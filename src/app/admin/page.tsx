@@ -10,9 +10,19 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold">Trang Tổng Quan Quản Trị</h1>
-        <p className="text-muted-foreground mt-2">Theo dõi các chỉ số quan trọng của toàn bộ hệ thống DONE.</p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Trang Tổng Quan Quản Trị</h1>
+          <p className="text-muted-foreground mt-2">Theo dõi các chỉ số quan trọng của toàn bộ hệ thống DONE.</p>
+        </div>
+        <div className="flex gap-3">
+          <a href="/admin/products/create" className="px-6 py-2.5 bg-accent text-white rounded-xl font-medium hover:bg-accent/90 transition-all shadow-sm">
+            + Đăng Sản Phẩm Mới
+          </a>
+          <a href="/admin/users" className="px-6 py-2.5 bg-foreground text-background rounded-xl font-medium hover:bg-foreground/90 transition-all shadow-sm">
+            Quản Lý User
+          </a>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

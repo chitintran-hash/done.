@@ -29,10 +29,17 @@ export default function Home() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button 
             onClick={() => router.push('/build')}
-            className="group flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium text-lg hover:bg-primary/90 transition-all w-full sm:w-auto"
+            className="group flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-medium text-lg hover:bg-foreground/90 transition-all w-full sm:w-auto"
           >
             {t('home.hero.start')}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+          
+          <button 
+            onClick={() => router.push('/shop')}
+            className="flex items-center justify-center px-8 py-4 bg-muted text-foreground rounded-full font-medium text-lg hover:bg-border transition-all w-full sm:w-auto"
+          >
+            Mua lẻ sản phẩm
           </button>
         </div>
       </div>

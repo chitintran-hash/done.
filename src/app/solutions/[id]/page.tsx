@@ -23,20 +23,23 @@ export default function SolutionDetailPage() {
       router.push('/');
       return;
     }
-    const generated = buildSolutions({
-      budget: store.budget,
-      maxWidth: store.maxWidth,
-      style: store.style,
-      ownedItems: store.ownedItems,
-      deadlineDays: store.deadlineDays
-    });
-    
-    const found = generated.find(s => s.id === id);
-    if (found) {
-      setSolution(found);
-    } else {
-      router.push('/solutions');
-    }
+    const fetchSolution = async () => {
+      const generated = await buildSolutions({
+        budget: store.budget,
+        maxWidth: store.maxWidth,
+        style: store.style,
+        ownedItems: store.ownedItems,
+        deadlineDays: store.deadlineDays
+      });
+      
+      const found = generated.find(s => s.id === id);
+      if (found) {
+        setSolution(found);
+      } else {
+        router.push('/solutions');
+      }
+    };
+    fetchSolution();
   }, [id]);
 
   if (!solution) return <div className="p-12 text-center">Loading...</div>;

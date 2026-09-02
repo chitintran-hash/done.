@@ -3,25 +3,37 @@
 import { useGoalStore } from '@/store/useGoalStore';
 import { useRouter } from 'next/navigation';
 import { Store, Truck, ArrowRight, ShoppingBag } from 'lucide-react';
-import { buildSolutions } from '@/lib/engine/compatibility';
-import { useMemo } from 'react';
+import { buildSolutions, Solution } from '@/lib/engine/compatibility';
+import { Product } from '@/lib/engine/mockProducts';
+import { useEffect, useState } from 'react';
 
 export default function CartPage() {
   const store = useGoalStore();
   const router = useRouter();
 
-  // In a real app, cart is stored in its own state/DB. For MVP, we'll just re-evaluate Best-fit.
-  const solution = useMemo(() => {
-    if (!store.goal) return null;
-    const solutions = buildSolutions({
-      budget: store.budget,
-      maxWidth: store.maxWidth,
-      style: store.style,
-      ownedItems: store.ownedItems,
-      deadlineDays: store.deadlineDays
-    });
-    return solutions.find(s => s.type === 'best-fit') || solutions[0];
+  const [solution, setSolution] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!store.goal) {
+        setLoading(false);
+        return;
+      }
+      const solutions = await buildSolutions({
+        budget: store.budget,
+        maxWidth: store.maxWidth,
+        style: store.style,
+        ownedItems: store.ownedItems,
+        deadlineDays: store.deadlineDays
+      });
+      setSolution(solutions.find(s => s.type === 'best-fit') || solutions[0]);
+      setLoading(false);
+    };
+    fetchCart();
   }, [store]);
+
+  if (loading) return <div className="p-12 text-center">Đang tải giỏ hàng...</div>;
 
   if (!solution) {
     return (
@@ -35,7 +47,7 @@ export default function CartPage() {
   }
 
   // Group products by Seller ID (Sub-orders)
-  const subOrders = solution.products.reduce((acc, product) => {
+  const subOrders = solution.products.reduce((acc: Record<string, any>, product: Product) => {
     if (!acc[product.sellerId]) {
       acc[product.sellerId] = {
         sellerId: product.sellerId,
@@ -53,7 +65,7 @@ export default function CartPage() {
     return acc;
   }, {} as Record<string, any>);
 
-  const subOrdersList = Object.values(subOrders);
+  const subOrdersList = Object.values(subOrders) as any[];
   const totalShipping = subOrdersList.reduce((sum, order) => sum + order.shippingFee, 0);
   const masterTotal = solution.totalPrice + totalShipping;
 

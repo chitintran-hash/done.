@@ -1,4 +1,5 @@
-import { mockProducts, Product, ProductCategory, StylePreference } from './mockProducts';
+import { Product, ProductCategory, StylePreference } from './mockProducts';
+import { createClient } from '@/lib/supabase/client';
 
 export interface MonitorConstraints {
   vesa: string; // e.g. '100x100'
@@ -27,7 +28,36 @@ export interface Solution {
   warnings: string[]; // for budget or deadline warnings
 }
 
-export function buildSolutions(constraints: Constraints): Solution[] {
+export async function buildSolutions(constraints: Constraints): Promise<Solution[]> {
+  const supabase = createClient();
+  const { data: dbProducts, error } = await supabase.from('products').select('*');
+  
+  // Format DB products back to the Engine's Product interface if necessary
+  const formattedProducts: Product[] = (dbProducts || []).map(p => ({
+    id: p.id,
+    sku: p.sku,
+    name: p.name,
+    brand: p.brand,
+    category: p.category as ProductCategory,
+    price: p.price,
+    image: p.image,
+    description: p.description,
+    isAvailable: p.is_available,
+    sellerId: p.seller_id,
+    deliveryDays: p.delivery_days,
+    specs: {
+      width: p.width !== null ? p.width : 'N/A',
+      depth: p.depth !== null ? p.depth : 'N/A',
+      height: p.height !== null ? p.height : 'N/A',
+      maxLoad: p.max_load !== null ? p.max_load : 'N/A',
+      vesaSupported: p.vesa_supported || 'N/A',
+      supportedMonitorSize: p.supported_monitor_size !== null ? p.supported_monitor_size : 'N/A',
+      clampThicknessMax: p.clamp_thickness_max !== null ? p.clamp_thickness_max : 'N/A',
+      deskThickness: p.desk_thickness !== null ? p.desk_thickness : 'N/A',
+      style: p.style || []
+    }
+  }));
+
   // RULE SPACE 01 & 02: Filter Desk
   const filterDesk = (p: Product) => {
     if (p.category !== 'desk') return true;
@@ -48,7 +78,7 @@ export function buildSolutions(constraints: Constraints): Solution[] {
     return true;
   });
 
-  const eligibleProducts = mockProducts.filter(p => {
+  const eligibleProducts = formattedProducts.filter(p => {
     if (!p.isAvailable) return false;
     if (!filterDesk(p)) return false;
     

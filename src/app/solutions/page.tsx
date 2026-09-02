@@ -21,8 +21,8 @@ export default function SolutionsPage() {
     }
 
     // Simulate processing time for UX
-    const timer = setTimeout(() => {
-      const generated = buildSolutions({
+    const timer = setTimeout(async () => {
+      const generated = await buildSolutions({
         budget: store.budget,
         maxWidth: store.maxWidth,
         style: store.style,

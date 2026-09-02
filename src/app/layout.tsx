@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 const geistSans = Geist({
@@ -31,9 +32,10 @@ export default function RootLayout({
       >
         <LanguageProvider>
           <Header />
-          <div className="pt-16">
+          <div className="pt-16 min-h-screen">
             {children}
           </div>
+          <Footer />
         </LanguageProvider>
       </body>
     </html>

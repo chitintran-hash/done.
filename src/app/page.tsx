@@ -5,10 +5,25 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+
+const images = [
+  "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1600&q=80",
+  "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1600&q=80"
+];
 
 export default function Home() {
   const router = useRouter();
   const { t } = useLanguage();
+  const [currentImg, setCurrentImg] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImg((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-background text-foreground flex flex-col items-center justify-center p-6">
@@ -49,13 +64,31 @@ export default function Home() {
           transition={{ duration: 1, delay: 0.2 }}
           className="pt-16 w-full max-w-5xl mx-auto"
         >
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/50 aspect-video">
-            <img 
-              src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1600&q=80" 
-              alt="DONE. Workspace Setup" 
-              className="w-full h-full object-cover"
-            />
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/50 aspect-video group">
+            {images.map((src, index) => (
+              <img 
+                key={src}
+                src={src} 
+                alt="DONE. Workspace Setup" 
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  index === currentImg ? 'opacity-100' : 'opacity-0'
+                }`}
+              />
+            ))}
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+            
+            {/* Slider Dots */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImg(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentImg ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

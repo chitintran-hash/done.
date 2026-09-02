@@ -27,7 +27,8 @@ export default function SolutionDetailPage() {
       budget: store.budget,
       maxWidth: store.maxWidth,
       style: store.style,
-      ownedItems: store.ownedItems
+      ownedItems: store.ownedItems,
+      deadlineDays: store.deadlineDays
     });
     
     const found = generated.find(s => s.id === id);

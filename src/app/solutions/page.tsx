@@ -26,7 +26,8 @@ export default function SolutionsPage() {
         budget: store.budget,
         maxWidth: store.maxWidth,
         style: store.style,
-        ownedItems: store.ownedItems
+        ownedItems: store.ownedItems,
+        deadlineDays: store.deadlineDays
       });
       setSolutions(generated);
       setLoading(false);

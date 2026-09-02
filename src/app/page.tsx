@@ -42,6 +42,22 @@ export default function Home() {
             Mua lẻ sản phẩm
           </button>
         </div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="pt-16 w-full max-w-5xl mx-auto"
+        >
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border/50 aspect-video">
+            <img 
+              src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1600&q=80" 
+              alt="DONE. Workspace Setup" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

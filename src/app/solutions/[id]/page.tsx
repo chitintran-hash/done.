@@ -4,8 +4,10 @@ import { useGoalStore } from '@/store/useGoalStore';
 import { buildSolutions, Solution } from '@/lib/engine/compatibility';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { CheckCircle, ArrowLeft, ShoppingBag, RefreshCw } from 'lucide-react';
+import { CheckCircle, ArrowLeft, ShoppingBag, RefreshCw, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
+import SmartSwapModal from '@/components/SmartSwapModal';
+import { Product } from '@/lib/engine/mockProducts';
 
 export default function SolutionDetailPage() {
   const params = useParams();
@@ -14,6 +16,7 @@ export default function SolutionDetailPage() {
   const router = useRouter();
   
   const [solution, setSolution] = useState<Solution | null>(null);
+  const [swappingProduct, setSwappingProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     if (!store.goal && !store.budget) {
@@ -44,7 +47,7 @@ export default function SolutionDetailPage() {
           <ArrowLeft className="w-5 h-5" /> Quay lại
         </Link>
         
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
           <div>
             <h1 className="text-4xl font-bold mb-2">{solution.name}</h1>
             <p className="text-muted-foreground">Được tối ưu cho ngân sách và không gian {store.maxWidth}cm của bạn.</p>
@@ -56,6 +59,17 @@ export default function SolutionDetailPage() {
             </div>
           </div>
         </div>
+
+        {solution.warnings && solution.warnings.length > 0 && (
+          <div className="mb-8 space-y-2">
+            {solution.warnings.map((warn, i) => (
+              <div key={i} className="p-4 bg-orange-50 text-orange-800 rounded-xl border border-orange-200 flex items-start gap-3 text-sm font-medium">
+                <AlertTriangle className="w-5 h-5 shrink-0" />
+                {warn}
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="space-y-6">
           {solution.products.map(product => (
@@ -81,7 +95,10 @@ export default function SolutionDetailPage() {
                 </div>
               </div>
 
-              <button className="flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg text-sm font-medium hover:bg-muted transition-colors w-full md:w-auto shrink-0">
+              <button 
+                onClick={() => setSwappingProduct(product)}
+                className="flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg text-sm font-medium hover:bg-muted transition-colors w-full md:w-auto shrink-0"
+              >
                 <RefreshCw className="w-4 h-4" /> Smart Swap
               </button>
             </div>
@@ -89,11 +106,32 @@ export default function SolutionDetailPage() {
         </div>
 
         <div className="mt-12 flex justify-end border-t border-border pt-8">
-          <button className="px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg flex items-center gap-3 hover:bg-foreground/90 transition-all">
+          <button onClick={() => router.push('/cart')} className="px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg flex items-center gap-3 hover:bg-foreground/90 transition-all">
             <ShoppingBag className="w-5 h-5" />
             Thêm bộ giải pháp vào giỏ hàng
           </button>
         </div>
+
+        {swappingProduct && (
+          <SmartSwapModal 
+            product={swappingProduct} 
+            currentSolutionProducts={solution.products}
+            constraints={{
+              budget: store.budget,
+              maxWidth: store.maxWidth,
+              style: store.style,
+              ownedItems: store.ownedItems,
+              deadlineDays: store.deadlineDays
+            }}
+            onClose={() => setSwappingProduct(null)}
+            onSwap={(newProduct) => {
+              const newProducts = solution.products.map(p => p.id === swappingProduct.id ? newProduct : p);
+              const newTotal = newProducts.reduce((sum, p) => sum + p.price, 0);
+              setSolution({ ...solution, products: newProducts, totalPrice: newTotal });
+              setSwappingProduct(null);
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -4,20 +4,23 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useGoalStore } from '@/store/useGoalStore';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import { ArrowRight, Check, ChevronLeft, Laptop, Monitor, Mouse, Keyboard, Armchair } from 'lucide-react';
-
-const steps = [
-  { id: 'goal', title: 'Bạn muốn hoàn thành điều gì?' },
-  { id: 'budget', title: 'Ngân sách tối đa của bạn?' },
-  { id: 'space', title: 'Kích thước không gian (chiều rộng)?' },
-  { id: 'style', title: 'Phong cách bạn hướng tới?' },
-  { id: 'owned', title: 'Bạn đã có sẵn những thiết bị nào?' },
-];
 
 export default function GoalBuilderPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const router = useRouter();
   const store = useGoalStore();
+  const { t } = useLanguage();
+
+  const steps = [
+    { id: 'goal', title: t('builder.step.goal') },
+    { id: 'budget', title: t('builder.step.budget') },
+    { id: 'space', title: t('builder.step.space') },
+    { id: 'style', title: t('builder.step.style') },
+    { id: 'owned', title: t('builder.step.owned') },
+    { id: 'deadline', title: t('builder.step.deadline') },
+  ];
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -121,11 +124,8 @@ export default function GoalBuilderPage() {
                     <span>80 cm</span>
                     <span>200 cm</span>
                   </div>
-                  <p className="text-center text-sm text-muted-foreground mt-4">
-                    Chiều rộng khoảng trống bạn dự định đặt bàn học.
-                  </p>
                   <button onClick={handleNext} className="w-full py-4 bg-foreground text-background rounded-full font-medium mt-8 hover:bg-foreground/90 transition-all">
-                    Tiếp tục
+                    {t('builder.btn.continue')}
                   </button>
                 </div>
               )}
@@ -183,8 +183,31 @@ export default function GoalBuilderPage() {
                       );
                     })}
                   </div>
+                  <button onClick={handleNext} className="w-full py-4 bg-foreground text-background rounded-full font-medium mt-8 hover:bg-foreground/90 transition-all">
+                    {t('builder.btn.continue')}
+                  </button>
+                </div>
+              )}
+
+              {steps[currentStep].id === 'deadline' && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
+                  <div className="flex flex-col items-center gap-4">
+                    <span className="text-5xl font-black text-accent">{store.deadlineDays} <span className="text-2xl text-foreground">ngày</span></span>
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="30" 
+                      step="1"
+                      value={store.deadlineDays}
+                      onChange={(e) => store.setDeadlineDays(Number(e.target.value))}
+                      className="w-full max-w-sm h-3 bg-muted rounded-full appearance-none cursor-pointer accent-accent"
+                    />
+                  </div>
+                  <p className="text-center text-sm text-muted-foreground mt-4">
+                    Hệ thống sẽ loại bỏ các sản phẩm không thể giao hàng kịp thời hạn.
+                  </p>
                   <button onClick={handleNext} className="w-full py-4 bg-accent text-white rounded-full font-bold text-lg hover:bg-accent/90 transition-all flex items-center justify-center gap-2">
-                    Xây Dựng Solution
+                    {t('builder.btn.finish')}
                     <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>

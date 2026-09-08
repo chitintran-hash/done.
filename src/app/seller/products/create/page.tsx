@@ -6,6 +6,47 @@ import { useRouter } from 'next/navigation';
 import { UploadCloud, ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
 
+const CATEGORIES = {
+  furniture: [
+    { id: 'desk', name: 'Bàn (Desk)' },
+    { id: 'chair', name: 'Ghế (Chair)' },
+    { id: 'drawer', name: 'Ngăn kéo bàn / Tủ hộc' },
+    { id: 'shelf', name: 'Kệ sách nhỏ' }
+  ],
+  display: [
+    { id: 'monitor', name: 'Màn hình' },
+    { id: 'monitor_arm', name: 'Tay đỡ màn hình (Monitor Arm)' },
+    { id: 'monitor_stand', name: 'Kệ màn hình' }
+  ],
+  accessories: [
+    { id: 'keyboard', name: 'Bàn phím' },
+    { id: 'mouse', name: 'Chuột' },
+    { id: 'mouse_pad', name: 'Mouse Pad' },
+    { id: 'laptop_stand', name: 'Giá đỡ Laptop' },
+    { id: 'webcam', name: 'Webcam' },
+    { id: 'microphone', name: 'Microphone' },
+    { id: 'speaker', name: 'Loa' },
+    { id: 'headphone', name: 'Tai nghe' }
+  ],
+  power_connectivity: [
+    { id: 'docking_station', name: 'Docking Station' },
+    { id: 'usb_hub', name: 'USB Hub' },
+    { id: 'power_strip', name: 'Ổ cắm điện' },
+    { id: 'smart_plug', name: 'Ổ điện thông minh' },
+    { id: 'charger', name: 'Củ sạc' },
+    { id: 'cable', name: 'Cáp kết nối' }
+  ],
+  organization: [
+    { id: 'cable_management', name: 'Quản lý dây cáp' },
+    { id: 'desk_organizer', name: 'Desk Organizer' }
+  ],
+  ergonomics: [
+    { id: 'desk_lamp', name: 'Đèn bàn' },
+    { id: 'footrest', name: 'Kê chân (Footrest)' },
+    { id: 'ergo_accessories', name: 'Phụ kiện công thái học khác' }
+  ]
+};
+
 export default function SellerCreateProductPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -14,13 +55,16 @@ export default function SellerCreateProductPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
-    name: '', sku: '', brand: '', category: 'desk', price: '', description: '',
-    delivery_days: '3', stock: '10',
-    // Specs
-    width: '', depth: '', height: '', max_load: '', vesa_supported: '',
-    supported_monitor_size: '', clamp_thickness_max: '', desk_thickness: '',
-    style: ''
+    name: '', brand: '', category: 'desk', price: '', description: '',
+    delivery_days: '3', stock: '10'
   });
+
+  // Dynamic Specs State
+  const [specs, setSpecs] = useState<Record<string, any>>({});
+
+  const handleSpecChange = (key: string, value: any) => {
+    setSpecs(prev => ({ ...prev, [key]: value }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -28,6 +72,12 @@ export default function SellerCreateProductPage() {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const generateSKU = (category: string) => {
+    const prefix = category.substring(0, 3).toUpperCase();
+    const timestamp = Date.now().toString().slice(-6);
+    return `${prefix}-${timestamp}`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,16 +90,14 @@ export default function SellerCreateProductPage() {
 
       let imageUrl = '';
       if (imageFile) {
-        // 1. Upload to Supabase Storage
         const fileExt = imageFile.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('done-products')
           .upload(`products/${fileName}`, imageFile);
 
-        if (uploadError) throw new Error('Lỗi upload ảnh: ' + uploadError.message);
+        if (uploadError) throw new Error('Lỗi upload ảnh (Có thể Bucket chưa được tạo): ' + uploadError.message);
 
-        // 2. Get public URL
         const { data: { publicUrl } } = supabase.storage
           .from('done-products')
           .getPublicUrl(`products/${fileName}`);
@@ -57,41 +105,32 @@ export default function SellerCreateProductPage() {
         imageUrl = publicUrl;
       }
 
-      // 3. Format data
-      const parseNumber = (val: string) => val ? Number(val) : null;
-      const parseArray = (val: string) => val ? val.split(',').map(s => s.trim()) : null;
+      const parseNumber = (val: string) => val ? Number(val) : 0;
+      const autoSku = generateSKU(formData.category);
 
       const productPayload = {
         name: formData.name,
-        sku: formData.sku,
+        sku: autoSku, // Auto generated
         brand: formData.brand,
         category: formData.category,
         price: parseNumber(formData.price) || 0,
         description: formData.description,
-        seller_id: user.id, // Auto-assign seller_id
+        seller_id: user.id,
         delivery_days: parseNumber(formData.delivery_days) || 1,
         stock: parseNumber(formData.stock) || 0,
         image_url: imageUrl || 'https://via.placeholder.com/400',
-        
-        width: parseNumber(formData.width),
-        depth: parseNumber(formData.depth),
-        height: parseNumber(formData.height),
-        max_load: parseNumber(formData.max_load),
-        vesa_supported: parseArray(formData.vesa_supported),
-        supported_monitor_size: parseNumber(formData.supported_monitor_size),
-        clamp_thickness_max: parseNumber(formData.clamp_thickness_max),
-        desk_thickness: parseNumber(formData.desk_thickness),
-        style: parseArray(formData.style),
+        approval_status: 'pending', // Pending Admin review
+        is_available: false,
+        technical_specs: specs, // JSONB
       };
 
-      // 4. Insert into DB
       const { error: dbError } = await supabase
         .from('products')
         .insert([productPayload]);
 
       if (dbError) throw new Error('Lỗi lưu Database: ' + dbError.message);
 
-      alert('Đăng sản phẩm thành công!');
+      alert('Đăng sản phẩm thành công! Sản phẩm đang chờ Admin duyệt.');
       router.push('/seller/products');
 
     } catch (error: any) {
@@ -99,6 +138,83 @@ export default function SellerCreateProductPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Render Dynamic Form based on Category
+  const renderDynamicSpecs = () => {
+    const c = formData.category;
+
+    if (c === 'monitor') return (
+      <>
+        <InputField label="Kích thước màn hình (inch)" type="number" val={specs.screen_size} onChange={(v) => handleSpecChange('screen_size', v)} />
+        <InputField label="Độ phân giải (VD: 4K, 2K, FHD)" val={specs.resolution} onChange={(v) => handleSpecChange('resolution', v)} />
+        <InputField label="Tần số quét (Hz)" type="number" val={specs.refresh_rate} onChange={(v) => handleSpecChange('refresh_rate', v)} />
+        <InputField label="Trọng lượng (kg)" type="number" val={specs.weight} onChange={(v) => handleSpecChange('weight', v)} />
+        <InputField label="Chuẩn VESA hỗ trợ (VD: 75x75, 100x100)" val={specs.vesa_supported} onChange={(v) => handleSpecChange('vesa_supported', v)} placeholder="Cách nhau bằng dấu phẩy" />
+      </>
+    );
+
+    if (c === 'monitor_arm') return (
+      <>
+        <InputField label="Chuẩn VESA hỗ trợ" val={specs.vesa_supported} onChange={(v) => handleSpecChange('vesa_supported', v)} />
+        <InputField label="Tải trọng tối đa (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
+        <InputField label="Kích thước màn hình tối đa (inch)" type="number" val={specs.supported_monitor_size} onChange={(v) => handleSpecChange('supported_monitor_size', v)} />
+        <InputField label="Ngàm kẹp độ dày bàn tối đa (cm)" type="number" val={specs.clamp_thickness_max} onChange={(v) => handleSpecChange('clamp_thickness_max', v)} />
+      </>
+    );
+
+    if (c === 'desk') return (
+      <>
+        <InputField label="Chiều rộng (cm)" type="number" val={specs.width} onChange={(v) => handleSpecChange('width', v)} />
+        <InputField label="Chiều sâu (cm)" type="number" val={specs.depth} onChange={(v) => handleSpecChange('depth', v)} />
+        <InputField label="Chiều cao (cm)" type="number" val={specs.height} onChange={(v) => handleSpecChange('height', v)} />
+        <InputField label="Độ dày mặt bàn (cm)" type="number" val={specs.desk_thickness} onChange={(v) => handleSpecChange('desk_thickness', v)} />
+        <InputField label="Tải trọng tối đa (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
+      </>
+    );
+
+    if (c === 'chair') return (
+      <>
+        <InputField label="Tải trọng tối đa (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
+        <InputField label="Chiều cao ghế tối đa (cm)" type="number" val={specs.height} onChange={(v) => handleSpecChange('height', v)} />
+        <div className="flex gap-4 items-center h-full pt-6">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={specs.has_armrest || false} onChange={(e) => handleSpecChange('has_armrest', e.target.checked)} />
+            <span className="text-sm">Có tay vịn (Armrest)</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={specs.has_lumbar_support || false} onChange={(e) => handleSpecChange('has_lumbar_support', e.target.checked)} />
+            <span className="text-sm">Hỗ trợ thắt lưng (Lumbar)</span>
+          </label>
+        </div>
+      </>
+    );
+
+    if (c === 'desk_lamp') return (
+      <>
+        <InputField label="Công suất (W)" type="number" val={specs.power} onChange={(v) => handleSpecChange('power', v)} />
+        <InputField label="Nhiệt độ màu (K)" val={specs.color_temperature} onChange={(v) => handleSpecChange('color_temperature', v)} placeholder="VD: 3000K-6000K" />
+        <InputField label="Kiểu gắn (Để bàn / Kẹp bàn)" val={specs.mount_type} onChange={(v) => handleSpecChange('mount_type', v)} />
+      </>
+    );
+
+    if (c === 'laptop_stand') return (
+      <>
+        <InputField label="Kích thước laptop tối đa (inch)" type="number" val={specs.supported_laptop_size} onChange={(v) => handleSpecChange('supported_laptop_size', v)} />
+        <InputField label="Tải trọng tối đa (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
+        <label className="flex items-center gap-2 pt-6 cursor-pointer">
+          <input type="checkbox" checked={specs.adjustable || false} onChange={(e) => handleSpecChange('adjustable', e.target.checked)} />
+          <span className="text-sm">Có thể điều chỉnh độ cao</span>
+        </label>
+      </>
+    );
+
+    // Default for accessories
+    return (
+      <div className="md:col-span-3">
+        <p className="text-muted-foreground text-sm">Danh mục này không yêu cầu thông số kỹ thuật đặc biệt. Bạn có thể bỏ qua phần này.</p>
+      </div>
+    );
   };
 
   return (
@@ -116,13 +232,9 @@ export default function SellerCreateProductPage() {
           <h2 className="text-xl font-bold border-b border-border pb-2">Thông tin cơ bản</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1">Tên sản phẩm *</label>
               <input required type="text" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">SKU *</label>
-              <input required type="text" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.sku} onChange={e => setFormData({...formData, sku: e.target.value})} />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Thương hiệu *</label>
@@ -130,25 +242,38 @@ export default function SellerCreateProductPage() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Danh mục *</label>
-              <select className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
-                <option value="desk">Bàn (Desk)</option>
-                <option value="chair">Ghế (Chair)</option>
-                <option value="monitor_arm">Tay đỡ (Monitor Arm)</option>
-                <option value="desk_lamp">Đèn (Desk Lamp)</option>
-                <option value="cable_management">Quản lý dây (Cable)</option>
+              <select required className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.category} onChange={e => { setFormData({...formData, category: e.target.value}); setSpecs({}); }}>
+                <optgroup label="Nội thất (Furniture)">
+                  {CATEGORIES.furniture.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </optgroup>
+                <optgroup label="Hiển thị (Display)">
+                  {CATEGORIES.display.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </optgroup>
+                <optgroup label="Phụ kiện & Thiết bị ngoại vi">
+                  {CATEGORIES.accessories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </optgroup>
+                <optgroup label="Nguồn & Kết nối">
+                  {CATEGORIES.power_connectivity.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </optgroup>
+                <optgroup label="Quản lý & Tổ chức">
+                  {CATEGORIES.organization.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </optgroup>
+                <optgroup label="Công thái học">
+                  {CATEGORIES.ergonomics.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </optgroup>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Giá (VNĐ) *</label>
-              <input required type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
+              <input required type="number" min={0} className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Tồn kho ban đầu *</label>
-              <input required type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
+              <input required type="number" min={0} className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">Mô tả ngắn</label>
-              <input type="text" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+              <label className="block text-sm font-medium mb-1">Mô tả chi tiết</label>
+              <textarea rows={4} className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
             </div>
           </div>
         </div>
@@ -163,7 +288,7 @@ export default function SellerCreateProductPage() {
               ) : (
                 <>
                   <UploadCloud className="w-8 h-8 text-muted-foreground mb-2" />
-                  <span className="text-sm text-muted-foreground font-medium">Tải ảnh lên</span>
+                  <span className="text-sm text-muted-foreground font-medium text-center">Tải ảnh lên<br/>(Bắt buộc)</span>
                 </>
               )}
               <input required type="file" accept="image/*" onChange={handleImageChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
@@ -173,44 +298,13 @@ export default function SellerCreateProductPage() {
 
         {/* Specs */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold border-b border-border pb-2">Thông số kỹ thuật (Dành cho Compatibility Engine)</h2>
-          <p className="text-xs text-muted-foreground mb-4">Lưu ý: Bỏ trống nếu sản phẩm không có chỉ số này (Ví dụ: Đèn thì không có chuẩn VESA).</p>
+          <h2 className="text-xl font-bold border-b border-border pb-2 flex justify-between items-center">
+            Thông số kỹ thuật
+            <span className="text-sm font-normal text-muted-foreground">Tự động điều chỉnh theo Danh mục</span>
+          </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Width (cm)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.width} onChange={e => setFormData({...formData, width: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Depth (cm)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.depth} onChange={e => setFormData({...formData, depth: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Height (cm)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.height} onChange={e => setFormData({...formData, height: e.target.value})} />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-1">Độ dày bàn (Desk Thickness) (cm)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.desk_thickness} onChange={e => setFormData({...formData, desk_thickness: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Ngàm kẹp tối đa (Clamp Max) (cm)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.clamp_thickness_max} onChange={e => setFormData({...formData, clamp_thickness_max: e.target.value})} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Tải trọng tối đa (Max Load) (kg)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.max_load} onChange={e => setFormData({...formData, max_load: e.target.value})} />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Màn hình tối đa (inches)</label>
-              <input type="number" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.supported_monitor_size} onChange={e => setFormData({...formData, supported_monitor_size: e.target.value})} />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">VESA hỗ trợ (cách nhau dấu phẩy)</label>
-              <input type="text" placeholder="VD: 75x75, 100x100" className="w-full p-3 bg-muted/50 rounded-xl border border-border" value={formData.vesa_supported} onChange={e => setFormData({...formData, vesa_supported: e.target.value})} />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-muted/10 p-6 rounded-2xl border border-border/50">
+            {renderDynamicSpecs()}
           </div>
         </div>
 
@@ -218,17 +312,32 @@ export default function SellerCreateProductPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-lg hover:bg-orange-700 transition-all flex items-center gap-2 disabled:opacity-50"
+            className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-lg hover:bg-orange-700 transition-all flex items-center gap-2 disabled:opacity-50 shadow-md hover:shadow-lg"
           >
-            {loading ? 'Đang lưu...' : (
+            {loading ? 'Đang xử lý...' : (
               <>
                 <Save className="w-5 h-5" />
-                Lưu vào cơ sở dữ liệu
+                Gửi yêu cầu duyệt
               </>
             )}
           </button>
         </div>
       </form>
+    </div>
+  );
+}
+
+function InputField({ label, type = "text", val, onChange, placeholder = "" }: { label: string, type?: string, val: any, onChange: (val: string) => void, placeholder?: string }) {
+  return (
+    <div>
+      <label className="block text-sm font-medium mb-1">{label}</label>
+      <input 
+        type={type} 
+        placeholder={placeholder}
+        className="w-full p-3 bg-white rounded-xl border border-border focus:border-orange-500 focus:outline-none transition-all" 
+        value={val || ''} 
+        onChange={e => onChange(e.target.value)} 
+      />
     </div>
   );
 }

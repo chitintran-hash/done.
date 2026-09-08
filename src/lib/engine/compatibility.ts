@@ -46,14 +46,14 @@ export async function buildSolutions(constraints: Constraints): Promise<Solution
     sellerId: p.seller_id,
     deliveryDays: p.delivery_days,
     specs: {
-      width: p.width !== null ? p.width : 'N/A',
-      depth: p.depth !== null ? p.depth : 'N/A',
-      height: p.height !== null ? p.height : 'N/A',
-      maxLoad: p.max_load !== null ? p.max_load : 'N/A',
-      vesaSupported: p.vesa_supported || 'N/A',
-      supportedMonitorSize: p.supported_monitor_size !== null ? p.supported_monitor_size : 'N/A',
-      clampThicknessMax: p.clamp_thickness_max !== null ? p.clamp_thickness_max : 'N/A',
-      deskThickness: p.desk_thickness !== null ? p.desk_thickness : 'N/A',
+      width: p.technical_specs?.width !== undefined ? p.technical_specs.width : (p.width !== null ? p.width : 'N/A'),
+      depth: p.technical_specs?.depth !== undefined ? p.technical_specs.depth : (p.depth !== null ? p.depth : 'N/A'),
+      height: p.technical_specs?.height !== undefined ? p.technical_specs.height : (p.height !== null ? p.height : 'N/A'),
+      maxLoad: p.technical_specs?.max_load !== undefined ? p.technical_specs.max_load : (p.max_load !== null ? p.max_load : 'N/A'),
+      vesaSupported: p.technical_specs?.vesa_supported !== undefined ? p.technical_specs.vesa_supported : (p.vesa_supported || 'N/A'),
+      supportedMonitorSize: p.technical_specs?.supported_monitor_size !== undefined ? p.technical_specs.supported_monitor_size : (p.supported_monitor_size !== null ? p.supported_monitor_size : 'N/A'),
+      clampThicknessMax: p.technical_specs?.clamp_thickness_max !== undefined ? p.technical_specs.clamp_thickness_max : (p.clamp_thickness_max !== null ? p.clamp_thickness_max : 'N/A'),
+      deskThickness: p.technical_specs?.desk_thickness !== undefined ? p.technical_specs.desk_thickness : (p.desk_thickness !== null ? p.desk_thickness : 'N/A'),
       style: p.style || []
     }
   }));

@@ -110,10 +110,13 @@ export default function ProductsClient({ initialProducts }: { initialProducts: a
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-xs text-muted-foreground space-y-1">
-                      {p.vesa_supported && p.vesa_supported.length > 0 && <div>VESA: {p.vesa_supported.join(', ')}</div>}
-                      {p.max_load && <div>Tải trọng: {p.max_load}kg</div>}
-                      {p.desk_thickness && <div>Độ dày bàn: {p.desk_thickness}cm</div>}
-                      {p.width && <div>Kích thước: {p.width}x{p.depth}x{p.height}</div>}
+                      {p.technical_specs && Object.keys(p.technical_specs).length > 0 ? (
+                        Object.entries(p.technical_specs).map(([k, v]) => (
+                          <div key={k} className="capitalize"><span className="font-medium">{k.replace(/_/g, ' ')}:</span> {String(v)}</div>
+                        ))
+                      ) : (
+                        <div className="text-muted-foreground/50 italic">Không có</div>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4">

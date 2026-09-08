@@ -121,14 +121,18 @@ export default function ProductDetailPage() {
             <div>
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><ShieldCheck className="w-5 h-5" /> Thông số kỹ thuật (Compatibility)</h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
-                {product.width && <div className="p-3 bg-muted/50 rounded-lg"><strong>Chiều rộng:</strong> {product.width} cm</div>}
-                {product.depth && <div className="p-3 bg-muted/50 rounded-lg"><strong>Chiều sâu:</strong> {product.depth} cm</div>}
-                {product.height && <div className="p-3 bg-muted/50 rounded-lg"><strong>Chiều cao:</strong> {product.height} cm</div>}
-                {product.max_load && <div className="p-3 bg-muted/50 rounded-lg"><strong>Tải trọng:</strong> {product.max_load} kg</div>}
-                {product.vesa_supported && product.vesa_supported.length > 0 && <div className="p-3 bg-muted/50 rounded-lg"><strong>VESA:</strong> {product.vesa_supported.join(', ')}</div>}
-                {product.supported_monitor_size && <div className="p-3 bg-muted/50 rounded-lg"><strong>Màn hình tối đa:</strong> {product.supported_monitor_size}"</div>}
-                {product.desk_thickness && <div className="p-3 bg-muted/50 rounded-lg"><strong>Độ dày bàn:</strong> {product.desk_thickness} cm</div>}
-                {product.clamp_thickness_max && <div className="p-3 bg-muted/50 rounded-lg"><strong>Ngàm kẹp tối đa:</strong> {product.clamp_thickness_max} cm</div>}
+                {product.technical_specs && Object.keys(product.technical_specs).length > 0 ? (
+                  Object.entries(product.technical_specs).map(([key, value]) => {
+                    if (value === null || value === '' || value === false) return null;
+                    return (
+                      <div key={key} className="p-3 bg-muted/50 rounded-lg">
+                        <strong className="capitalize">{key.replace(/_/g, ' ')}:</strong> {String(value)}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="p-3 bg-muted/50 rounded-lg text-muted-foreground col-span-2">Sản phẩm không có thông số kỹ thuật đặc biệt.</div>
+                )}
               </div>
             </div>
           </div>

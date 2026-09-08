@@ -47,7 +47,7 @@ export default function Header() {
 
         {user ? (
           <>
-            {user.email === 'tranchitin2006@gmail.com' && (
+            {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
               <Link href="/admin" className="text-sm font-medium text-accent hover:underline">
                 {t('nav.admin')}
               </Link>

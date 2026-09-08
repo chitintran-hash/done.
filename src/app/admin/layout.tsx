@@ -15,7 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user || user.email !== 'tranchitin2006@gmail.com') {
+      if (!user || user.email?.toLowerCase().trim() !== 'tranchitin2006@gmail.com') {
         router.push('/');
       } else {
         setLoading(false);

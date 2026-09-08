@@ -92,7 +92,7 @@ export default function RegisterPage() {
                 </label>
                 <label className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'seller' ? 'border-orange-500 bg-orange-50' : 'border-border bg-muted/30'}`}>
                   <input type="radio" name="role" className="hidden" checked={role === 'seller'} onChange={() => setRole('seller')} />
-                  <span className={`font-medium ${role === 'seller' ? 'text-orange-600' : 'text-muted-foreground'}`}>Nhà bán (Seller)</span>
+                  <span className={`font-medium ${role === 'seller' ? 'text-orange-600' : 'text-muted-foreground'}`}>Người Bán (Seller)</span>
                 </label>
               </div>
             </div>

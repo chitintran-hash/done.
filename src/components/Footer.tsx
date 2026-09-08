@@ -29,10 +29,10 @@ export default function Footer() {
           <div>
             <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Sản Phẩm</h3>
             <ul className="space-y-3">
-              <li><Link href="/build" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Xây dựng Solution</Link></li>
-              <li><Link href="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mua lẻ thiết bị</Link></li>
-              <li><Link href="/b2b" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Dành cho Doanh nghiệp</Link></li>
-              <li><Link href="/brands" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Thương hiệu đối tác</Link></li>
+              <li><Link href="/seller" className="text-muted-foreground hover:text-foreground text-sm">Kênh Người Bán (Seller Center)</Link></li>
+              <li><Link href="/seller/guidelines" className="text-muted-foreground hover:text-foreground text-sm">Quy định Người Bán</Link></li>
+              <li><Link href="/seller/fees" className="text-muted-foreground hover:text-foreground text-sm">Biểu phí hoa hồng</Link></li>
+              <li><Link href="/seller/shipping" className="text-muted-foreground hover:text-foreground text-sm">Hướng dẫn giao hàng</Link></li>
             </ul>
           </div>
 

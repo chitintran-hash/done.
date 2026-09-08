@@ -46,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
           <Link href="/admin/sellers" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
             <Store className="w-5 h-5" />
-            Nhà bán (Sellers)
+            Người Bán (Sellers)
           </Link>
           <Link href="/admin/compatibility" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
             <ListChecks className="w-5 h-5" />

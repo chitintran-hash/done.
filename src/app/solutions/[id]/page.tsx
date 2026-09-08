@@ -8,6 +8,7 @@ import { CheckCircle, ArrowLeft, ShoppingBag, RefreshCw, AlertTriangle } from 'l
 import Link from 'next/link';
 import SmartSwapModal from '@/components/SmartSwapModal';
 import { Product } from '@/lib/engine/mockProducts';
+import { useCartStore } from '@/store/useCartStore';
 
 export default function SolutionDetailPage() {
   const params = useParams();
@@ -110,7 +111,23 @@ export default function SolutionDetailPage() {
         </div>
 
         <div className="mt-12 flex justify-end border-t border-border pt-8">
-          <button onClick={() => router.push('/cart')} className="px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg flex items-center gap-3 hover:bg-foreground/90 transition-all">
+          <button 
+            onClick={() => {
+              solution.products.forEach(p => {
+                useCartStore.getState().addItem({
+                  id: p.id,
+                  name: p.name,
+                  price: p.price,
+                  image: p.image,
+                  sellerId: p.sellerId,
+                  storeName: p.sellerId.replace('seller-', '').toUpperCase(), // Fallback
+                  deliveryDays: p.deliveryDays || 3
+                });
+              });
+              router.push('/cart');
+            }} 
+            className="px-8 py-4 bg-foreground text-background rounded-full font-bold text-lg flex items-center gap-3 hover:bg-foreground/90 transition-all"
+          >
             <ShoppingBag className="w-5 h-5" />
             Thêm bộ giải pháp vào giỏ hàng
           </button>

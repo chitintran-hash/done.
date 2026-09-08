@@ -45,36 +45,48 @@ export default function Header() {
           {language === 'vi' ? 'EN' : 'VI'}
         </button>
 
-        {user ? (
-          <>
-            {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
-              <Link href="/admin" className="text-sm font-medium text-accent hover:underline">
-                {t('nav.admin')}
-              </Link>
-            )}
-            {user.user_metadata?.role === 'seller' && (
-              <Link href="/seller" className="text-sm font-medium text-orange-600 hover:underline">
+          {user ? (
+            <>
+              {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
+                <Link href="/admin" className="text-sm font-medium text-accent hover:underline">
+                  {t('nav.admin')}
+                </Link>
+              )}
+              {user.user_metadata?.role === 'seller' ? (
+                <Link href="/seller" className="text-sm font-medium text-orange-600 hover:underline">
+                  {t('nav.seller')}
+                </Link>
+              ) : (
+                <>
+                  <Link href="/orders" className="text-sm font-medium hover:underline">
+                    Đơn hàng của tôi
+                  </Link>
+                  <Link href="/sell" className="text-sm font-medium text-orange-600 hover:underline">
+                    {t('nav.seller')}
+                  </Link>
+                </>
+              )}
+              <span className="text-sm text-muted-foreground hidden sm:inline-block">{user.email}</span>
+              <button 
+                onClick={handleSignOut}
+                className="text-sm font-medium text-red-600 hover:underline"
+              >
+                {t('nav.logout')}
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/sell" className="text-sm font-medium text-orange-600 hover:underline">
                 {t('nav.seller')}
               </Link>
-            )}
-            <span className="text-sm text-muted-foreground">{user.email}</span>
-            <button 
-              onClick={handleSignOut}
-              className="text-sm font-medium hover:text-accent transition-colors"
-            >
-              {t('nav.logout')}
-            </button>
-          </>
-        ) : (
-          <>
-            <Link href="/login" className="text-sm font-medium hover:text-accent transition-colors">
-              {t('nav.login')}
-            </Link>
-            <Link href="/register" className="text-sm font-medium px-4 py-2 bg-foreground text-background rounded-full hover:bg-foreground/90 transition-colors">
-              {t('nav.register')}
-            </Link>
-          </>
-        )}
+              <Link href="/login" className="text-sm font-medium hover:underline">
+                {t('nav.login')}
+              </Link>
+              <Link href="/register" className="text-sm font-medium bg-foreground text-background px-4 py-2 rounded-full hover:bg-foreground/90 transition-colors">
+                {t('nav.register')}
+              </Link>
+            </>
+          )}
       </div>
     </header>
   );

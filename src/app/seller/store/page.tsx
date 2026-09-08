@@ -11,7 +11,9 @@ export default function StoreProfilePage() {
     store_name: '',
     store_description: '',
     phone_number: '',
-    full_name: ''
+    full_name: '',
+    address: '',
+    pickup_address: ''
   });
 
   useEffect(() => {
@@ -22,7 +24,9 @@ export default function StoreProfilePage() {
           store_name: user.user_metadata.store_name || '',
           store_description: user.user_metadata.store_description || '',
           phone_number: user.user_metadata.phone_number || '',
-          full_name: user.user_metadata.full_name || ''
+          full_name: user.user_metadata.full_name || '',
+          address: user.user_metadata.address || '',
+          pickup_address: user.user_metadata.pickup_address || ''
         });
       }
     };
@@ -38,7 +42,9 @@ export default function StoreProfilePage() {
         store_name: formData.store_name,
         store_description: formData.store_description,
         phone_number: formData.phone_number,
-        full_name: formData.full_name
+        full_name: formData.full_name,
+        address: formData.address,
+        pickup_address: formData.pickup_address
       }
     });
 
@@ -96,6 +102,26 @@ export default function StoreProfilePage() {
               value={formData.store_description}
               onChange={e => setFormData({...formData, store_description: e.target.value})}
               className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Địa chỉ cửa hàng</label>
+            <input 
+              type="text" 
+              value={formData.address}
+              onChange={e => setFormData({...formData, address: e.target.value})}
+              className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:outline-none"
+              placeholder="Ví dụ: 123 Đường A, Quận B, TP.HCM"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Địa chỉ lấy hàng (Kho)</label>
+            <input 
+              type="text" 
+              value={formData.pickup_address}
+              onChange={e => setFormData({...formData, pickup_address: e.target.value})}
+              className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:outline-none"
+              placeholder="Để trống nếu giống địa chỉ cửa hàng"
             />
           </div>
         </div>

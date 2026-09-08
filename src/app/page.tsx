@@ -51,7 +51,7 @@ export default function Home() {
           </button>
           
           <button 
-            onClick={() => router.push('/shop')}
+            onClick={() => router.push('/products')}
             className="flex items-center justify-center px-8 py-4 bg-muted text-foreground rounded-full font-medium text-lg hover:bg-border transition-all w-full sm:w-auto"
           >
             Mua lẻ sản phẩm

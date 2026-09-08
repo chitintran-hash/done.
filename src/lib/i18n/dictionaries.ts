@@ -7,7 +7,7 @@ export const dictionaries = {
     'nav.register': 'Đăng ký',
     'nav.logout': 'Đăng xuất',
     'nav.admin': 'Admin',
-    'nav.seller': 'Kênh nhà bán',
+    'nav.seller': 'Kênh Người Bán',
     'nav.cart': 'Giỏ hàng',
     
     'home.hero.title': 'Bạn muốn hoàn thành điều gì?',

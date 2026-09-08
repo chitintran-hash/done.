@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, Truck, Store, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Truck, Store, LogOut, Warehouse } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SellerLayout({ children }: { children: React.ReactNode }) {
@@ -17,6 +17,8 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
 
       if (!user) {
         router.push('/login');
+      } else if (user.user_metadata?.role !== 'seller') {
+        router.push('/');
       } else {
         setLoading(false);
       }
@@ -39,6 +41,10 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
           <Link href="/seller/products" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
             <Package className="w-5 h-5" />
             Quản lý Sản phẩm
+          </Link>
+          <Link href="/seller/inventory" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
+            <Warehouse className="w-5 h-5" />
+            Tồn kho
           </Link>
           <Link href="/seller/orders" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
             <Truck className="w-5 h-5" />

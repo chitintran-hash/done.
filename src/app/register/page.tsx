@@ -9,6 +9,11 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [role, setRole] = useState<'buyer' | 'seller'>('buyer');
+  const [storeName, setStoreName] = useState('');
+  const [storeDesc, setStoreDesc] = useState('');
+  const [phone, setPhone] = useState('');
+  
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,6 +34,10 @@ export default function RegisterPage() {
       options: {
         data: {
           full_name: fullName,
+          role: role,
+          store_name: role === 'seller' ? storeName : null,
+          store_description: role === 'seller' ? storeDesc : null,
+          phone_number: role === 'seller' ? phone : null,
         },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
@@ -73,8 +82,58 @@ export default function RegisterPage() {
                 placeholder="Ví dụ: Nguyễn Văn A"
               />
             </div>
+            
+            <div className="pt-2">
+              <label className="block text-sm font-medium mb-3">Bạn là ai?</label>
+              <div className="flex gap-4">
+                <label className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'buyer' ? 'border-accent bg-accent/5' : 'border-border bg-muted/30'}`}>
+                  <input type="radio" name="role" className="hidden" checked={role === 'buyer'} onChange={() => setRole('buyer')} />
+                  <span className={`font-medium ${role === 'buyer' ? 'text-accent' : 'text-muted-foreground'}`}>Khách mua hàng</span>
+                </label>
+                <label className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition-all ${role === 'seller' ? 'border-orange-500 bg-orange-50' : 'border-border bg-muted/30'}`}>
+                  <input type="radio" name="role" className="hidden" checked={role === 'seller'} onChange={() => setRole('seller')} />
+                  <span className={`font-medium ${role === 'seller' ? 'text-orange-600' : 'text-muted-foreground'}`}>Nhà bán (Seller)</span>
+                </label>
+              </div>
+            </div>
+
+            {role === 'seller' && (
+              <div className="space-y-4 pt-2 border-t border-border mt-4">
+                <h3 className="text-sm font-bold text-orange-600">Thông tin cửa hàng</h3>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Tên cửa hàng *</label>
+                  <input 
+                    type="text" 
+                    required={role === 'seller'}
+                    value={storeName}
+                    onChange={e => setStoreName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:border-accent focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Số điện thoại *</label>
+                  <input 
+                    type="text" 
+                    required={role === 'seller'}
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:border-accent focus:outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Mô tả ngắn về cửa hàng</label>
+                  <textarea 
+                    rows={2}
+                    value={storeDesc}
+                    onChange={e => setStoreDesc(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg border border-border focus:border-accent focus:outline-none transition-colors"
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
+              <label className="block text-sm font-medium mb-1">Email *</label>
               <input 
                 type="email" 
                 required

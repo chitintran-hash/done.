@@ -52,6 +52,11 @@ export default function Header() {
                 {t('nav.admin')}
               </Link>
             )}
+            {user.user_metadata?.role === 'seller' && (
+              <Link href="/seller" className="text-sm font-medium text-orange-600 hover:underline">
+                {t('nav.seller')}
+              </Link>
+            )}
             <span className="text-sm text-muted-foreground">{user.email}</span>
             <button 
               onClick={handleSignOut}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { LayoutDashboard, Users, Box, ListChecks, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Box, ListChecks, Settings, LogOut, Store } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -45,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Tài khoản (Users)
           </Link>
           <Link href="/admin/sellers" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
-            <Users className="w-5 h-5" />
+            <Store className="w-5 h-5" />
             Nhà bán (Sellers)
           </Link>
           <Link href="/admin/compatibility" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">

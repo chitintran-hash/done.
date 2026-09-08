@@ -1,11 +1,15 @@
-import { Activity, Box, ShoppingCart, Users } from "lucide-react";
+import { Activity, Box, ShoppingCart, Users, Store } from "lucide-react";
+import { getDashboardStats } from "../actions/admin";
+import Link from 'next/link';
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const statsData = await getDashboardStats();
+
   const stats = [
-    { title: "Tổng nhà bán", value: "24", icon: Users, trend: "+12%" },
-    { title: "Sản phẩm chờ duyệt", value: "8", icon: Box, trend: "Cần xử lý" },
-    { title: "Đơn hàng (Master Orders)", value: "156", icon: ShoppingCart, trend: "+45%" },
-    { title: "Lỗi tương thích (Rules)", value: "0", icon: Activity, trend: "Ổn định" },
+    { title: "Tổng Người Bán", value: statsData.totalSellers.toString(), icon: Store, trend: "Active" },
+    { title: "Tổng Người Dùng", value: statsData.totalUsers.toString(), icon: Users, trend: "Active" },
+    { title: "Sản phẩm chờ duyệt", value: statsData.pendingProducts.toString(), icon: Box, trend: "Cần xử lý" },
+    { title: "Đơn hàng (Master Orders)", value: statsData.totalOrders.toString(), icon: ShoppingCart, trend: "Toàn hệ thống" },
   ];
 
   return (
@@ -16,12 +20,12 @@ export default function AdminDashboardPage() {
           <p className="text-muted-foreground mt-2">Theo dõi các chỉ số quan trọng của toàn bộ hệ thống DONE.</p>
         </div>
         <div className="flex gap-3">
-          <a href="/admin/products/create" className="px-6 py-2.5 bg-accent text-white rounded-xl font-medium hover:bg-accent/90 transition-all shadow-sm">
-            + Đăng Sản Phẩm Mới
-          </a>
-          <a href="/admin/users" className="px-6 py-2.5 bg-foreground text-background rounded-xl font-medium hover:bg-foreground/90 transition-all shadow-sm">
+          <Link href="/admin/products" className="px-6 py-2.5 bg-accent text-white rounded-xl font-medium hover:bg-accent/90 transition-all shadow-sm">
+            Duyệt Sản Phẩm
+          </Link>
+          <Link href="/admin/users" className="px-6 py-2.5 bg-foreground text-background rounded-xl font-medium hover:bg-foreground/90 transition-all shadow-sm">
             Quản Lý User
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -34,7 +38,7 @@ export default function AdminDashboardPage() {
                 <div className="p-3 bg-accent/10 rounded-xl">
                   <Icon className="w-6 h-6 text-accent" />
                 </div>
-                <span className={`text-sm font-medium ${stat.trend.includes('+') ? 'text-green-600' : 'text-orange-500'}`}>
+                <span className="text-sm font-medium text-orange-500">
                   {stat.trend}
                 </span>
               </div>
@@ -47,28 +51,18 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-2xl border border-border shadow-sm">
-          <h3 className="font-bold text-lg mb-4">Sản phẩm chờ duyệt gần đây</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center py-2 border-b border-border">
-              <div>
-                <p className="font-medium">Bàn phím cơ Keychron K8 Pro</p>
-                <p className="text-sm text-muted-foreground">Seller: GearVN</p>
-              </div>
-              <button className="px-4 py-2 bg-accent/10 text-accent font-medium rounded-lg text-sm">Duyệt ngay</button>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-border">
-              <div>
-                <p className="font-medium">Ghế Ergonomic Herman Miller</p>
-                <p className="text-sm text-muted-foreground">Seller: SiliconZ</p>
-              </div>
-              <button className="px-4 py-2 bg-accent/10 text-accent font-medium rounded-lg text-sm">Duyệt ngay</button>
-            </div>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-bold text-lg">Sản phẩm chờ duyệt</h3>
+            <Link href="/admin/products" className="text-sm text-accent hover:underline">Xem tất cả</Link>
+          </div>
+          <div className="flex items-center justify-center h-32 bg-muted/30 rounded-xl border border-dashed border-border text-muted-foreground">
+            {statsData.pendingProducts === 0 ? 'Không có sản phẩm nào đang chờ duyệt.' : `Có ${statsData.pendingProducts} sản phẩm cần duyệt.`}
           </div>
         </div>
 
         <div className="bg-white p-6 rounded-2xl border border-border shadow-sm">
           <h3 className="font-bold text-lg mb-4">Cảnh báo hệ thống (Rules)</h3>
-          <div className="flex items-center justify-center h-48 bg-muted/30 rounded-xl border border-dashed border-border text-muted-foreground">
+          <div className="flex items-center justify-center h-32 bg-muted/30 rounded-xl border border-dashed border-border text-muted-foreground">
             Không có ngoại lệ (Exception) nào về Compatibility.
           </div>
         </div>

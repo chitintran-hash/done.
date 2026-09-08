@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Search, Filter, ShoppingCart, AlertCircle } from 'lucide-react';
+import { Search, Filter, ShoppingCart, AlertCircle, Store } from 'lucide-react';
 import Link from 'next/link';
+import { formatVND } from '@/lib/utils/currency';
 
 export default function ProductCatalogPage() {
   const supabase = createClient();
@@ -124,12 +125,13 @@ export default function ProductCatalogPage() {
                 </div>
                 <div className="p-5 flex flex-col flex-1">
                   <h3 className="font-bold text-lg mb-1 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 truncate">
-                    Bởi: {product.profiles?.store_name || 'Người bán DONE.'}
-                  </p>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Store className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground line-clamp-1">{product.profiles?.store_name || 'Người bán DONE.'}</span>
+                  </div>
                   <div className="mt-auto flex items-end justify-between">
                     <span className="text-xl font-bold text-accent">
-                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                      {formatVND(product.price)}
                     </span>
                     <button 
                       disabled={isOutOfStock}

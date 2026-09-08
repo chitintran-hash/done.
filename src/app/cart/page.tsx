@@ -4,6 +4,8 @@ import { useCartStore } from '@/store/useCartStore';
 import { useRouter } from 'next/navigation';
 import { Store, Truck, ArrowRight, ShoppingBag, Trash2, Plus, Minus, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { formatVND } from '@/lib/utils/currency';
+import { SHIPPING_FEE } from '@/lib/constants';
 
 export default function CartPage() {
   const cart = useCartStore();
@@ -39,7 +41,7 @@ export default function CartPage() {
         storeName: item.storeName || 'Cửa hàng DONE.',
         items: [],
         subtotal: 0,
-        shippingFee: 35000, // Fixed mock fee per seller
+        shippingFee: SHIPPING_FEE,
         maxDelivery: 0
       };
     }
@@ -96,7 +98,7 @@ export default function CartPage() {
                       <div className="flex-1">
                         <Link href={`/products/${item.id}`} className="font-bold hover:text-accent transition-colors line-clamp-1">{item.name}</Link>
                         <div className="font-bold text-lg text-accent mt-1">
-                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                          {formatVND(item.price)}
                         </div>
                       </div>
                       
@@ -134,12 +136,15 @@ export default function CartPage() {
                   ))}
                 </div>
 
-                <div className="bg-muted/10 px-6 py-4 border-t border-border flex justify-end items-center gap-6">
-                  <div className="text-sm text-muted-foreground">Phí giao hàng: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.shippingFee)}</div>
-                  <div className="font-bold">
-                    Tạm tính: <span className="text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.subtotal + order.shippingFee)}</span>
-                  </div>
+                <div className="p-4 bg-muted/30 border-t border-border flex justify-between items-center">
+                <div className="text-muted-foreground font-medium">
+                  Tổng {order.items.reduce((s:number, i:any) => s + i.quantity, 0)} sản phẩm + Phí ship {formatVND(order.shippingFee)}
                 </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-muted-foreground">Tạm tính (Sub-order)</div>
+                  <div className="font-bold text-xl text-accent">{formatVND(order.subtotal + order.shippingFee)}</div>
+                </div>
+              </div>
               </div>
             ))}
           </div>
@@ -149,27 +154,24 @@ export default function CartPage() {
               <h2 className="text-xl font-bold mb-6">Tổng đơn hàng</h2>
               
               <div className="space-y-4 mb-6">
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Tổng tiền hàng ({cart.items.reduce((s, i) => s + i.quantity, 0)} sản phẩm)</span>
-                  <span className="font-medium text-foreground">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(itemsTotal)}</span>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground font-medium">Tạm tính ({cart.items.length} sản phẩm)</span>
+                  <span className="font-bold">{formatVND(itemsTotal)}</span>
                 </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Tổng phí giao hàng ({subOrdersList.length} kiện)</span>
-                  <span className="font-medium text-foreground">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalShipping)}</span>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground font-medium">Tổng phí giao hàng</span>
+                  <span className="font-bold">{formatVND(totalShipping)}</span>
                 </div>
               </div>
-
-              <div className="pt-6 border-t border-border mb-8">
-                <div className="flex justify-between items-end">
-                  <span className="font-bold text-lg">Tổng thanh toán</span>
-                  <span className="font-black text-3xl text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(masterTotal)}</span>
-                </div>
-                <p className="text-right text-xs text-muted-foreground mt-1">Đã bao gồm VAT</p>
+              <div className="pt-4 border-t border-border flex justify-between items-end">
+                <span className="font-bold text-lg">Tổng thanh toán</span>
+                <span className="text-3xl font-black text-accent">{formatVND(masterTotal)}</span>
               </div>
+              <p className="text-right text-xs text-muted-foreground mt-1">Đã bao gồm VAT</p>
 
               <button 
                 onClick={() => router.push('/checkout')}
-                className="w-full py-4 bg-foreground text-background rounded-xl font-bold text-lg hover:bg-foreground/90 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-foreground text-background rounded-xl font-bold text-lg hover:bg-foreground/90 transition-all flex items-center justify-center gap-2 mt-6"
               >
                 Tiến hành thanh toán
                 <ArrowRight className="w-5 h-5" />

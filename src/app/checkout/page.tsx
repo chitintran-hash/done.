@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { formatVND } from '@/lib/utils/currency';
 
 export default function CheckoutPage() {
   const router = useRouter();

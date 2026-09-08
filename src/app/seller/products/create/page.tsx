@@ -10,19 +10,21 @@ const CATEGORIES = {
   furniture: [
     { id: 'desk', name: 'Bàn (Desk)' },
     { id: 'chair', name: 'Ghế (Chair)' },
-    { id: 'drawer', name: 'Ngăn kéo bàn / Tủ hộc' },
-    { id: 'shelf', name: 'Kệ sách nhỏ' }
+    { id: 'drawer', name: 'Ngăn kéo bàn' },
+    { id: 'cabinet', name: 'Tủ hoặc hộc bàn' },
+    { id: 'desk_shelf', name: 'Kệ bàn' },
+    { id: 'bookshelf', name: 'Kệ sách nhỏ' }
   ],
   display: [
     { id: 'monitor', name: 'Màn hình' },
-    { id: 'monitor_arm', name: 'Tay đỡ màn hình (Monitor Arm)' },
+    { id: 'monitor_arm', name: 'Monitor Arm' },
     { id: 'monitor_stand', name: 'Kệ màn hình' }
   ],
   accessories: [
     { id: 'keyboard', name: 'Bàn phím' },
     { id: 'mouse', name: 'Chuột' },
     { id: 'mouse_pad', name: 'Mouse Pad' },
-    { id: 'laptop_stand', name: 'Giá đỡ Laptop' },
+    { id: 'laptop_stand', name: 'Laptop Stand' },
     { id: 'webcam', name: 'Webcam' },
     { id: 'microphone', name: 'Microphone' },
     { id: 'speaker', name: 'Loa' },
@@ -32,18 +34,17 @@ const CATEGORIES = {
     { id: 'docking_station', name: 'Docking Station' },
     { id: 'usb_hub', name: 'USB Hub' },
     { id: 'power_strip', name: 'Ổ cắm điện' },
-    { id: 'smart_plug', name: 'Ổ điện thông minh' },
-    { id: 'charger', name: 'Củ sạc' },
+    { id: 'charger', name: 'Sạc' },
     { id: 'cable', name: 'Cáp kết nối' }
   ],
   organization: [
-    { id: 'cable_management', name: 'Quản lý dây cáp' },
+    { id: 'cable_management', name: 'Quản lý dây' },
     { id: 'desk_organizer', name: 'Desk Organizer' }
   ],
   ergonomics: [
     { id: 'desk_lamp', name: 'Đèn bàn' },
-    { id: 'footrest', name: 'Kê chân (Footrest)' },
-    { id: 'ergo_accessories', name: 'Phụ kiện công thái học khác' }
+    { id: 'footrest', name: 'Footrest' },
+    { id: 'ergo_accessories', name: 'Các phụ kiện công thái học' }
   ]
 };
 
@@ -76,8 +77,9 @@ export default function SellerCreateProductPage() {
 
   const generateSKU = (category: string) => {
     const prefix = category.substring(0, 3).toUpperCase();
-    const timestamp = Date.now().toString().slice(-6);
-    return `${prefix}-${timestamp}`;
+    const timePart = Date.now().toString(36).toUpperCase();
+    const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `${prefix}-${timePart}-${randomPart}`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -156,10 +158,12 @@ export default function SellerCreateProductPage() {
 
     if (c === 'monitor_arm') return (
       <>
-        <InputField label="Chuẩn VESA hỗ trợ" val={specs.vesa_supported} onChange={(v) => handleSpecChange('vesa_supported', v)} />
+        <InputField label="Chuẩn VESA hỗ trợ (VD: 75x75, 100x100)" val={specs.vesa_supported} onChange={(v) => handleSpecChange('vesa_supported', v)} />
+        <InputField label="Tải trọng tối thiểu (kg)" type="number" val={specs.min_load} onChange={(v) => handleSpecChange('min_load', v)} />
         <InputField label="Tải trọng tối đa (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
-        <InputField label="Kích thước màn hình tối đa (inch)" type="number" val={specs.supported_monitor_size} onChange={(v) => handleSpecChange('supported_monitor_size', v)} />
-        <InputField label="Ngàm kẹp độ dày bàn tối đa (cm)" type="number" val={specs.clamp_thickness_max} onChange={(v) => handleSpecChange('clamp_thickness_max', v)} />
+        <InputField label="Kích thước màn hình hỗ trợ (inch)" type="number" val={specs.supported_monitor_size} onChange={(v) => handleSpecChange('supported_monitor_size', v)} />
+        <InputField label="Độ dày bàn hỗ trợ (cm)" type="number" val={specs.clamp_thickness_max} onChange={(v) => handleSpecChange('clamp_thickness_max', v)} />
+        <InputField label="Kiểu gắn (Kẹp bàn / Xuyên lỗ)" val={specs.mount_type} onChange={(v) => handleSpecChange('mount_type', v)} />
       </>
     );
 
@@ -200,12 +204,21 @@ export default function SellerCreateProductPage() {
 
     if (c === 'laptop_stand') return (
       <>
-        <InputField label="Kích thước laptop tối đa (inch)" type="number" val={specs.supported_laptop_size} onChange={(v) => handleSpecChange('supported_laptop_size', v)} />
-        <InputField label="Tải trọng tối đa (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
+        <InputField label="Kích thước laptop hỗ trợ (inch)" type="number" val={specs.supported_laptop_size} onChange={(v) => handleSpecChange('supported_laptop_size', v)} />
+        <InputField label="Tải trọng (kg)" type="number" val={specs.max_load} onChange={(v) => handleSpecChange('max_load', v)} />
+        <InputField label="Chiều cao (cm)" type="number" val={specs.height} onChange={(v) => handleSpecChange('height', v)} />
         <label className="flex items-center gap-2 pt-6 cursor-pointer">
           <input type="checkbox" checked={specs.adjustable || false} onChange={(e) => handleSpecChange('adjustable', e.target.checked)} />
-          <span className="text-sm">Có thể điều chỉnh độ cao</span>
+          <span className="text-sm">Khả năng điều chỉnh (Adjustable)</span>
         </label>
+      </>
+    );
+
+    if (c === 'docking_station' || c === 'usb_hub') return (
+      <>
+        <InputField label="Loại cổng kết nối đầu vào (Host)" val={specs.input_ports} onChange={(v) => handleSpecChange('input_ports', v)} />
+        <InputField label="Các cổng đầu ra (Outputs)" val={specs.output_ports} onChange={(v) => handleSpecChange('output_ports', v)} placeholder="VD: 2x USB-A, 1x HDMI..." />
+        <InputField label="Công suất Power Delivery (W)" type="number" val={specs.power_delivery} onChange={(v) => handleSpecChange('power_delivery', v)} />
       </>
     );
 

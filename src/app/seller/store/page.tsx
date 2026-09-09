@@ -81,7 +81,7 @@ export default function StoreProfilePage() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.updateUser({
+    const { error: authError } = await supabase.auth.updateUser({
       data: {
         store_name: formData.store_name,
         store_description: formData.store_description,
@@ -95,11 +95,35 @@ export default function StoreProfilePage() {
       }
     });
 
-    if (error) {
-      alert('Lỗi cập nhật: ' + error.message);
-    } else {
-      alert('Cập nhật thông tin cửa hàng thành công!');
+    if (authError) {
+      alert('Lỗi cập nhật metadata: ' + authError.message);
+      setLoading(false);
+      return;
     }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { error: dbError } = await supabase
+        .from('profiles')
+        .update({
+          store_name: formData.store_name,
+          store_description: formData.store_description,
+          phone_number: formData.phone_number,
+          address: formData.address,
+          pickup_address: formData.pickup_address,
+          logo_url: formData.logo_url,
+          cover_url: formData.cover_url,
+          store_email: formData.store_email
+        })
+        .eq('id', user.id);
+        
+      if (dbError) {
+        alert('Lỗi lưu CSDL profiles (Bạn đã chạy tệp SQL để tạo cột chưa?): ' + dbError.message);
+        setLoading(false);
+        return;
+      }
+    }
+    alert('Cập nhật hồ sơ cửa hàng thành công!');
     setLoading(false);
   };
 

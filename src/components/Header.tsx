@@ -39,7 +39,9 @@ export default function Header() {
       </Link>
       <div className="hidden md:flex flex-1 items-center justify-center gap-8 px-8">
         <Link href="/products" className="text-sm font-medium hover:text-accent transition-colors">Sản phẩm</Link>
-        <Link href="/build" className="text-sm font-medium hover:text-accent transition-colors">Solution Builder</Link>
+        <Link href="/build" className="text-sm font-medium hover:text-accent transition-colors">
+          Tạo setup
+        </Link>
         <Link href="/sell" className="text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors">Trở thành Người bán</Link>
       </div>
 

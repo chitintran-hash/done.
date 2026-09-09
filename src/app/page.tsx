@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Monitor, Box, Smartphone, Mouse, Zap, LayoutDashboard, Store } from "lucide-react";
+import { ArrowRight, CheckCircle2, Store } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { motion } from "framer-motion";
@@ -16,17 +16,16 @@ const images = [
 ];
 
 const categories = [
-  { id: 'desk', name: 'Bàn', icon: LayoutDashboard },
-  { id: 'chair', name: 'Ghế', icon: Box },
-  { id: 'monitor', name: 'Màn hình', icon: Monitor },
-  { id: 'monitor_arm', name: 'Monitor Arm', icon: Zap },
-  { id: 'keyboard', name: 'Bàn phím', icon: Smartphone },
-  { id: 'mouse', name: 'Chuột', icon: Mouse },
+  { id: 'desk', name: 'Bàn Làm Việc', image: 'https://images.unsplash.com/photo-1595514535415-8422714fa418?auto=format&fit=crop&w=600&q=80' },
+  { id: 'chair', name: 'Ghế Công Thái Học', image: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=600&q=80' },
+  { id: 'monitor', name: 'Màn Hình', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80' },
+  { id: 'monitor_arm', name: 'Tay Đỡ (Monitor Arm)', image: 'https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=600&q=80' },
+  { id: 'keyboard', name: 'Bàn Phím & Chuột', image: 'https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=600&q=80' },
+  { id: 'accessories', name: 'Phụ Kiện Setup', image: 'https://images.unsplash.com/photo-1621361365424-06f0e1eb5c49?auto=format&fit=crop&w=600&q=80' },
 ];
 
 export default function Home() {
   const router = useRouter();
-  const { t } = useLanguage();
   const [currentImg, setCurrentImg] = useState(0);
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
 
@@ -42,7 +41,7 @@ export default function Home() {
       const supabase = createClient();
       const { data } = await supabase
         .from('products')
-        .select('*, profiles!products_seller_id_fkey(store_name)')
+        .select('*, profiles!products_seller_id_fkey(store_name, logo_url)')
         .eq('approval_status', 'active')
         .limit(8);
       
@@ -54,45 +53,40 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* 1. HERO SECTION */}
-      <section className="flex flex-col items-center justify-center p-6 pt-24 pb-16">
-        <div className="max-w-4xl w-full text-center space-y-8">
-          <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent font-medium text-sm mb-4">
-            <CheckCircle2 className="w-4 h-4" />
-            <span>Marketplace Chuyên Biệt Cho Workspace</span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-            {t('home.hero.title')}
+      <section className="flex flex-col items-center justify-center p-6 pt-20 pb-16">
+        <div className="max-w-4xl w-full text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+            Hoàn thiện góc học tập và làm việc theo cách của bạn.
           </h1>
           
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            {t('home.hero.subtitle')}
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Chọn từng sản phẩm bạn thích hoặc để DONE. gợi ý một setup phù hợp với không gian, nhu cầu và ngân sách của bạn.
           </p>
 
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button 
               onClick={() => router.push('/build')}
-              className="group flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-medium text-lg hover:bg-foreground/90 transition-all w-full sm:w-auto shadow-lg"
+              className="group flex items-center justify-center gap-2 px-8 py-3.5 bg-foreground text-background rounded-xl font-medium hover:bg-foreground/90 transition-all w-full sm:w-auto shadow-md"
             >
-              {t('home.hero.start')}
+              Tạo setup của bạn
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             
             <button 
               onClick={() => router.push('/products')}
-              className="flex items-center justify-center px-8 py-4 bg-muted text-foreground rounded-full font-medium text-lg hover:bg-border transition-all w-full sm:w-auto"
+              className="flex items-center justify-center px-8 py-3.5 bg-muted text-foreground rounded-xl font-medium hover:bg-border transition-all w-full sm:w-auto"
             >
               Khám phá sản phẩm
             </button>
           </div>
 
           <motion.div 
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="pt-16 w-full max-w-5xl mx-auto"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="pt-12 w-full max-w-5xl mx-auto"
           >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-border aspect-video group">
+            <div className="relative rounded-2xl overflow-hidden border border-border aspect-[21/9] group bg-muted">
               {images.map((src, index) => (
                 <img 
                   key={src}
@@ -103,99 +97,72 @@ export default function Home() {
                   }`}
                 />
               ))}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent"></div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* 2. SOLUTION EXPLANATION */}
-      <section className="py-24 bg-muted/30 border-y border-border">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">Không chỉ mua sản phẩm.<br/>Hãy xây dựng một setup phù hợp.</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-16 leading-relaxed">
-            DONE. kết nối nhu cầu, không gian và ngân sách của bạn với những sản phẩm tương thích. Không còn phỏng đoán, không còn nỗi lo mua về không lắp được.
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white p-8 rounded-3xl border border-border shadow-sm text-left">
-              <div className="w-12 h-12 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-6">
-                <Box className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Phù hợp Không Gian</h3>
-              <p className="text-muted-foreground">Thuật toán phân tích kích thước và giới hạn vật lý của căn phòng để đề xuất đồ đạc vừa vặn nhất.</p>
-            </div>
-            <div className="bg-white p-8 rounded-3xl border border-border shadow-sm text-left">
-              <div className="w-12 h-12 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-6">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Tương Thích 100%</h3>
-              <p className="text-muted-foreground">Compatibility Engine đảm bảo monitor arm lắp vừa mặt bàn, hoặc cáp nối đúng chuẩn thiết bị.</p>
-            </div>
-            <div className="bg-white p-8 rounded-3xl border border-border shadow-sm text-left">
-              <div className="w-12 h-12 bg-accent/10 text-accent rounded-full flex items-center justify-center mb-6">
-                <Zap className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Phù hợp Ngân Sách</h3>
-              <p className="text-muted-foreground">Hệ sinh thái hàng ngàn sản phẩm từ nhiều cửa hàng giúp tối ưu chi phí cho nhu cầu của bạn.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. CATEGORY EXPLORER */}
-      <section className="py-24">
+      {/* 2. CATEGORY EXPLORER */}
+      <section className="py-20 bg-muted/20 border-t border-border">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex justify-between items-end mb-10">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Khám phá theo danh mục</h2>
-              <p className="text-muted-foreground">Tìm kiếm các mảnh ghép cho góc làm việc của bạn.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Danh mục phổ biến</h2>
+              <p className="text-muted-foreground">Khám phá các mảnh ghép cho góc làm việc của bạn.</p>
             </div>
+            <Link href="/products" className="hidden sm:flex items-center gap-2 font-medium text-accent hover:underline">
+              Xem tất cả <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {categories.map((cat) => (
-              <Link key={cat.id} href={`/products?category=${cat.id}`} className="group bg-muted/50 border border-border rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white hover:border-accent hover:shadow-lg transition-all text-center">
-                <cat.icon className="w-10 h-10 text-muted-foreground group-hover:text-accent transition-colors" />
-                <span className="font-bold">{cat.name}</span>
+              <Link key={cat.id} href={`/products?category=${cat.id}`} className="group relative rounded-2xl overflow-hidden aspect-[4/3] md:aspect-[3/2] border border-border">
+                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
+                  <span className="text-white font-bold text-lg md:text-xl">{cat.name}</span>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 4. FEATURED PRODUCTS */}
-      <section className="py-24 bg-muted/30 border-y border-border">
+      {/* 3. FEATURED PRODUCTS */}
+      <section className="py-20 border-t border-border">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex justify-between items-end mb-10">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Sản phẩm nổi bật</h2>
-              <p className="text-muted-foreground">Được đề xuất cho các góc làm việc hiện đại.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Sản phẩm nổi bật</h2>
+              <p className="text-muted-foreground">Lựa chọn hàng đầu từ cộng đồng.</p>
             </div>
-            <Link href="/products" className="hidden sm:flex items-center gap-2 font-bold text-accent hover:underline">
-              Xem tất cả <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
           
           {featuredProducts.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-border rounded-3xl">
+            <div className="text-center py-20 bg-muted/30 border border-border border-dashed rounded-2xl">
               <p className="text-muted-foreground">Hệ thống đang cập nhật sản phẩm.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {featuredProducts.map(product => (
-                <Link key={product.id} href={`/products/${product.id}`} className="group bg-white rounded-3xl border border-border overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-                  <div className="aspect-square bg-muted relative overflow-hidden p-6">
-                    <img src={product.image_url} alt={product.name} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                <Link key={product.id} href={`/products/${product.id}`} className="group bg-white rounded-2xl border border-border overflow-hidden hover:border-accent hover:shadow-lg transition-all duration-300 flex flex-col">
+                  <div className="aspect-square bg-muted relative overflow-hidden">
+                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-bold text-lg mb-4 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
-                    <div className="flex items-center gap-2 mb-4">
-                      <Store className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground line-clamp-1">{product.profiles?.store_name || 'Người bán DONE.'}</span>
+                  <div className="p-4 flex flex-col flex-1">
+                    <h3 className="font-bold text-base mb-3 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden shrink-0 border border-border">
+                        {product.profiles?.logo_url ? (
+                          <img src={product.profiles.logo_url} alt="Logo" className="w-full h-full object-cover" />
+                        ) : (
+                          <Store className="w-3 h-3 text-orange-600" />
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground line-clamp-1">{product.profiles?.store_name || 'Người bán DONE.'}</span>
                     </div>
-                    <div className="mt-auto flex items-end justify-between">
-                      <span className="text-xl font-bold text-accent">{formatVND(product.price)}</span>
+                    <div className="mt-auto">
+                      <span className="text-lg font-bold text-accent">{formatVND(product.price)}</span>
                     </div>
                   </div>
                 </Link>
@@ -205,33 +172,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. BRAND STORY */}
-      <section className="py-24">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-8 tracking-tight">Câu chuyện của DONE.</h2>
-          <div className="space-y-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
-            <p>DONE. bắt đầu từ một câu hỏi đơn giản: Vì sao việc xây dựng một góc học tập hoặc làm việc phù hợp lại phải bắt đầu bằng hàng chục tab tìm kiếm, và kết thúc bằng việc trả hàng vì không lắp vừa?</p>
-            <p>Một chiếc bàn đẹp chưa chắc phù hợp với tay đỡ màn hình. Một chiếc màn hình tốt chưa chắc vừa với không gian phòng. Một bộ setup hợp lý không chỉ là tập hợp của những món đồ riêng lẻ.</p>
-            <p className="text-foreground font-medium italic">"DONE. được xây dựng để kết nối những lựa chọn đó."</p>
-            <p>Chúng tôi giúp bạn đi từ nhu cầu đến một không gian hoàn chỉnh, nơi sản phẩm, thẩm mỹ và ngân sách có thể hoạt động hoàn hảo cùng nhau.</p>
+      {/* 4. BRAND STORY */}
+      <section className="py-24 bg-muted/30 border-t border-border">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-2xl md:text-4xl font-bold mb-8 tracking-tight">Câu chuyện của DONE.</h2>
+          <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
+            <p>Một góc học tập tốt không bắt đầu từ việc mua thật nhiều đồ. Nó bắt đầu từ việc hiểu mình cần gì, có bao nhiêu không gian và những sản phẩm nào thực sự tương thích với nhau.</p>
+            <p>DONE. được xây dựng để đơn giản hóa quá trình đó.</p>
+            <p>Chúng tôi muốn biến việc xây dựng góc học tập và làm việc từ một quá trình tìm kiếm rời rạc thành một trải nghiệm liền mạch và trọn vẹn hơn.</p>
           </div>
-        </div>
-      </section>
-
-      {/* 6. CALL TO ACTION (SELLER) */}
-      <section className="py-24 bg-foreground text-background">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-          <Store className="w-16 h-16 mx-auto text-orange-500 mb-6" />
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Bạn có sản phẩm phù hợp cho góc làm việc?</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Mở cửa hàng trên DONE. và đưa sản phẩm của bạn đến đúng đối tượng khách hàng đang xây dựng setup của riêng họ. Tích hợp trực tiếp vào Solution Builder của chúng tôi.
-          </p>
-          <button 
-            onClick={() => router.push('/register')}
-            className="px-8 py-4 bg-orange-600 text-white rounded-full font-bold text-lg hover:bg-orange-700 transition-colors shadow-lg"
-          >
-            Trở thành Người Bán
-          </button>
         </div>
       </section>
     </div>

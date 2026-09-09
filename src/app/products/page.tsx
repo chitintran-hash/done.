@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Search, Filter, ShoppingCart, AlertCircle, Store } from 'lucide-react';
+import { Search, ShoppingCart, AlertCircle, Store } from 'lucide-react';
 import Link from 'next/link';
 import { formatVND } from '@/lib/utils/currency';
+import { CATEGORY_MAP } from '@/lib/constants';
 
 export default function ProductCatalogPage() {
   const supabase = createClient();
@@ -14,6 +15,16 @@ export default function ProductCatalogPage() {
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get('category');
+      if (cat && CATEGORY_MAP[cat]) {
+        setCategory(cat);
+      }
+    }
+  }, []);
   const [priceSort, setPriceSort] = useState<'asc'|'desc'|'none'>('none');
 
   useEffect(() => {
@@ -74,11 +85,9 @@ export default function ProductCatalogPage() {
           className="px-4 py-3 rounded-2xl border border-border focus:border-accent focus:outline-none bg-white min-w-[150px]"
         >
           <option value="all">Tất cả danh mục</option>
-          <option value="desk">Bàn (Desk)</option>
-          <option value="chair">Ghế (Chair)</option>
-          <option value="monitor_arm">Tay đỡ (Monitor Arm)</option>
-          <option value="desk_lamp">Đèn bàn</option>
-          <option value="cable_management">Quản lý cáp</option>
+          {Object.entries(CATEGORY_MAP).map(([key, name]) => (
+            <option key={key} value={key}>{name}</option>
+          ))}
         </select>
         <select 
           value={priceSort}

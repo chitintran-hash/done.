@@ -81,7 +81,7 @@ export default function ProductDetailPage() {
         {/* Left Column: Gallery */}
         <div className="lg:col-span-7">
           <div className="sticky top-24 space-y-4">
-            <div className="aspect-[4/3] bg-white rounded-3xl border border-border overflow-hidden flex items-center justify-center relative">
+            <div className="aspect-[4/3] bg-white rounded-2xl border border-border overflow-hidden flex items-center justify-center relative">
               <img src={selectedImage} alt={product.name} className="w-full h-full object-contain" />
               {isOutOfStock && (
                 <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center">
@@ -96,7 +96,7 @@ export default function ProductDetailPage() {
                 {product.image_url && (
                   <button 
                     onClick={() => setSelectedImage(product.image_url)}
-                    className={`w-24 h-24 shrink-0 rounded-2xl border-2 overflow-hidden bg-white ${selectedImage === product.image_url ? 'border-accent' : 'border-transparent hover:border-border'}`}
+                    className={`w-24 h-24 shrink-0 rounded-xl border-2 overflow-hidden bg-white ${selectedImage === product.image_url ? 'border-accent' : 'border-transparent hover:border-border'}`}
                   >
                     <img src={product.image_url} alt="Thumb" className="w-full h-full object-cover" />
                   </button>
@@ -105,7 +105,7 @@ export default function ProductDetailPage() {
                   <button 
                     key={idx}
                     onClick={() => setSelectedImage(url)}
-                    className={`w-24 h-24 shrink-0 rounded-2xl border-2 overflow-hidden bg-white ${selectedImage === url ? 'border-accent' : 'border-transparent hover:border-border'}`}
+                    className={`w-24 h-24 shrink-0 rounded-xl border-2 overflow-hidden bg-white ${selectedImage === url ? 'border-accent' : 'border-transparent hover:border-border'}`}
                   >
                     <img src={url} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
                   </button>
@@ -124,28 +124,24 @@ export default function ProductDetailPage() {
               )}
               <span className="px-3 py-1 bg-accent/10 text-accent font-bold text-xs rounded capitalize">{product.category.replace('_', ' ')}</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
-            <div className="text-4xl font-black text-accent">
+            <h1 className="text-2xl md:text-3xl font-bold mb-3">{product.name}</h1>
+            <div className="text-3xl font-black text-accent">
               {formatVND(product.price)}
             </div>
           </div>
 
-          <div className="bg-white border border-border rounded-2xl p-5 mb-8">
+          <div className="bg-white border border-border rounded-xl p-5 mb-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center border border-border shrink-0 overflow-hidden">
+                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center border border-border shrink-0 overflow-hidden text-orange-600 font-bold text-lg">
                   {product.profiles?.logo_url ? (
                     <img src={product.profiles.logo_url} alt="Logo" className="w-full h-full object-cover" />
                   ) : (
-                    <Store className="w-6 h-6 text-orange-600" />
+                    product.profiles?.store_name ? product.profiles.store_name.charAt(0).toUpperCase() : <Store className="w-6 h-6" />
                   )}
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">{product.profiles?.store_name || 'Người bán DONE.'}</h3>
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
-                    <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Đã xác thực</span>
-                    <span>100% Chính hãng</span>
-                  </div>
                 </div>
               </div>
               <Link href={`/store/${product.seller_id}`} className="px-4 py-2 bg-muted text-foreground text-sm font-bold rounded-full hover:bg-border transition-colors whitespace-nowrap">
@@ -162,23 +158,21 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            <div>
-              <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Box className="w-5 h-5" /> Thông số kỹ thuật (Compatibility)</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                {product.technical_specs && Object.keys(product.technical_specs).length > 0 ? (
-                  Object.entries(product.technical_specs).map(([key, value]) => {
+            {product.technical_specs && Object.keys(product.technical_specs).length > 0 && Object.values(product.technical_specs).some(val => val !== null && val !== '') && (
+              <div>
+                <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Box className="w-5 h-5" /> Thông số kỹ thuật (Compatibility)</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  {Object.entries(product.technical_specs).map(([key, value]) => {
                     if (value === null || value === '' || value === false) return null;
                     return (
                       <div key={key} className="p-3 bg-muted/50 rounded-lg">
                         <strong className="capitalize">{key.replace(/_/g, ' ')}:</strong> {String(value)}
                       </div>
                     );
-                  })
-                ) : (
-                  <div className="p-3 bg-muted/50 rounded-lg text-muted-foreground col-span-2">Sản phẩm không có thông số kỹ thuật đặc biệt.</div>
-                )}
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="mt-8 pt-8 border-t border-border">

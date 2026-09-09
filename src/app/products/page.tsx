@@ -1,13 +1,22 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Search, ShoppingCart, AlertCircle, Store } from 'lucide-react';
+import { Search, ShoppingCart, AlertCircle, Store, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { formatVND } from '@/lib/utils/currency';
 import { CATEGORY_MAP } from '@/lib/constants';
 
 export default function ProductCatalogPage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground" /></div>}>
+      <ProductCatalogContent />
+    </Suspense>
+  );
+}
+
+function ProductCatalogContent() {
   const supabase = createClient();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,16 +24,14 @@ export default function ProductCatalogPage() {
   // Filters
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
-  
+  const searchParams = useSearchParams();
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const cat = params.get('category');
-      if (cat && CATEGORY_MAP[cat]) {
-        setCategory(cat);
-      }
+    const cat = searchParams.get('category');
+    if (cat && CATEGORY_MAP[cat]) {
+      setCategory(cat);
     }
-  }, []);
+  }, [searchParams]);
   const [priceSort, setPriceSort] = useState<'asc'|'desc'|'none'>('none');
 
   useEffect(() => {

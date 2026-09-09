@@ -84,14 +84,18 @@ export default function Header() {
                   </Link>
                 </>
               )}
-              <span className="text-sm text-muted-foreground hidden lg:inline-block flex items-center gap-2">
+              <Link 
+                href={user.user_metadata?.role === 'seller' ? '/seller/store' : '/orders'}
+                className="text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center"
+              >
                 {user.user_metadata?.avatar_url ? (
-                  <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-6 h-6 rounded-full object-cover" />
+                  <img src={user.user_metadata.avatar_url} alt="Avatar" className="w-8 h-8 rounded-full object-cover border border-border" />
                 ) : (
-                  <UserIcon className="w-4 h-4" />
+                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-border">
+                    <UserIcon className="w-4 h-4" />
+                  </div>
                 )}
-                {user.user_metadata?.full_name || user.email}
-              </span>
+              </Link>
               <button 
                 onClick={handleSignOut}
                 className="text-sm font-medium text-red-600 hover:underline"

@@ -16,7 +16,7 @@ const images = [
 ];
 
 const categories = [
-  { id: 'desk', name: 'Bàn Làm Việc', image: 'https://images.unsplash.com/photo-1595514535415-8422714fa418?auto=format&fit=crop&w=600&q=80' },
+  { id: 'desk', name: 'Bàn Làm Việc', image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80' },
   { id: 'chair', name: 'Ghế Công Thái Học', image: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=600&q=80' },
   { id: 'monitor', name: 'Màn Hình', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80' },
   { id: 'monitor_arm', name: 'Tay Đỡ (Monitor Arm)', image: 'https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=600&q=80' },

@@ -22,44 +22,59 @@ function ProductCatalogContent() {
   const [loading, setLoading] = useState(true);
 
   // Filters
-  const [searchTerm, setSearchTerm] = useState('');
-  const [category, setCategory] = useState('all');
   const searchParams = useSearchParams();
-
+  const initialCategory = searchParams.get('category');
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState(
+    initialCategory && CATEGORY_MAP[initialCategory] ? initialCategory : 'all'
+  );
+  
+  // Sync URL changes if user uses browser back/forward
   useEffect(() => {
     const cat = searchParams.get('category');
     if (cat && CATEGORY_MAP[cat]) {
       setCategory(cat);
+    } else {
+      setCategory('all');
     }
   }, [searchParams]);
+
   const [priceSort, setPriceSort] = useState<'asc'|'desc'|'none'>('none');
 
   useEffect(() => {
+    let ignore = false;
+    const fetchProducts = async () => {
+      setLoading(true);
+      let query = supabase
+        .from('products')
+        .select('*, profiles!products_seller_id_fkey(store_name, logo_url)')
+        .eq('is_available', true);
+
+      if (category !== 'all') {
+        query = query.eq('category', category);
+      }
+      if (priceSort !== 'none') {
+        query = query.order('price', { ascending: priceSort === 'asc' });
+      } else {
+        query = query.order('created_at', { ascending: false });
+      }
+
+      const { data, error } = await query;
+      if (!ignore) {
+        if (!error && data) {
+          setProducts(data);
+        }
+        setLoading(false);
+      }
+    };
+
     fetchProducts();
-  }, [category, priceSort]);
-
-  const fetchProducts = async () => {
-    setLoading(true);
-    let query = supabase
-      .from('products')
-      .select('*, profiles!products_seller_id_fkey(store_name)')
-      .eq('is_available', true);
-
-    if (category !== 'all') {
-      query = query.eq('category', category);
-    }
-    if (priceSort !== 'none') {
-      query = query.order('price', { ascending: priceSort === 'asc' });
-    } else {
-      query = query.order('created_at', { ascending: false });
-    }
-
-    const { data, error } = await query;
-    if (!error && data) {
-      setProducts(data);
-    }
-    setLoading(false);
-  };
+    
+    return () => {
+      ignore = true;
+    };
+  }, [category, priceSort, supabase]);
 
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase())

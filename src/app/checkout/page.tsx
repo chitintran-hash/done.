@@ -23,10 +23,19 @@ export default function CheckoutPage() {
           <CheckCircle2 className="w-8 h-8 text-accent" />
         </div>
         <h1 className="text-2xl font-bold">Mô phỏng Thanh Toán</h1>
-        <p className="text-muted-foreground text-sm">
-          Đây là màn hình thanh toán giả lập cho MVP. Trong thực tế, hệ thống sẽ kết nối với cổng thanh toán (Stripe, VNPay) để thanh toán cho Master Order.
+        <p className="text-muted-foreground text-sm mb-6">
+          Đây là màn hình thanh toán giả lập cho MVP.
         </p>
-        
+        <div className="text-left space-y-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" className="w-5 h-5 accent-primary rounded" />
+            <span className="font-medium">Đơn hàng này là một món quà</span>
+          </label>
+          <div>
+            <label className="block text-sm font-medium mb-1">Lời nhắn cho người nhận (Tùy chọn)</label>
+            <textarea rows={3} placeholder="Chúc mừng sinh nhật..." className="w-full p-3 rounded-xl border border-border focus:border-primary focus:outline-none resize-none"></textarea>
+          </div>
+        </div>
         <button 
           onClick={handleCheckout}
           disabled={loading}

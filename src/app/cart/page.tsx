@@ -17,16 +17,16 @@ export default function CartPage() {
         <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center">
           <ShoppingBag className="w-10 h-10 text-muted-foreground" />
         </div>
-        <h2 className="text-2xl font-bold">Giỏ hàng của bạn đang trống</h2>
+        <h2 className="text-2xl font-bold">Giỏ quà của bạn đang trống</h2>
         <p className="text-muted-foreground text-center max-w-md">
-          Có vẻ như bạn chưa thêm sản phẩm nào vào giỏ. Khám phá ngay các giải pháp hoặc sản phẩm bán lẻ của DONE.
+          Có vẻ như bạn chưa thêm món quà nào vào giỏ. Khám phá ngay bộ sưu tập quà tặng của DONE. Gifting.
         </p>
         <div className="flex gap-4 mt-4">
-          <button onClick={() => router.push('/build')} className="px-6 py-3 bg-foreground text-background rounded-full font-medium transition-colors hover:bg-foreground/90">
-            Tạo Solution
+          <button onClick={() => router.push('/gift-finder')} className="px-6 py-3 bg-primary text-white rounded-full font-bold transition-colors hover:bg-primary/90">
+            Tìm quà cho người ấy
           </button>
-          <button onClick={() => router.push('/products')} className="px-6 py-3 bg-muted text-foreground rounded-full font-medium transition-colors hover:bg-border">
-            Mua lẻ sản phẩm
+          <button onClick={() => router.push('/products')} className="px-6 py-3 bg-muted text-foreground rounded-full font-bold transition-colors hover:bg-border">
+            Xem tất cả quà tặng
           </button>
         </div>
       </div>

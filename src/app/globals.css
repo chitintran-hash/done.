@@ -2,14 +2,16 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #111111;
-  --primary: #000000;
+  --foreground: #222222;
+  --primary: #045a33;
   --primary-foreground: #ffffff;
-  --accent: #ea580c;
-  --accent-foreground: #ffffff;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --accent: #f7f2e5;
+  --accent-foreground: #045a33;
+  --muted: #f8f8f8;
+  --muted-foreground: #666666;
   --border: #e4e4e7;
+  --ug-cream: #faf5eb;
+  --ug-mint: #eef5ef;
 }
 
 @theme inline {
@@ -22,6 +24,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-ug-cream: var(--ug-cream);
+  --color-ug-mint: var(--ug-mint);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

@@ -158,21 +158,24 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {product.technical_specs && Object.keys(product.technical_specs).length > 0 && Object.values(product.technical_specs).some(val => val !== null && val !== '') && (
-              <div>
-                <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Box className="w-5 h-5" /> Thông số kỹ thuật (Compatibility)</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  {Object.entries(product.technical_specs).map(([key, value]) => {
-                    if (value === null || value === '' || value === false) return null;
-                    return (
-                      <div key={key} className="p-3 bg-muted/50 rounded-lg">
-                        <strong className="capitalize">{key.replace(/_/g, ' ')}:</strong> {String(value)}
-                      </div>
-                    );
-                  })}
-                </div>
+            {/* Gift Tags Section */}
+            <div className="space-y-3">
+              <h3 className="font-bold text-lg mb-2 flex items-center gap-2"><Box className="w-5 h-5" /> Phù hợp với</h3>
+              <div className="flex flex-wrap gap-2">
+                {product.recipient_tags?.map((tag: string) => (
+                  <span key={tag} className="px-3 py-1 bg-ug-cream text-primary border border-primary/20 rounded-full text-sm font-medium capitalize">Người nhận: {tag.replace('-', ' ')}</span>
+                ))}
+                {product.occasion_tags?.map((tag: string) => (
+                  <span key={tag} className="px-3 py-1 bg-ug-mint text-primary border border-primary/20 rounded-full text-sm font-medium capitalize">Dịp: {tag.replace('-', ' ')}</span>
+                ))}
+                {product.interest_tags?.map((tag: string) => (
+                  <span key={tag} className="px-3 py-1 bg-muted text-foreground border border-border rounded-full text-sm font-medium capitalize">Sở thích: {tag.replace('-', ' ')}</span>
+                ))}
+                {product.zodiac_tags?.map((tag: string) => (
+                  <span key={tag} className="px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-sm font-medium capitalize">Cung Hoàng Đạo: {tag.replace('-', ' ')}</span>
+                ))}
               </div>
-            )}
+            </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-border">

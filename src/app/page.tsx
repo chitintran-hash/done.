@@ -1,188 +1,138 @@
-"use client";
-
-import Link from "next/link";
-import { ArrowRight, CheckCircle2, Store } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useLanguage } from "@/lib/i18n/LanguageContext";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { formatVND } from "@/lib/utils/currency";
-
-const images = [
-  "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=1600&q=80",
-  "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1600&q=80",
-  "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=1600&q=80"
-];
-
-const categories = [
-  { id: 'desk', name: 'Bàn Làm Việc', image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80' },
-  { id: 'chair', name: 'Ghế Công Thái Học', image: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=600&q=80' },
-  { id: 'monitor', name: 'Màn Hình', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80' },
-  { id: 'desk_lamp', name: 'Đèn Bàn', image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=600&q=80' },
-  { id: 'keyboard', name: 'Bàn Phím & Chuột', image: 'https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=600&q=80' },
-  { id: 'headphone', name: 'Tai Nghe & Loa', image: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&w=600&q=80' },
-];
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
-  const router = useRouter();
-  const [currentImg, setCurrentImg] = useState(0);
-  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImg((prev) => (prev + 1) % images.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const fetchFeatured = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from('products')
-        .select('*, profiles!products_seller_id_fkey(store_name, logo_url)')
-        .eq('approval_status', 'active')
-        .limit(8);
-      
-      if (data) setFeaturedProducts(data);
-    };
-    fetchFeatured();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* 1. HERO SECTION */}
-      <section className="flex flex-col items-center justify-center p-6 pt-20 pb-16">
-        <div className="max-w-4xl w-full text-center space-y-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Hoàn thiện góc học tập và làm việc theo cách của bạn.
-          </h1>
-          
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Chọn từng sản phẩm bạn thích hoặc để DONE. gợi ý một setup phù hợp với không gian, nhu cầu và ngân sách của bạn.
-          </p>
-
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button 
-              onClick={() => router.push('/build')}
-              className="group flex items-center justify-center gap-2 px-8 py-3.5 bg-foreground text-background rounded-xl font-medium hover:bg-foreground/90 transition-all w-full sm:w-auto shadow-md"
-            >
-              Tạo setup của bạn
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            
-            <button 
-              onClick={() => router.push('/products')}
-              className="flex items-center justify-center px-8 py-3.5 bg-muted text-foreground rounded-xl font-medium hover:bg-border transition-all w-full sm:w-auto"
-            >
-              Khám phá sản phẩm
-            </button>
+    <main className="min-h-screen bg-background pt-32 pb-24 font-sans">
+      
+      {/* 1. Hero Section */}
+      <section className="container mx-auto px-6 mb-16">
+        <div className="bg-primary rounded-3xl overflow-hidden relative min-h-[500px] flex items-center">
+          <div className="absolute inset-0 z-0 opacity-40">
+            {/* Background image placeholder */}
+            <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2040&auto=format&fit=crop')] bg-cover bg-center" />
           </div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="pt-12 w-full max-w-5xl mx-auto"
-          >
-            <div className="relative rounded-2xl overflow-hidden border border-border aspect-[21/9] group bg-muted">
-              {images.map((src, index) => (
-                <img 
-                  key={src}
-                  src={src} 
-                  alt="DONE. Workspace Setup" 
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-                    index === currentImg ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-              ))}
-            </div>
-          </motion.div>
+          <div className="relative z-10 p-12 lg:p-24 max-w-3xl text-white">
+            <h1 className="text-5xl lg:text-7xl font-bold tracking-tighter mb-6 leading-tight">
+              Không biết <br /> tặng gì?
+            </h1>
+            <p className="text-xl lg:text-2xl mb-10 font-medium opacity-90 max-w-xl leading-relaxed">
+              Khám phá những món quà phù hợp cho từng người, từng dịp và từng ngân sách.
+            </p>
+            <Link href="/gift-finder" className="inline-block bg-white text-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-ug-cream transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              Tìm quà ngay
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* 2. CATEGORY EXPLORER */}
-      <section className="py-20 bg-muted/20 border-t border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Danh mục phổ biến</h2>
-              <p className="text-muted-foreground">Khám phá các mảnh ghép cho góc làm việc của bạn.</p>
-            </div>
-            <Link href="/products" className="hidden sm:flex items-center gap-2 font-medium text-accent hover:underline">
-              Xem tất cả <ArrowRight className="w-4 h-4" />
+      {/* 2. Shop by Occasion */}
+      <section className="container mx-auto px-6 mb-20">
+        <h2 className="text-3xl font-bold text-center text-primary mb-10 tracking-tight">Quà cho dịp nào?</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {[
+            { name: "Sinh nhật", img: "https://images.unsplash.com/photo-1530103862676-de8892ebeea6?w=400&q=80", link: "/products?occasion=sinh-nhat" },
+            { name: "Kỷ niệm", img: "https://images.unsplash.com/photo-1518199268815-95a206b18cc6?w=400&q=80", link: "/products?occasion=ky-niem" },
+            { name: "Tốt nghiệp", img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&q=80", link: "/products?occasion=tot-nghiep" },
+            { name: "Tân gia", img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&q=80", link: "/products?occasion=tan-gia" },
+            { name: "Valentine", img: "https://images.unsplash.com/photo-1518199268815-95a206b18cc6?w=400&q=80", link: "/products?occasion=valentine" },
+            { name: "Cảm ơn", img: "https://images.unsplash.com/photo-1606787620819-8bdf0c44c293?w=400&q=80", link: "/products?occasion=cam-on" }
+          ].map((item, idx) => (
+            <Link href={item.link} key={idx} className="group flex flex-col items-center">
+              <div className="w-full aspect-square rounded-2xl overflow-hidden bg-ug-cream mb-4 relative shadow-sm group-hover:shadow-md transition-all">
+                <Image src={item.img} alt={item.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <span className="font-medium text-foreground group-hover:text-primary transition-colors text-lg">{item.name}</span>
             </Link>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {categories.map((cat) => (
-              <Link key={cat.id} href={`/products?category=${cat.id}`} className="group relative rounded-2xl overflow-hidden aspect-[4/3] md:aspect-[3/2] border border-border">
-                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
-                  <span className="text-white font-bold text-lg md:text-xl">{cat.name}</span>
-                </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. Shop by Recipient (Pastel background section) */}
+      <section className="bg-ug-cream py-20 mb-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-primary mb-10 tracking-tight">Bạn đang tặng quà cho ai?</h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {[
+              { name: "Bạn gái / Vợ", link: "/products?recipient=ban-gai" },
+              { name: "Bạn trai / Chồng", link: "/products?recipient=ban-trai" },
+              { name: "Bạn thân", link: "/products?recipient=ban-than" },
+              { name: "Mẹ", link: "/products?recipient=me" },
+              { name: "Bố", link: "/products?recipient=bo" },
+              { name: "Đồng nghiệp", link: "/products?recipient=dong-nghiep" },
+              { name: "Thầy cô", link: "/products?recipient=thay-co" },
+              { name: "Trẻ em", link: "/products?recipient=tre-em" }
+            ].map((item, idx) => (
+              <Link href={item.link} key={idx} className="bg-white hover:bg-primary hover:text-white text-primary font-bold px-8 py-4 rounded-full border border-primary/20 shadow-sm transition-all transform hover:-translate-y-1">
+                {item.name}
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 3. FEATURED PRODUCTS */}
-      <section className="py-20 border-t border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-end mb-10">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">Sản phẩm nổi bật</h2>
-              <p className="text-muted-foreground">Lựa chọn hàng đầu từ cộng đồng.</p>
-            </div>
-          </div>
-          
-          {featuredProducts.length === 0 ? (
-            <div className="text-center py-20 bg-muted/30 border border-border border-dashed rounded-2xl">
-              <p className="text-muted-foreground">Hệ thống đang cập nhật sản phẩm.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {featuredProducts.map(product => (
-                <Link key={product.id} href={`/products/${product.id}`} className="group bg-white rounded-2xl border border-border overflow-hidden hover:border-accent hover:shadow-lg transition-all duration-300 flex flex-col">
-                  <div className="aspect-square bg-muted relative overflow-hidden">
-                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="p-4 flex flex-col flex-1">
-                    <h3 className="font-bold text-base mb-3 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden shrink-0 border border-border">
-                        {product.profiles?.logo_url ? (
-                          <img src={product.profiles.logo_url} alt="Logo" className="w-full h-full object-cover" />
-                        ) : (
-                          <Store className="w-3 h-3 text-orange-600" />
-                        )}
-                      </div>
-                      <span className="text-xs text-muted-foreground line-clamp-1">{product.profiles?.store_name || 'Người bán DONE.'}</span>
-                    </div>
-                    <div className="mt-auto">
-                      <span className="text-lg font-bold text-accent">{formatVND(product.price)}</span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+      {/* 4. Shop by Interest */}
+      <section className="container mx-auto px-6 mb-20">
+        <h2 className="text-3xl font-bold text-center text-primary mb-10 tracking-tight">Chọn quà theo sở thích</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {[
+            { name: "Công nghệ", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&q=80", link: "/products?interest=cong-nghe" },
+            { name: "Gaming", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&q=80", link: "/products?interest=gaming" },
+            { name: "Âm nhạc", img: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&q=80", link: "/products?interest=am-nhac" },
+            { name: "Đọc sách", img: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80", link: "/products?interest=doc-sach" },
+            { name: "Làm đẹp", img: "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=400&q=80", link: "/products?interest=lam-dep" },
+            { name: "Thời trang", img: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80", link: "/products?interest=thoi-trang" },
+            { name: "Thể thao", img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&q=80", link: "/products?interest=the-thao" },
+            { name: "Du lịch", img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80", link: "/products?interest=du-lich" },
+            { name: "Decor", img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&q=80", link: "/products?interest=decor" },
+            { name: "Nấu ăn", img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&q=80", link: "/products?interest=nau-an" },
+            { name: "Thú cưng", img: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=400&q=80", link: "/products?interest=thu-cung" },
+            { name: "Chụp ảnh", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80", link: "/products?interest=chup-anh" }
+          ].map((item, idx) => (
+            <Link href={item.link} key={idx} className="group relative rounded-2xl overflow-hidden h-32 flex items-center justify-center bg-gray-100">
+              <Image src={item.img} alt={item.name} fill className="object-cover opacity-60 group-hover:opacity-80 group-hover:scale-110 transition-all duration-500" />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+              <span className="relative z-10 text-white font-bold text-lg drop-shadow-md">{item.name}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* 4. BRAND STORY */}
-      <section className="py-24 bg-muted/30 border-t border-border">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-2xl md:text-4xl font-bold mb-8 tracking-tight">Câu chuyện của DONE.</h2>
-          <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-            <p>Một góc học tập tốt không bắt đầu từ việc mua thật nhiều đồ. Nó bắt đầu từ việc hiểu mình cần gì, có bao nhiêu không gian và những sản phẩm nào thực sự tương thích với nhau.</p>
-            <p>DONE. được xây dựng để đơn giản hóa quá trình đó.</p>
-            <p>Chúng tôi muốn biến việc xây dựng góc học tập và làm việc từ một quá trình tìm kiếm rời rạc thành một trải nghiệm liền mạch và trọn vẹn hơn.</p>
+      {/* 5. Shop by Budget (Mint background section) */}
+      <section className="bg-ug-mint py-20 mb-20">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center text-primary mb-10 tracking-tight">Quà theo ngân sách</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "Dưới 200.000đ", link: "/products?budget=under-200k" },
+              { name: "200.000đ - 500.000đ", link: "/products?budget=200k-500k" },
+              { name: "500.000đ - 1.000.000đ", link: "/products?budget=500k-1m" },
+              { name: "Trên 1.000.000đ", link: "/products?budget=over-1m" }
+            ].map((item, idx) => (
+              <Link href={item.link} key={idx} className="bg-white py-10 px-6 rounded-2xl text-center shadow-sm hover:shadow-xl border border-border/50 hover:border-primary/20 transition-all transform hover:-translate-y-2">
+                <span className="text-xl font-bold text-primary">{item.name}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
-    </div>
+      
+      {/* 6. Zodiac & Numerology */}
+      <section className="container mx-auto px-6 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Link href="/products?zodiac=all" className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-12 text-center border border-indigo-100 hover:shadow-lg transition-all group">
+            <h3 className="text-3xl font-bold text-indigo-900 mb-4 group-hover:scale-105 transition-transform">Cung Hoàng Đạo</h3>
+            <p className="text-indigo-700/80 mb-6 font-medium">Khám phá món quà hoàn hảo cho tính cách của 12 chòm sao.</p>
+            <span className="inline-block px-6 py-2 bg-indigo-100 text-indigo-800 font-bold rounded-full">Xem ngay</span>
+          </Link>
+          <Link href="/products?numerology=all" className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl p-12 text-center border border-orange-100 hover:shadow-lg transition-all group">
+            <h3 className="text-3xl font-bold text-orange-900 mb-4 group-hover:scale-105 transition-transform">Thần Số Học</h3>
+            <p className="text-orange-700/80 mb-6 font-medium">Quà tặng tương ứng với năng lượng của các con số chủ đạo.</p>
+            <span className="inline-block px-6 py-2 bg-orange-100 text-orange-800 font-bold rounded-full">Xem ngay</span>
+          </Link>
+        </div>
+      </section>
+
+    </main>
   );
 }

@@ -13,29 +13,28 @@ export default function Home() {
           style={{
             backgroundImage: "url('/hero-cupfy.jpg')",
             backgroundSize: "cover",
-            backgroundPosition: "center top",
+            backgroundPosition: "right center",
             backgroundRepeat: "no-repeat",
           }}
         ></div>
 
-                {/* Subtle overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/30 to-transparent w-full md:w-2/3"></div>
+                
 
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 h-full flex flex-col justify-center">
           <div className="max-w-xl xl:max-w-2xl mt-8">
-            <h1 className="text-[64px] xl:text-[80px] leading-[1.1] font-bold text-[#5c4a43] mb-6 tracking-tight" style={{ fontFamily: 'Nunito, Quicksand, sans-serif' }}>
+            <h1 className="text-[64px] xl:text-[80px] leading-[1.1] font-bold text-[#5c4a43] mb-6 tracking-tight drop-shadow-md" style={{ fontFamily: 'Nunito, Quicksand, sans-serif' }}>
               Find your cup.<br/>
-              <span className="text-[#d86a7a]">Make it yours. <span className="font-normal">♡</span></span>
+              <span className="text-[#e3506c]" style={{ textShadow: "0 2px 10px rgba(255,255,255,0.8)" }}>Make it yours. <span className="font-normal text-[#ff6b8b]">♡</span></span>
             </h1>
             
-            <p className="text-[17px] text-[#5c4a43] mb-10 max-w-[420px] leading-relaxed font-medium">
+            <p className="text-[17px] text-[#5c4a43] mb-10 max-w-[420px] leading-relaxed font-semibold drop-shadow-sm">
               Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép<br/>
               và mọi khoảnh khắc hằng ngày của bạn.
             </p>
             
             <div className="flex items-center gap-4 mb-14">
-              <Link href="/products" className="bg-[#df9ca4] hover:bg-[#d86a7a] text-white font-medium px-8 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm text-[15px]">
-                Shop Cups &rarr;
+              <Link href="/products" className="bg-[#c85666] hover:bg-[#a63c4a] text-white font-bold px-10 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-md text-[15px] tracking-wide">
+                Shop
               </Link>
               <Link href="/custom-cup" className="bg-transparent hover:bg-white/50 text-[#5c4a43] border border-[#5c4a43] font-medium px-8 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 text-[15px]">
                 Explore Custom Cup

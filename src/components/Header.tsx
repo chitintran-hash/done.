@@ -12,6 +12,7 @@ export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const cart = useCartStore();
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
@@ -24,7 +25,18 @@ export default function Header() {
       setUser(session?.user ?? null);
     });
 
-    return () => subscription.unsubscribe();
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      subscription.unsubscribe();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleSignOut = async () => {
@@ -33,7 +45,7 @@ export default function Header() {
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-0" : "bg-transparent py-2"}`}>
       <div className="max-w-[1400px] mx-auto px-6 h-24 flex items-center justify-between">
         {/* Mobile Menu Icon */}
         <div className="lg:hidden flex items-center">

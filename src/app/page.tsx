@@ -6,39 +6,37 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-screen">
       {/* 1. Hero Section */}
-      <section className="cupfy-hero">
-        <div className="cupfy-hero-content container mx-auto">
-          <h1 className="text-[56px] md:text-[72px] xl:text-[80px] leading-[1.1] font-bold mb-6 tracking-tight text-[#3B2725]" style={{ fontFamily: 'Nunito, Quicksand, sans-serif' }}>
+      <section className="hero">
+        <div className="hero-content mx-auto max-w-[1400px]">
+          <h1 className="hero-title">
             Find your cup.<br/>
-            <span className="text-[#3B2725]">Make it yours.</span>
+            Make it yours.
           </h1>
           
-          <p className="text-[16px] md:text-[18px] mb-10 max-w-[420px] leading-relaxed font-medium text-[#6B4B4B]">
-            Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép<br/>
+          <p className="hero-description">
+            Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép<br className="hidden md:block" />
             và mọi khoảnh khắc hằng ngày của bạn.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-14">
-            <Link href="/products" className="bg-[#D9788F] hover:bg-[#c2687d] text-[#FFFFFF] font-bold px-10 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm text-[16px] tracking-wide w-full sm:w-auto">
-              Shop
+          <div className="hero-actions">
+            <Link href="/products" className="hero-primary-button">
+              Shop Cups
             </Link>
-            <Link href="/custom-cup" className="bg-transparent hover:bg-white/50 text-[#A84F66] border border-[#D9788F] font-bold px-8 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 text-[16px] w-full sm:w-auto">
+            <Link href="/custom-cup" className="hero-secondary-button">
               Explore Custom Cup
             </Link>
           </div>
         </div>
 
-        {/* Mobile Image (Hidden on Desktop) */}
-        <div className="hero-image-mobile hidden px-5 pb-5">
-          <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-sm">
-            <Image 
-              src="/cupfy-hero.jpg" 
-              alt="Cupfy aesthetic cups" 
-              fill 
-              className="object-cover object-right"
-              priority
-            />
-          </div>
+        <div className="hero-mobile-image px-5 pb-5">
+          <Image 
+            src="/images/cupfy-hero.png" 
+            alt="Cupfy aesthetic cups" 
+            width={1200}
+            height={800}
+            priority
+            quality={100}
+          />
         </div>
       </section>
 

@@ -32,3 +32,70 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Cupfy Hero Styles */
+.cupfy-hero {
+  position: relative;
+  min-height: 720px;
+  background-image: url("/cupfy-hero.jpg");
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.cupfy-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 246, 248, 0.92) 0%,
+    rgba(255, 246, 248, 0.82) 28%,
+    rgba(255, 246, 248, 0.42) 48%,
+    rgba(255, 246, 248, 0.08) 70%,
+    rgba(255, 246, 248, 0) 100%
+  );
+  z-index: 1;
+}
+
+.cupfy-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+  padding-left: clamp(24px, 7vw, 96px);
+  padding-top: clamp(120px, 16vh, 200px);
+}
+
+@media (max-width: 768px) {
+  .cupfy-hero {
+    background-image: none;
+    min-height: auto;
+    padding: 96px 20px 40px;
+    background: #FFF3F6;
+  }
+  
+  .cupfy-hero::before {
+    display: none;
+  }
+  
+  .cupfy-hero-content {
+    padding: 0;
+    max-width: 100%;
+  }
+  
+  .hero-image-mobile {
+    display: block !important;
+    margin-top: 32px;
+    width: 100%;
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  
+  .hero-image-mobile img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+}

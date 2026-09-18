@@ -18,9 +18,8 @@ export default function Home() {
           }}
         ></div>
 
-        {/* Overlay to hide the baked-in text on the left side, so we can write real HTML text */}
-        {/* We use a gradient that is solid pink on the left and transparent on the right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#ffd9de] via-[#ffd9de]/90 to-transparent w-[55%]"></div>
+                {/* Subtle overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/30 to-transparent w-full md:w-2/3"></div>
 
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 h-full flex flex-col justify-center">
           <div className="max-w-xl xl:max-w-2xl mt-8">

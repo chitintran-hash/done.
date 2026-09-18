@@ -2,14 +2,17 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface CartItem {
-  id: string; // product id
+  id: string; // product id (hoặc id tự tạo nếu là hàng custom)
   name: string;
   price: number;
   image: string;
-  sellerId: string;
-  storeName?: string;
   quantity: number;
-  deliveryDays: number;
+  isCustom?: boolean;
+  customText?: string;
+  customNote?: string;
+  sellerId?: string; // legacy support
+  storeName?: string; // legacy support
+  deliveryDays?: number; // legacy support
 }
 
 interface CartState {
@@ -25,8 +28,11 @@ export const useCartStore = create<CartState>()(
     (set) => ({
       items: [],
       addItem: (item) => set((state) => {
-        const existing = state.items.find((i) => i.id === item.id);
-        if (existing) {
+        // Đối với hàng custom, ta không gom chung mà coi như 1 item riêng nếu id khác
+        // Nếu cùng id (VD product ID giống nhau) nhưng isCustom khác nhau hoặc text khác nhau thì không nên gộp.
+        // Tạm thời đơn giản: Nếu là isCustom thì tạo ID đặc biệt luôn ở phía gọi (ví dụ id + '-' + timestamp).
+        const existing = state.items.find((i) => i.id === item.id && !i.isCustom);
+        if (existing && !item.isCustom) {
           return {
             items: state.items.map((i) =>
               i.id === item.id ? { ...i, quantity: i.quantity + (item.quantity || 1) } : i
@@ -38,15 +44,18 @@ export const useCartStore = create<CartState>()(
       removeItem: (id) => set((state) => ({
         items: state.items.filter((i) => i.id !== id),
       })),
-      updateQuantity: (id, quantity) => set((state) => ({
-        items: state.items.map((i) =>
-          i.id === id ? { ...i, quantity } : i
-        ),
-      })),
+      updateQuantity: (id, quantity) => set((state) => {
+        if (quantity < 1) return { items: state.items };
+        return {
+          items: state.items.map((i) =>
+            i.id === id ? { ...i, quantity } : i
+          ),
+        };
+      }),
       clearCart: () => set({ items: [] }),
     }),
     {
-      name: 'done-cart-storage',
+      name: 'cupfy-cart-storage',
     }
   )
 );

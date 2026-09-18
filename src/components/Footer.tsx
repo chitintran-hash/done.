@@ -2,70 +2,50 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-background border-t border-border pt-16 pb-8 mt-12">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-black tracking-tight">DONE.</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              DONE. là nền tảng cung cấp giải pháp không gian làm việc toàn diện. Chúng tôi kết nối bạn với những nhà bán lẻ nội thất hàng đầu để xây dựng góc làm việc tối ưu nhất.
-            </p>
-            <div className="flex gap-4 pt-2">
-              <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-white transition-colors text-sm font-bold">
-                IN
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-white transition-colors text-sm font-bold">
-                TW
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-white transition-colors text-sm font-bold">
-                FB
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-accent hover:text-white transition-colors text-sm font-bold">
-                IG
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Sản Phẩm</h3>
-            <ul className="space-y-3">
-              <li><Link href="/seller" className="text-muted-foreground hover:text-foreground text-sm">Kênh Người Bán (Seller Center)</Link></li>
-              <li><Link href="/seller/guidelines" className="text-muted-foreground hover:text-foreground text-sm">Quy định Người Bán</Link></li>
-              <li><Link href="/seller/fees" className="text-muted-foreground hover:text-foreground text-sm">Biểu phí hoa hồng</Link></li>
-              <li><Link href="/seller/shipping" className="text-muted-foreground hover:text-foreground text-sm">Hướng dẫn giao hàng</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Liên Hệ</h3>
-            <ul className="space-y-3">
-              <li className="text-sm text-muted-foreground">hello@done.vn</li>
-              <li className="text-sm text-muted-foreground">+84 987 654 321</li>
-              <li><Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Về chúng tôi</Link></li>
-              <li><Link href="/careers" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tuyển dụng</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-sm tracking-wider uppercase mb-4">Pháp Lý</h3>
-            <ul className="space-y-3">
-              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Chính sách Bảo mật</Link></li>
-              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Điều khoản Dịch vụ</Link></li>
-              <li><Link href="/shipping" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Chính sách Giao hàng</Link></li>
-              <li><Link href="/refund" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Chính sách Hoàn tiền</Link></li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground">
-            © 2026 DONE. Inc. Bảo lưu mọi quyền.
+    <footer className="bg-muted border-t border-border pt-16 pb-8">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="col-span-1 md:col-span-1">
+          <Link href="/" className="text-3xl font-bold tracking-widest text-primary font-serif mb-4 block">
+            CUPFY
+          </Link>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Find your cup. Make it yours. <br />
+            Những chiếc ly nhỏ xinh cho mọi khoảnh khắc hằng ngày của bạn.
           </p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Chính sách Bảo mật</Link>
-            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Điều khoản Dịch vụ</Link>
-          </div>
         </div>
+        
+        <div>
+          <h4 className="font-bold mb-6 text-foreground tracking-wide uppercase text-sm">Shop</h4>
+          <ul className="space-y-4">
+            <li><Link href="/products?category=coffee" className="text-muted-foreground hover:text-primary text-sm transition-colors">Ly uống cà phê</Link></li>
+            <li><Link href="/products?category=milktea" className="text-muted-foreground hover:text-primary text-sm transition-colors">Ly trà sữa</Link></li>
+            <li><Link href="/products?category=glass" className="text-muted-foreground hover:text-primary text-sm transition-colors">Ly thủy tinh</Link></li>
+            <li><Link href="/custom-cup" className="text-muted-foreground hover:text-primary text-sm transition-colors">Custom Cup</Link></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 className="font-bold mb-6 text-foreground tracking-wide uppercase text-sm">Chăm sóc khách hàng</h4>
+          <ul className="space-y-4">
+            <li><Link href="/shipping" className="text-muted-foreground hover:text-primary text-sm transition-colors">Chính sách giao hàng</Link></li>
+            <li><Link href="/returns" className="text-muted-foreground hover:text-primary text-sm transition-colors">Chính sách đổi trả</Link></li>
+            <li><Link href="/faq" className="text-muted-foreground hover:text-primary text-sm transition-colors">Câu hỏi thường gặp</Link></li>
+            <li><Link href="/contact" className="text-muted-foreground hover:text-primary text-sm transition-colors">Liên hệ</Link></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 className="font-bold mb-6 text-foreground tracking-wide uppercase text-sm">Kết nối</h4>
+          <ul className="space-y-4">
+            <li><a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">Instagram</a></li>
+            <li><a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">Facebook</a></li>
+            <li><a href="#" className="text-muted-foreground hover:text-primary text-sm transition-colors">TikTok</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between">
+        <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} CUPFY. All rights reserved.</p>
       </div>
     </footer>
   );

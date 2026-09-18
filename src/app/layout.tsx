@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DONE. | What do you want to get done?",
-  description: "Outcome-first furniture marketplace for study setups.",
+  title: "CUPFY - Find your cup. Make it yours.",
+  description: "CUPFY chuyên bán các loại ly thiết kế, ly cafe, ly trà sữa. Tinh tế, nghệ thuật và cá nhân hóa.",
 };
 
 export default function RootLayout({
@@ -27,16 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <LanguageProvider>
-          <Header />
-          <div className="pt-16 min-h-screen">
-            {children}
-          </div>
-          <Footer />
-        </LanguageProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Header />
+        <main className="min-h-screen">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

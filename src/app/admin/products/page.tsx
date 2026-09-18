@@ -1,25 +1,236 @@
-import { createClient } from '@/lib/supabase/server';
-import ProductsClient from './ProductsClient';
+"use client";
 
-export default async function AdminProductsPage() {
-  const supabase = await createClient();
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { Plus, Edit2, Trash2, Search, Loader2 } from 'lucide-react';
+
+export default function AdminProductsPage() {
+  const supabase = createClient();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const [showModal, setShowModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
   
-  // Fetch products with their seller information
-  const { data: products } = await supabase
-    .from('products')
-    .select('*, profiles!products_seller_id_fkey(store_name, full_name)')
-    .order('created_at', { ascending: false });
+  const [formData, setFormData] = useState({
+    name: '',
+    price: 0,
+    category: 'coffee',
+    description: '',
+    image_url: '',
+    stock: 0,
+    material: '',
+    capacity: '',
+    color: '',
+    is_customizable: false
+  });
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    if (data) setProducts(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleOpenModal = (product: any = null) => {
+    if (product) {
+      setEditingProduct(product);
+      setFormData({
+        name: product.name || '',
+        price: product.price || 0,
+        category: product.category || 'coffee',
+        description: product.description || '',
+        image_url: product.image_url || '',
+        stock: product.stock || 0,
+        material: product.technical_specs?.material || '',
+        capacity: product.technical_specs?.capacity || '',
+        color: product.technical_specs?.color || '',
+        is_customizable: product.technical_specs?.is_customizable || false
+      });
+    } else {
+      setEditingProduct(null);
+      setFormData({
+        name: '', price: 0, category: 'coffee', description: '', image_url: '', stock: 0, material: '', capacity: '', color: '', is_customizable: false
+      });
+    }
+    setShowModal(true);
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const specs = {
+      material: formData.material,
+      capacity: formData.capacity,
+      color: formData.color,
+      is_customizable: formData.is_customizable
+    };
+
+    const payload = {
+      name: formData.name,
+      price: formData.price,
+      category: formData.category,
+      description: formData.description,
+      image_url: formData.image_url,
+      stock: formData.stock,
+      technical_specs: specs,
+      is_available: true,
+      approval_status: 'active'
+    };
+
+    if (editingProduct) {
+      await supabase.from('products').update(payload).eq('id', editingProduct.id);
+    } else {
+      const { data: { user } } = await supabase.auth.getUser();
+      await supabase.from('products').insert({ ...payload, seller_id: user?.id });
+    }
+
+    setShowModal(false);
+    await fetchProducts();
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) return;
+    setLoading(true);
+    await supabase.from('products').delete().eq('id', id);
+    await fetchProducts();
+  };
+
+  const filteredProducts = products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-bold">Duyệt Sản Phẩm</h1>
-          <p className="text-muted-foreground mt-2">Kiểm tra thông số Compatibility và nội dung sản phẩm do Seller đăng.</p>
-        </div>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-foreground">Quản lý Sản phẩm</h1>
+        <button onClick={() => handleOpenModal()} className="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary/90">
+          <Plus className="w-5 h-5" /> Thêm sản phẩm mới
+        </button>
       </div>
 
-      <ProductsClient initialProducts={products || []} />
+      <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-border">
+          <div className="relative max-w-md">
+            <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input 
+              type="text" 
+              placeholder="Tìm kiếm sản phẩm..." 
+              value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-muted/50 rounded-lg border border-border focus:border-primary focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="p-12 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+        ) : (
+          <table className="w-full text-left">
+            <thead>
+              <tr className="border-b border-border bg-muted/20 text-sm text-muted-foreground">
+                <th className="px-6 py-4 font-medium">Sản phẩm</th>
+                <th className="px-6 py-4 font-medium">Giá</th>
+                <th className="px-6 py-4 font-medium">Danh mục</th>
+                <th className="px-6 py-4 font-medium">Tồn kho</th>
+                <th className="px-6 py-4 font-medium text-right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProducts.map(p => (
+                <tr key={p.id} className="border-b border-border hover:bg-muted/10">
+                  <td className="px-6 py-4 flex items-center gap-3">
+                    <img src={p.image_url || 'https://via.placeholder.com/50'} alt="" className="w-12 h-12 rounded-lg object-cover bg-muted" />
+                    <span className="font-medium text-foreground">{p.name}</span>
+                  </td>
+                  <td className="px-6 py-4">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(p.price)}</td>
+                  <td className="px-6 py-4 capitalize">{p.category}</td>
+                  <td className="px-6 py-4">{p.stock}</td>
+                  <td className="px-6 py-4 text-right">
+                    <button onClick={() => handleOpenModal(p)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg mr-2"><Edit2 className="w-4 h-4" /></button>
+                    <button onClick={() => handleDelete(p.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg"><Trash2 className="w-4 h-4" /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-6">{editingProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'}</h2>
+            <form onSubmit={handleSave} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Tên sản phẩm *</label>
+                  <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Giá (VNĐ) *</label>
+                  <input required type="number" value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Danh mục *</label>
+                  <select required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none">
+                    <option value="coffee">Ly cà phê</option>
+                    <option value="milktea">Ly trà sữa</option>
+                    <option value="glass">Ly thủy tinh</option>
+                    <option value="straw">Ly ống hút</option>
+                    <option value="thermos">Ly giữ nhiệt</option>
+                    <option value="gift">Ly quà tặng</option>
+                    <option value="office">Ly văn phòng</option>
+                    <option value="minimal">Phong cách tối giản</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Tồn kho</label>
+                  <input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: Number(e.target.value)})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Link Ảnh Sản phẩm</label>
+                <input type="text" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Mô tả ngắn</label>
+                <textarea rows={3} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none"></textarea>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Chất liệu</label>
+                  <input type="text" value={formData.material} onChange={e => setFormData({...formData, material: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Dung tích (ml)</label>
+                  <input type="text" value={formData.capacity} onChange={e => setFormData({...formData, capacity: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Màu sắc</label>
+                  <input type="text" value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                </div>
+                <div className="flex items-center gap-2 mt-6">
+                  <input type="checkbox" checked={formData.is_customizable} onChange={e => setFormData({...formData, is_customizable: e.target.checked})} className="w-4 h-4 accent-primary" id="customCheck" />
+                  <label htmlFor="customCheck" className="text-sm font-medium cursor-pointer">Cho phép Custom</label>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 mt-6 pt-6">
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 border rounded-lg hover:bg-muted">Hủy</button>
+                <button type="submit" className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">Lưu sản phẩm</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

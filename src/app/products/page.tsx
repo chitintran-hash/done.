@@ -2,14 +2,14 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Search, ShoppingCart, AlertCircle, Store, Loader2, Heart } from 'lucide-react';
+import { Search, Loader2, Filter, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { formatVND } from '@/lib/utils/currency';
+import Image from 'next/image';
 
 export default function ProductCatalogPage() {
   return (
-    <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground" /></div>}>
+    <Suspense fallback={<div className="flex justify-center items-center min-h-[50vh]"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>}>
       <ProductCatalogContent />
     </Suspense>
   );
@@ -17,184 +17,192 @@ export default function ProductCatalogPage() {
 
 function ProductCatalogContent() {
   const supabase = createClient();
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category') || 'all';
+  const collectionParam = searchParams.get('collection') || 'all';
+
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Filters from query params
-  const searchParams = useSearchParams();
-  const recipient = searchParams.get('recipient');
-  const occasion = searchParams.get('occasion');
-  const interest = searchParams.get('interest');
-  const budget = searchParams.get('budget');
-  const style = searchParams.get('style');
-  const zodiac = searchParams.get('zodiac');
-  const numerology = searchParams.get('numerology');
-  
   const [searchTerm, setSearchTerm] = useState('');
-  const [priceSort, setPriceSort] = useState<'asc'|'desc'|'none'>('none');
+  
+  // States cho filter
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam);
+  const [sortOrder, setSortOrder] = useState('newest');
+
+  useEffect(() => {
+    setSelectedCategory(categoryParam);
+  }, [categoryParam]);
 
   useEffect(() => {
     let ignore = false;
     const fetchProducts = async () => {
       setLoading(true);
-      let query = supabase
+      // Lấy toàn bộ sản phẩm ly, giả định các sản phẩm cũ đã bị xoá
+      const { data, error } = await supabase
         .from('products')
-        .select('*, profiles!products_seller_id_fkey(store_name, logo_url)')
+        .select('*')
         .eq('is_available', true);
 
-      // We handle overlaps manually in JS or we can use Supabase Contains filter.
-      // Since it's text[], we use .cs (contains) 
-      if (recipient && recipient !== 'all') {
-        const arr = recipient.split(',');
-        query = query.contains('recipient_tags', arr);
+      if (!ignore && data) {
+        setProducts(data);
       }
-      if (occasion && occasion !== 'all') {
-        const arr = occasion.split(',');
-        query = query.contains('occasion_tags', arr);
-      }
-      if (interest && interest !== 'all') {
-        const arr = interest.split(',');
-        query = query.contains('interest_tags', arr);
-      }
-      if (style && style !== 'all') {
-        const arr = style.split(',');
-        query = query.contains('style_tags', arr);
-      }
-      if (zodiac && zodiac !== 'all') {
-        const arr = zodiac.split(',');
-        query = query.contains('zodiac_tags', arr);
-      }
-      if (numerology && numerology !== 'all') {
-        const arr = numerology.split(',');
-        query = query.contains('numerology_tags', arr);
-      }
-
-      if (priceSort !== 'none') {
-        query = query.order('price', { ascending: priceSort === 'asc' });
-      } else {
-        query = query.order('created_at', { ascending: false });
-      }
-
-      const { data, error } = await query;
-      if (!ignore) {
-        let finalData = data || [];
-        
-        // Handle manual budget filtering
-        if (budget && budget !== 'all') {
-          finalData = finalData.filter(p => {
-            if (budget === 'under-200k') return p.price < 200000;
-            if (budget === '200k-500k') return p.price >= 200000 && p.price <= 500000;
-            if (budget === '500k-1m') return p.price > 500000 && p.price <= 1000000;
-            if (budget === 'over-1m') return p.price > 1000000;
-            return true;
-          });
-        }
-
-        setProducts(finalData);
-        setLoading(false);
-      }
+      if (!ignore) setLoading(false);
     };
 
     fetchProducts();
-    
-    return () => {
-      ignore = true;
-    };
-  }, [searchParams, priceSort, supabase, budget, interest, occasion, recipient, style, numerology, zodiac]);
+    return () => { ignore = true; };
+  }, []);
 
-  const filteredProducts = products.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Filter in JS
+  let displayed = [...products];
 
-  const isGiftFinderResult = recipient || occasion || interest || budget || style;
+  if (searchTerm) {
+    displayed = displayed.filter(p => 
+      p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
+  if (selectedCategory !== 'all') {
+    displayed = displayed.filter(p => p.category === selectedCategory);
+  }
+
+  // Tạm thời chưa filter collection vì cần setup trong technical_specs
+  if (collectionParam !== 'all') {
+    displayed = displayed.filter(p => {
+      const specs = p.technical_specs || {};
+      return specs.collection === collectionParam;
+    });
+  }
+
+  if (sortOrder === 'price_asc') {
+    displayed.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === 'price_desc') {
+    displayed.sort((a, b) => b.price - a.price);
+  } else {
+    // newest - assume higher id or created_at
+    displayed.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  const categories = [
+    { id: 'all', name: 'Tất cả ly' },
+    { id: 'coffee', name: 'Ly cà phê' },
+    { id: 'milktea', name: 'Ly trà sữa' },
+    { id: 'glass', name: 'Ly thủy tinh' },
+    { id: 'straw', name: 'Ly ống hút' },
+    { id: 'thermos', name: 'Ly giữ nhiệt' },
+    { id: 'gift', name: 'Ly quà tặng' },
+    { id: 'office', name: 'Ly văn phòng' },
+    { id: 'minimal', name: 'Phong cách tối giản' }
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-6 pt-32 pb-24 font-sans">
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary tracking-tight">
-          {isGiftFinderResult ? "Tụi mình nghĩ người ấy sẽ thích những món này" : "Tất cả Quà Tặng"}
-        </h1>
-        <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-          Khám phá bộ sưu tập quà tặng độc đáo và ý nghĩa.
-        </p>
+    <div className="container mx-auto px-6 py-12">
+      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+        <div>
+          <h1 className="text-4xl font-serif font-bold text-foreground mb-4">Shop Cups</h1>
+          <p className="text-muted-foreground text-lg max-w-xl">
+            Khám phá bộ sưu tập những chiếc ly xinh xắn, giúp mỗi ngụm nước bạn uống đều ngập tràn niềm vui.
+          </p>
+        </div>
       </div>
 
-      {/* Filters Area */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8 border-b border-border pb-8">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input 
-            type="text" 
-            placeholder="Tìm theo tên sản phẩm..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-xl border border-border focus:border-primary focus:outline-none transition-colors"
-          />
-        </div>
-        
-        <select 
-          value={priceSort}
-          onChange={(e) => setPriceSort(e.target.value as any)}
-          className="px-4 py-3 rounded-xl border border-border focus:border-primary focus:outline-none bg-white min-w-[200px]"
-        >
-          <option value="none">Sắp xếp: Mới nhất</option>
-          <option value="asc">Giá: Thấp đến cao</option>
-          <option value="desc">Giá: Cao đến thấp</option>
-        </select>
-      </div>
+      <div className="flex flex-col lg:flex-row gap-10">
+        {/* Sidebar Filters */}
+        <aside className="w-full lg:w-64 flex-shrink-0">
+          <div className="sticky top-28 space-y-10">
+            {/* Search */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Tìm ly..."
+                className="w-full pl-10 pr-4 py-3 rounded-full border border-border bg-white text-sm focus:outline-none focus:border-primary transition-colors"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+              <Search className="w-4 h-4 text-muted-foreground absolute left-4 top-3.5" />
+            </div>
 
-      {/* Products Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {[1,2,3,4,5,6,7,8].map(i => (
-            <div key={i} className="animate-pulse bg-muted rounded-2xl aspect-[3/4]"></div>
-          ))}
-        </div>
-      ) : filteredProducts.length === 0 ? (
-        <div className="text-center py-24 bg-ug-cream rounded-3xl">
-          <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-xl font-bold mb-2">Chưa tìm thấy món quà phù hợp</h3>
-          <p className="text-muted-foreground mb-6">Hãy thử thay đổi tiêu chí lọc hoặc tìm kiếm lại nhé.</p>
-          <Link href="/gift-finder" className="inline-block bg-primary text-white font-bold px-8 py-3 rounded-full hover:bg-primary/90 transition-colors">
-            Tìm quà lại từ đầu
-          </Link>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredProducts.map((product) => {
-            const isOutOfStock = product.stock <= 0;
-            return (
-              <Link href={`/products/${product.id}`} key={product.id} className="group flex flex-col bg-white border border-border rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="relative aspect-square bg-ug-cream overflow-hidden">
-                  <img src={product.image_url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  {isOutOfStock && (
-                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
-                      <span className="px-6 py-2 bg-red-100 text-red-700 font-bold rounded-full transform -rotate-12 shadow-sm">HẾT HÀNG</span>
-                    </div>
-                  )}
-                  <button className="absolute top-4 right-4 p-2 bg-white/80 hover:bg-white rounded-full text-muted-foreground hover:text-red-500 transition-colors shadow-sm z-10">
-                    <Heart className="w-5 h-5" />
-                  </button>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <div className="flex items-center gap-2 mb-2 text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                    <Store className="w-3 h-3" />
-                    <span className="line-clamp-1">{product.profiles?.store_name || 'Người bán DONE.'}</span>
-                  </div>
-                  <h3 className="font-bold text-lg mb-4 text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">
-                    {product.name}
-                  </h3>
-                  <div className="mt-auto flex items-end justify-between">
-                    <span className="text-xl font-bold text-primary">
-                      {formatVND(product.price)}
+            {/* Categories */}
+            <div>
+              <h3 className="font-bold text-foreground mb-4 uppercase tracking-wider text-sm">Danh mục</h3>
+              <ul className="space-y-3">
+                {categories.map(c => (
+                  <li key={c.id}>
+                    <button 
+                      onClick={() => setSelectedCategory(c.id)}
+                      className={`text-sm hover:text-primary transition-colors text-left w-full ${selectedCategory === c.id ? 'text-primary font-bold' : 'text-muted-foreground'}`}
+                    >
+                      {c.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Sort */}
+            <div>
+              <h3 className="font-bold text-foreground mb-4 uppercase tracking-wider text-sm">Sắp xếp</h3>
+              <div className="relative">
+                <select 
+                  className="w-full appearance-none border border-border bg-white rounded-xl px-4 py-3 text-sm text-foreground focus:outline-none focus:border-primary"
+                  value={sortOrder}
+                  onChange={e => setSortOrder(e.target.value)}
+                >
+                  <option value="newest">Mới nhất</option>
+                  <option value="price_asc">Giá: Thấp đến Cao</option>
+                  <option value="price_desc">Giá: Cao đến Thấp</option>
+                </select>
+                <ChevronDown className="w-4 h-4 text-muted-foreground absolute right-4 top-3.5 pointer-events-none" />
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Product Grid */}
+        <div className="flex-1">
+          {loading ? (
+            <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+          ) : displayed.length === 0 ? (
+            <div className="text-center py-20 bg-muted/30 rounded-3xl border border-border border-dashed">
+              <p className="text-muted-foreground text-lg">Chưa có ly nào phù hợp với tìm kiếm của bạn.</p>
+              <button 
+                onClick={() => { setSelectedCategory('all'); setSearchTerm(''); }}
+                className="mt-4 text-primary font-bold hover:underline"
+              >
+                Xóa bộ lọc
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
+              {displayed.map(product => (
+                <div key={product.id} className="group relative flex flex-col">
+                  <Link href={`/products/${product.id}`} className="relative w-full aspect-square rounded-2xl overflow-hidden bg-muted mb-4 block">
+                    <Image 
+                      src={product.image_url || 'https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80'} 
+                      alt={product.name} 
+                      fill 
+                      className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                    {product.technical_specs?.is_customizable && (
+                      <span className="absolute top-3 left-3 px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white/90 backdrop-blur-sm text-foreground rounded-full">
+                        Custom
+                      </span>
+                    )}
+                  </Link>
+                  <div className="flex flex-col flex-1">
+                    <Link href={`/products/${product.id}`} className="font-medium text-lg text-foreground hover:text-primary transition-colors mb-1 line-clamp-1">
+                      {product.name}
+                    </Link>
+                    <span className="text-muted-foreground font-medium">
+                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                     </span>
                   </div>
                 </div>
-              </Link>
-            );
-          })}
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

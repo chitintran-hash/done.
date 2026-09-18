@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
-import { LayoutDashboard, Users, Box, ListChecks, Settings, LogOut, Store } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
+import { LayoutDashboard, Users, Box, ListChecks, Settings, LogOut, ShoppingCart, Paintbrush } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -24,37 +25,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     checkAdmin();
   }, [router]);
 
-  if (loading) return <div className="p-8 text-center">Đang kiểm tra quyền truy cập...</div>;
+  if (loading) return <div className="p-8 text-center text-primary">Đang kiểm tra quyền truy cập...</div>;
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] bg-muted/30">
+    <div className="flex h-screen bg-muted/30">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-border p-4 flex flex-col">
-        <div className="font-bold text-lg mb-8 text-accent px-4">Admin Portal</div>
+        <div className="font-serif font-bold text-2xl mb-8 text-primary px-4 tracking-widest mt-4">
+          CUPFY ADMIN
+        </div>
         <nav className="flex-1 space-y-2">
-          <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-lg bg-accent/10 text-accent font-medium">
+          <Link href="/admin" className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname === '/admin' ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
             <LayoutDashboard className="w-5 h-5" />
             Dashboard
           </Link>
-          <Link href="/admin/products" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
+          <Link href="/admin/products" className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname.startsWith('/admin/products') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
             <Box className="w-5 h-5" />
             Sản phẩm
           </Link>
-          <Link href="/admin/users" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
+          <Link href="/admin/orders" className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname.startsWith('/admin/orders') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
+            <ShoppingCart className="w-5 h-5" />
+            Đơn hàng
+          </Link>
+          <Link href="/admin/custom-requests" className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname.startsWith('/admin/custom-requests') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
+            <Paintbrush className="w-5 h-5" />
+            Custom Requests
+          </Link>
+          <Link href="/admin/users" className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname.startsWith('/admin/users') ? 'bg-primary/10 text-primary' : 'hover:bg-muted text-muted-foreground hover:text-foreground'}`}>
             <Users className="w-5 h-5" />
-            Tài khoản (Users)
-          </Link>
-          <Link href="/admin/sellers" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
-            <Store className="w-5 h-5" />
-            Người Bán (Sellers)
-          </Link>
-          <Link href="/admin/compatibility" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
-            <ListChecks className="w-5 h-5" />
-            Rules Tương thích
-          </Link>
-          <Link href="/admin/system" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground font-medium transition-colors">
-            <Settings className="w-5 h-5" />
-            Hệ thống (Dataset)
+            Khách hàng
           </Link>
         </nav>
         <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 font-medium transition-colors mt-auto">
@@ -64,7 +63,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-8">
+      <main className="flex-1 overflow-y-auto p-8 bg-white m-4 rounded-3xl shadow-sm border border-border">
         {children}
       </main>
     </div>

@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCartStore } from '@/store/useCartStore';
 import Image from 'next/image';
-import { CheckCircle2, Paintbrush, Type, Upload } from 'lucide-react';
+import { CheckCircle2, Paintbrush, Type, Upload, Loader2 } from 'lucide-react';
 
 export default function CustomCupPage() {
+  return (
+    <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>}>
+      <CustomCupContent />
+    </Suspense>
+  );
+}
+
+function CustomCupContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialProductId = searchParams.get('productId');

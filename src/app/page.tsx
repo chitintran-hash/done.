@@ -42,26 +42,7 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Features Row */}
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Custom<br/>theo ý thích</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Truck className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Giao hàng<br/>toàn quốc</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Đóng gói<br/>an toàn</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Gift className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
-                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Món quà<br/>đầy ý nghĩa</span>
-              </div>
             </div>
-          </div>
         </div>
       </section>
 

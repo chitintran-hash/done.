@@ -47,7 +47,7 @@ export default function Header() {
             <span className="text-2xl mt-1">♡</span>
           </div>
           <span className="text-[#d86a7a] text-[13px] font-medium tracking-wide mt-[-4px]">
-            Your cup, your story ♡
+            Your cup, your story
           </span>
         </Link>
 

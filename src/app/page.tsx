@@ -1,27 +1,68 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Heart, Truck, ShieldCheck, Gift } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex flex-col min-h-screen">
+    <main className="flex flex-col min-h-screen pt-24">
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[80vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-accent/30">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-accent/50 to-transparent"></div>
-        <h1 className="text-5xl md:text-7xl font-serif font-bold text-foreground mb-6 tracking-tight">
-          Find your cup.<br/>
-          <span className="text-primary">Make it yours.</span>
-        </h1>
-        <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl font-medium">
-          Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép và mọi khoảnh khắc hằng ngày của bạn.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link href="/products" className="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-4 rounded-full transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
-            Shop Cups <ArrowRight className="w-5 h-5" />
-          </Link>
-          <Link href="/custom-cup" className="bg-white hover:bg-gray-50 text-foreground border border-border font-medium px-8 py-4 rounded-full transition-all flex items-center justify-center gap-2">
-            Explore Custom Cup
-          </Link>
+      <section className="relative w-full h-[600px] xl:h-[700px] overflow-hidden bg-[#fedce0]">
+        {/* Background Image (Mockup) */}
+        <div 
+          className="absolute inset-0 w-full h-full"
+          style={{
+            backgroundImage: "url('/hero-cupfy.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+            backgroundRepeat: "no-repeat",
+          }}
+        ></div>
+
+        {/* Overlay to hide the baked-in text on the left side, so we can write real HTML text */}
+        {/* We use a gradient that is solid pink on the left and transparent on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#ffd9de] via-[#ffd9de]/90 to-transparent w-[55%]"></div>
+
+        <div className="relative z-10 max-w-[1400px] mx-auto px-6 h-full flex flex-col justify-center">
+          <div className="max-w-xl xl:max-w-2xl mt-8">
+            <h1 className="text-[64px] xl:text-[80px] leading-[1.1] font-bold text-[#5c4a43] mb-6 tracking-tight" style={{ fontFamily: 'Nunito, Quicksand, sans-serif' }}>
+              Find your cup.<br/>
+              <span className="text-[#d86a7a]">Make it yours. <span className="font-normal">♡</span></span>
+            </h1>
+            
+            <p className="text-[17px] text-[#5c4a43] mb-10 max-w-[420px] leading-relaxed font-medium">
+              Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép<br/>
+              và mọi khoảnh khắc hằng ngày của bạn.
+            </p>
+            
+            <div className="flex items-center gap-4 mb-14">
+              <Link href="/products" className="bg-[#df9ca4] hover:bg-[#d86a7a] text-white font-medium px-8 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 shadow-sm text-[15px]">
+                Shop Cups &rarr;
+              </Link>
+              <Link href="/custom-cup" className="bg-transparent hover:bg-white/50 text-[#5c4a43] border border-[#5c4a43] font-medium px-8 py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 text-[15px]">
+                Explore Custom Cup
+              </Link>
+            </div>
+
+            {/* Features Row */}
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-2">
+                <Heart className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
+                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Custom<br/>theo ý thích</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Truck className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
+                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Giao hàng<br/>toàn quốc</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
+                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Đóng gói<br/>an toàn</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Gift className="w-5 h-5 text-[#5c4a43]" strokeWidth={1.5} />
+                <span className="text-[12px] font-medium text-[#5c4a43] leading-tight">Món quà<br/>đầy ý nghĩa</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -110,33 +151,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* 5. Shop by Mood Collections */}
-      <section className="py-24 mb-10">
-        <div className="container mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-foreground mb-16">Shop by mood</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { name: "Pink Morning", desc: "Khởi đầu ngày mới với sắc hồng pastel ngọt ngào.", img: "https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80", link: "/products?collection=pink-morning" },
-              { name: "Coffee Time", desc: "Dành cho những tâm hồn không thể thiếu cà phê.", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80", link: "/products?collection=coffee-time" },
-              { name: "Study Desk", desc: "Góc học tập gọn gàng với những chiếc ly truyền cảm hứng.", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600&q=80", link: "/products?collection=study-desk" },
-              { name: "Sweet Gift", desc: "Món quà dễ thương dành tặng người thương.", img: "https://images.unsplash.com/photo-1577937927133-66ef06acdf18?w=600&q=80", link: "/products?collection=sweet-gift" },
-              { name: "Minimal Glass", desc: "Vẻ đẹp của sự trong trẻo và tối giản.", img: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=600&q=80", link: "/products?collection=minimal-glass" },
-              { name: "Summer Drink", desc: "Cho những thức uống mát lạnh xua tan mùa hè.", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80", link: "/products?collection=summer-drink" }
-            ].map((col, idx) => (
-              <Link href={col.link} key={idx} className="group relative rounded-3xl overflow-hidden aspect-square flex flex-col justify-end p-8">
-                <Image src={col.img} alt={col.name} fill className="object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                <div className="relative z-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <h3 className="text-2xl font-serif font-bold text-white mb-2">{col.name}</h3>
-                  <p className="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{col.desc}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
     </main>
   );
 }

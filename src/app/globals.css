@@ -38,7 +38,7 @@ body {
 .hero {
   position: relative;
   min-height: 760px;
-  background-image: url("/images/cupfy-hero.jpg");
+  background-image: url("/images/cupfy-hero.png");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;

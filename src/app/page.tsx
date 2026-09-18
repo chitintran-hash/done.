@@ -32,7 +32,7 @@ export default function Home() {
 
         <div className="hero-mobile-image px-5 pb-5">
           <Image 
-            src="/images/cupfy-hero.jpg" 
+            src="/images/cupfy-hero.png" 
             alt="Cupfy aesthetic cups" 
             width={1200}
             height={800}

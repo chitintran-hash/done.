@@ -7,7 +7,8 @@ export default function Home() {
     <main className="flex flex-col min-h-screen">
       {/* 1. Hero Section */}
       <section className="hero">
-        <div className="hero-content mx-auto max-w-[1400px]">
+        <div className="max-w-[1400px] mx-auto w-full h-full relative">
+        <div className="hero-content">
           <h1 className="hero-title">
             Find your cup.<br/>
             Make it yours.
@@ -27,10 +28,11 @@ export default function Home() {
             </Link>
           </div>
         </div>
+        </div>
 
         <div className="hero-mobile-image px-5 pb-5">
           <Image 
-            src="/images/cupfy-hero.png" 
+            src="/images/cupfy-hero.jpg" 
             alt="Cupfy aesthetic cups" 
             width={1200}
             height={800}

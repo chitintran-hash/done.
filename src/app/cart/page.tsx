@@ -1,123 +1,113 @@
-"use client";
+'use client';
 
-import { useCartStore } from '@/store/useCartStore';
-import { useRouter } from 'next/navigation';
-import { ShoppingBag, Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useCartStore } from '@/store/useCartStore';
+import { Trash2, Plus, Minus, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function CartPage() {
-  const cart = useCartStore();
-  const router = useRouter();
+  const { items, updateQuantity, removeItem } = useCartStore();
 
-  if (cart.items.length === 0) {
-    return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center space-y-6">
-        <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center">
-          <ShoppingBag className="w-10 h-10 text-muted-foreground" />
-        </div>
-        <h2 className="text-3xl font-serif font-bold text-foreground">Giỏ hàng của bạn đang trống</h2>
-        <p className="text-muted-foreground text-center max-w-md text-lg">
-          Hãy khám phá những chiếc ly xinh xắn tại Cupfy nhé.
-        </p>
-        <div className="flex gap-4 mt-6">
-          <button onClick={() => router.push('/products')} className="px-8 py-4 bg-primary text-white rounded-full font-medium transition-colors hover:bg-primary/90">
-            Khám phá Shop
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const subtotal = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shippingFee = 30000;
-  const total = subtotal + shippingFee;
+  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-serif font-bold text-foreground mb-12">Giỏ hàng</h1>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white border border-border rounded-3xl p-6">
-            <div className="space-y-6 divide-y divide-border">
-              {cart.items.map((item, index) => (
-                <div key={item.id + index} className="flex gap-6 pt-6 first:pt-0">
-                  <div className="w-24 h-24 bg-muted rounded-xl flex-shrink-0 overflow-hidden relative">
-                    <img src={item.image || 'https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80'} alt={item.name} className="w-full h-full object-cover" />
+    <div className="bg-[#F7F7F5] min-h-screen pt-[120px] pb-24">
+      <div className="max-w-5xl mx-auto px-6">
+        <h1 className="text-3xl font-extrabold text-[#181818] mb-8">Giỏ hàng của bạn</h1>
+
+        {items.length === 0 ? (
+          <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-[#EAE7DE]">
+            <div className="text-6xl mb-4">🛒</div>
+            <h2 className="text-xl font-bold text-[#181818] mb-4">Giỏ hàng đang trống</h2>
+            <p className="text-[#888888] mb-8">Hãy thiết kế ngay cho mình một chiếc ly độc nhất vô nhị nhé!</p>
+            <Link href="/custom-cup" className="inline-flex bg-[#FFEDA8] text-[#181818] font-bold px-8 py-3 rounded-full hover:bg-[#F4D35E] transition-colors border border-[#EAE7DE]">
+              Bắt đầu thiết kế ✨
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-4">
+              {items.map((item) => (
+                <div key={item.id} className="bg-white p-6 rounded-2xl shadow-sm border border-[#EAE7DE] flex gap-6 relative">
+                  <button 
+                    onClick={() => removeItem(item.id)}
+                    className="absolute top-4 right-4 text-[#888888] hover:text-red-500 transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+
+                  <div className="w-24 h-24 bg-[#FFF9E8] rounded-xl flex items-center justify-center shrink-0 border border-[#EAE7DE] overflow-hidden relative p-2">
+                    <Image src={item.image || "/images/cupfy-hero.png"} alt={item.name} fill className="object-contain p-2" />
                   </div>
-                  <div className="flex-1 flex flex-col justify-between py-1">
-                    <div className="flex justify-between items-start gap-4">
+
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h3 className="font-medium text-lg text-foreground">{item.name}</h3>
-                        {item.isCustom && (
-                          <div className="mt-1 text-sm text-primary font-medium bg-primary/10 px-2 py-1 rounded w-max">
-                            + Ly thiết kế riêng
-                            {item.customText && <div className="text-xs mt-1 text-muted-foreground">Text: {item.customText}</div>}
-                          </div>
-                        )}
+                        <h3 className="font-bold text-lg text-[#181818]">{item.name}</h3>
+                        <p className="text-sm font-bold text-[#FFB15C]">{item.price.toLocaleString('vi-VN')} đ</p>
                       </div>
-                      <span className="font-bold text-lg text-foreground whitespace-nowrap">
-                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * item.quantity)}
-                      </span>
                     </div>
-                    
-                    <div className="flex justify-between items-end">
-                      <div className="flex items-center border border-border rounded-full h-10 w-28 justify-between px-3 mt-4">
-                        <button onClick={() => cart.updateQuantity(item.id, item.quantity - 1)} className="text-muted-foreground hover:text-foreground">
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="font-medium">{item.quantity}</span>
-                        <button onClick={() => cart.updateQuantity(item.id, item.quantity + 1)} className="text-muted-foreground hover:text-foreground">
-                          <Plus className="w-4 h-4" />
-                        </button>
+
+                    {item.isCustom && item.customSpecs && (
+                      <div className="bg-[#F7F7F5] rounded-xl p-3 mt-3 mb-4 text-xs text-[#333333] space-y-1.5 border border-[#EAE7DE]">
+                        <p><span className="font-bold">Loại ly:</span> {item.customSpecs.modelType === 'tumbler' ? 'Tumbler (Ống hút)' : 'Mug (Cốc quai)'}</p>
+                        <p><span className="font-bold">Màu thân:</span> {item.customSpecs.cupColor}</p>
+                        {item.customSpecs.modelType === 'tumbler' && <p><span className="font-bold">Màu nắp:</span> {item.customSpecs.lidColor}</p>}
+                        {item.customSpecs.customText && <p><span className="font-bold">Nội dung in:</span> "{item.customSpecs.customText}" (Màu: {item.customSpecs.textColor})</p>}
+                        {item.customSpecs.sticker && <p><span className="font-bold">Sticker:</span> Có hình dán</p>}
+                        {item.customSpecs.uploadedImage && <p><span className="font-bold">Ảnh:</span> Khách hàng tải lên</p>}
                       </div>
-                      <button onClick={() => cart.removeItem(item.id)} className="text-red-500 hover:text-red-600 p-2 hover:bg-red-50 rounded-full transition-colors">
-                        <Trash2 className="w-5 h-5" />
+                    )}
+
+                    <div className="flex items-center gap-3 bg-[#F7F7F5] w-fit rounded-full px-1 py-1 border border-[#EAE7DE]">
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        className="w-8 h-8 flex items-center justify-center bg-white rounded-full text-[#181818] shadow-sm"
+                      >
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="font-bold text-sm w-4 text-center text-[#181818]">{item.quantity}</span>
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="w-8 h-8 flex items-center justify-center bg-white rounded-full text-[#181818] shadow-sm"
+                      >
+                        <Plus className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
 
-        <div className="lg:col-span-1">
-          <div className="bg-muted/30 rounded-3xl p-8 border border-border sticky top-28">
-            <h2 className="text-xl font-bold mb-6 text-foreground">Tóm tắt đơn hàng</h2>
-            <div className="space-y-4 mb-6 text-sm">
-              <div className="flex justify-between text-muted-foreground">
-                <span>Tạm tính ({cart.items.reduce((s, i) => s + i.quantity, 0)} sản phẩm)</span>
-                <span className="font-medium text-foreground">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(subtotal)}
-                </span>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#EAE7DE] h-fit sticky top-[100px]">
+              <h3 className="font-bold text-xl text-[#181818] mb-6">Tổng đơn hàng</h3>
+              
+              <div className="space-y-4 text-sm text-[#333333] mb-6 border-b border-[#EAE7DE] pb-6">
+                <div className="flex justify-between">
+                  <span>Tạm tính</span>
+                  <span className="font-bold">{subtotal.toLocaleString('vi-VN')} đ</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Phí vận chuyển</span>
+                  <span>Miễn phí</span>
+                </div>
               </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span>Phí giao hàng</span>
-                <span className="font-medium text-foreground">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(shippingFee)}
-                </span>
+
+              <div className="flex justify-between items-center mb-8">
+                <span className="font-bold text-[#181818]">Tổng thanh toán</span>
+                <span className="font-extrabold text-2xl text-[#EF4444]">{subtotal.toLocaleString('vi-VN')} đ</span>
               </div>
+
+              <button className="w-full bg-[#181818] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#333333] transition-colors shadow-md">
+                THANH TOÁN <ArrowRight className="w-5 h-5" />
+              </button>
+              
+              <p className="text-xs text-center text-[#888888] mt-4">
+                Sản phẩm thiết kế riêng sẽ được in và giao trong 3-5 ngày làm việc.
+              </p>
             </div>
-            
-            <div className="border-t border-border pt-6 mb-8">
-              <div className="flex justify-between items-end">
-                <span className="font-bold text-foreground">Tổng cộng</span>
-                <span className="text-3xl font-bold text-primary">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground text-right mt-1">(Đã bao gồm VAT nếu có)</p>
-            </div>
-            
-            <button 
-              onClick={() => router.push('/checkout')}
-              className="w-full bg-foreground text-white py-4 rounded-full font-medium text-lg hover:bg-black transition-colors flex items-center justify-center gap-2"
-            >
-              Tiến hành thanh toán <ArrowRight className="w-5 h-5" />
-            </button>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

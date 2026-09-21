@@ -11,20 +11,19 @@ import * as THREE from 'three';
 import { useCartStore } from '@/store/useCartStore';
 
 // Safe Decal Component using Drei's Decal
-function StickerDecal({ url, isText, text, textColor }: { url?: string, isText?: boolean, text?: string, textColor?: string }) {
+function StickerDecal({ url, isText, text, textColor, radius }: { url?: string, isText?: boolean, text?: string, textColor?: string, radius: number }) {
   const texture = url ? useTexture(url) : null;
   
   if (isText && text) {
     return (
       <Text 
-        position={[0, 0.2, 1.4]} 
-        fontSize={0.4} 
+        position={[0, 0.2, radius + 0.02]} 
+        fontSize={0.35} 
         color={textColor}
         anchorX="center"
         anchorY="middle"
         maxWidth={2}
         textAlign="center"
-        depthOffset={-1}
       >
         {text}
       </Text>
@@ -33,7 +32,7 @@ function StickerDecal({ url, isText, text, textColor }: { url?: string, isText?:
 
   if (texture) {
     return (
-      <Decal position={[0, 0, 1.4]} rotation={[0, 0, 0]} scale={[1.5, 1.5, 1.5]}>
+      <Decal position={[0, 0, radius]} rotation={[0, 0, 0]} scale={[1.2, 1.2, 1.2]}>
         <meshBasicMaterial 
           map={texture} 
           transparent 
@@ -49,16 +48,17 @@ function StickerDecal({ url, isText, text, textColor }: { url?: string, isText?:
 
 function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, sticker, uploadedImage }: any) {
   const isCeramic = modelType === 'mug';
+  const radius = isCeramic ? 1.5 : 1.3;
 
   return (
     <group position={[0, isCeramic ? -0.5 : -1, 0]}>
       
-      {/* Cup Body */}
-      <mesh position={[0, isCeramic ? 1 : 1.5, 0]} castShadow receiveShadow>
+      {/* Cup Body (Hollow) */}
+      <mesh position={[0, isCeramic ? 1.25 : 1.75, 0]} castShadow receiveShadow>
         {isCeramic ? (
-          <cylinderGeometry args={[1.5, 1.5, 2.5, 64]} />
+          <cylinderGeometry args={[1.5, 1.5, 2.5, 64, 1, true]} />
         ) : (
-          <cylinderGeometry args={[1.4, 1.1, 3.5, 64]} />
+          <cylinderGeometry args={[1.4, 1.1, 3.5, 64, 1, true]} />
         )}
         
         {isCeramic ? (
@@ -66,6 +66,7 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
             color={cupColor} 
             roughness={0.2} 
             metalness={0.1} 
+            side={THREE.DoubleSide}
           />
         ) : (
           <meshPhysicalMaterial 
@@ -78,23 +79,38 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
             ior={1.5}
             clearcoat={1}
             envMapIntensity={1.5}
+            side={THREE.DoubleSide}
           />
         )}
         
         {/* Custom Text */}
-        {customText && <StickerDecal isText text={customText} textColor={textColor} />}
+        {customText && <StickerDecal isText text={customText} textColor={textColor} radius={radius} />}
 
         {/* Sticker */}
-        {sticker && <StickerDecal url={sticker} />}
+        {sticker && <StickerDecal url={sticker} radius={radius} />}
         
         {/* Uploaded Photo */}
-        {uploadedImage && <StickerDecal url={uploadedImage} />}
+        {uploadedImage && <StickerDecal url={uploadedImage} radius={radius} />}
+      </mesh>
+
+      {/* Cup Bottom Cap */}
+      <mesh position={[0, isCeramic ? 0 : 0, 0]} castShadow receiveShadow>
+        {isCeramic ? (
+          <cylinderGeometry args={[1.5, 1.5, 0.1, 64]} />
+        ) : (
+          <cylinderGeometry args={[1.1, 1.1, 0.1, 64]} />
+        )}
+        {isCeramic ? (
+          <meshStandardMaterial color={cupColor} roughness={0.2} metalness={0.1} />
+        ) : (
+          <meshPhysicalMaterial color={cupColor} transmission={0.9} transparent roughness={0.1} ior={1.5} />
+        )}
       </mesh>
 
       {/* Handle for Mug */}
       {isCeramic && (
-        <mesh position={[1.5, 1, 0]} rotation={[0, 0, 0]}>
-          <torusGeometry args={[0.8, 0.25, 16, 64, Math.PI]} />
+        <mesh position={[1.5, 1.25, 0]} rotation={[0, 0, -Math.PI / 2]} castShadow>
+          <torusGeometry args={[0.7, 0.22, 16, 64, Math.PI]} />
           <meshStandardMaterial color={cupColor} roughness={0.2} />
         </mesh>
       )}
@@ -102,11 +118,11 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
       {/* Lid & Straw for Tumbler */}
       {!isCeramic && (
         <>
-          <mesh position={[0, 3.4, 0]} castShadow>
+          <mesh position={[0, 3.65, 0]} castShadow>
             <cylinderGeometry args={[1.45, 1.45, 0.3, 64]} />
             <meshStandardMaterial color={lidColor} roughness={0.3} />
           </mesh>
-          <mesh position={[0, 4.5, 0]}>
+          <mesh position={[0, 4.8, 0]}>
             <cylinderGeometry args={[0.12, 0.12, 4, 16]} />
             <meshPhysicalMaterial color="#ffffff" transmission={0.9} roughness={0.1} transparent opacity={0.6} />
           </mesh>

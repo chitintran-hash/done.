@@ -10,6 +10,7 @@ export interface CartItem {
   isCustom?: boolean;
   customText?: string;
   customNote?: string;
+  customSpecs?: any;
   sellerId?: string; // legacy support
   storeName?: string; // legacy support
   deliveryDays?: number; // legacy support

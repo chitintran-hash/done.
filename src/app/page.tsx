@@ -4,27 +4,23 @@ import { ArrowRight, Heart, Truck, ShieldCheck, Gift } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex flex-col min-h-screen">
+    <main className="flex flex-col min-h-screen pt-[112px]">
       {/* 1. Hero Section */}
       <section className="hero">
         <div className="max-w-[1400px] mx-auto w-full h-full relative">
         <div className="hero-content">
           <h1 className="hero-title">
-            Find your cup.<br/>
-            Make it yours.
+            Find your cup.
           </h1>
           
-          <p className="hero-description">
-            Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép<br className="hidden md:block" />
+          <p className="hero-description text-[22px] md:text-[26px]">
+            Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép
             và mọi khoảnh khắc hằng ngày của bạn.
           </p>
           
-          <div className="hero-actions">
-            <Link href="/products" className="hero-primary-button">
-              Shop Cups
-            </Link>
-            <Link href="/custom-cup" className="hero-secondary-button">
-              Explore Custom Cup
+          <div className="hero-actions mt-8">
+            <Link href="/products" className="text-[#2F201E] font-bold text-[16px] md:text-[18px] tracking-wide border-b-2 border-[#2F201E] pb-1 hover:text-[#D9788F] hover:border-[#D9788F] transition-colors">
+              Shop The Cupfy Collection
             </Link>
           </div>
         </div>

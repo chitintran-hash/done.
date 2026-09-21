@@ -39,42 +39,28 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const orderData = {
+        name: formData.name,
+        email: formData.email,
+        address: formData.address,
+        ward: formData.ward,
+        district: formData.district,
+        city: formData.city,
+        total: total,
+      };
 
-      const shippingAddress = `${formData.address}, ${formData.ward}, ${formData.district}, ${formData.city}`;
+      const result = await processCheckout(orderData, cart.items);
 
-      // Insert order
-      const { data: order, error } = await supabase.from('orders').insert({
-        buyer_id: user?.id || null,
-        buyer_name_snapshot: formData.name,
-        buyer_email_snapshot: formData.email,
-        total_price: total,
-        status: 'pending',
-        shipping_address: shippingAddress
-      }).select().single();
+      if (!result.success) {
+        throw new Error(result.error);
+      }
 
-      if (error) throw error;
-
-      // Insert order items
-      const orderItems = cart.items.map(item => ({
-        order_id: order.id,
-        product_id: item.isCustom ? null : item.id, // For custom products that don't exist in DB, we could handle differently. For now, leave null.
-        quantity: item.quantity,
-        price: item.price,
-        status: 'pending'
-      }));
-
-      const { error: itemsError } = await supabase.from('order_items').insert(orderItems);
-      if (itemsError) throw itemsError;
-
-      // Giả lập delay
-      setTimeout(() => {
-        cart.clearCart();
-        router.push('/order-confirmation');
-      }, 1000);
-    } catch (error) {
+      cart.clearCart();
+      router.push('/order-confirmation');
+      
+    } catch (error: any) {
       console.error(error);
-      alert("Có lỗi xảy ra khi đặt hàng.");
+      alert("Có lỗi xảy ra khi đặt hàng: " + error.message);
       setLoading(false);
     }
   };

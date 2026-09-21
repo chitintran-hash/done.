@@ -9,7 +9,7 @@ export default async function AdminOrdersPage() {
     .select(`
       id, created_at, total_price, status, buyer_name_snapshot, shipping_address,
       profiles!orders_buyer_id_fkey(full_name, email),
-      order_items(id, quantity, price, status, products(name, profiles(store_name)))
+      order_items(id, quantity, price, status, products(name, image_url, description, category, profiles(store_name)))
     `)
     .order('created_at', { ascending: false });
 
@@ -63,28 +63,58 @@ export default async function AdminOrdersPage() {
 
                 <div className="divide-y divide-border bg-white p-4">
                   <h4 className="font-bold text-sm mb-2 flex items-center gap-2"><Package className="w-4 h-4" /> Chi tiết Sub-orders (Cho từng Seller)</h4>
-                  {order.order_items.map((item: any) => (
-                    <div key={item.id} className="py-3 flex justify-between items-center text-sm">
-                      <div>
-                        <div className="font-medium">{item.products?.name || 'Sản phẩm đã xóa'}</div>
-                        <div className="text-muted-foreground text-xs mt-0.5">Seller: {(item.products?.profiles as any)?.store_name || 'Không rõ'}</div>
-                      </div>
-                      <div className="flex items-center gap-6">
-                        <div className="text-right">
-                          <div className="font-medium">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)} x {item.quantity}</div>
+                  {order.order_items.map((item: any) => {
+                    const isCustom = item.products?.category === 'custom';
+                    let specs = null;
+                    if (isCustom && item.products?.description) {
+                      try {
+                        specs = JSON.parse(item.products.description);
+                      } catch (e) {}
+                    }
+                    
+                    return (
+                      <div key={item.id} className="py-4 flex gap-4 text-sm">
+                        {item.products?.image_url && (
+                          <div className="w-20 h-20 bg-[#F7F7F5] rounded-lg border border-[#EAE7DE] flex items-center justify-center shrink-0 p-1">
+                            <img src={item.products.image_url} alt="product" className="w-full h-full object-contain" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-bold text-[#181818] text-base">{item.products?.name || 'Sản phẩm đã xóa'}</div>
+                              {!isCustom && <div className="text-[#888888] text-xs mt-0.5">Seller: {(item.products?.profiles as any)?.store_name || 'Không rõ'}</div>}
+                              
+                              {specs && (
+                                <div className="mt-2 text-xs text-[#333333] bg-[#FFF9E8] p-2 rounded-md border border-[#EAE7DE]">
+                                  <p><span className="font-bold">Loại ly:</span> {specs.modelType}</p>
+                                  <p><span className="font-bold">Màu thân:</span> {specs.cupColor}</p>
+                                  {specs.modelType === 'tumbler' && <p><span className="font-bold">Màu nắp:</span> {specs.lidColor}</p>}
+                                  {specs.customText && <p><span className="font-bold">Nội dung in:</span> "{specs.customText}" (Màu: {specs.textColor})</p>}
+                                  {(specs.sticker || specs.uploadedImage) && <p className="font-bold text-[#FFB15C]">** Có dán ảnh/sticker tuỳ chỉnh **</p>}
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex items-center gap-6">
+                              <div className="text-right">
+                                <div className="font-bold text-[#181818]">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)} x {item.quantity}</div>
+                              </div>
+                              <div className="w-24 text-right">
+                                <span className={`px-2 py-1 text-xs font-bold rounded ${
+                                  item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                                  item.status === 'shipped' ? 'bg-green-100 text-green-700' :
+                                  'bg-muted text-muted-foreground'
+                                }`}>
+                                  {item.status}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className="w-24 text-right">
-                          <span className={`px-2 py-0.5 text-xs font-bold rounded ${
-                            item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                            item.status === 'shipped' ? 'bg-green-100 text-green-700' :
-                            'bg-muted text-muted-foreground'
-                          }`}>
-                            {item.status}
-                          </span>
-                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             ))}

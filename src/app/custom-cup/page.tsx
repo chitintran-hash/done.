@@ -193,13 +193,20 @@ export default function CustomCupStudio() {
 
   const handleAddToCart = () => {
     setIsAddingToCart(true);
+    
+    const canvas = document.querySelector('canvas');
+    let capturedImage = '/images/cupfy-hero.png';
+    if (canvas) {
+      capturedImage = canvas.toDataURL('image/webp', 0.8);
+    }
+
     setTimeout(() => {
       cartStore.addItem({
         id: 'custom-' + Date.now(),
         name: modelType === 'tumbler' ? 'Ly Tumbler Tuỳ Chỉnh' : 'Cốc Sứ Tuỳ Chỉnh',
         price: modelType === 'tumbler' ? 250000 : 180000,
         quantity: 1,
-        image: '/images/cupfy-hero.png', 
+        image: capturedImage, 
         isCustom: true,
         customSpecs: {
           modelType,
@@ -436,7 +443,7 @@ export default function CustomCupStudio() {
               <span className="font-bold text-[#181818]">Đang tải môi trường 3D...</span>
             </div>
           }>
-            <Canvas camera={{ position: [0, 2, 9], fov: 45 }} shadows>
+            <Canvas camera={{ position: [0, 2, 9], fov: 45 }} shadows gl={{ preserveDrawingBuffer: true }}>
               <ambientLight intensity={0.6} />
               <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow shadow-mapSize={1024} />
               <spotLight position={[-5, 5, 5]} intensity={0.5} penumbra={1} />

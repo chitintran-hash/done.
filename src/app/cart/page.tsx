@@ -98,9 +98,9 @@ export default function CartPage() {
                 <span className="font-extrabold text-2xl text-[#EF4444]">{subtotal.toLocaleString('vi-VN')} đ</span>
               </div>
 
-              <button className="w-full bg-[#181818] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#333333] transition-colors shadow-md">
+              <Link href="/checkout" className="w-full bg-[#181818] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#333333] transition-colors shadow-md">
                 THANH TOÁN <ArrowRight className="w-5 h-5" />
-              </button>
+              </Link>
               
               <p className="text-xs text-center text-[#888888] mt-4">
                 Sản phẩm thiết kế riêng sẽ được in và giao trong 3-5 ngày làm việc.

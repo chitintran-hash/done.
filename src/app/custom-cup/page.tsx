@@ -6,35 +6,50 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Type, Image as ImageIcon, Smile, ShoppingCart, Save, Layers, Share2, Check, Upload, Box } from 'lucide-react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, Text, useTexture, Decal } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, Text, useTexture, Decal, RenderTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCartStore } from '@/store/useCartStore';
 
+
 // Safe Decal Component using Drei's Decal
-function StickerDecal({ url, isText, text, textColor, radius }: { url?: string, isText?: boolean, text?: string, textColor?: string, radius: number }) {
+function StickerDecal({ url, isText, text, textColor, radius, transform }: any) {
   const texture = url ? useTexture(url) : null;
   
+  // Calculate position based on cylinder coordinates
+  const x = Math.sin(transform.rotY) * radius;
+  const z = Math.cos(transform.rotY) * radius;
+  const pos: [number, number, number] = [x, transform.y, z];
+  const rot: [number, number, number] = [0, transform.rotY, 0];
+  
+  const scaleX = isText ? transform.scale * 2 : transform.scale;
+  const scaleY = transform.scale;
+  const scaleZ = 1.5; // Decal projection depth
+
   if (isText && text) {
     return (
-      <Text 
-        position={[0, 0.2, radius + 0.02]} 
-        fontSize={0.35} 
-        color={textColor}
-        anchorX="center"
-        anchorY="middle"
-        maxWidth={2}
-        textAlign="center"
-      >
-        {text}
-      </Text>
+      <Decal position={pos} rotation={rot} scale={[scaleX, scaleY, scaleZ] as [number, number, number]}>
+        <meshBasicMaterial transparent polygonOffset polygonOffsetFactor={-10} depthWrite={false}>
+          <RenderTexture attach="map" width={1024} height={512}>
+            <Text 
+              fontSize={2.5} 
+              color={textColor}
+              anchorX="center"
+              anchorY="middle"
+              position={[0, 0, 0]}
+            >
+              {text}
+            </Text>
+          </RenderTexture>
+        </meshBasicMaterial>
+      </Decal>
     );
   }
 
   if (texture) {
     return (
-      <Decal position={[0, 0, radius]} rotation={[0, 0, 0]} scale={[1.2, 1.2, 1.2]}>
+      <Decal position={pos} rotation={rot} scale={[scaleX, scaleY, scaleZ] as [number, number, number]}>
         <meshBasicMaterial 
-          map={texture} 
+          map={texture as any} 
           transparent 
           polygonOffset 
           polygonOffsetFactor={-10} 
@@ -46,9 +61,9 @@ function StickerDecal({ url, isText, text, textColor, radius }: { url?: string, 
   return null;
 }
 
-function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, sticker, uploadedImage }: any) {
+function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, sticker, uploadedImage, textTransform, stickerTransform }: any) {
   const isCeramic = modelType === 'mug';
-  const radius = isCeramic ? 1.5 : 1.3;
+  const radius = isCeramic ? 1.5 : 1.35; // slightly larger than tumbler inner radius for projection
 
   return (
     <group position={[0, isCeramic ? -0.5 : -1, 0]}>
@@ -84,13 +99,13 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
         )}
         
         {/* Custom Text */}
-        {customText && <StickerDecal isText text={customText} textColor={textColor} radius={radius} />}
+        {customText && <StickerDecal isText text={customText} textColor={textColor} radius={radius} transform={textTransform} />}
 
         {/* Sticker */}
-        {sticker && <StickerDecal url={sticker} radius={radius} />}
+        {sticker && <StickerDecal url={sticker} radius={radius} transform={stickerTransform} />}
         
         {/* Uploaded Photo */}
-        {uploadedImage && <StickerDecal url={uploadedImage} radius={radius} />}
+        {uploadedImage && <StickerDecal url={uploadedImage} radius={radius} transform={stickerTransform} />}
       </mesh>
 
       {/* Cup Bottom Cap */}
@@ -143,6 +158,10 @@ export default function CustomCupStudio() {
   const [textColor, setTextColor] = useState('#181818');
   const [sticker, setSticker] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');
+
+  const [textTransform, setTextTransform] = useState({ y: 0, rotY: 0, scale: 1 });
+  const [stickerTransform, setStickerTransform] = useState({ y: 0, rotY: 0, scale: 1.5 });
+
   
   const [activeTab, setActiveTab] = useState('models');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -189,7 +208,9 @@ export default function CustomCupStudio() {
           customText,
           textColor,
           sticker,
-          uploadedImage
+          uploadedImage,
+          textTransform,
+          stickerTransform
         }
       });
       router.push('/cart');
@@ -253,6 +274,23 @@ export default function CustomCupStudio() {
                   <div className="w-8 h-12 border-2 border-current rounded-b-md rounded-t-sm mb-2 opacity-80 relative">
                     <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1 h-3 bg-current"></div>
                   </div>
+              <div className="mt-6 border-t border-[#EAE7DE] pt-6">
+                <h3 className="font-bold text-[#181818] mb-4">Điều chỉnh Vị trí</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Xoay ngang</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
+                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Độ cao</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
+                    <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Kích thước</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
+                    <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                </div>
+              </div>
                   <span className="text-sm font-bold">Tumbler</span>
                 </button>
                 <button onClick={() => setModelType('mug')} className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${modelType === 'mug' ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
@@ -306,6 +344,23 @@ export default function CustomCupStudio() {
                     <button key={c} onClick={() => setTextColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${textColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c }} />
                   ))}
                 </div>
+              <div className="mt-6 border-t border-[#EAE7DE] pt-6">
+                <h3 className="font-bold text-[#181818] mb-4">Điều chỉnh Vị trí</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Xoay ngang</span> <span>{Math.round(textTransform.rotY * (180/Math.PI))}°</span></label>
+                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={textTransform.rotY} onChange={(e) => setTextTransform({...textTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Độ cao</span> <span>{textTransform.y.toFixed(2)}</span></label>
+                    <input type="range" min={-1.5} max={1.5} step={0.01} value={textTransform.y} onChange={(e) => setTextTransform({...textTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Kích thước</span> <span>{textTransform.scale.toFixed(2)}</span></label>
+                    <input type="range" min={0.2} max={3} step={0.05} value={textTransform.scale} onChange={(e) => setTextTransform({...textTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                </div>
+              </div>
               </div>
             </>
           )}
@@ -347,6 +402,24 @@ export default function CustomCupStudio() {
                   </div>
                 </div>
               )}
+            
+              <div className="mt-6 border-t border-[#EAE7DE] pt-6">
+                <h3 className="font-bold text-[#181818] mb-4">Điều chỉnh Vị trí</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Xoay ngang</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
+                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Độ cao</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
+                    <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Kích thước</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
+                    <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -378,6 +451,8 @@ export default function CustomCupStudio() {
                 textColor={textColor} 
                 sticker={sticker} 
                 uploadedImage={uploadedImage}
+                textTransform={textTransform}
+                stickerTransform={stickerTransform}
               />
               
               <ContactShadows position={[0, -1.05, 0]} opacity={0.6} scale={15} blur={2.5} far={4} color="#181818" />

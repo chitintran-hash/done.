@@ -185,9 +185,13 @@ export default function CustomCupStudio() {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setUploadedImage(url);
-      setSticker(''); // Clear preset sticker if uploading photo
+      // Use FileReader to get base64 so it can be saved to the database for Admin
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadedImage(reader.result as string);
+        setSticker(''); // Clear preset sticker if uploading photo
+      };
+      reader.readAsDataURL(file);
     }
   };
 

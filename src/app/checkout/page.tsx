@@ -2,6 +2,8 @@
 
 import { useCartStore } from '@/store/useCartStore';
 import { useRouter } from 'next/navigation';
+import { processCheckout } from '@/app/actions/checkout';
+
 import { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';

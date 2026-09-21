@@ -1,3 +1,4 @@
+import { deleteProduct, saveProduct } from '@/app/actions/admin';
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ export default function AdminProductsPage() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('products').select('*').neq('category', 'custom').order('created_at', { ascending: false });
     if (data) setProducts(data);
     setLoading(false);
   };
@@ -98,7 +99,10 @@ export default function AdminProductsPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) return;
     setLoading(true);
-    await supabase.from('products').delete().eq('id', id);
+    const result = await deleteProduct(id);
+    if (!result.success) {
+      alert("Không thể xoá sản phẩm: " + result.error);
+    }
     await fetchProducts();
   };
 

@@ -202,3 +202,30 @@ export async function hideProduct(productId: string) {
   revalidatePath('/admin/products');
   return { success: true };
 }
+
+export async function deleteProduct(productId: string) {
+  try {
+    const { error } = await getAdminClient().from('products').delete().eq('id', productId);
+    if (error) throw error;
+    return { success: true };
+  } catch (error: any) {
+    console.error("Delete product error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function saveProduct(payload: any, editingId?: string) {
+  try {
+    if (editingId) {
+      const { error } = await getAdminClient().from('products').update(payload).eq('id', editingId);
+      if (error) throw error;
+    } else {
+      const { error } = await getAdminClient().from('products').insert(payload);
+      if (error) throw error;
+    }
+    return { success: true };
+  } catch (error: any) {
+    console.error("Save product error:", error);
+    return { success: false, error: error.message };
+  }
+}

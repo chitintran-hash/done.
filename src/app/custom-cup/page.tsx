@@ -1,203 +1,162 @@
-"use client";
+'use client';
 
-import { useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useCartStore } from '@/store/useCartStore';
-import Image from 'next/image';
-import { CheckCircle2, Paintbrush, Type, Upload, Loader2 } from 'lucide-react';
+import React, { useState, Suspense } from 'react';
+import Link from 'next/link';
+import { ChevronLeft, Type, Image as ImageIcon, Smile, ShoppingCart, Save, Layers, Share2 } from 'lucide-react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 
-export default function CustomCupPage() {
+function ProceduralCup({ cupColor, lidColor }: { cupColor: string, lidColor: string }) {
   return (
-    <Suspense fallback={<div className="min-h-[50vh] flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>}>
-      <CustomCupContent />
-    </Suspense>
+    <group position={[0, -1, 0]}>
+      {/* Cup Body - Glass/Plastic Material */}
+      <mesh position={[0, 1.5, 0]}>
+        <cylinderGeometry args={[1.4, 1.1, 3.5, 64]} />
+        <meshPhysicalMaterial 
+          color={cupColor}
+          transmission={0.6}
+          opacity={0.9}
+          transparent
+          roughness={0.15}
+          thickness={0.5}
+          envMapIntensity={1}
+        />
+      </mesh>
+
+      {/* Lid */}
+      <mesh position={[0, 3.4, 0]}>
+        <cylinderGeometry args={[1.45, 1.45, 0.3, 64]} />
+        <meshStandardMaterial color={lidColor} roughness={0.4} />
+      </mesh>
+
+      {/* Straw */}
+      <mesh position={[0, 4.5, 0]} rotation={[0, 0, 0]}>
+        <cylinderGeometry args={[0.12, 0.12, 4, 16]} />
+        <meshPhysicalMaterial color="#ffffff" transmission={0.9} roughness={0.1} transparent opacity={0.6} />
+      </mesh>
+    </group>
   );
 }
 
-function CustomCupContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialProductId = searchParams.get('productId');
-  const cart = useCartStore();
+export default function CustomCupStudio() {
+  const [cupColor, setCupColor] = useState('#ffffff');
+  const [lidColor, setLidColor] = useState('#FFCFE0');
+  const [activeTab, setActiveTab] = useState('colors');
 
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    cupStyle: initialProductId || 'cup-1',
-    text: '',
-    color: '#f28482',
-    position: 'center',
-    note: ''
-  });
-
-  const cups = [
-    { id: 'cup-1', name: 'Ly sứ trắng tối giản', price: 129000, img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80' },
-    { id: 'cup-2', name: 'Ly thủy tinh trong suốt', price: 149000, img: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=600&q=80' },
-    { id: 'cup-3', name: 'Ly giữ nhiệt Pastel', price: 199000, img: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80' },
-  ];
-
-  const selectedCup = cups.find(c => c.id === formData.cupStyle) || cups[0];
-
-  const handleNext = () => setStep(step + 1);
-  const handlePrev = () => setStep(step - 1);
-
-  const handleAddToCart = () => {
-    cart.addItem({
-      id: `custom-${Date.now()}`,
-      name: `Custom: ${selectedCup.name}`,
-      price: selectedCup.price + 30000, // phí custom
-      image: selectedCup.img,
-      quantity: 1,
-      isCustom: true,
-      customText: formData.text,
-      customNote: formData.note
-    });
-    router.push('/cart');
-  };
+  const cupColors = ['#ffffff', '#FFCFE0', '#BFE5D0', '#FFEDA8', '#DCD1FF', '#C8DFFF'];
+  const lidColors = ['#ffffff', '#FFCFE0', '#181818', '#FFB15C', '#CFE8C4', '#DCD1FF'];
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-4">Custom your cup, your way.</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Chọn mẫu ly, thêm chữ hoặc phong cách riêng. Một chiếc ly nhỏ nhưng mang đúng cá tính của bạn.
-        </p>
+    <div className="flex flex-col h-screen w-full bg-[#F7F7F5] overflow-hidden">
+      {/* Top Bar */}
+      <div className="h-16 bg-white border-b border-[#EAE7DE] flex items-center justify-between px-4 z-10 shrink-0">
+        <div className="flex items-center gap-4">
+          <Link href="/" className="p-2 hover:bg-[#F7F7F5] rounded-full transition-colors">
+            <ChevronLeft className="w-5 h-5 text-[#181818]" />
+          </Link>
+          <div className="h-6 w-px bg-[#EAE7DE]"></div>
+          <span className="font-bold text-[#181818]">My Awesome Cup ✨</span>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button className="px-4 py-2 text-sm font-semibold text-[#333333] hover:bg-[#F7F7F5] rounded-full flex items-center gap-2">
+            <Share2 className="w-4 h-4" /> Share
+          </button>
+          <button className="px-4 py-2 text-sm font-semibold text-[#333333] hover:bg-[#F7F7F5] rounded-full flex items-center gap-2">
+            <Save className="w-4 h-4" /> LƯU
+          </button>
+          <button className="px-6 py-2.5 text-sm font-bold bg-[#181818] text-white rounded-full flex items-center gap-2 hover:bg-[#333333] shadow-[0_4px_14px_rgba(0,0,0,0.1)] transition-all">
+            <ShoppingCart className="w-4 h-4" /> THÊM VÀO GIỎ - 250.000đ
+          </button>
+        </div>
       </div>
 
-      {/* Stepper */}
-      <div className="flex items-center justify-center mb-12">
-        {[1, 2, 3].map((s) => (
-          <div key={s} className="flex items-center">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${step >= s ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
-              {s}
-            </div>
-            {s < 3 && <div className={`w-16 h-1 mx-2 ${step > s ? 'bg-primary' : 'bg-muted'}`}></div>}
-          </div>
-        ))}
-      </div>
+      {/* Main Studio Area */}
+      <div className="flex flex-1 overflow-hidden">
+        
+        {/* Left Toolbar Strip */}
+        <div className="w-20 bg-white border-r border-[#EAE7DE] flex flex-col items-center py-6 gap-6 z-10 shrink-0">
+          <button onClick={() => setActiveTab('colors')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'colors' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+            <Layers className="w-6 h-6" />
+            <span className="text-[10px] font-bold">Màu sắc</span>
+          </button>
+          <button onClick={() => setActiveTab('text')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'text' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+            <Type className="w-6 h-6" />
+            <span className="text-[10px] font-bold">Thêm chữ</span>
+          </button>
+          <button onClick={() => setActiveTab('sticker')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'sticker' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+            <Smile className="w-6 h-6" />
+            <span className="text-[10px] font-bold">Sticker</span>
+          </button>
+          <button onClick={() => setActiveTab('upload')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'upload' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+            <ImageIcon className="w-6 h-6" />
+            <span className="text-[10px] font-bold">Tải ảnh lên</span>
+          </button>
+        </div>
 
-      <div className="bg-white rounded-3xl p-8 border border-border shadow-sm min-h-[500px]">
-        {step === 1 && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4">
-            <h2 className="text-2xl font-serif font-bold text-center">Bước 1: Chọn dáng ly</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {cups.map(cup => (
-                <div 
-                  key={cup.id}
-                  onClick={() => setFormData({...formData, cupStyle: cup.id})}
-                  className={`cursor-pointer rounded-2xl overflow-hidden border-2 transition-all ${formData.cupStyle === cup.id ? 'border-primary ring-4 ring-primary/20' : 'border-transparent hover:border-border'}`}
-                >
-                  <div className="aspect-square relative bg-muted">
-                    <Image src={cup.img} alt={cup.name} fill className="object-cover" />
-                  </div>
-                  <div className="p-4 text-center bg-muted/20">
-                    <h3 className="font-medium text-foreground">{cup.name}</h3>
-                    <p className="text-primary font-bold">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(cup.price)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex justify-end mt-8">
-              <button onClick={handleNext} className="bg-foreground text-white px-8 py-3 rounded-full font-medium hover:bg-black transition-colors">Tiếp tục</button>
-            </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-right-4">
-            <div>
-              <h2 className="text-2xl font-serif font-bold mb-6">Bước 2: Thiết kế</h2>
-              
-              <div className="space-y-6">
-                <div>
-                  <label className="flex items-center gap-2 font-medium mb-2"><Type className="w-4 h-4" /> Nội dung in</label>
-                  <input 
-                    type="text" 
-                    maxLength={20}
-                    placeholder="Tên của bạn hoặc 1 câu quote ngắn (max 20 ký tự)" 
-                    className="w-full p-4 rounded-xl border border-border focus:border-primary focus:outline-none"
-                    value={formData.text}
-                    onChange={e => setFormData({...formData, text: e.target.value})}
-                  />
-                </div>
-                
-                <div>
-                  <label className="flex items-center gap-2 font-medium mb-2"><Paintbrush className="w-4 h-4" /> Màu sắc chữ</label>
-                  <div className="flex gap-4">
-                    {['#f28482', '#4a3f35', '#222222', '#ffffff'].map(color => (
-                      <button 
-                        key={color}
-                        onClick={() => setFormData({...formData, color})}
-                        className={`w-10 h-10 rounded-full border-2 ${formData.color === color ? 'border-primary scale-110' : 'border-border'}`}
-                        style={{ backgroundColor: color }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="flex items-center gap-2 font-medium mb-2"><Upload className="w-4 h-4" /> Ghi chú thêm</label>
-                  <textarea 
-                    rows={3} 
-                    placeholder="Bạn muốn in ở vị trí nào? Có icon nhỏ nào không?" 
-                    className="w-full p-4 rounded-xl border border-border focus:border-primary focus:outline-none resize-none"
-                    value={formData.note}
-                    onChange={e => setFormData({...formData, note: e.target.value})}
-                  />
-                  <p className="text-xs text-muted-foreground mt-2">*Ở phiên bản hiện tại, Cupfy sẽ liên hệ xác nhận thiết kế qua Zalo trước khi in.</p>
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-8">
-                <button onClick={handlePrev} className="text-muted-foreground hover:text-foreground font-medium px-4 py-3">Quay lại</button>
-                <button onClick={handleNext} className="bg-foreground text-white px-8 py-3 rounded-full font-medium hover:bg-black transition-colors">Xem trước</button>
-              </div>
-            </div>
-            
-            <div className="bg-muted/30 rounded-2xl flex items-center justify-center p-8 relative">
-              <div className="w-full max-w-sm aspect-square relative rounded-xl overflow-hidden shadow-lg">
-                <Image src={selectedCup.img} alt={selectedCup.name} fill className="object-cover" />
-                {formData.text && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <span 
-                      className="text-3xl font-serif font-bold text-center px-4" 
-                      style={{ color: formData.color, textShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                    >
-                      {formData.text}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="flex flex-col items-center justify-center animate-in fade-in slide-in-from-right-4 py-8">
-            <CheckCircle2 className="w-16 h-16 text-primary mb-6" />
-            <h2 className="text-3xl font-serif font-bold text-center mb-4">Hoàn tất thiết kế!</h2>
-            <p className="text-muted-foreground text-center mb-8 max-w-md">
-              Chiếc ly {selectedCup.name.toLowerCase()} với thiết kế riêng của bạn đã sẵn sàng. Thêm vào giỏ hàng ngay.
-            </p>
-            
-            <div className="bg-muted/20 border border-border rounded-2xl p-6 w-full max-w-md mb-8 flex gap-4 items-center">
-              <div className="w-20 h-20 relative rounded-lg overflow-hidden shrink-0">
-                <Image src={selectedCup.img} alt={selectedCup.name} fill className="object-cover" />
-              </div>
+        {/* Properties Panel (Left) */}
+        <div className="w-72 bg-white border-r border-[#EAE7DE] p-6 flex flex-col gap-8 z-10 overflow-y-auto">
+          {activeTab === 'colors' && (
+            <>
               <div>
-                <h4 className="font-medium text-foreground">Custom {selectedCup.name}</h4>
-                <p className="text-sm text-muted-foreground mt-1">Text: "{formData.text || 'Không có'}"</p>
-                <p className="text-primary font-bold mt-2">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(selectedCup.price + 30000)}
-                </p>
+                <h3 className="font-bold text-[#181818] mb-4">Màu thân ly</h3>
+                <div className="flex flex-wrap gap-3">
+                  {cupColors.map(c => (
+                    <button 
+                      key={c} 
+                      onClick={() => setCupColor(c)}
+                      className={`w-10 h-10 rounded-full border-2 transition-all ${cupColor === c ? 'border-[#181818] scale-110' : 'border-transparent shadow-sm'}`}
+                      style={{ backgroundColor: c }}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="flex gap-4">
-              <button onClick={handlePrev} className="border border-border text-foreground px-8 py-3 rounded-full font-medium hover:bg-muted transition-colors">Chỉnh sửa lại</button>
-              <button onClick={handleAddToCart} className="bg-primary text-white px-8 py-3 rounded-full font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Thêm vào giỏ hàng</button>
+              <div>
+                <h3 className="font-bold text-[#181818] mb-4">Màu nắp ly</h3>
+                <div className="flex flex-wrap gap-3">
+                  {lidColors.map(c => (
+                    <button 
+                      key={c} 
+                      onClick={() => setLidColor(c)}
+                      className={`w-10 h-10 rounded-full border-2 transition-all ${lidColor === c ? 'border-[#181818] scale-110' : 'border-transparent shadow-sm'}`}
+                      style={{ backgroundColor: c === '#ffffff' ? '#f0f0f0' : c }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {activeTab !== 'colors' && (
+            <div className="flex flex-col items-center justify-center h-full text-center opacity-50">
+              <span className="text-4xl mb-2">🚧</span>
+              <p className="text-sm font-medium">Tính năng đang được phát triển trong Phase tiếp theo.</p>
             </div>
+          )}
+        </div>
+
+        {/* 3D Canvas Area */}
+        <div className="flex-1 relative bg-[#FFF9E8]">
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm text-xs font-bold text-[#333333] border border-[#EAE7DE]">
+            Kéo chuột để xoay 360° | Cuộn để Zoom
           </div>
-        )}
+          <Suspense fallback={<div className="flex items-center justify-center h-full font-bold">Đang tải mô hình 3D...</div>}>
+            <Canvas camera={{ position: [0, 2, 8], fov: 45 }}>
+              <ambientLight intensity={0.5} />
+              <directionalLight position={[5, 5, 5]} intensity={1} />
+              
+              {/* Studio Environment for nice reflections */}
+              <Environment preset="city" />
+
+              <ProceduralCup cupColor={cupColor} lidColor={lidColor} />
+
+              <ContactShadows position={[0, -1, 0]} opacity={0.4} scale={10} blur={2} far={4} />
+              <OrbitControls enablePan={false} minDistance={4} maxDistance={12} maxPolarAngle={Math.PI / 1.5} />
+            </Canvas>
+          </Suspense>
+        </div>
+
       </div>
     </div>
   );

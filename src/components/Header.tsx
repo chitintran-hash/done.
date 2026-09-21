@@ -43,6 +43,8 @@ export default function Header() {
     const supabase = createClient();
     await supabase.auth.signOut();
   };
+  if (pathname === '/custom-cup') return null;
+
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#EAE7DE] ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-[#FFF9E8]"}`}>

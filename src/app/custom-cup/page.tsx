@@ -1,73 +1,117 @@
 
 'use client';
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Type, Image as ImageIcon, Smile, ShoppingCart, Save, Layers, Share2, Check } from 'lucide-react';
+import { ChevronLeft, Type, Image as ImageIcon, Smile, ShoppingCart, Save, Layers, Share2, Check, Upload, Box } from 'lucide-react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, Text, useTexture } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, Text, useTexture, Decal } from '@react-three/drei';
+import * as THREE from 'three';
 import { useCartStore } from '@/store/useCartStore';
 
-function StickerDecal({ url }: { url: string }) {
-  const texture = useTexture(url);
-  return (
-    <mesh position={[0, 0, 1.42]} rotation={[0, 0, 0]}>
-      <planeGeometry args={[1.5, 1.5]} />
-      <meshBasicMaterial map={texture} transparent opacity={0.9} depthWrite={false} />
-    </mesh>
-  );
+// Safe Decal Component using Drei's Decal
+function StickerDecal({ url, isText, text, textColor }: { url?: string, isText?: boolean, text?: string, textColor?: string }) {
+  const texture = url ? useTexture(url) : null;
+  
+  if (isText && text) {
+    return (
+      <Text 
+        position={[0, 0.2, 1.4]} 
+        fontSize={0.4} 
+        color={textColor}
+        anchorX="center"
+        anchorY="middle"
+        maxWidth={2}
+        textAlign="center"
+        depthOffset={-1}
+      >
+        {text}
+      </Text>
+    );
+  }
+
+  if (texture) {
+    return (
+      <Decal position={[0, 0, 1.4]} rotation={[0, 0, 0]} scale={[1.5, 1.5, 1.5]}>
+        <meshBasicMaterial 
+          map={texture} 
+          transparent 
+          polygonOffset 
+          polygonOffsetFactor={-10} 
+          depthWrite={false}
+        />
+      </Decal>
+    );
+  }
+  return null;
 }
 
-function ProceduralCup({ cupColor, lidColor, customText, textColor, sticker }: any) {
+function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, sticker, uploadedImage }: any) {
+  const isCeramic = modelType === 'mug';
+
   return (
-    <group position={[0, -1, 0]}>
+    <group position={[0, isCeramic ? -0.5 : -1, 0]}>
+      
       {/* Cup Body */}
-      <mesh position={[0, 1.5, 0]}>
-        <cylinderGeometry args={[1.4, 1.1, 3.5, 64]} />
-        <meshPhysicalMaterial 
-          color={cupColor}
-          transmission={0.6}
-          opacity={0.9}
-          transparent
-          roughness={0.15}
-          thickness={0.5}
-          envMapIntensity={1}
-        />
+      <mesh position={[0, isCeramic ? 1 : 1.5, 0]} castShadow receiveShadow>
+        {isCeramic ? (
+          <cylinderGeometry args={[1.5, 1.5, 2.5, 64]} />
+        ) : (
+          <cylinderGeometry args={[1.4, 1.1, 3.5, 64]} />
+        )}
+        
+        {isCeramic ? (
+          <meshStandardMaterial 
+            color={cupColor} 
+            roughness={0.2} 
+            metalness={0.1} 
+          />
+        ) : (
+          <meshPhysicalMaterial 
+            color={cupColor}
+            transmission={0.9}
+            opacity={1}
+            transparent
+            roughness={0.1}
+            thickness={1.5}
+            ior={1.5}
+            clearcoat={1}
+            envMapIntensity={1.5}
+          />
+        )}
         
         {/* Custom Text */}
-        {customText && (
-          <Text 
-            position={[0, 0.5, 1.41]} 
-            fontSize={0.4} 
-            color={textColor}
-            font="https://fonts.gstatic.com/s/bevietnampro/v11/w8Q0H34z5zto_8b4Z9C2gK0p8R8vD_S-w8I.woff"
-            anchorX="center"
-            anchorY="middle"
-            maxWidth={2}
-            textAlign="center"
-          >
-            {customText}
-          </Text>
-        )}
+        {customText && <StickerDecal isText text={customText} textColor={textColor} />}
 
         {/* Sticker */}
-        {sticker && (
-          <StickerDecal url={sticker} />
-        )}
+        {sticker && <StickerDecal url={sticker} />}
+        
+        {/* Uploaded Photo */}
+        {uploadedImage && <StickerDecal url={uploadedImage} />}
       </mesh>
 
-      {/* Lid */}
-      <mesh position={[0, 3.4, 0]}>
-        <cylinderGeometry args={[1.45, 1.45, 0.3, 64]} />
-        <meshStandardMaterial color={lidColor} roughness={0.4} />
-      </mesh>
+      {/* Handle for Mug */}
+      {isCeramic && (
+        <mesh position={[1.5, 1, 0]} rotation={[0, 0, 0]}>
+          <torusGeometry args={[0.8, 0.25, 16, 64, Math.PI]} />
+          <meshStandardMaterial color={cupColor} roughness={0.2} />
+        </mesh>
+      )}
 
-      {/* Straw */}
-      <mesh position={[0, 4.5, 0]}>
-        <cylinderGeometry args={[0.12, 0.12, 4, 16]} />
-        <meshPhysicalMaterial color="#ffffff" transmission={0.9} roughness={0.1} transparent opacity={0.6} />
-      </mesh>
+      {/* Lid & Straw for Tumbler */}
+      {!isCeramic && (
+        <>
+          <mesh position={[0, 3.4, 0]} castShadow>
+            <cylinderGeometry args={[1.45, 1.45, 0.3, 64]} />
+            <meshStandardMaterial color={lidColor} roughness={0.3} />
+          </mesh>
+          <mesh position={[0, 4.5, 0]}>
+            <cylinderGeometry args={[0.12, 0.12, 4, 16]} />
+            <meshPhysicalMaterial color="#ffffff" transmission={0.9} roughness={0.1} transparent opacity={0.6} />
+          </mesh>
+        </>
+      )}
     </group>
   );
 }
@@ -76,40 +120,60 @@ export default function CustomCupStudio() {
   const router = useRouter();
   const cartStore = useCartStore();
   
+  const [modelType, setModelType] = useState('tumbler'); // tumbler, mug
   const [cupColor, setCupColor] = useState('#ffffff');
   const [lidColor, setLidColor] = useState('#FFCFE0');
   const [customText, setCustomText] = useState('');
   const [textColor, setTextColor] = useState('#181818');
   const [sticker, setSticker] = useState('');
+  const [uploadedImage, setUploadedImage] = useState('');
   
-  const [activeTab, setActiveTab] = useState('colors');
+  const [activeTab, setActiveTab] = useState('models');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
-  const cupColors = ['#ffffff', '#FFCFE0', '#BFE5D0', '#FFEDA8', '#DCD1FF', '#C8DFFF'];
-  const lidColors = ['#ffffff', '#FFCFE0', '#181818', '#FFB15C', '#CFE8C4', '#DCD1FF'];
-  const textColors = ['#181818', '#ffffff', '#FFB15C', '#EF4444', '#3B82F6'];
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const cupColors = [
+    '#ffffff', '#181818', '#FFCFE0', '#BFE5D0', '#FFEDA8', '#DCD1FF', '#C8DFFF', 
+    '#FFB15C', '#EF4444', '#3B82F6', '#10B981', '#F472B6', '#FBBF24'
+  ];
+  
   const stickers = [
     { id: 'cat', url: 'https://cdn-icons-png.flaticon.com/512/616/616430.png' },
     { id: 'flower', url: 'https://cdn-icons-png.flaticon.com/512/1087/1087420.png' },
-    { id: 'heart', url: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' }
+    { id: 'heart', url: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' },
+    { id: 'star', url: 'https://cdn-icons-png.flaticon.com/512/118/118669.png' },
+    { id: 'smile', url: 'https://cdn-icons-png.flaticon.com/512/742/742751.png' },
+    { id: 'coffee', url: 'https://cdn-icons-png.flaticon.com/512/1047/1047503.png' }
   ];
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setUploadedImage(url);
+      setSticker(''); // Clear preset sticker if uploading photo
+    }
+  };
 
   const handleAddToCart = () => {
     setIsAddingToCart(true);
     setTimeout(() => {
       cartStore.addItem({
         id: 'custom-' + Date.now(),
-        name: 'My Awesome Cup ✨',
-        price: 250000,
+        name: modelType === 'tumbler' ? 'Ly Tumbler Tuỳ Chỉnh' : 'Cốc Sứ Tuỳ Chỉnh',
+        price: modelType === 'tumbler' ? 250000 : 180000,
         quantity: 1,
-        image: '/images/cupfy-hero.png', // In a real app, we would capture the canvas frame here
+        image: '/images/cupfy-hero.png', 
         isCustom: true,
         customSpecs: {
+          modelType,
           cupColor,
           lidColor,
           customText,
           textColor,
-          sticker
+          sticker,
+          uploadedImage
         }
       });
       router.push('/cart');
@@ -119,30 +183,31 @@ export default function CustomCupStudio() {
   return (
     <div className="flex flex-col h-screen w-full bg-[#F7F7F5] overflow-hidden">
       {/* Top Bar */}
-      <div className="h-16 bg-white border-b border-[#EAE7DE] flex items-center justify-between px-4 z-10 shrink-0">
+      <div className="h-16 bg-white border-b border-[#EAE7DE] flex items-center justify-between px-4 z-10 shrink-0 shadow-sm">
         <div className="flex items-center gap-4">
           <Link href="/" className="p-2 hover:bg-[#F7F7F5] rounded-full transition-colors">
             <ChevronLeft className="w-5 h-5 text-[#181818]" />
           </Link>
           <div className="h-6 w-px bg-[#EAE7DE]"></div>
-          <span className="font-bold text-[#181818]">My Awesome Cup ✨</span>
+          <span className="font-bold text-[#181818]">Thiết kế của tôi ✨</span>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="px-4 py-2 text-sm font-semibold text-[#333333] hover:bg-[#F7F7F5] rounded-full flex items-center gap-2">
-            <Share2 className="w-4 h-4" /> Share
-          </button>
           <button className="px-6 py-2.5 text-sm font-bold bg-[#181818] text-white rounded-full flex items-center gap-2 hover:bg-[#333333] shadow-md transition-all disabled:opacity-70" onClick={handleAddToCart} disabled={isAddingToCart}>
             {isAddingToCart ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
-            {isAddingToCart ? 'ĐÃ THÊM' : 'THÊM VÀO GIỎ - 250.000đ'}
+            {isAddingToCart ? 'ĐÃ THÊM' : 'THÊM VÀO GIỎ'}
           </button>
         </div>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         
         {/* Left Toolbar */}
-        <div className="w-20 bg-white border-r border-[#EAE7DE] flex flex-col items-center py-6 gap-6 z-10 shrink-0">
+        <div className="w-20 bg-white border-r border-[#EAE7DE] flex flex-col items-center py-6 gap-4 z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
+          <button onClick={() => setActiveTab('models')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'models' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+            <Box className="w-6 h-6" />
+            <span className="text-[10px] font-bold text-center leading-tight">Mẫu ly</span>
+          </button>
           <button onClick={() => setActiveTab('colors')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'colors' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
             <Layers className="w-6 h-6" />
             <span className="text-[10px] font-bold">Màu sắc</span>
@@ -155,10 +220,35 @@ export default function CustomCupStudio() {
             <Smile className="w-6 h-6" />
             <span className="text-[10px] font-bold">Sticker</span>
           </button>
+          <button onClick={() => setActiveTab('upload')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'upload' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+            <ImageIcon className="w-6 h-6" />
+            <span className="text-[10px] font-bold">Ảnh</span>
+          </button>
         </div>
 
         {/* Properties Panel */}
-        <div className="w-72 bg-white border-r border-[#EAE7DE] p-6 flex flex-col gap-8 z-10 overflow-y-auto">
+        <div className="w-80 bg-white border-r border-[#EAE7DE] p-6 flex flex-col gap-8 z-10 overflow-y-auto shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
+          
+          {activeTab === 'models' && (
+            <div>
+              <h3 className="font-bold text-[#181818] mb-4">Chọn Mẫu Ly</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <button onClick={() => setModelType('tumbler')} className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${modelType === 'tumbler' ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
+                  <div className="w-8 h-12 border-2 border-current rounded-b-md rounded-t-sm mb-2 opacity-80 relative">
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1 h-3 bg-current"></div>
+                  </div>
+                  <span className="text-sm font-bold">Tumbler</span>
+                </button>
+                <button onClick={() => setModelType('mug')} className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${modelType === 'mug' ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
+                  <div className="w-10 h-8 border-2 border-current rounded-md mb-2 opacity-80 relative mt-2">
+                    <div className="absolute top-1 -right-3 w-3 h-4 border-2 border-l-0 border-current rounded-r-full"></div>
+                  </div>
+                  <span className="text-sm font-bold mt-2">Cốc Sứ</span>
+                </button>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'colors' && (
             <>
               <div>
@@ -169,14 +259,16 @@ export default function CustomCupStudio() {
                   ))}
                 </div>
               </div>
-              <div>
-                <h3 className="font-bold text-[#181818] mb-4">Màu nắp ly</h3>
-                <div className="flex flex-wrap gap-3">
-                  {lidColors.map(c => (
-                    <button key={c} onClick={() => setLidColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${lidColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c === '#ffffff' ? '#f0f0f0' : c }} />
-                  ))}
+              {modelType === 'tumbler' && (
+                <div>
+                  <h3 className="font-bold text-[#181818] mb-4">Màu nắp ly</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {cupColors.map(c => (
+                      <button key={c} onClick={() => setLidColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${lidColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c === '#ffffff' ? '#f0f0f0' : c }} />
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </>
           )}
 
@@ -194,7 +286,7 @@ export default function CustomCupStudio() {
               <div>
                 <h3 className="font-bold text-[#181818] mb-4">Màu chữ</h3>
                 <div className="flex flex-wrap gap-3">
-                  {textColors.map(c => (
+                  {['#181818', '#ffffff', '#FFB15C', '#EF4444', '#3B82F6', '#10B981', '#F472B6'].map(c => (
                     <button key={c} onClick={() => setTextColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${textColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c }} />
                   ))}
                 </div>
@@ -210,28 +302,71 @@ export default function CustomCupStudio() {
                   Trống
                 </button>
                 {stickers.map(s => (
-                  <button key={s.id} onClick={() => setSticker(s.url)} className={`aspect-square rounded-xl border-2 flex items-center justify-center p-4 ${sticker === s.url ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:bg-[#F7F7F5]'}`}>
+                  <button key={s.id} onClick={() => { setSticker(s.url); setUploadedImage(''); }} className={`aspect-square rounded-xl border-2 flex items-center justify-center p-4 ${sticker === s.url ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:bg-[#F7F7F5]'}`}>
                     <img src={s.url} alt={s.id} className="w-full h-full object-contain opacity-80" />
                   </button>
                 ))}
               </div>
             </div>
           )}
+
+          {activeTab === 'upload' && (
+            <div>
+              <h3 className="font-bold text-[#181818] mb-4">Tải ảnh Meme/Logo của bạn</h3>
+              <p className="text-sm text-[#888888] mb-4">Hình ảnh sẽ được in trực tiếp lên thân ly. Khuyến nghị ảnh nền trong suốt (PNG).</p>
+              
+              <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
+              
+              <button onClick={() => fileInputRef.current?.click()} className="w-full py-8 border-2 border-dashed border-[#EAE7DE] rounded-xl flex flex-col items-center justify-center gap-3 hover:border-[#181818] hover:bg-[#F7F7F5] transition-all">
+                <Upload className="w-8 h-8 text-[#888888]" />
+                <span className="font-bold text-[#333333]">Click để tải ảnh lên</span>
+              </button>
+
+              {uploadedImage && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-bold text-[#181818] mb-2">Ảnh đã tải lên:</h4>
+                  <div className="relative w-full aspect-square rounded-xl border border-[#EAE7DE] overflow-hidden bg-[#F7F7F5] flex items-center justify-center p-4">
+                    <img src={uploadedImage} alt="Uploaded" className="w-full h-full object-contain" />
+                    <button onClick={() => setUploadedImage('')} className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm text-red-500 font-bold text-xs px-2 hover:bg-red-500 hover:text-white transition-colors">Xoá</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* 3D Canvas */}
-        <div className="flex-1 relative bg-[#FFF9E8]">
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/90 px-5 py-2.5 rounded-full shadow-sm text-xs font-bold text-[#181818] border border-[#EAE7DE]">
+        <div className="flex-1 relative bg-gradient-to-b from-[#FFF9E8] to-[#FFF0C7]">
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-sm font-bold text-[#181818] border border-[#EAE7DE] backdrop-blur-md">
             Kéo chuột để xoay 360°
           </div>
-          <Suspense fallback={<div className="flex items-center justify-center h-full font-bold">Đang tải mô hình 3D...</div>}>
-            <Canvas camera={{ position: [0, 2, 8], fov: 45 }}>
-              <ambientLight intensity={0.5} />
-              <directionalLight position={[5, 5, 5]} intensity={1} />
-              <Environment preset="city" />
-              <ProceduralCup cupColor={cupColor} lidColor={lidColor} customText={customText} textColor={textColor} sticker={sticker} />
-              <ContactShadows position={[0, -1, 0]} opacity={0.4} scale={10} blur={2} far={4} />
-              <OrbitControls enablePan={false} minDistance={4} maxDistance={12} maxPolarAngle={Math.PI / 1.5} />
+          
+          <Suspense fallback={
+            <div className="flex flex-col items-center justify-center h-full gap-4">
+              <div className="w-10 h-10 border-4 border-[#FFEDA8] border-t-[#FFB15C] rounded-full animate-spin"></div>
+              <span className="font-bold text-[#181818]">Đang tải môi trường 3D...</span>
+            </div>
+          }>
+            <Canvas camera={{ position: [0, 2, 9], fov: 45 }} shadows>
+              <ambientLight intensity={0.6} />
+              <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow shadow-mapSize={1024} />
+              <spotLight position={[-5, 5, 5]} intensity={0.5} penumbra={1} />
+              
+              <Environment preset="studio" />
+              
+              <ProceduralCup 
+                modelType={modelType}
+                cupColor={cupColor} 
+                lidColor={lidColor} 
+                customText={customText} 
+                textColor={textColor} 
+                sticker={sticker} 
+                uploadedImage={uploadedImage}
+              />
+              
+              <ContactShadows position={[0, -1.05, 0]} opacity={0.6} scale={15} blur={2.5} far={4} color="#181818" />
+              
+              <OrbitControls enablePan={false} minDistance={5} maxDistance={12} maxPolarAngle={Math.PI / 1.4} />
             </Canvas>
           </Suspense>
         </div>

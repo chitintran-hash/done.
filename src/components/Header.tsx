@@ -103,7 +103,8 @@ export default function Header() {
                 <Link href="/account" className="hover:text-[#FFB15C] transition-colors flex items-center">
                   <UserIcon className="w-[22px] h-[22px]" strokeWidth={2} />
                 </Link>
-                <div className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-xl overflow-hidden hidden group-hover:block border border-[#EAE7DE]">
+                <div className="absolute right-0 top-full pt-4 w-52 hidden group-hover:block z-50">
+                  <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-[#EAE7DE]">
                   <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] text-[#181818] font-medium">Account & Designs</Link>
                   <Link href="/orders" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] text-[#181818] font-medium">Đơn hàng</Link>
                   <Link href="/wishlist" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] text-[#181818] font-medium flex items-center justify-between">Wishlist <Heart className="w-3 h-3"/></Link>
@@ -111,6 +112,7 @@ export default function Header() {
                     <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] font-bold text-[#FFB15C]">Quản trị Admin</Link>
                   )}
                   <button onClick={handleSignOut} className="w-full text-left px-4 py-3 text-sm hover:bg-[#F7F7F5] font-bold text-red-500 border-t border-[#EAE7DE]">Đăng xuất</button>
+                  </div>
                 </div>
               </div>
             ) : (

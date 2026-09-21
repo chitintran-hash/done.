@@ -1,5 +1,5 @@
-import { deleteProduct, saveProduct } from '@/app/actions/admin';
 "use client";
+import { deleteProduct, saveProduct } from '@/app/actions/admin';
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';

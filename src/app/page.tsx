@@ -6,35 +6,53 @@ export default function Home() {
   return (
     <main className="flex flex-col min-h-screen pt-[112px]">
       {/* 1. Hero Section */}
-      <section className="hero">
-        <div className="max-w-[1400px] mx-auto w-full h-full relative">
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Find your cup.
-          </h1>
+      <section className="relative w-full overflow-hidden bg-[#FFF9E8]">
+        <div className="max-w-[1400px] mx-auto px-6 pt-12 pb-24 md:pt-20 md:pb-32 flex flex-col md:flex-row items-center gap-12">
           
-          <p className="hero-description text-[22px] md:text-[26px]">
-            Những chiếc ly nhỏ xinh cho cà phê, trà sữa, nước ép
-            và mọi khoảnh khắc hằng ngày của bạn.
-          </p>
-          
-          <div className="hero-actions mt-8">
-            <Link href="/products" className="text-[#2F201E] font-bold text-[16px] md:text-[18px] tracking-wide border-b-2 border-[#2F201E] pb-1 hover:text-[#D9788F] hover:border-[#D9788F] transition-colors">
-              Shop The Cupfy Collection
-            </Link>
+          {/* Text Content */}
+          <div className="w-full md:w-1/2 flex flex-col items-start z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFEDA8] text-[#181818] text-sm font-bold mb-6 border border-[#EAE7DE] shadow-sm">
+              ✨ 3D Cup Design Studio
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-extrabold text-[#181818] tracking-tight leading-[1.1] mb-6">
+              Your cup.<br/>
+              Your vibe.<br/>
+              Your story.
+            </h1>
+            
+            <p className="text-lg md:text-xl text-[#333333] mb-10 max-w-[540px] leading-relaxed">
+              Uống nước theo phong cách của bạn – Khắc họa câu chuyện trên từng ngụm trà, cà phê mỗi ngày.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <Link href="/custom-cup" className="px-8 py-4 bg-[#181818] text-white rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-[#333333] hover:-translate-y-0.5 transition-all shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                Thiết kế ly của bạn ✨
+              </Link>
+              <Link href="/templates" className="px-8 py-4 bg-white text-[#181818] rounded-full font-bold text-lg flex items-center justify-center border-2 border-[#EAE7DE] hover:border-[#181818] transition-colors">
+                Khám phá mẫu
+              </Link>
+            </div>
           </div>
-        </div>
-        </div>
 
-        <div className="hero-mobile-image px-5 pb-5">
-          <Image 
-            src="/images/cupfy-hero.png" 
-            alt="Cupfy aesthetic cups" 
-            width={1200}
-            height={800}
-            priority
-            quality={100}
-          />
+          {/* Image / Interactive Visual */}
+          <div className="w-full md:w-1/2 relative z-10">
+            <div className="relative w-full aspect-square md:aspect-[4/3] rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+              <Image 
+                src="/images/cupfy-hero.png" 
+                alt="Cupfy aesthetic cups" 
+                fill
+                className="object-cover object-right"
+                priority
+                quality={100}
+              />
+            </div>
+            
+            {/* Decor elements */}
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#FFEDA8] rounded-full blur-2xl opacity-60 -z-10"></div>
+            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#FFCFE0] rounded-full blur-3xl opacity-60 -z-10"></div>
+          </div>
+
         </div>
       </section>
 

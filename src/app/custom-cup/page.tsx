@@ -298,38 +298,20 @@ export default function CustomCupStudio() {
             <div>
               <h3 className="font-bold text-[#181818] mb-4">Chọn Mẫu Ly</h3>
               <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => setModelType('tumbler')} className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${modelType === 'tumbler' ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
-                  <div className="w-8 h-12 border-2 border-current rounded-b-md rounded-t-sm mb-2 opacity-80 relative">
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1 h-3 bg-current"></div>
-                  </div>
-              <div className="mt-6 border-t border-[#EAE7DE] pt-6">
-                <h3 className="font-bold text-[#181818] mb-4">Điều chỉnh Vị trí</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Xoay ngang</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
-                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Độ cao</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
-                    <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Kích thước</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
-                    <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
-                  </div>
-                </div>
+                {customizableProducts.length > 0 ? customizableProducts.map(p => (
+                  <button key={p.id} onClick={() => {
+                    setSelectedProduct(p);
+                    setModelType((p.category === 'glass' || p.category === 'plastic') ? 'mug' : 'tumbler');
+                  }} className={`flex flex-col items-center p-3 rounded-xl border-2 transition-all ${selectedProduct?.id === p.id ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
+                    <img src={p.image_url} alt={p.name} className="w-12 h-12 object-cover rounded-lg mb-2" />
+                    <span className="font-bold text-sm text-center line-clamp-1">{p.name}</span>
+                    <span className="text-[#888888] text-xs">{new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
+                  </button>
+                )) : (
+                  <div className="col-span-2 text-center text-[#888888] py-4 text-sm">Chưa có sản phẩm nào cho phép custom.</div>
+                )}
               </div>
-                  <span className="text-sm font-bold">Tumbler</span>
-                </button>
-                <button onClick={() => setModelType('mug')} className={`flex flex-col items-center p-4 rounded-xl border-2 transition-all ${modelType === 'mug' ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
-                  <div className="w-10 h-8 border-2 border-current rounded-md mb-2 opacity-80 relative mt-2">
-                    <div className="absolute top-1 -right-3 w-3 h-4 border-2 border-l-0 border-current rounded-r-full"></div>
-                  </div>
-                  <span className="text-sm font-bold mt-2">Cốc Sứ</span>
-                </button>
-              </div>
-            </div>
-          )}
+            </div>          )}
 
           {activeTab === 'colors' && (
             <>
@@ -453,7 +435,11 @@ export default function CustomCupStudio() {
         </div>
 
         {/* 3D Canvas */}
-        <div className="flex-1 relative bg-gradient-to-b from-[#FFF9E8] to-[#FFF0C7]">
+        <div className="flex-1 relative bg-[#FFF9E8] overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none">
+            <img src="https://images.unsplash.com/photo-1618220179428-22790b46a0eb?w=1600&q=80" alt="" className="w-full h-full object-cover opacity-[0.15] mix-blend-multiply blur-sm" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#FFF9E8] via-transparent to-transparent"></div>
+          </div>
           <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-sm font-bold text-[#181818] border border-[#EAE7DE] backdrop-blur-md">
             Kéo chuột để xoay 360°
           </div>

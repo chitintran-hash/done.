@@ -229,3 +229,33 @@ export async function saveProduct(payload: any, editingId?: string) {
     return { success: false, error: error.message };
   }
 }
+
+export async function uploadAdminFile(formData: FormData) {
+  try {
+    const file = formData.get('file') as File;
+    if (!file) throw new Error('No file provided');
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    
+    // Generate unique filename
+    const ext = file.name.split('.').pop();
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+    const filePath = `products/${filename}`;
+
+    const { error } = await getAdminClient().storage
+      .from('done-products')
+      .upload(filePath, buffer, {
+        contentType: file.type,
+        upsert: false
+      });
+
+    if (error) throw error;
+
+    const { data } = getAdminClient().storage.from('done-products').getPublicUrl(filePath);
+    return { success: true, url: data.publicUrl };
+  } catch (error: any) {
+    console.error("Upload error:", error);
+    return { success: false, error: error.message };
+  }
+}

@@ -1,5 +1,5 @@
 "use client";
-import { deleteProduct, saveProduct } from '@/app/actions/admin';
+import { deleteProduct, saveProduct, uploadAdminFile } from '@/app/actions/admin';
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -20,6 +20,7 @@ export default function AdminProductsPage() {
     category: 'coffee',
     description: '',
     image_url: '',
+    images: [] as string[],
     stock: 0,
     material: '',
     capacity: '',
@@ -47,6 +48,7 @@ export default function AdminProductsPage() {
         category: product.category || 'coffee',
         description: product.description || '',
         image_url: product.image_url || '',
+        images: product.technical_specs?.images || (product.image_url ? [product.image_url] : []),
         stock: product.stock || 0,
         material: product.technical_specs?.material || '',
         capacity: product.technical_specs?.capacity || '',
@@ -56,7 +58,7 @@ export default function AdminProductsPage() {
     } else {
       setEditingProduct(null);
       setFormData({
-        name: '', price: 0, category: 'coffee', description: '', image_url: '', stock: 0, material: '', capacity: '', color: '', is_customizable: false
+        name: '', price: 0, category: 'coffee', description: '', image_url: '', images: [], stock: 0, material: '', capacity: '', color: '', is_customizable: false
       });
     }
     setShowModal(true);
@@ -70,7 +72,8 @@ export default function AdminProductsPage() {
       material: formData.material,
       capacity: formData.capacity,
       color: formData.color,
-      is_customizable: formData.is_customizable
+      is_customizable: formData.is_customizable,
+      images: formData.images
     };
 
     const payload = {
@@ -193,9 +196,42 @@ export default function AdminProductsPage() {
                 </div>
               </div>
               
-              <div>
-                <label className="block text-sm font-medium mb-1">Link Ảnh Sản phẩm</label>
-                <input type="text" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+              <div className="col-span-2">
+                <label className="block text-sm font-medium mb-2">Hình ảnh Sản phẩm (Hỗ trợ nhiều ảnh)</label>
+                <div className="flex flex-wrap gap-4 mb-2">
+                  {formData.images.map((url, idx) => (
+                    <div key={idx} className="relative w-24 h-24 border rounded-xl overflow-hidden group">
+                      <img src={url} className="w-full h-full object-cover" />
+                      <button type="button" onClick={() => {
+                        const newImages = formData.images.filter((_, i) => i !== idx);
+                        setFormData({...formData, images: newImages, image_url: formData.image_url === url ? (newImages[0] || '') : formData.image_url});
+                      }} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-3 h-3" /></button>
+                      {formData.image_url === url && <span className="absolute bottom-0 left-0 right-0 bg-primary/90 text-primary-foreground text-[10px] text-center py-0.5">Ảnh chính</span>}
+                      {formData.image_url !== url && <button type="button" onClick={() => setFormData({...formData, image_url: url})} className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-[10px] text-center py-0.5 opacity-0 group-hover:opacity-100">Đặt làm ảnh chính</button>}
+                    </div>
+                  ))}
+                  <label className="w-24 h-24 border-2 border-dashed border-border rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-muted/50 transition-colors">
+                    <Plus className="w-6 h-6 text-muted-foreground mb-1" />
+                    <span className="text-[10px] text-muted-foreground">Thêm ảnh</span>
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={async (e) => {
+                      if (!e.target.files) return;
+                      setLoading(true);
+                      const newUrls = [...formData.images];
+                      for (const file of Array.from(e.target.files)) {
+                        const fd = new FormData();
+                        fd.append('file', file);
+                        const result = await uploadAdminFile(fd);
+                        if (result.success && result.url) {
+                          newUrls.push(result.url);
+                        } else {
+                          alert("Lỗi tải ảnh: " + result.error);
+                        }
+                      }
+                      setFormData({...formData, images: newUrls, image_url: formData.image_url || newUrls[0] || ''});
+                      setLoading(false);
+                    }} />
+                  </label>
+                </div>
               </div>
 
               <div>

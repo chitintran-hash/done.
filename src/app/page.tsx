@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Heart, Truck, ShieldCheck, Gift } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: latestProducts } = await supabase.from("products").select("*").neq("category", "custom").limit(4);
+
   return (
     <main className="flex flex-col min-h-screen pt-[112px]">
       {/* 1. Hero Section */}
@@ -84,32 +88,25 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-            {/* Demo Products */}
-            {[
-              { id: "1", name: "Cupfy Pink Glass", price: "89.000đ", img: "https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80", tags: ["New"] },
-              { id: "2", name: "Cupfy Morning Coffee", price: "119.000đ", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80", tags: ["Best Seller"] },
-              { id: "3", name: "Cupfy Clear Straw", price: "149.000đ", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80", tags: ["Customizable"] },
-              { id: "4", name: "Cupfy Sweet Milk Tea", price: "179.000đ", img: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&q=80", tags: [] }
-            ].map((product, idx) => (
+            {/* Real Products */}
+            {(latestProducts || []).map((product: any, idx: number) => (
               <div key={idx} className="group relative flex flex-col">
                 <Link href={`/products/${product.id}`} className="relative w-full aspect-square rounded-2xl overflow-hidden bg-white mb-4">
-                  <Image src={product.img} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
-                  {product.tags.length > 0 && (
+                  <Image src={product.image_url || "https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80"} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                  {idx === 0 && (
                     <div className="absolute top-3 left-3 flex flex-col gap-1">
-                      {product.tags.map(tag => (
-                        <span key={tag} className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white/90 backdrop-blur-sm text-[#3B2725] rounded-full">
-                          {tag}
+                        <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white/90 backdrop-blur-sm text-[#3B2725] rounded-full">
+                          New
                         </span>
-                      ))}
                     </div>
                   )}
                 </Link>
                 <div className="flex flex-col flex-1">
-                  <Link href={`/products/${product.id}`} className="font-bold text-lg text-[#3B2725] hover:text-[#D9788F] transition-colors mb-1">{product.name}</Link>
-                  <span className="text-[#6B4B4B] font-medium">{product.price}</span>
-                  <button className="mt-4 w-full py-3 rounded-full border border-[#D9788F] text-sm font-bold text-[#A84F66] hover:bg-[#D9788F] hover:text-white transition-all">
-                    Add to Cart
-                  </button>
+                  <Link href={`/products/${product.id}`} className="font-bold text-lg text-[#3B2725] hover:text-[#D9788F] transition-colors mb-1 line-clamp-1">{product.name}</Link>
+                  <span className="text-[#6B4B4B] font-medium">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}</span>
+                  <Link href={`/products/${product.id}`} className="mt-4 w-full py-3 text-center rounded-full border border-[#D9788F] text-sm font-bold text-[#A84F66] hover:bg-[#D9788F] hover:text-white transition-all">
+                    Xem chi tiết
+                  </Link>
                 </div>
               </div>
             ))}
@@ -137,7 +134,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. Shop by Mood Collections */}
+      {/* {/ * 5. Shop by Mood Collections * /}
       <section className="py-24 mb-10">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#3B2725] mb-16">Shop by mood</h2>
@@ -163,6 +160,7 @@ export default function Home() {
         </div>
       </section>
 
+     */}
     </main>
   );
 }

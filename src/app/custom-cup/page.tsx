@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 
 
 // Safe Decal Component using Drei's Decal
-function StickerDecal({ url, isText, text, textColor, radius, transform }: any) {
+function StickerDecal({ url, isText, text, textColor, fontUrl, radius, transform }: any) {
   const texture = url ? useTexture(url) : null;
   
   // Calculate position based on cylinder coordinates
@@ -35,6 +35,7 @@ function StickerDecal({ url, isText, text, textColor, radius, transform }: any) 
             <Text 
               fontSize={2.5} 
               color={textColor}
+              font={fontUrl || undefined}
               anchorX="center"
               anchorY="middle"
               position={[0, 0, 0]}
@@ -63,17 +64,17 @@ function StickerDecal({ url, isText, text, textColor, radius, transform }: any) 
   return null;
 }
 
-function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, sticker, uploadedImage, textTransform, stickerTransform }: any) {
+function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, fontUrl, sticker, uploadedImage, textTransform, stickerTransform }: any) {
   const isMug = modelType === 'mug';
   const isGlass = modelType === 'glass';
   const isTumbler = modelType === 'tumbler';
   
-  const radius = isMug ? 1.5 : (isGlass ? 1.4 : 1.35);
+  const radius = isMug ? 1.5 : 1.4;
   const groupY = isMug ? -0.5 : -1;
   const bodyY = isMug ? 1.25 : 1.75;
   const height = isMug ? 2.5 : 3.5;
   const topRadius = isMug ? 1.5 : 1.4;
-  const botRadius = isMug ? 1.5 : (isGlass ? 1.3 : 1.1);
+  const botRadius = isMug ? 1.5 : 1.4;
 
   return (
     <group position={[0, groupY, 0]}>
@@ -84,10 +85,10 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
         {isMug ? (
           <meshStandardMaterial color={cupColor} roughness={0.2} metalness={0.1} side={THREE.DoubleSide} />
         ) : (
-          <meshPhysicalMaterial color={cupColor} transmission={0.9} opacity={1} transparent roughness={0.1} thickness={1.5} ior={1.5} clearcoat={1} side={THREE.DoubleSide} />
+          <meshPhysicalMaterial color={cupColor} transmission={0.9} opacity={1} transparent roughness={0.1} thickness={0.05} ior={1.5} clearcoat={1} side={THREE.DoubleSide} />
         )}
         
-        {customText && <StickerDecal isText text={customText} textColor={textColor} radius={radius} transform={textTransform} />}
+        {customText && <StickerDecal isText text={customText} textColor={textColor} fontUrl={fontUrl} radius={radius} transform={textTransform} />}
         {sticker && <StickerDecal url={sticker} radius={radius} transform={stickerTransform} />}
         {uploadedImage && <StickerDecal url={uploadedImage} radius={radius} transform={stickerTransform} />}
       </mesh>
@@ -136,6 +137,14 @@ export default function CustomCupStudio() {
   const [lidColor, setLidColor] = useState('#FFCFE0');
   const [customText, setCustomText] = useState('');
   const [textColor, setTextColor] = useState('#181818');
+  const [fontUrl, setFontUrl] = useState('');
+  
+  const fonts = [
+    { name: 'Cơ bản', url: '' },
+    { name: 'Mềm mại', url: 'https://fonts.gstatic.com/s/dancingscript/v24/IfsqT06SmCExW53Zgzirtb3yPFtt.woff' },
+    { name: 'Cổ điển', url: 'https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.woff' },
+    { name: 'Phá cách', url: 'https://fonts.gstatic.com/s/pacifico/v22/FwZY7-Qmy14u9lezJ-6H6MmBp0u-.woff' }
+  ];
   const [sticker, setSticker] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');
 
@@ -204,7 +213,19 @@ export default function CustomCupStudio() {
     const canvas = document.querySelector('canvas');
     let capturedImage = '/images/cupfy-hero.png';
     if (canvas) {
-      capturedImage = canvas.toDataURL('image/webp', 0.8);
+      const scale = Math.min(400 / canvas.width, 400 / canvas.height);
+      if (scale < 1) {
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = canvas.width * scale;
+        tmpCanvas.height = canvas.height * scale;
+        const ctx = tmpCanvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+          capturedImage = tmpCanvas.toDataURL('image/jpeg', 0.7);
+        }
+      } else {
+        capturedImage = canvas.toDataURL('image/jpeg', 0.7);
+      }
     }
 
     setTimeout(() => {
@@ -369,6 +390,17 @@ export default function CustomCupStudio() {
                   className="w-full p-3 bg-[#F7F7F5] border border-[#EAE7DE] rounded-xl text-sm focus:outline-none focus:border-[#FFB15C] resize-none h-24"
                 />
               </div>
+              <div className="mb-6">
+                <h3 className="font-bold text-[#181818] mb-4">Phông chữ</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {fonts.map(f => (
+                    <button key={f.name} onClick={() => setFontUrl(f.url)} className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${fontUrl === f.url ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
+                      {f.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
               <div>
                 <h3 className="font-bold text-[#181818] mb-4">Màu chữ</h3>
                 <div className="flex flex-wrap gap-3">
@@ -484,7 +516,8 @@ export default function CustomCupStudio() {
                 cupColor={cupColor} 
                 lidColor={lidColor} 
                 customText={customText} 
-                textColor={textColor} 
+                textColor={textColor}
+                fontUrl={fontUrl} 
                 sticker={sticker} 
                 uploadedImage={uploadedImage}
                 textTransform={textTransform}

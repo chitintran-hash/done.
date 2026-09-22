@@ -76,7 +76,9 @@ export default function AdminProductsPage() {
       images: formData.images
     };
 
+    const { data: { user } } = await supabase.auth.getUser();
     const payload = {
+      seller_id: user?.id,
       name: formData.name,
       price: formData.price,
       category: formData.category,
@@ -88,15 +90,14 @@ export default function AdminProductsPage() {
       approval_status: 'active'
     };
 
-    if (editingProduct) {
-      await supabase.from('products').update(payload).eq('id', editingProduct.id);
+    const result = await saveProduct(payload, editingProduct ? editingProduct.id : undefined);
+    if (!result.success) {
+      alert("Lỗi lưu sản phẩm: " + result.error);
     } else {
-      const { data: { user } } = await supabase.auth.getUser();
-      await supabase.from('products').insert({ ...payload, seller_id: user?.id });
+      setShowModal(false);
+      await fetchProducts();
     }
-
-    setShowModal(false);
-    await fetchProducts();
+    setLoading(false);
   };
 
   const handleDelete = async (id: string) => {
@@ -180,7 +181,7 @@ export default function AdminProductsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Giá (VNĐ) *</label>
-                  <input required type="number" value={formData.price} onChange={e => setFormData({...formData, price: Number(e.target.value)})} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
+                  <input required type="text" value={formData.price ? new Intl.NumberFormat('vi-VN').format(formData.price) : ''} onChange={e => { const val = e.target.value.replace(/\D/g, ''); setFormData({...formData, price: val ? parseInt(val, 10) : 0}); }} className="w-full p-2 border rounded-lg focus:border-primary outline-none" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Danh mục *</label>

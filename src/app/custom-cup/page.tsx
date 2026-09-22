@@ -9,6 +9,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, Text, useTexture, Decal, RenderTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCartStore } from '@/store/useCartStore';
+import { createClient } from '@/lib/supabase/client';
+import { useEffect } from 'react';
 
 
 // Safe Decal Component using Drei's Decal
@@ -165,6 +167,21 @@ export default function CustomCupStudio() {
   
   const [activeTab, setActiveTab] = useState('models');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [customizableProducts, setCustomizableProducts] = useState<any[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchProds = async () => {
+      const supabase = createClient();
+      const { data } = await supabase.from('products').select('*').contains('technical_specs', { is_customizable: true }).eq('approval_status', 'active');
+      if (data && data.length > 0) {
+        setCustomizableProducts(data);
+        setSelectedProduct(data[0]);
+        setModelType((data[0].category === 'glass' || data[0].category === 'plastic') ? 'mug' : 'tumbler');
+      }
+    };
+    fetchProds();
+  }, []);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -207,8 +224,8 @@ export default function CustomCupStudio() {
     setTimeout(() => {
       cartStore.addItem({
         id: 'custom-' + Date.now(),
-        name: modelType === 'tumbler' ? 'Ly Tumbler Tuỳ Chỉnh' : 'Cốc Sứ Tuỳ Chỉnh',
-        price: modelType === 'tumbler' ? 250000 : 180000,
+        name: selectedProduct ? `${selectedProduct.name} (Custom)` : (modelType === 'tumbler' ? 'Ly Tumbler Tuỳ Chỉnh' : 'Cốc Sứ Tuỳ Chỉnh'),
+        price: selectedProduct ? selectedProduct.price : (modelType === 'tumbler' ? 250000 : 180000),
         quantity: 1,
         image: capturedImage, 
         isCustom: true,

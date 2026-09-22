@@ -64,60 +64,38 @@ function StickerDecal({ url, isText, text, textColor, radius, transform }: any) 
 }
 
 function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, sticker, uploadedImage, textTransform, stickerTransform }: any) {
-  const isCeramic = modelType === 'mug';
-  const radius = isCeramic ? 1.5 : 1.35; // slightly larger than tumbler inner radius for projection
+  const isMug = modelType === 'mug';
+  const isGlass = modelType === 'glass';
+  const isTumbler = modelType === 'tumbler';
+  
+  const radius = isMug ? 1.5 : (isGlass ? 1.4 : 1.35);
+  const groupY = isMug ? -0.5 : -1;
+  const bodyY = isMug ? 1.25 : 1.75;
+  const height = isMug ? 2.5 : 3.5;
+  const topRadius = isMug ? 1.5 : 1.4;
+  const botRadius = isMug ? 1.5 : (isGlass ? 1.3 : 1.1);
 
   return (
-    <group position={[0, isCeramic ? -0.5 : -1, 0]}>
-      
-      {/* Cup Body (Hollow) */}
-      <mesh position={[0, isCeramic ? 1.25 : 1.75, 0]} castShadow receiveShadow>
-        {isCeramic ? (
-          <cylinderGeometry args={[1.5, 1.5, 2.5, 64, 1, true]} />
+    <group position={[0, groupY, 0]}>
+      {/* Cup Body */}
+      <mesh position={[0, bodyY, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[topRadius, botRadius, height, 64, 1, true]} />
+        
+        {isMug ? (
+          <meshStandardMaterial color={cupColor} roughness={0.2} metalness={0.1} side={THREE.DoubleSide} />
         ) : (
-          <cylinderGeometry args={[1.4, 1.1, 3.5, 64, 1, true]} />
+          <meshPhysicalMaterial color={cupColor} transmission={0.9} opacity={1} transparent roughness={0.1} thickness={1.5} ior={1.5} clearcoat={1} side={THREE.DoubleSide} />
         )}
         
-        {isCeramic ? (
-          <meshStandardMaterial 
-            color={cupColor} 
-            roughness={0.2} 
-            metalness={0.1} 
-            side={THREE.DoubleSide}
-          />
-        ) : (
-          <meshPhysicalMaterial 
-            color={cupColor}
-            transmission={0.9}
-            opacity={1}
-            transparent
-            roughness={0.1}
-            thickness={1.5}
-            ior={1.5}
-            clearcoat={1}
-            envMapIntensity={1.5}
-            side={THREE.DoubleSide}
-          />
-        )}
-        
-        {/* Custom Text */}
         {customText && <StickerDecal isText text={customText} textColor={textColor} radius={radius} transform={textTransform} />}
-
-        {/* Sticker */}
         {sticker && <StickerDecal url={sticker} radius={radius} transform={stickerTransform} />}
-        
-        {/* Uploaded Photo */}
         {uploadedImage && <StickerDecal url={uploadedImage} radius={radius} transform={stickerTransform} />}
       </mesh>
 
-      {/* Cup Bottom Cap */}
-      <mesh position={[0, isCeramic ? 0 : 0, 0]} castShadow receiveShadow>
-        {isCeramic ? (
-          <cylinderGeometry args={[1.5, 1.5, 0.1, 64]} />
-        ) : (
-          <cylinderGeometry args={[1.1, 1.1, 0.1, 64]} />
-        )}
-        {isCeramic ? (
+      {/* Bottom Cap */}
+      <mesh position={[0, bodyY - height/2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[botRadius, botRadius, 0.1, 64]} />
+        {isMug ? (
           <meshStandardMaterial color={cupColor} roughness={0.2} metalness={0.1} />
         ) : (
           <meshPhysicalMaterial color={cupColor} transmission={0.9} transparent roughness={0.1} ior={1.5} />
@@ -125,7 +103,7 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
       </mesh>
 
       {/* Handle for Mug */}
-      {isCeramic && (
+      {isMug && (
         <mesh position={[1.5, 1.25, 0]} rotation={[0, 0, -Math.PI / 2]} castShadow>
           <torusGeometry args={[0.7, 0.22, 16, 64, Math.PI]} />
           <meshStandardMaterial color={cupColor} roughness={0.2} />
@@ -133,7 +111,7 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, s
       )}
 
       {/* Lid & Straw for Tumbler */}
-      {!isCeramic && (
+      {isTumbler && (
         <>
           <mesh position={[0, 3.65, 0]} castShadow>
             <cylinderGeometry args={[1.45, 1.45, 0.3, 64]} />
@@ -177,7 +155,15 @@ export default function CustomCupStudio() {
       if (data && data.length > 0) {
         setCustomizableProducts(data);
         setSelectedProduct(data[0]);
-        setModelType((data[0].category === 'glass' || data[0].category === 'plastic') ? 'mug' : 'tumbler');
+        
+        let initType = 'tumbler';
+        if (data[0].category === 'thermos') initType = 'tumbler';
+        else if (data[0].category === 'plastic') initType = 'mug';
+        else if (data[0].category === 'glass') initType = 'glass';
+        if (data[0].name.toLowerCase().includes('mug') || data[0].name.toLowerCase().includes('quai')) initType = 'mug';
+        if (data[0].name.toLowerCase().includes('boba') || data[0].name.toLowerCase().includes('ống hút')) initType = 'tumbler';
+        setModelType(initType);
+
       }
     };
     fetchProds();
@@ -301,9 +287,45 @@ export default function CustomCupStudio() {
                 {customizableProducts.length > 0 ? customizableProducts.map(p => (
                   <button key={p.id} onClick={() => {
                     setSelectedProduct(p);
-                    setModelType((p.category === 'glass' || p.category === 'plastic') ? 'mug' : 'tumbler');
+                    let type = 'tumbler';
+                    if (p.category === 'thermos') type = 'tumbler';
+                    else if (p.category === 'plastic') type = 'mug';
+                    else if (p.category === 'glass') type = 'glass';
+                    
+                    if (p.name.toLowerCase().includes('mug') || p.name.toLowerCase().includes('quai')) type = 'mug';
+                    if (p.name.toLowerCase().includes('boba') || p.name.toLowerCase().includes('ống hút')) type = 'tumbler';
+                    
+                    setModelType(type);
                   }} className={`flex flex-col items-center p-3 rounded-xl border-2 transition-all ${selectedProduct?.id === p.id ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
-                    <img src={p.image_url} alt={p.name} className="w-12 h-12 object-cover rounded-lg mb-2" />
+                    
+                                        {(() => {
+                      let type = 'tumbler';
+                      if (p.category === 'thermos') type = 'tumbler';
+                      else if (p.category === 'plastic') type = 'mug';
+                      else if (p.category === 'glass') type = 'glass';
+                      if (p.name.toLowerCase().includes('mug') || p.name.toLowerCase().includes('quai')) type = 'mug';
+                      if (p.name.toLowerCase().includes('boba') || p.name.toLowerCase().includes('ống hút')) type = 'tumbler';
+                      
+                      return (
+                        <>
+                          {type === 'tumbler' && (
+                            <div className="w-8 h-12 border-2 border-current rounded-b-md rounded-t-sm mb-2 opacity-80 relative">
+                              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1 h-3 bg-current"></div>
+                            </div>
+                          )}
+                          {type === 'mug' && (
+                            <div className="w-10 h-8 border-2 border-current rounded-md mb-2 opacity-80 relative mt-2">
+                              <div className="absolute top-1 -right-3 w-3 h-4 border-2 border-l-0 border-current rounded-r-full"></div>
+                            </div>
+                          )}
+                          {type === 'glass' && (
+                            <div className="w-8 h-10 border-2 border-current rounded-b-md mb-2 opacity-80 relative mt-2">
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+
                     <span className="font-bold text-sm text-center line-clamp-1">{p.name}</span>
                     <span className="text-[#888888] text-xs">{new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
                   </button>

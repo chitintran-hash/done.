@@ -15,14 +15,28 @@ export default function ResetPasswordPage() {
   const supabase = createClient();
 
   useEffect(() => {
-    // Check if user is actually authenticated (which they should be after clicking the link)
-    const checkUser = async () => {
+    const checkAndExchangeCode = async () => {
+      // If PKCE code is in the URL, exchange it first
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) {
+          setError('Liên kết khôi phục không hợp lệ hoặc đã hết hạn.');
+          return;
+        }
+        // Remove code from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      // Check if session exists (either from code exchange or implicit flow)
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         setError('Phiên bản khôi phục không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại.');
       }
     };
-    checkUser();
+    checkAndExchangeCode();
   }, [supabase]);
 
   const handleUpdatePassword = async (e: React.FormEvent) => {

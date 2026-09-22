@@ -43,7 +43,7 @@ export default function Header() {
     const supabase = createClient();
     await supabase.auth.signOut();
   };
-  if (pathname === '/custom-cup') return null;
+  if (pathname === '/custom-cup' || pathname.startsWith('/admin')) return null;
 
 
   return (

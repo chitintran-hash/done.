@@ -39,7 +39,11 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const userId = session?.user?.id || null;
+
       const orderData = {
+        buyer_id: userId,
         name: formData.name,
         email: formData.email,
         address: formData.address,

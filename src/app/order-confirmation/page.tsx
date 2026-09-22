@@ -24,16 +24,16 @@ export default function OrderConfirmationPage() {
         
         <div className="space-y-2 text-lg text-muted-foreground">
           <p>Đơn hàng của bạn đã được ghi nhận.</p>
-          <p>Hệ thống đã tự động chia nhỏ thành các **Sub-orders** và gửi thông báo đến từng Nhà bán (Seller) để chuẩn bị hàng.</p>
+          <p>Xưởng sản xuất đã nhận được yêu cầu thiết kế của bạn và đang tiến hành xử lý.</p>
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row justify-center gap-4">
           <button 
-            onClick={() => router.push('/my-setup')}
+            onClick={() => router.push('/orders')}
             className="px-8 py-4 bg-accent text-white rounded-full font-bold hover:bg-accent/90 transition-all flex items-center justify-center gap-2"
           >
             <Layout className="w-5 h-5" />
-            Xem góc máy của tôi (My Setup)
+            Xem đơn hàng của tôi
           </button>
           
           <button 

@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 
 // Create a Supabase client with the Service Role key to bypass RLS for creating orders and temp products
 const supabaseAdmin = createClient(
@@ -20,6 +21,7 @@ export async function processCheckout(orderData: any, cartItems: any[]) {
     const { data: order, error: orderErr } = await supabaseAdmin
       .from('orders')
       .insert({
+        buyer_id: orderData.buyer_id || null,
         buyer_name_snapshot: orderData.name,
         buyer_email_snapshot: orderData.email,
         shipping_address: `${orderData.address}, ${orderData.ward}, ${orderData.district}, ${orderData.city}`,
@@ -76,6 +78,8 @@ export async function processCheckout(orderData: any, cartItems: any[]) {
 
     if (itemsErr) throw itemsErr;
 
+    revalidatePath('/admin/orders');
+    revalidatePath('/orders');
     return { success: true, orderId: order.id };
   } catch (error) {
     console.error("Checkout Server Action Error:", error);

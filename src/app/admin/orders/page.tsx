@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { ShoppingCart, Package } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminOrdersPage() {
   const supabase = await createClient();
   
@@ -8,7 +10,7 @@ export default async function AdminOrdersPage() {
     .from('orders')
     .select(`
       id, created_at, total_price, status, buyer_name_snapshot, shipping_address,
-      profiles!orders_buyer_id_fkey(full_name, email),
+      profiles:buyer_id(full_name, email),
       order_items(id, quantity, price, status, products(name, image_url, description, category, profiles(store_name)))
     `)
     .order('created_at', { ascending: false });

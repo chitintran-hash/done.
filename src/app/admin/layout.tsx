@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Box, ListChecks, Settings, LogOut, ShoppingCart, Paintbrush } from 'lucide-react';
+import { LayoutDashboard, Users, Box, ListChecks, Settings, LogOut, ShoppingCart, Paintbrush, Home } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -56,9 +56,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             Khách hàng
           </Link>
         </nav>
-        <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 font-medium transition-colors mt-auto">
-          <LogOut className="w-5 h-5" />
-          Thoát Admin
+        <Link href="/" className="flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white border-2 border-border text-foreground font-bold hover:bg-muted transition-colors mt-auto shadow-sm">
+          <Home className="w-5 h-5" />
+          Về trang chủ
         </Link>
       </aside>
 

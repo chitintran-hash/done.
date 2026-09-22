@@ -76,9 +76,7 @@ export default function AdminProductsPage() {
       images: formData.images
     };
 
-    const { data: { user } } = await supabase.auth.getUser();
     const payload = {
-      seller_id: user?.id,
       name: formData.name,
       price: formData.price,
       category: formData.category,

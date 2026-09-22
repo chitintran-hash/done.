@@ -9,7 +9,7 @@ export default async function AdminUsersPage() {
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-bold">Quản lý Tài Khoản</h1>
-          <p className="text-muted-foreground mt-2">Theo dõi và phân quyền người dùng trong hệ thống DONE.</p>
+          <p className="text-muted-foreground mt-2">Theo dõi và phân quyền người dùng trong hệ thống Cupfy</p>
         </div>
       </div>
       

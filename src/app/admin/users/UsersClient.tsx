@@ -38,7 +38,7 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('CẢNH BÁO NGUY HIỂM: Bạn có chắc muốn XÓA VĨNH VIỄN tài khoản này?\nHành động này sẽ xóa quyền truy cập của người dùng khỏi DONE. Họ có thể đăng ký lại bằng email này sau.')) return;
+    if (!confirm('CẢNH BÁO NGUY HIỂM: Bạn có chắc muốn XÓA VĨNH VIỄN tài khoản này?\nHành động này sẽ xóa quyền truy cập của người dùng khỏi Cupfy Họ có thể đăng ký lại bằng email này sau.')) return;
     setLoadingAction(id);
     try {
       await deleteUser(id);

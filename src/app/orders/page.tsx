@@ -49,7 +49,7 @@ export default function BuyerOrdersPage() {
         <div className="text-center py-20 bg-muted/20 rounded-3xl border border-border border-dashed">
           <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-xl font-bold mb-2">Chưa có đơn hàng nào</h3>
-          <p className="text-muted-foreground mb-6">Bạn chưa mua bất kỳ sản phẩm nào trên DONE.</p>
+          <p className="text-muted-foreground mb-6">Bạn chưa mua bất kỳ sản phẩm nào trên Cupfy</p>
           <Link href="/products" className="px-6 py-3 bg-foreground text-background rounded-full font-medium">Mua sắm ngay</Link>
         </div>
       ) : (
@@ -87,7 +87,7 @@ export default function BuyerOrdersPage() {
                     <img src={item.products?.image_url} alt="" className="w-20 h-20 object-cover rounded-lg border border-border" />
                     <div className="flex-1">
                       <h4 className="font-bold text-lg leading-tight mb-1">{item.products?.name}</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Cung cấp bởi: <strong>{item.products?.profiles?.store_name || 'Người bán DONE.'}</strong></p>
+                      <p className="text-sm text-muted-foreground mb-2">Cung cấp bởi: <strong>{item.products?.profiles?.store_name || 'Người bán Cupfy'}</strong></p>
                       <div className="flex items-center gap-4 text-sm font-medium">
                         <span className="text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</span>
                         <span className="text-muted-foreground">x{item.quantity}</span>

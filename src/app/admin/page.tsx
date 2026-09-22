@@ -17,7 +17,7 @@ export default async function AdminDashboardPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <h1 className="text-3xl font-bold">Trang Tổng Quan Quản Trị</h1>
-          <p className="text-muted-foreground mt-2">Theo dõi các chỉ số quan trọng của toàn bộ hệ thống DONE.</p>
+          <p className="text-muted-foreground mt-2">Theo dõi các chỉ số quan trọng của toàn bộ hệ thống Cupfy</p>
         </div>
         <div className="flex gap-3">
           <Link href="/admin/products" className="px-6 py-2.5 bg-accent text-white rounded-xl font-medium hover:bg-accent/90 transition-all shadow-sm">

@@ -36,7 +36,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white border border-border rounded-2xl p-8 shadow-sm">
         <h1 className="text-3xl font-bold mb-2">Đăng nhập</h1>
-        <p className="text-muted-foreground mb-8">Chào mừng bạn trở lại với DONE.</p>
+        <p className="text-muted-foreground mb-8">Chào mừng bạn trở lại với Cupfy ✨</p>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -46,7 +46,7 @@ export default function LoginPage() {
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-border focus:border-accent focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors"
               placeholder="Nhập email"
             />
           </div>
@@ -57,7 +57,7 @@ export default function LoginPage() {
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-border focus:border-accent focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors"
               placeholder="Nhập mật khẩu"
             />
           </div>
@@ -78,7 +78,7 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          Chưa có tài khoản? <Link href="/register" className="text-accent font-medium hover:underline">Đăng ký ngay</Link>
+          Chưa có tài khoản? <Link href="/register" className="text-[#181818] font-medium hover:underline">Đăng ký ngay</Link>
         </div>
       </div>
     </div>

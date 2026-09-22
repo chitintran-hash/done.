@@ -85,18 +85,13 @@ function ProductCatalogContent() {
 
   const categories = [
     { id: 'all', name: 'Tất cả ly' },
-    { id: 'coffee', name: 'Ly cà phê' },
-    { id: 'milktea', name: 'Ly trà sữa' },
     { id: 'glass', name: 'Ly thủy tinh' },
-    { id: 'straw', name: 'Ly ống hút' },
     { id: 'thermos', name: 'Ly giữ nhiệt' },
-    { id: 'gift', name: 'Ly quà tặng' },
-    { id: 'office', name: 'Ly văn phòng' },
-    { id: 'minimal', name: 'Phong cách tối giản' }
+    { id: 'plastic', name: 'Ly nhựa' }
   ];
 
   return (
-    <div className="container mx-auto px-6 py-12">
+    <div className="container mx-auto px-6 pt-32 pb-12">
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
         <div>
           <h1 className="text-4xl font-serif font-bold text-foreground mb-4">Shop Cups</h1>
@@ -130,7 +125,7 @@ function ProductCatalogContent() {
                   <li key={c.id}>
                     <button 
                       onClick={() => setSelectedCategory(c.id)}
-                      className={`text-sm hover:text-primary transition-colors text-left w-full ${selectedCategory === c.id ? 'text-primary font-bold' : 'text-muted-foreground'}`}
+                      className={`text-sm hover:text-[#181818] transition-colors text-left w-full ${selectedCategory === c.id ? 'text-[#181818] font-black' : 'text-muted-foreground'}`}
                     >
                       {c.name}
                     </button>
@@ -167,7 +162,7 @@ function ProductCatalogContent() {
               <p className="text-muted-foreground text-lg">Chưa có ly nào phù hợp với tìm kiếm của bạn.</p>
               <button 
                 onClick={() => { setSelectedCategory('all'); setSearchTerm(''); }}
-                className="mt-4 text-primary font-bold hover:underline"
+                className="mt-4 text-[#181818] font-black hover:underline"
               >
                 Xóa bộ lọc
               </button>

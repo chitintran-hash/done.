@@ -42,7 +42,7 @@ export default function BuyerOrdersPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 min-h-[80vh]">
+    <div className="max-w-6xl mx-auto px-6 pt-32 pb-12 min-h-[80vh]">
       <h1 className="text-3xl font-bold mb-8">Đơn hàng của tôi</h1>
 
       {orders.length === 0 ? (

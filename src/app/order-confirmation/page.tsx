@@ -14,7 +14,7 @@ export default function OrderConfirmationPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen bg-background flex items-center justify-center pt-32 pb-6 px-6">
       <div className="max-w-2xl w-full text-center space-y-8">
         <div className="mx-auto w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center animate-bounce">
           <PartyPopper className="w-12 h-12 text-accent" />

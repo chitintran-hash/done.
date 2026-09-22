@@ -79,7 +79,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 pt-32 pb-12">
       <Link href="/cart" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors">
         <ArrowLeft className="w-4 h-4" /> Quay lại giỏ hàng
       </Link>

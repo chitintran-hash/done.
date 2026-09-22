@@ -22,9 +22,9 @@ export default function Footer() {
         <div>
           <h4 className="font-bold mb-6 text-foreground tracking-wide uppercase text-sm">Shop</h4>
           <ul className="space-y-4">
-            <li><Link href="/products?category=coffee" className="text-muted-foreground hover:text-primary text-sm transition-colors">Ly uống cà phê</Link></li>
-            <li><Link href="/products?category=milktea" className="text-muted-foreground hover:text-primary text-sm transition-colors">Ly trà sữa</Link></li>
-            <li><Link href="/products?category=glass" className="text-muted-foreground hover:text-primary text-sm transition-colors">Ly thủy tinh</Link></li>
+            <li><Link href="/products?category=glass" className="text-muted-foreground hover:text-[#181818] text-sm transition-colors">Ly thủy tinh</Link></li>
+            <li><Link href="/products?category=thermos" className="text-muted-foreground hover:text-[#181818] text-sm transition-colors">Ly giữ nhiệt</Link></li>
+            <li><Link href="/products?category=plastic" className="text-muted-foreground hover:text-[#181818] text-sm transition-colors">Ly nhựa</Link></li>
             <li><Link href="/custom-cup" className="text-muted-foreground hover:text-primary text-sm transition-colors">Custom Cup</Link></li>
           </ul>
         </div>

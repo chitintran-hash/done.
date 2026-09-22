@@ -182,14 +182,9 @@ export default function AdminProductsPage() {
                 <div>
                   <label className="block text-sm font-medium mb-1">Danh mục *</label>
                   <select required value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="w-full p-2 border rounded-lg focus:border-primary outline-none">
-                    <option value="coffee">Ly cà phê</option>
-                    <option value="milktea">Ly trà sữa</option>
                     <option value="glass">Ly thủy tinh</option>
-                    <option value="straw">Ly ống hút</option>
                     <option value="thermos">Ly giữ nhiệt</option>
-                    <option value="gift">Ly quà tặng</option>
-                    <option value="office">Ly văn phòng</option>
-                    <option value="minimal">Phong cách tối giản</option>
+                    <option value="plastic">Ly nhựa</option>
                   </select>
                 </div>
                 <div>

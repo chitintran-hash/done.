@@ -61,14 +61,9 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#3B2725] mb-16">Cups for every little moment</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
           {[
-            { name: "Ly uống cà phê", img: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&q=80", link: "/products?category=coffee" },
-            { name: "Ly trà sữa", img: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&q=80", link: "/products?category=milktea" },
             { name: "Ly thủy tinh", img: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=600&q=80", link: "/products?category=glass" },
-            { name: "Ly có ống hút", img: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80", link: "/products?category=straw" },
             { name: "Ly giữ nhiệt", img: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80", link: "/products?category=thermos" },
-            { name: "Ly làm quà tặng", img: "https://images.unsplash.com/photo-1577937927133-66ef06acdf18?w=600&q=80", link: "/products?category=gift" },
-            { name: "Ly văn phòng", img: "https://images.unsplash.com/photo-1505075954930-b3b4f6b643fa?w=600&q=80", link: "/products?category=office" },
-            { name: "Phong cách tối giản", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600&q=80", link: "/products?category=minimal" }
+            { name: "Ly nhựa", img: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=600&q=80", link: "/products?category=plastic" }
           ].map((item, idx) => (
             <Link href={item.link} key={idx} className="group flex flex-col items-center text-center">
               <div className="w-full aspect-[4/5] rounded-2xl overflow-hidden bg-muted mb-6 relative">

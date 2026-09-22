@@ -65,7 +65,7 @@ export async function getDashboardStats() {
 
   const { count: totalUsers } = await adminClient.from('profiles').select('*', { count: 'exact', head: true });
   const { count: totalSellers } = await adminClient.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'seller');
-  const { count: pendingProducts } = await adminClient.from('products').select('*', { count: 'exact', head: true }).eq('approval_status', 'pending');
+  const { count: pendingProducts } = await adminClient.from('products').select('*', { count: 'exact', head: true }).eq('approval_status', 'pending').neq('category', 'custom');
   const { count: totalOrders } = await adminClient.from('orders').select('*', { count: 'exact', head: true });
 
   return {

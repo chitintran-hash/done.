@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Heart, Truck, ShieldCheck, Gift } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getTranslation } from "@/lib/i18n/server";
+import HeroSlider from "@/components/HeroSlider";
 
 export default async function Home() {
   const { t } = await getTranslation();
@@ -43,16 +44,7 @@ export default async function Home() {
 
           {/* Image / Interactive Visual */}
           <div className="w-full md:w-1/2 relative z-10">
-            <div className="relative w-full aspect-square md:aspect-[4/3] rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-              <Image 
-                src="/images/cupfy-hero.png" 
-                alt="Cupfy aesthetic cups" 
-                fill
-                className="object-cover object-right"
-                priority
-                quality={100}
-              />
-            </div>
+            <HeroSlider />
             
             {/* Decor elements */}
             <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#FFEDA8] rounded-full blur-2xl opacity-60 -z-10"></div>

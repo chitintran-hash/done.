@@ -15,28 +15,40 @@ export default function ResetPasswordPage() {
   const supabase = createClient();
 
   useEffect(() => {
+    let mounted = true;
     const checkAndExchangeCode = async () => {
       // If PKCE code is in the URL, exchange it first
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code');
       
       if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (error) {
-          setError('Liên kết khôi phục không hợp lệ hoặc đã hết hạn.');
-          return;
-        }
-        // Remove code from URL
+        // Remove code from URL immediately to prevent strict-mode double firing
         window.history.replaceState({}, document.title, window.location.pathname);
+        
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error && mounted) {
+          // If error is about code already used, maybe the first strict-mode run succeeded.
+          // We will ignore it here and let the session check below handle it.
+          console.log("Code exchange warning:", error.message);
+        }
       }
 
-      // Check if session exists (either from code exchange or implicit flow)
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        setError('Phiên bản khôi phục không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại.');
-      }
+      // Wait a tiny bit for Supabase client to sync session (especially for implicit hash flow)
+      setTimeout(async () => {
+        if (!mounted) return;
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          setError('Phiên bản khôi phục không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại bằng link mới nhất.');
+        } else {
+          setError(''); // Clear any previous errors if session exists
+        }
+      }, 500);
     };
+    
     checkAndExchangeCode();
+    
+    return () => { mounted = false; };
   }, [supabase]);
 
   const handleUpdatePassword = async (e: React.FormEvent) => {

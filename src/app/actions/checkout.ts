@@ -45,7 +45,7 @@ export async function processCheckout(orderData: any, cartItems: any[]) {
           .from('products')
           .insert({
             name: item.name,
-            category: 'custom',
+            category: 'user_custom',
             price: item.price,
             description: JSON.stringify(item.customSpecs || {}),
             image_url: item.image,

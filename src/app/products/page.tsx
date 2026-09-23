@@ -41,7 +41,8 @@ function ProductCatalogContent() {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('is_available', true);
+        .eq('is_available', true)
+        .neq('category', 'user_custom');
 
       if (!ignore && data) {
         setProducts(data);
@@ -87,7 +88,8 @@ function ProductCatalogContent() {
     { id: 'all', name: 'Tất cả ly' },
     { id: 'glass', name: 'Ly thủy tinh' },
     { id: 'thermos', name: 'Ly giữ nhiệt' },
-    { id: 'plastic', name: 'Ly nhựa' }
+    { id: 'plastic', name: 'Ly nhựa' },
+    { id: 'custom', name: 'Ly custom' }
   ];
 
   return (

@@ -8,7 +8,7 @@ import HeroSlider from "@/components/HeroSlider";
 export default async function Home() {
   const { t } = await getTranslation();
   const supabase = await createClient();
-  const { data: latestProducts } = await supabase.from("products").select("*").neq("category", "custom").limit(4);
+  const { data: latestProducts } = await supabase.from("products").select("*").neq("category", "user_custom").limit(4);
 
   return (
     <main className="flex flex-col min-h-screen pt-[112px] bg-[#FFF9E8]">

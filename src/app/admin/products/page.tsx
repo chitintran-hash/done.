@@ -30,7 +30,7 @@ export default function AdminProductsPage() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('products').select('*').neq('category', 'custom').order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('products').select('*').neq('category', 'user_custom').order('created_at', { ascending: false });
     if (data) setProducts(data);
     setLoading(false);
   };
@@ -45,7 +45,7 @@ export default function AdminProductsPage() {
       setFormData({
         name: product.name || '',
         price: product.price || 0,
-        category: product.category || 'coffee',
+        category: product.category || 'glass',
         description: product.description || '',
         image_url: product.image_url || '',
         images: product.technical_specs?.images || (product.image_url ? [product.image_url] : []),
@@ -58,7 +58,7 @@ export default function AdminProductsPage() {
     } else {
       setEditingProduct(null);
       setFormData({
-        name: '', price: 0, category: 'coffee', description: '', image_url: '', images: [], stock: 0, material: '', capacity: '', color: '', is_customizable: false
+        name: '', price: 0, category: 'glass', description: '', image_url: '', images: [], stock: 0, material: '', capacity: '', color: '', is_customizable: false
       });
     }
     setShowModal(true);
@@ -187,6 +187,9 @@ export default function AdminProductsPage() {
                     <option value="glass">Ly thủy tinh</option>
                     <option value="thermos">Ly giữ nhiệt</option>
                     <option value="plastic">Ly nhựa</option>
+                    <option value="custom">Ly custom</option>
+                    <option value="Coffee">Coffee (Cũ)</option>
+                    <option value="coffee">Coffee (Cũ)</option>
                   </select>
                 </div>
                 <div>

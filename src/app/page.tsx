@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Heart, Truck, ShieldCheck, Gift } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getTranslation } from "@/lib/i18n/server";
 
 export default async function Home() {
+  const { t } = await getTranslation();
   const supabase = await createClient();
   const { data: latestProducts } = await supabase.from("products").select("*").neq("category", "custom").limit(4);
 
@@ -26,7 +28,7 @@ export default async function Home() {
             </h1>
             
             <p className="text-lg md:text-xl text-[#333333] mb-10 max-w-[540px] leading-relaxed">
-              Uống nước theo phong cách của bạn – Khắc họa câu chuyện trên từng ngụm trà, cà phê mỗi ngày.
+              {t('Everyday cups with your own story.')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">

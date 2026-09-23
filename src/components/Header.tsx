@@ -7,12 +7,16 @@ import { createClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { useCartStore } from '@/store/useCartStore';
+import { useLanguageStore } from '@/store/useLanguageStore';
+import { translations, TranslationKey } from '@/lib/i18n/translations';
 
 export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const cart = useCartStore();
   const [isScrolled, setIsScrolled] = useState(false);
+  const { language, setLanguage } = useLanguageStore();
+  const t = (key: TranslationKey) => translations[language][key] || key;
 
   useEffect(() => {
     const supabase = createClient();
@@ -92,7 +96,7 @@ export default function Header() {
             <Search className="w-4 h-4 absolute left-4 text-[#333333]" strokeWidth={2} />
             <input 
               type="text" 
-              placeholder="Tìm sản phẩm, mẫu..." 
+              placeholder={t('Search products, templates...')} 
               className="w-full pl-11 pr-4 py-2 bg-white border border-[#EAE7DE] rounded-full text-sm focus:outline-none focus:border-[#FFB15C] focus:ring-1 focus:ring-[#FFB15C] transition-all"
             />
           </div>

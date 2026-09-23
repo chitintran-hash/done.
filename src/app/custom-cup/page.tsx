@@ -9,6 +9,8 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, Text, useTexture, Decal, RenderTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { useCartStore } from '@/store/useCartStore';
+import { useLanguageStore } from '@/store/useLanguageStore';
+import { translations, TranslationKey } from '@/lib/i18n/translations';
 import { createClient } from '@/lib/supabase/client';
 import { useEffect } from 'react';
 
@@ -131,6 +133,8 @@ function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, f
 export default function CustomCupStudio() {
   const router = useRouter();
   const cartStore = useCartStore();
+  const { language } = useLanguageStore();
+  const t = (key: TranslationKey) => translations[language]?.[key] || key;
   
   const [modelType, setModelType] = useState('tumbler'); // tumbler, mug
   const [cupColor, setCupColor] = useState('#ffffff');
@@ -261,7 +265,7 @@ export default function CustomCupStudio() {
             <ChevronLeft className="w-5 h-5 text-[#181818]" />
           </Link>
           <div className="h-6 w-px bg-[#EAE7DE]"></div>
-          <span className="font-bold text-[#181818]">Thiết kế của tôi ✨</span>
+          <span className="font-bold text-[#181818]">{t('My Design ✨' as any)}</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -282,11 +286,11 @@ export default function CustomCupStudio() {
           </button>
           <button onClick={() => setActiveTab('colors')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'colors' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
             <Layers className="w-6 h-6" />
-            <span className="text-[10px] font-bold">Màu sắc</span>
+            <span className="text-[10px] font-bold">{t('Colors' as any)}</span>
           </button>
           <button onClick={() => setActiveTab('text')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'text' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
             <Type className="w-6 h-6" />
-            <span className="text-[10px] font-bold">Chữ</span>
+            <span className="text-[10px] font-bold">{t('Text' as any)}</span>
           </button>
           <button onClick={() => setActiveTab('sticker')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'sticker' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
             <Smile className="w-6 h-6" />
@@ -303,7 +307,7 @@ export default function CustomCupStudio() {
           
           {activeTab === 'models' && (
             <div>
-              <h3 className="font-bold text-[#181818] mb-4">Chọn Mẫu Ly</h3>
+              <h3 className="font-bold text-[#181818] mb-4">{t('Select Model' as any)}</h3>
               <div className="grid grid-cols-2 gap-3">
                 {customizableProducts.length > 0 ? customizableProducts.map(p => (
                   <button key={p.id} onClick={() => {
@@ -359,7 +363,7 @@ export default function CustomCupStudio() {
           {activeTab === 'colors' && (
             <>
               <div>
-                <h3 className="font-bold text-[#181818] mb-4">Màu thân ly</h3>
+                <h3 className="font-bold text-[#181818] mb-4">{t('Cup Color' as any)}</h3>
                 <div className="flex flex-wrap gap-3">
                   {cupColors.map(c => (
                     <button key={c} onClick={() => setCupColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${cupColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c }} />
@@ -391,7 +395,7 @@ export default function CustomCupStudio() {
                 />
               </div>
               <div className="mb-6">
-                <h3 className="font-bold text-[#181818] mb-4">Phông chữ</h3>
+                <h3 className="font-bold text-[#181818] mb-4">{t('Font Style' as any)}</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {fonts.map(f => (
                     <button key={f.name} onClick={() => setFontUrl(f.url)} className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${fontUrl === f.url ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
@@ -402,25 +406,25 @@ export default function CustomCupStudio() {
               </div>
               
               <div>
-                <h3 className="font-bold text-[#181818] mb-4">Màu chữ</h3>
+                <h3 className="font-bold text-[#181818] mb-4">{t('Text Color' as any)}</h3>
                 <div className="flex flex-wrap gap-3">
                   {['#181818', '#ffffff', '#FFB15C', '#EF4444', '#3B82F6', '#10B981', '#F472B6'].map(c => (
                     <button key={c} onClick={() => setTextColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${textColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c }} />
                   ))}
                 </div>
               <div className="mt-6 border-t border-[#EAE7DE] pt-6">
-                <h3 className="font-bold text-[#181818] mb-4">Điều chỉnh Vị trí</h3>
+                <h3 className="font-bold text-[#181818] mb-4">{t('Adjust Position' as any)}</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Xoay ngang</span> <span>{Math.round(textTransform.rotY * (180/Math.PI))}°</span></label>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(textTransform.rotY * (180/Math.PI))}°</span></label>
                     <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={textTransform.rotY} onChange={(e) => setTextTransform({...textTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Độ cao</span> <span>{textTransform.y.toFixed(2)}</span></label>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Height' as any)}</span> <span>{textTransform.y.toFixed(2)}</span></label>
                     <input type="range" min={-1.5} max={1.5} step={0.01} value={textTransform.y} onChange={(e) => setTextTransform({...textTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Kích thước</span> <span>{textTransform.scale.toFixed(2)}</span></label>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Size' as any)}</span> <span>{textTransform.scale.toFixed(2)}</span></label>
                     <input type="range" min={0.2} max={3} step={0.05} value={textTransform.scale} onChange={(e) => setTextTransform({...textTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
                   </div>
                 </div>
@@ -462,24 +466,24 @@ export default function CustomCupStudio() {
                   <h4 className="text-sm font-bold text-[#181818] mb-2">Ảnh đã tải lên:</h4>
                   <div className="relative w-full aspect-square rounded-xl border border-[#EAE7DE] overflow-hidden bg-[#F7F7F5] flex items-center justify-center p-4">
                     <img src={uploadedImage} alt="Uploaded" className="w-full h-full object-contain" />
-                    <button onClick={() => setUploadedImage('')} className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm text-red-500 font-bold text-xs px-2 hover:bg-red-500 hover:text-white transition-colors">Xoá</button>
+                    <button onClick={() => setUploadedImage('')} className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm text-red-500 font-bold text-xs px-2 hover:bg-red-500 hover:text-white transition-colors">{t('Remove' as any)}</button>
                   </div>
                 </div>
               )}
             
               <div className="mt-6 border-t border-[#EAE7DE] pt-6">
-                <h3 className="font-bold text-[#181818] mb-4">Điều chỉnh Vị trí</h3>
+                <h3 className="font-bold text-[#181818] mb-4">{t('Adjust Position' as any)}</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Xoay ngang</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
                     <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Độ cao</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Height' as any)}</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
                     <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>Kích thước</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
+                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Size' as any)}</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
                     <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
                   </div>
                 </div>

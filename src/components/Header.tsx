@@ -102,6 +102,29 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-5 text-[#181818]">
+          {/* Language Toggle */}
+          <div className="hidden md:flex bg-[#EAE7DE] rounded-full p-1 border border-[#EAE7DE]">
+            <button 
+              onClick={() => {
+                setLanguage('vi');
+                document.cookie = "NEXT_LOCALE=vi; path=/; max-age=31536000";
+                window.location.reload();
+              }}
+              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'vi' ? 'bg-white text-[#181818] shadow-sm' : 'text-[#888888] hover:text-[#181818]'}`}
+            >
+              VI
+            </button>
+            <button 
+              onClick={() => {
+                setLanguage('en');
+                document.cookie = "NEXT_LOCALE=en; path=/; max-age=31536000";
+                window.location.reload();
+              }}
+              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white text-[#181818] shadow-sm' : 'text-[#888888] hover:text-[#181818]'}`}
+            >
+              EN
+            </button>
+          </div>
             {user ? (
               <div className="relative group">
                 <Link href="/account" className="hover:text-[#FFB15C] transition-colors flex items-center">

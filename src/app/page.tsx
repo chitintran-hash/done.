@@ -17,18 +17,13 @@ export default async function Home() {
         <div className="max-w-[1400px] mx-auto px-6 pt-12 pb-24 md:pt-20 md:pb-32 flex flex-col md:flex-row items-center gap-12">
           
           {/* Text Content */}
-          <div className="w-full md:w-1/2 flex flex-col items-start z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFEDA8] text-[#181818] text-sm font-bold mb-6 border border-[#EAE7DE] shadow-sm">
-              ✨ 3D Cup Design Studio
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-extrabold text-[#181818] tracking-tight leading-[1.1] mb-6">
-              Your cup.<br/>
-              Your vibe.<br/>
-              Your story.
+          <div className="w-full md:w-1/2 flex flex-col items-start z-10 justify-center">
+            <h1 className="text-6xl md:text-[5.5rem] lg:text-[7rem] font-black text-[#181818] tracking-tighter leading-[0.95] mb-8 uppercase">
+              YOUR CUP.<br/>
+              <span className="text-[#FFB15C] font-serif italic font-medium lowercase tracking-normal">your vibe.</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-[#333333] mb-10 max-w-[540px] leading-relaxed">
+            <p className="text-lg md:text-xl text-[#555555] mb-10 max-w-[480px] leading-relaxed font-medium">
               {t('Everyday cups with your own story.')}
             </p>
             

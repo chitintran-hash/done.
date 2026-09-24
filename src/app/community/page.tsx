@@ -15,11 +15,11 @@ export default async function CommunityPage() {
     .limit(20);
 
   return (
-    <div className="min-h-screen pt-[120px] pb-24 bg-[#FFF9E8]">
+    <div className="min-h-screen pt-[120px] pb-24 bg-[#F7F6F2]">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#3B2725] mb-6">Cộng đồng Cupfy</h1>
-          <p className="text-[#6B4B4B] text-lg">
+          <p className="text-[#6F625E] text-lg">
             Khám phá những thiết kế độc đáo nhất từ cộng đồng. Lấy cảm hứng hoặc tự tạo ra tác phẩm mang đậm dấu ấn cá nhân của bạn!
           </p>
           <div className="mt-8">
@@ -36,7 +36,7 @@ export default async function CommunityPage() {
           <div className="text-center py-20 bg-white/50 rounded-3xl border border-dashed border-[#D9788F]">
             <div className="text-4xl mb-4">🎨</div>
             <h3 className="text-xl font-bold text-[#3B2725] mb-2">Chưa có thiết kế nào</h3>
-            <p className="text-[#6B4B4B]">Admin đang chuẩn bị những tác phẩm tuyệt vời để trưng bày tại đây. Bạn hãy quay lại sau nhé!</p>
+            <p className="text-[#6F625E]">Admin đang chuẩn bị những tác phẩm tuyệt vời để trưng bày tại đây. Bạn hãy quay lại sau nhé!</p>
           </div>
         )}
       </div>

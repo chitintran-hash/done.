@@ -46,21 +46,21 @@ export default function LoginPage() {
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors"
               placeholder="Nhập email"
             />
           </div>
           <div>
             <div className="flex justify-between items-center mb-1">
                 <label className="block text-sm font-medium">Mật khẩu</label>
-                <Link href="/forgot-password" className="text-xs text-[#181818] hover:underline font-medium">Quên mật khẩu?</Link>
+                <Link href="/forgot-password" className="text-xs text-[#201817] hover:underline font-medium">Quên mật khẩu?</Link>
               </div>
             <input 
               type="password" 
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors"
+              className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors"
               placeholder="Nhập mật khẩu"
             />
           </div>
@@ -81,7 +81,7 @@ export default function LoginPage() {
         </form>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          Chưa có tài khoản? <Link href="/register" className="text-[#181818] font-medium hover:underline">Đăng ký ngay</Link>
+          Chưa có tài khoản? <Link href="/register" className="text-[#201817] font-medium hover:underline">Đăng ký ngay</Link>
         </div>
       </div>
     </div>

@@ -127,7 +127,7 @@ function ProductCatalogContent() {
                   <li key={c.id}>
                     <button 
                       onClick={() => setSelectedCategory(c.id)}
-                      className={`text-sm hover:text-[#181818] transition-colors text-left w-full ${selectedCategory === c.id ? 'text-[#181818] font-black' : 'text-muted-foreground'}`}
+                      className={`text-sm hover:text-[#201817] transition-colors text-left w-full ${selectedCategory === c.id ? 'text-[#201817] font-black' : 'text-muted-foreground'}`}
                     >
                       {c.name}
                     </button>
@@ -164,7 +164,7 @@ function ProductCatalogContent() {
               <p className="text-muted-foreground text-lg">Chưa có ly nào phù hợp với tìm kiếm của bạn.</p>
               <button 
                 onClick={() => { setSelectedCategory('all'); setSearchTerm(''); }}
-                className="mt-4 text-[#181818] font-black hover:underline"
+                className="mt-4 text-[#201817] font-black hover:underline"
               >
                 Xóa bộ lọc
               </button>

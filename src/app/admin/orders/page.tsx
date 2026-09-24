@@ -77,30 +77,30 @@ export default async function AdminOrdersPage() {
                     return (
                       <div key={item.id} className="py-4 flex gap-4 text-sm">
                         {item.products?.image_url && (
-                          <div className="w-20 h-20 bg-[#F7F7F5] rounded-lg border border-[#EAE7DE] flex items-center justify-center shrink-0 p-1">
+                          <div className="w-20 h-20 bg-[#EDECEA] rounded-lg border border-[#DDD8D2] flex items-center justify-center shrink-0 p-1">
                             <img src={item.products.image_url} alt="product" className="w-full h-full object-contain" />
                           </div>
                         )}
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
                             <div>
-                              <div className="font-bold text-[#181818] text-base">{item.products?.name || 'Sản phẩm đã xóa'}</div>
-                              {!isCustom && <div className="text-[#888888] text-xs mt-0.5">Seller: {(item.products?.profiles as any)?.store_name || 'Không rõ'}</div>}
+                              <div className="font-bold text-[#201817] text-base">{item.products?.name || 'Sản phẩm đã xóa'}</div>
+                              {!isCustom && <div className="text-[#6F625E] text-xs mt-0.5">Seller: {(item.products?.profiles as any)?.store_name || 'Không rõ'}</div>}
                               
                               {specs && (
-                                <div className="mt-2 text-xs text-[#333333] bg-[#FFF9E8] p-2 rounded-md border border-[#EAE7DE]">
+                                <div className="mt-2 text-xs text-[#6F625E] bg-[#F7F6F2] p-2 rounded-md border border-[#DDD8D2]">
                                   <p><span className="font-bold">Loại ly:</span> {specs.modelType}</p>
                                   <p><span className="font-bold">Màu thân:</span> {specs.cupColor}</p>
                                   {specs.modelType === 'tumbler' && <p><span className="font-bold">Màu nắp:</span> {specs.lidColor}</p>}
                                   {specs.customText && <p><span className="font-bold">Nội dung in:</span> "{specs.customText}" (Màu: {specs.textColor})</p>}
-                                  {(specs.sticker || specs.uploadedImage) && <p className="font-bold text-[#FFB15C]">** Có dán ảnh/sticker tuỳ chỉnh **</p>}
+                                  {(specs.sticker || specs.uploadedImage) && <p className="font-bold text-[#6B463D]">** Có dán ảnh/sticker tuỳ chỉnh **</p>}
                                 </div>
                               )}
                             </div>
                             
                             <div className="flex items-center gap-6">
                               <div className="text-right">
-                                <div className="font-bold text-[#181818]">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)} x {item.quantity}</div>
+                                <div className="font-bold text-[#201817]">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)} x {item.quantity}</div>
                               </div>
                               <div className="w-24 text-right">
                                 <span className={`px-2 py-1 text-xs font-bold rounded ${

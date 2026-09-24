@@ -138,9 +138,9 @@ export default function CustomCupStudio() {
   
   const [modelType, setModelType] = useState('tumbler'); // tumbler, mug
   const [cupColor, setCupColor] = useState('#ffffff');
-  const [lidColor, setLidColor] = useState('#FFCFE0');
+  const [lidColor, setLidColor] = useState('#BFDCEF');
   const [customText, setCustomText] = useState('');
-  const [textColor, setTextColor] = useState('#181818');
+  const [textColor, setTextColor] = useState('#201817');
   const [fontUrl, setFontUrl] = useState('');
   
   const fonts = [
@@ -185,8 +185,8 @@ export default function CustomCupStudio() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const cupColors = [
-    '#ffffff', '#181818', '#FFCFE0', '#BFE5D0', '#FFEDA8', '#DCD1FF', '#C8DFFF', 
-    '#FFB15C', '#EF4444', '#3B82F6', '#10B981', '#F472B6', '#FBBF24'
+    '#ffffff', '#201817', '#BFDCEF', '#BFE5D0', '#FFF3A6', '#DCD1FF', '#C8DFFF', 
+    '#6B463D', '#EF4444', '#3B82F6', '#10B981', '#F472B6', '#FBBF24'
   ];
   
   const stickers = [
@@ -257,19 +257,19 @@ export default function CustomCupStudio() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#F7F7F5] overflow-hidden">
+    <div className="flex flex-col h-screen w-full bg-[#EDECEA] overflow-hidden">
       {/* Top Bar */}
-      <div className="h-16 bg-white border-b border-[#EAE7DE] flex items-center justify-between px-4 z-10 shrink-0 shadow-sm">
+      <div className="h-16 bg-white border-b border-[#DDD8D2] flex items-center justify-between px-4 z-10 shrink-0 shadow-sm">
         <div className="flex items-center gap-4">
-          <Link href="/" className="p-2 hover:bg-[#F7F7F5] rounded-full transition-colors">
-            <ChevronLeft className="w-5 h-5 text-[#181818]" />
+          <Link href="/" className="p-2 hover:bg-[#EDECEA] rounded-full transition-colors">
+            <ChevronLeft className="w-5 h-5 text-[#201817]" />
           </Link>
-          <div className="h-6 w-px bg-[#EAE7DE]"></div>
-          <span className="font-bold text-[#181818]">{t('My Design ✨' as any)}</span>
+          <div className="h-6 w-px bg-[#DDD8D2]"></div>
+          <span className="font-bold text-[#201817]">{t('My Design ✨' as any)}</span>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="px-6 py-2.5 text-sm font-bold bg-[#181818] text-white rounded-full flex items-center gap-2 hover:bg-[#333333] shadow-md transition-all disabled:opacity-70" onClick={handleAddToCart} disabled={isAddingToCart}>
+          <button className="px-6 py-2.5 text-sm font-bold bg-[#4A2A25] text-white rounded-full flex items-center gap-2 hover:bg-[#3A211E] shadow-md transition-all disabled:opacity-70" onClick={handleAddToCart} disabled={isAddingToCart}>
             {isAddingToCart ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
             {isAddingToCart ? 'ĐÃ THÊM' : 'THÊM VÀO GIỎ'}
           </button>
@@ -279,35 +279,35 @@ export default function CustomCupStudio() {
       <div className="flex flex-1 overflow-hidden relative">
         
         {/* Left Toolbar */}
-        <div className="w-20 bg-white border-r border-[#EAE7DE] flex flex-col items-center py-6 gap-4 z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
-          <button onClick={() => setActiveTab('models')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'models' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+        <div className="w-20 bg-white border-r border-[#DDD8D2] flex flex-col items-center py-6 gap-4 z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
+          <button onClick={() => setActiveTab('models')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'models' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
             <Box className="w-6 h-6" />
             <span className="text-[10px] font-bold text-center leading-tight">Mẫu ly</span>
           </button>
-          <button onClick={() => setActiveTab('colors')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'colors' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+          <button onClick={() => setActiveTab('colors')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'colors' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
             <Layers className="w-6 h-6" />
             <span className="text-[10px] font-bold">{t('Colors' as any)}</span>
           </button>
-          <button onClick={() => setActiveTab('text')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'text' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+          <button onClick={() => setActiveTab('text')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'text' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
             <Type className="w-6 h-6" />
             <span className="text-[10px] font-bold">{t('Text' as any)}</span>
           </button>
-          <button onClick={() => setActiveTab('sticker')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'sticker' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+          <button onClick={() => setActiveTab('sticker')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'sticker' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
             <Smile className="w-6 h-6" />
             <span className="text-[10px] font-bold">Sticker</span>
           </button>
-          <button onClick={() => setActiveTab('upload')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'upload' ? 'bg-[#FFF9E8] text-[#181818]' : 'text-[#888888] hover:text-[#181818]'}`}>
+          <button onClick={() => setActiveTab('upload')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'upload' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
             <ImageIcon className="w-6 h-6" />
             <span className="text-[10px] font-bold">Ảnh</span>
           </button>
         </div>
 
         {/* Properties Panel */}
-        <div className="w-80 bg-white border-r border-[#EAE7DE] p-6 flex flex-col gap-8 z-10 overflow-y-auto shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
+        <div className="w-80 bg-white border-r border-[#DDD8D2] p-6 flex flex-col gap-8 z-10 overflow-y-auto shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
           
           {activeTab === 'models' && (
             <div>
-              <h3 className="font-bold text-[#181818] mb-4">{t('Select Model' as any)}</h3>
+              <h3 className="font-bold text-[#201817] mb-4">{t('Select Model' as any)}</h3>
               <div className="grid grid-cols-2 gap-3">
                 {customizableProducts.length > 0 ? customizableProducts.map(p => (
                   <button key={p.id} onClick={() => {
@@ -321,7 +321,7 @@ export default function CustomCupStudio() {
                     if (p.name.toLowerCase().includes('boba') || p.name.toLowerCase().includes('ống hút')) type = 'tumbler';
                     
                     setModelType(type);
-                  }} className={`flex flex-col items-center p-3 rounded-xl border-2 transition-all ${selectedProduct?.id === p.id ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
+                  }} className={`flex flex-col items-center p-3 rounded-xl border-2 transition-all ${selectedProduct?.id === p.id ? 'border-[#201817] bg-[#F7F6F2]' : 'border-[#DDD8D2] hover:border-[#201817]'}`}>
                     
                                         {(() => {
                       let type = 'tumbler';
@@ -352,10 +352,10 @@ export default function CustomCupStudio() {
                     })()}
 
                     <span className="font-bold text-sm text-center line-clamp-1">{p.name}</span>
-                    <span className="text-[#888888] text-xs">{new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
+                    <span className="text-[#6F625E] text-xs">{new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
                   </button>
                 )) : (
-                  <div className="col-span-2 text-center text-[#888888] py-4 text-sm">Chưa có sản phẩm nào cho phép custom.</div>
+                  <div className="col-span-2 text-center text-[#6F625E] py-4 text-sm">Chưa có sản phẩm nào cho phép custom.</div>
                 )}
               </div>
             </div>          )}
@@ -363,19 +363,19 @@ export default function CustomCupStudio() {
           {activeTab === 'colors' && (
             <>
               <div>
-                <h3 className="font-bold text-[#181818] mb-4">{t('Cup Color' as any)}</h3>
+                <h3 className="font-bold text-[#201817] mb-4">{t('Cup Color' as any)}</h3>
                 <div className="flex flex-wrap gap-3">
                   {cupColors.map(c => (
-                    <button key={c} onClick={() => setCupColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${cupColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c }} />
+                    <button key={c} onClick={() => setCupColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${cupColor === c ? 'border-[#201817] scale-110' : 'border-[#DDD8D2]'}`} style={{ backgroundColor: c }} />
                   ))}
                 </div>
               </div>
               {modelType === 'tumbler' && (
                 <div>
-                  <h3 className="font-bold text-[#181818] mb-4">Màu nắp ly</h3>
+                  <h3 className="font-bold text-[#201817] mb-4">Màu nắp ly</h3>
                   <div className="flex flex-wrap gap-3">
                     {cupColors.map(c => (
-                      <button key={c} onClick={() => setLidColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${lidColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c === '#ffffff' ? '#f0f0f0' : c }} />
+                      <button key={c} onClick={() => setLidColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${lidColor === c ? 'border-[#201817] scale-110' : 'border-[#DDD8D2]'}`} style={{ backgroundColor: c === '#ffffff' ? '#f0f0f0' : c }} />
                     ))}
                   </div>
                 </div>
@@ -386,19 +386,19 @@ export default function CustomCupStudio() {
           {activeTab === 'text' && (
             <>
               <div>
-                <h3 className="font-bold text-[#181818] mb-4">Nội dung in</h3>
+                <h3 className="font-bold text-[#201817] mb-4">Nội dung in</h3>
                 <textarea 
                   value={customText}
                   onChange={(e) => setCustomText(e.target.value)}
                   placeholder="Nhập tên hoặc câu quote..."
-                  className="w-full p-3 bg-[#F7F7F5] border border-[#EAE7DE] rounded-xl text-sm focus:outline-none focus:border-[#FFB15C] resize-none h-24"
+                  className="w-full p-3 bg-[#EDECEA] border border-[#DDD8D2] rounded-xl text-sm focus:outline-none focus:border-[#6B463D] resize-none h-24"
                 />
               </div>
               <div className="mb-6">
-                <h3 className="font-bold text-[#181818] mb-4">{t('Font Style' as any)}</h3>
+                <h3 className="font-bold text-[#201817] mb-4">{t('Font Style' as any)}</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {fonts.map(f => (
-                    <button key={f.name} onClick={() => setFontUrl(f.url)} className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${fontUrl === f.url ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:border-[#181818]'}`}>
+                    <button key={f.name} onClick={() => setFontUrl(f.url)} className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${fontUrl === f.url ? 'border-[#201817] bg-[#F7F6F2]' : 'border-[#DDD8D2] hover:border-[#201817]'}`}>
                       {f.name}
                     </button>
                   ))}
@@ -406,26 +406,26 @@ export default function CustomCupStudio() {
               </div>
               
               <div>
-                <h3 className="font-bold text-[#181818] mb-4">{t('Text Color' as any)}</h3>
+                <h3 className="font-bold text-[#201817] mb-4">{t('Text Color' as any)}</h3>
                 <div className="flex flex-wrap gap-3">
-                  {['#181818', '#ffffff', '#FFB15C', '#EF4444', '#3B82F6', '#10B981', '#F472B6'].map(c => (
-                    <button key={c} onClick={() => setTextColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${textColor === c ? 'border-[#181818] scale-110' : 'border-[#EAE7DE]'}`} style={{ backgroundColor: c }} />
+                  {['#201817', '#ffffff', '#6B463D', '#EF4444', '#3B82F6', '#10B981', '#F472B6'].map(c => (
+                    <button key={c} onClick={() => setTextColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${textColor === c ? 'border-[#201817] scale-110' : 'border-[#DDD8D2]'}`} style={{ backgroundColor: c }} />
                   ))}
                 </div>
-              <div className="mt-6 border-t border-[#EAE7DE] pt-6">
-                <h3 className="font-bold text-[#181818] mb-4">{t('Adjust Position' as any)}</h3>
+              <div className="mt-6 border-t border-[#DDD8D2] pt-6">
+                <h3 className="font-bold text-[#201817] mb-4">{t('Adjust Position' as any)}</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(textTransform.rotY * (180/Math.PI))}°</span></label>
-                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={textTransform.rotY} onChange={(e) => setTextTransform({...textTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(textTransform.rotY * (180/Math.PI))}°</span></label>
+                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={textTransform.rotY} onChange={(e) => setTextTransform({...textTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Height' as any)}</span> <span>{textTransform.y.toFixed(2)}</span></label>
-                    <input type="range" min={-1.5} max={1.5} step={0.01} value={textTransform.y} onChange={(e) => setTextTransform({...textTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Height' as any)}</span> <span>{textTransform.y.toFixed(2)}</span></label>
+                    <input type="range" min={-1.5} max={1.5} step={0.01} value={textTransform.y} onChange={(e) => setTextTransform({...textTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Size' as any)}</span> <span>{textTransform.scale.toFixed(2)}</span></label>
-                    <input type="range" min={0.2} max={3} step={0.05} value={textTransform.scale} onChange={(e) => setTextTransform({...textTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Size' as any)}</span> <span>{textTransform.scale.toFixed(2)}</span></label>
+                    <input type="range" min={0.2} max={3} step={0.05} value={textTransform.scale} onChange={(e) => setTextTransform({...textTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
                   </div>
                 </div>
               </div>
@@ -435,13 +435,13 @@ export default function CustomCupStudio() {
 
           {activeTab === 'sticker' && (
             <div>
-              <h3 className="font-bold text-[#181818] mb-4">Chọn Sticker</h3>
+              <h3 className="font-bold text-[#201817] mb-4">Chọn Sticker</h3>
               <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => setSticker('')} className={`aspect-square rounded-xl border-2 flex items-center justify-center font-bold text-gray-400 ${sticker === '' ? 'border-[#181818]' : 'border-[#EAE7DE]'}`}>
+                <button onClick={() => setSticker('')} className={`aspect-square rounded-xl border-2 flex items-center justify-center font-bold text-gray-400 ${sticker === '' ? 'border-[#201817]' : 'border-[#DDD8D2]'}`}>
                   Trống
                 </button>
                 {stickers.map(s => (
-                  <button key={s.id} onClick={() => { setSticker(s.url); setUploadedImage(''); }} className={`aspect-square rounded-xl border-2 flex items-center justify-center p-4 ${sticker === s.url ? 'border-[#181818] bg-[#FFF9E8]' : 'border-[#EAE7DE] hover:bg-[#F7F7F5]'}`}>
+                  <button key={s.id} onClick={() => { setSticker(s.url); setUploadedImage(''); }} className={`aspect-square rounded-xl border-2 flex items-center justify-center p-4 ${sticker === s.url ? 'border-[#201817] bg-[#F7F6F2]' : 'border-[#DDD8D2] hover:bg-[#EDECEA]'}`}>
                     <img src={s.url} alt={s.id} className="w-full h-full object-contain opacity-80" />
                   </button>
                 ))}
@@ -451,40 +451,40 @@ export default function CustomCupStudio() {
 
           {activeTab === 'upload' && (
             <div>
-              <h3 className="font-bold text-[#181818] mb-4">Tải ảnh Meme/Logo của bạn</h3>
-              <p className="text-sm text-[#888888] mb-4">Hình ảnh sẽ được in trực tiếp lên thân ly. Khuyến nghị ảnh nền trong suốt (PNG).</p>
+              <h3 className="font-bold text-[#201817] mb-4">Tải ảnh Meme/Logo của bạn</h3>
+              <p className="text-sm text-[#6F625E] mb-4">Hình ảnh sẽ được in trực tiếp lên thân ly. Khuyến nghị ảnh nền trong suốt (PNG).</p>
               
               <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
               
-              <button onClick={() => fileInputRef.current?.click()} className="w-full py-8 border-2 border-dashed border-[#EAE7DE] rounded-xl flex flex-col items-center justify-center gap-3 hover:border-[#181818] hover:bg-[#F7F7F5] transition-all">
-                <Upload className="w-8 h-8 text-[#888888]" />
-                <span className="font-bold text-[#333333]">Click để tải ảnh lên</span>
+              <button onClick={() => fileInputRef.current?.click()} className="w-full py-8 border-2 border-dashed border-[#DDD8D2] rounded-xl flex flex-col items-center justify-center gap-3 hover:border-[#201817] hover:bg-[#EDECEA] transition-all">
+                <Upload className="w-8 h-8 text-[#6F625E]" />
+                <span className="font-bold text-[#6F625E]">Click để tải ảnh lên</span>
               </button>
 
               {uploadedImage && (
                 <div className="mt-6">
-                  <h4 className="text-sm font-bold text-[#181818] mb-2">Ảnh đã tải lên:</h4>
-                  <div className="relative w-full aspect-square rounded-xl border border-[#EAE7DE] overflow-hidden bg-[#F7F7F5] flex items-center justify-center p-4">
+                  <h4 className="text-sm font-bold text-[#201817] mb-2">Ảnh đã tải lên:</h4>
+                  <div className="relative w-full aspect-square rounded-xl border border-[#DDD8D2] overflow-hidden bg-[#EDECEA] flex items-center justify-center p-4">
                     <img src={uploadedImage} alt="Uploaded" className="w-full h-full object-contain" />
                     <button onClick={() => setUploadedImage('')} className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm text-red-500 font-bold text-xs px-2 hover:bg-red-500 hover:text-white transition-colors">{t('Remove' as any)}</button>
                   </div>
                 </div>
               )}
             
-              <div className="mt-6 border-t border-[#EAE7DE] pt-6">
-                <h3 className="font-bold text-[#181818] mb-4">{t('Adjust Position' as any)}</h3>
+              <div className="mt-6 border-t border-[#DDD8D2] pt-6">
+                <h3 className="font-bold text-[#201817] mb-4">{t('Adjust Position' as any)}</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
-                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
+                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Height' as any)}</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
-                    <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Height' as any)}</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
+                    <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-[#888888] flex justify-between"><span>{t('Size' as any)}</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
-                    <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#181818]" />
+                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Size' as any)}</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
+                    <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
                   </div>
                 </div>
               </div>
@@ -493,19 +493,19 @@ export default function CustomCupStudio() {
         </div>
 
         {/* 3D Canvas */}
-        <div className="flex-1 relative bg-[#FFF9E8] overflow-hidden">
+        <div className="flex-1 relative bg-[#F7F6F2] overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <img src="https://images.unsplash.com/photo-1618220179428-22790b46a0eb?w=1600&q=80" alt="" className="w-full h-full object-cover opacity-[0.15] mix-blend-multiply blur-sm" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#FFF9E8] via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-transparent to-transparent"></div>
           </div>
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-sm font-bold text-[#181818] border border-[#EAE7DE] backdrop-blur-md">
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-sm font-bold text-[#201817] border border-[#DDD8D2] backdrop-blur-md">
             Kéo chuột để xoay 360°
           </div>
           
           <Suspense fallback={
             <div className="flex flex-col items-center justify-center h-full gap-4">
-              <div className="w-10 h-10 border-4 border-[#FFEDA8] border-t-[#FFB15C] rounded-full animate-spin"></div>
-              <span className="font-bold text-[#181818]">Đang tải môi trường 3D...</span>
+              <div className="w-10 h-10 border-4 border-[#FFF3A6] border-t-[#6B463D] rounded-full animate-spin"></div>
+              <span className="font-bold text-[#201817]">Đang tải môi trường 3D...</span>
             </div>
           }>
             <Canvas camera={{ position: [0, 2, 9], fov: 45 }} shadows gl={{ preserveDrawingBuffer: true }}>
@@ -528,7 +528,7 @@ export default function CustomCupStudio() {
                 stickerTransform={stickerTransform}
               />
               
-              <ContactShadows position={[0, -1.05, 0]} opacity={0.6} scale={15} blur={2.5} far={4} color="#181818" />
+              <ContactShadows position={[0, -1.05, 0]} opacity={0.6} scale={15} blur={2.5} far={4} color="#201817" />
               
               <OrbitControls enablePan={false} minDistance={5} maxDistance={12} maxPolarAngle={Math.PI / 1.4} />
             </Canvas>

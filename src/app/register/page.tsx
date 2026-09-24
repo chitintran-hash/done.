@@ -52,12 +52,12 @@ export default function RegisterPage() {
         <p className="text-muted-foreground mb-8">Gia nhập Cupfy để tạo nên chiếc ly của riêng bạn</p>
 
         {success ? (
-          <div className="bg-[#181818] text-[#FFEDA8] p-6 rounded-xl text-center">
+          <div className="bg-[#4A2A25] text-[#FFF3A6] p-6 rounded-xl text-center">
             <h3 className="font-bold text-lg mb-2">Đăng ký thành công!</h3>
             <p className="text-sm opacity-90">Vui lòng kiểm tra hộp thư Email của bạn ({email}) để xác thực tài khoản trước khi đăng nhập.</p>
             <button 
               onClick={() => router.push('/login')}
-              className="mt-6 w-full py-3 bg-[#FFEDA8] text-[#181818] rounded-full font-bold hover:bg-[#FFF0C7] transition-colors"
+              className="mt-6 w-full py-3 bg-[#FFF3A6] text-[#201817] rounded-full font-bold hover:bg-[#FFF0C7] transition-colors"
             >
               Chuyển đến Đăng nhập
             </button>
@@ -71,7 +71,7 @@ export default function RegisterPage() {
                 required
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors"
                 placeholder="Ví dụ: Nguyễn Văn A"
               />
             </div>
@@ -83,7 +83,7 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors bg-muted/30"
+                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors bg-muted/30"
                 placeholder="email@example.com"
               />
             </div>
@@ -96,7 +96,7 @@ export default function RegisterPage() {
                 minLength={6}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#181818] focus:outline-none transition-colors bg-muted/30"
+                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors bg-muted/30"
                 placeholder="Tối thiểu 6 ký tự"
               />
             </div>
@@ -110,13 +110,13 @@ export default function RegisterPage() {
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full py-4 mt-4 bg-[#181818] hover:bg-[#333333] text-white rounded-full font-bold transition-all disabled:opacity-50"
+              className="w-full py-4 mt-4 bg-[#4A2A25] hover:bg-[#6F625E] text-white rounded-full font-bold transition-all disabled:opacity-50"
             >
               {loading ? 'Đang xử lý...' : 'Đăng ký'}
             </button>
             
             <p className="text-center text-sm text-muted-foreground pt-4">
-              Đã có tài khoản? <Link href="/login" className="text-[#181818] font-bold hover:underline">Đăng nhập ngay</Link>
+              Đã có tài khoản? <Link href="/login" className="text-[#201817] font-bold hover:underline">Đăng nhập ngay</Link>
             </p>
           </form>
         )}

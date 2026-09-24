@@ -51,40 +51,40 @@ export default function Header() {
 
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#EAE7DE] ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-[#FFF9E8]"}`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#DDD8D2] ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-[#F7F6F2]"}`}>
       <div className="max-w-[1400px] mx-auto h-[80px] flex items-center justify-between px-6">
         
         {/* Mobile Menu Icon */}
         <div className="lg:hidden flex items-center">
-          <Menu className="w-6 h-6 text-[#181818]" />
+          <Menu className="w-6 h-6 text-[#201817]" />
         </div>
 
         <div className="flex items-center gap-10 h-full">
           {/* Logo */}
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-            <span className="text-3xl font-extrabold tracking-tighter text-[#181818]">
-              CUPFY<span className="text-xl ml-1 text-[#FFB15C]">✨</span>
+            <span className="text-3xl font-extrabold tracking-tighter text-[#3A211E]">
+              CUPFY<span className="text-xl ml-1 text-[#6B463D]">✨</span>
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8 h-full">
-            <Link href="/products" className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#181818] text-[#181818]' : 'border-transparent text-[#333333] hover:text-[#181818]'}`}>
+            <Link href="/products" className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#201817] text-[#201817]' : 'border-transparent text-[#6F625E] hover:text-[#201817]'}`}>
               Shop
             </Link>
-            <Link href="/custom-cup" className="text-[15px] font-bold text-[#000000] bg-[#FFEDA8] px-5 py-2.5 rounded-full hover:bg-[#F4D35E] transition-colors flex items-center gap-2 shadow-sm border border-[#EAE7DE]">
+            <Link href="/custom-cup" className="text-[15px] font-bold text-[#201817] bg-[#FFF3A6] px-5 py-2.5 rounded-full hover:bg-[#EDECEA] transition-colors flex items-center gap-2 shadow-sm border border-[#DDD8D2]">
               Design Your Cup ✨
             </Link>
-            <Link href="/templates" className="text-[15px] font-bold transition-colors text-[#333333] hover:text-[#181818] h-full flex items-center border-b-2 border-transparent">
+            <Link href="/templates" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
               Templates
             </Link>
-            <Link href="/community" className="text-[15px] font-bold transition-colors text-[#333333] hover:text-[#181818] h-full flex items-center border-b-2 border-transparent">
+            <Link href="/community" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
               Community
             </Link>
-            <Link href="/gifts" className="text-[15px] font-bold transition-colors text-[#333333] hover:text-[#181818] h-full flex items-center border-b-2 border-transparent">
+            <Link href="/gifts" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
               Gifts
             </Link>
-            <Link href="/about" className="text-[15px] font-bold transition-colors text-[#333333] hover:text-[#181818] h-full flex items-center border-b-2 border-transparent">
+            <Link href="/about" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
               About
             </Link>
           </nav>
@@ -93,24 +93,24 @@ export default function Header() {
         {/* Right Section (Search & Icons) */}
         <div className="flex items-center gap-6">
           <div className="hidden lg:flex items-center relative w-[240px]">
-            <Search className="w-4 h-4 absolute left-4 text-[#333333]" strokeWidth={2} />
+            <Search className="w-4 h-4 absolute left-4 text-[#6F625E]" strokeWidth={2} />
             <input 
               type="text" 
               placeholder={t('Search products, templates...')} 
-              className="w-full pl-11 pr-4 py-2 bg-white border border-[#EAE7DE] rounded-full text-sm focus:outline-none focus:border-[#FFB15C] focus:ring-1 focus:ring-[#FFB15C] transition-all"
+              className="w-full pl-11 pr-4 py-2 bg-white border border-[#DDD8D2] rounded-full text-sm focus:outline-none focus:border-[#6B463D] focus:ring-1 focus:ring-[#6B463D] transition-all"
             />
           </div>
 
-          <div className="flex items-center gap-5 text-[#181818]">
+          <div className="flex items-center gap-5 text-[#201817]">
           {/* Language Toggle */}
-          <div className="hidden md:flex bg-[#EAE7DE] rounded-full p-1 border border-[#EAE7DE]">
+          <div className="hidden md:flex bg-[#DDD8D2] rounded-full p-1 border border-[#DDD8D2]">
             <button 
               onClick={() => {
                 setLanguage('vi');
                 document.cookie = "NEXT_LOCALE=vi; path=/; max-age=31536000";
                 window.location.reload();
               }}
-              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'vi' ? 'bg-white text-[#181818] shadow-sm' : 'text-[#888888] hover:text-[#181818]'}`}
+              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'vi' ? 'bg-white text-[#201817] shadow-sm' : 'text-[#6F625E] hover:text-[#201817]'}`}
             >
               VI
             </button>
@@ -120,38 +120,38 @@ export default function Header() {
                 document.cookie = "NEXT_LOCALE=en; path=/; max-age=31536000";
                 window.location.reload();
               }}
-              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white text-[#181818] shadow-sm' : 'text-[#888888] hover:text-[#181818]'}`}
+              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white text-[#201817] shadow-sm' : 'text-[#6F625E] hover:text-[#201817]'}`}
             >
               EN
             </button>
           </div>
             {user ? (
               <div className="relative group">
-                <Link href="/account" className="hover:text-[#FFB15C] transition-colors flex items-center">
+                <Link href="/account" className="hover:text-[#6B463D] transition-colors flex items-center">
                   <UserIcon className="w-[22px] h-[22px]" strokeWidth={2} />
                 </Link>
                 <div className="absolute right-0 top-full pt-4 w-52 hidden group-hover:block z-50">
-                  <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-[#EAE7DE]">
-                  <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] text-[#181818] font-medium">Account & Designs</Link>
-                  <Link href="/orders" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] text-[#181818] font-medium">Đơn hàng</Link>
-                  <Link href="/wishlist" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] text-[#181818] font-medium flex items-center justify-between">Wishlist <Heart className="w-3 h-3"/></Link>
+                  <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-[#DDD8D2]">
+                  <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">Account & Designs</Link>
+                  <Link href="/orders" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">Đơn hàng</Link>
+                  <Link href="/wishlist" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium flex items-center justify-between">Wishlist <Heart className="w-3 h-3"/></Link>
                   {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
-                    <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#F7F7F5] font-bold text-[#FFB15C]">Quản trị Admin</Link>
+                    <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-[#6B463D]">Quản trị Admin</Link>
                   )}
-                  <button onClick={handleSignOut} className="w-full text-left px-4 py-3 text-sm hover:bg-[#F7F7F5] font-bold text-red-500 border-t border-[#EAE7DE]">Đăng xuất</button>
+                  <button onClick={handleSignOut} className="w-full text-left px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-red-500 border-t border-[#DDD8D2]">Đăng xuất</button>
                   </div>
                 </div>
               </div>
             ) : (
-              <Link href="/login" className="hover:text-[#FFB15C] transition-colors">
+              <Link href="/login" className="hover:text-[#6B463D] transition-colors">
                 <UserIcon className="w-[22px] h-[22px]" strokeWidth={2} />
               </Link>
             )}
 
-            <Link href="/cart" className="relative hover:text-[#FFB15C] transition-colors">
+            <Link href="/cart" className="relative hover:text-[#6B463D] transition-colors">
               <ShoppingCart className="w-[22px] h-[22px]" strokeWidth={2} />
               {cart.items.length >= 0 && (
-                <span className="absolute -top-1.5 -right-2.5 w-[18px] h-[18px] bg-[#000000] text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-[#FFF9E8]">
+                <span className="absolute -top-1.5 -right-2.5 w-[18px] h-[18px] bg-[#4A2A25] text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-[#F7F6F2]">
                   {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
                 </span>
               )}

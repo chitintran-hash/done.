@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={`${beVietnamPro.variable} font-sans antialiased bg-[#FFF9E8] text-[#181818]`}>
+      <body className={`${beVietnamPro.variable} font-sans antialiased bg-[#F7F6F2] text-[#201817]`}>
         <Header />
         <main className="min-h-screen">
           {children}

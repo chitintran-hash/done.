@@ -513,7 +513,7 @@ export default function CustomCupStudio() {
               <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow shadow-mapSize={1024} />
               <spotLight position={[-5, 5, 5]} intensity={0.5} penumbra={1} />
               
-              <Environment preset="studio" />
+              <Environment preset="city" />
               
               <ProceduralCup 
                 modelType={modelType}

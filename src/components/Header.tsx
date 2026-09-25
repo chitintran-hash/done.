@@ -69,24 +69,12 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8 h-full">
-            <Link href="/products" className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#201817] text-[#201817]' : 'border-transparent text-[#6F625E] hover:text-[#201817]'}`}>
-              Shop
-            </Link>
-            <Link href="/custom-cup" className="text-[15px] font-bold text-[#201817] bg-[#FFF3A6] px-5 py-2.5 rounded-full hover:bg-[#EDECEA] transition-colors flex items-center gap-2 shadow-sm border border-[#DDD8D2]">
-              Design Your Cup ✨
-            </Link>
-            <Link href="/templates" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
-              Templates
-            </Link>
-            <Link href="/community" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
-              Community
-            </Link>
-            <Link href="/gifts" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
-              Gifts
-            </Link>
-            <Link href="/about" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">
-              About
-            </Link>
+            <Link href="/products" className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#201817] text-[#201817]' : 'border-transparent text-[#6F625E] hover:text-[#201817]'}`}>{t('Shop' as any)}</Link>
+            <Link href="/custom-cup" className="text-[15px] font-bold text-[#201817] bg-[#FFF3A6] px-5 py-2.5 rounded-full hover:bg-[#EDECEA] transition-colors flex items-center gap-2 shadow-sm border border-[#DDD8D2]">{t('Design Your Cup ✨' as any)}</Link>
+            <Link href="/templates" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('Templates' as any)}</Link>
+            <Link href="/community" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('Community' as any)}</Link>
+            <Link href="/gifts" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('Gifts' as any)}</Link>
+            <Link href="/about" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('About' as any)}</Link>
           </nav>
         </div>
 
@@ -132,13 +120,13 @@ export default function Header() {
                 </Link>
                 <div className="absolute right-0 top-full pt-4 w-52 hidden group-hover:block z-50">
                   <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-[#DDD8D2]">
-                  <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">Account & Designs</Link>
+                  <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">{t('Profile' as any)}</Link>
                   <Link href="/orders" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">Đơn hàng</Link>
                   <Link href="/wishlist" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium flex items-center justify-between">Wishlist <Heart className="w-3 h-3"/></Link>
                   {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
                     <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-[#6B463D]">Quản trị Admin</Link>
                   )}
-                  <button onClick={handleSignOut} className="w-full text-left px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-red-500 border-t border-[#DDD8D2]">Đăng xuất</button>
+                  <button onClick={handleSignOut} className="w-full text-left px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-red-500 border-t border-[#DDD8D2]">{t('Logout' as any)}</button>
                   </div>
                 </div>
               </div>

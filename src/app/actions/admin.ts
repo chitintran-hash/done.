@@ -206,7 +206,18 @@ export async function hideProduct(productId: string) {
 export async function deleteProduct(productId: string) {
   try {
     const { error } = await getAdminClient().from('products').delete().eq('id', productId);
-    if (error) throw error;
+    
+    // If it fails (likely due to foreign key constraint in order_items), soft delete it
+    if (error) {
+      console.warn("Hard delete failed, soft deleting instead:", error);
+      const { error: softError } = await getAdminClient()
+        .from('products')
+        .update({ is_available: false, category: 'user_custom' })
+        .eq('id', productId);
+        
+      if (softError) throw softError;
+    }
+    
     return { success: true };
   } catch (error: any) {
     console.error("Delete product error:", error);

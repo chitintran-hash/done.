@@ -74,19 +74,28 @@ export default async function Home() {
             <h3 className="text-3xl font-extrabold text-[#201817] mb-4">{t("how_title" as any)}</h3>
             <p className="text-[#6F625E] text-lg">{t("how_subtitle" as any)}</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {/* Decorative dashed line for desktop */}
+            <div className="hidden md:block absolute top-[44px] left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-[#DDD8D2] z-0"></div>
+
             {[
-              { icon: MousePointer2, title: t("how_step1_title" as any), desc: t("how_step1_desc" as any) },
-              { icon: Paintbrush, title: t("how_step2_title" as any), desc: t("how_step2_desc" as any) },
-              { icon: Eye, title: t("how_step3_title" as any), desc: t("how_step3_desc" as any) },
-              { icon: ShoppingBag, title: t("how_step4_title" as any), desc: t("how_step4_desc" as any) }
+              { icon: MousePointer2, title: t("how_step1_title" as any), desc: t("how_step1_desc" as any), color: "bg-[#BFDCEF]/40", textColor: "text-[#3A211E]" },
+              { icon: Paintbrush, title: t("how_step2_title" as any), desc: t("how_step2_desc" as any), color: "bg-[#FFF3A6]/60", textColor: "text-[#6B463D]" },
+              { icon: Eye, title: t("how_step3_title" as any), desc: t("how_step3_desc" as any), color: "bg-[#B9D9EC]/30", textColor: "text-[#4A2A25]" },
+              { icon: ShoppingBag, title: t("how_step4_title" as any), desc: t("how_step4_desc" as any), color: "bg-[#EDECEA]", textColor: "text-[#201817]" }
             ].map((step, i) => (
-              <div key={i} className="bg-[#F7F6F2] rounded-[24px] p-8 text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm text-[#4A2A25]">
-                  <step.icon className="w-8 h-8" strokeWidth={1.75} />
+              <div key={i} className="relative bg-[#F7F6F2] rounded-[24px] p-8 text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300 border border-[#DDD8D2] shadow-sm hover:shadow-md z-10 overflow-hidden group">
+                {/* Large background number */}
+                <span className="absolute -bottom-4 -right-2 text-[100px] font-black text-[#EDECEA] opacity-50 group-hover:scale-110 transition-transform duration-500 pointer-events-none select-none">
+                  0{i + 1}
+                </span>
+
+                <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mb-6 shadow-sm ${step.textColor} relative z-10 border border-white`}>
+                  <step.icon className="w-8 h-8" strokeWidth={2} />
                 </div>
-                <h4 className="text-xl font-bold text-[#201817] mb-3">{step.title}</h4>
-                <p className="text-sm text-[#6F625E] leading-relaxed">{step.desc}</p>
+                
+                <h4 className="text-xl font-bold text-[#201817] mb-3 relative z-10">{step.title}</h4>
+                <p className="text-sm text-[#6F625E] leading-relaxed relative z-10">{step.desc}</p>
               </div>
             ))}
           </div>

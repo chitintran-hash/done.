@@ -141,13 +141,12 @@ export default function CustomCupStudio() {
   const [lidColor, setLidColor] = useState('#BFDCEF');
   const [customText, setCustomText] = useState('');
   const [textColor, setTextColor] = useState('#201817');
-  const [fontUrl, setFontUrl] = useState('');
+  const [fontUrl, setFontUrl] = useState('/fonts/inter.ttf');
   
   const fonts = [
-    { name: 'Cơ bản', url: '' },
-    { name: 'Mềm mại', url: 'https://fonts.gstatic.com/s/dancingscript/v24/IfsqT06SmCExW53Zgzirtb3yPFtt.woff' },
-    { name: 'Cổ điển', url: 'https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtM.woff' },
-    { name: 'Phá cách', url: 'https://fonts.gstatic.com/s/pacifico/v22/FwZY7-Qmy14u9lezJ-6H6MmBp0u-.woff' }
+    { name: 'Inter (Cơ bản)', url: '/fonts/inter.ttf' },
+    { name: 'Lora (Cổ điển)', url: '/fonts/lora.ttf' },
+    { name: 'Dancing (Mềm mại)', url: '/fonts/dancing.ttf' }
   ];
   const [sticker, setSticker] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');

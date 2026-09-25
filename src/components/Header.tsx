@@ -16,7 +16,7 @@ export default function Header() {
   const cart = useCartStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const { language, setLanguage } = useLanguageStore();
-  const t = (key: TranslationKey) => translations[language][key] || key;
+  const t = (key: TranslationKey) => translations[language][key] !== undefined ? translations[language][key] : key;
 
   useEffect(() => {
     const supabase = createClient();

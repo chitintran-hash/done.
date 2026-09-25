@@ -11,6 +11,6 @@ export async function getTranslation() {
   const lang = await getLanguage();
   return {
     lang,
-    t: (key: TranslationKey) => translations[lang][key] || key
+    t: (key: TranslationKey) => translations[lang][key] !== undefined ? translations[lang][key] : key
   };
 }

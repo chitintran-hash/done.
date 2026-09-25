@@ -134,7 +134,7 @@ export default function CustomCupStudio() {
   const router = useRouter();
   const cartStore = useCartStore();
   const { language } = useLanguageStore();
-  const t = (key: TranslationKey) => translations[language]?.[key] || key;
+  const t = (key: TranslationKey) => translations[language]?.[key] !== undefined ? translations[language][key] : key;
   
   const [modelType, setModelType] = useState('tumbler'); // tumbler, mug
   const [cupColor, setCupColor] = useState('#ffffff');

@@ -200,6 +200,6 @@ export type TranslationKey = keyof typeof translations.en;
 export function useTranslation() {
   // We'll import useLanguageStore where this is used
   return (key: TranslationKey, lang: 'vi' | 'en') => {
-    return translations[lang][key] || key;
+    return translations[lang][key] !== undefined ? translations[lang][key] : key;
   };
 }

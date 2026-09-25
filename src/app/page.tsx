@@ -37,20 +37,20 @@ export default async function Home() {
           {/* Cột trái: Nội dung chữ */}
           <div className="w-full md:w-1/2 flex flex-col items-start z-10">
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold text-[#201817] leading-[1.15] mb-6 tracking-tight">
-              Tự thiết kế chiếc ly mang <span className="text-[#6B463D] italic font-serif">dấu ấn riêng</span> của bạn
+              {t("hero_title_1" as any)}<span className="text-[#6B463D] italic font-serif">{t("hero_title_highlight" as any)}</span>{t("hero_title_2" as any)}
             </h2>
             <p className="text-lg text-[#6F625E] mb-4 leading-relaxed max-w-[500px]">
-              Cupfy giúp bạn chọn mẫu ly, thêm chữ, hình ảnh hoặc nét vẽ cá nhân, sau đó xem trước và đặt làm chiếc ly dành riêng cho mình.
+              {t("hero_desc_1" as any)}
             </p>
             <p className="text-md text-[#6F625E] font-medium mb-10 opacity-80 border-l-2 border-[#B9D9EC] pl-4">
-              Không cần biết thiết kế. Chỉ cần có một ý tưởng.
+              {t("hero_desc_2" as any)}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <Link href="/custom-cup" className="px-8 py-4 bg-[#4A2A25] text-white rounded-full font-bold text-lg flex items-center justify-center hover:bg-[#3A211E] transition-colors shadow-[0_8px_20px_rgba(0,0,0,0.1)]">
-                Thiết kế ly ngay
+                {t("hero_btn_design" as any)}
               </Link>
               <Link href="/templates" className="px-8 py-4 bg-white text-[#201817] border border-[#DDD8D2] rounded-full font-bold text-lg flex items-center justify-center hover:bg-[#EDECEA] transition-colors">
-                Khám phá cửa hàng
+                {t("hero_btn_shop" as any)}
               </Link>
             </div>
           </div>
@@ -59,9 +59,9 @@ export default async function Home() {
           <div className="w-full md:w-1/2 flex flex-col gap-5 z-10">
             <HeroSlider />
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-1 text-sm font-semibold text-[#6F625E]">
-              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> Tự vẽ ở bất cứ đâu</span>
-              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> Biến ý tưởng thành chiếc ly thật</span>
-              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> Thiết kế cho chính mình hoặc quà tặng</span>
+              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> {t("hero_feature_1" as any)}</span>
+              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> {t("hero_feature_2" as any)}</span>
+              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> {t("hero_feature_3" as any)}</span>
             </div>
           </div>
         </div>
@@ -71,15 +71,15 @@ export default async function Home() {
       <section className="bg-white py-24 border-y border-[#DDD8D2]">
         <div className="max-w-[1400px] mx-auto px-6">
           <div className="text-center mb-16">
-            <h3 className="text-3xl font-extrabold text-[#201817] mb-4">Cách thức hoạt động</h3>
-            <p className="text-[#6F625E] text-lg">4 bước đơn giản để sở hữu chiếc ly trong mơ</p>
+            <h3 className="text-3xl font-extrabold text-[#201817] mb-4">{t("how_title" as any)}</h3>
+            <p className="text-[#6F625E] text-lg">{t("how_subtitle" as any)}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { icon: MousePointer2, title: "Chọn mẫu ly", desc: "Đa dạng kiểu dáng từ ly thuỷ tinh đến ly giữ nhiệt" },
-              { icon: Paintbrush, title: "Thêm thiết kế", desc: "Cá nhân hoá với hình vẽ, chữ, và sticker" },
-              { icon: Eye, title: "Xem trước 3D", desc: "Trải nghiệm hình ảnh thực tế đa chiều" },
-              { icon: ShoppingBag, title: "Đặt hàng", desc: "Nhận chiếc ly độc bản ngay tại nhà" }
+              { icon: MousePointer2, title: t("how_step1_title" as any), desc: t("how_step1_desc" as any) },
+              { icon: Paintbrush, title: t("how_step2_title" as any), desc: t("how_step2_desc" as any) },
+              { icon: Eye, title: t("how_step3_title" as any), desc: t("how_step3_desc" as any) },
+              { icon: ShoppingBag, title: t("how_step4_title" as any), desc: t("how_step4_desc" as any) }
             ].map((step, i) => (
               <div key={i} className="bg-[#F7F6F2] rounded-[24px] p-8 text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300">
                 <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm text-[#4A2A25]">
@@ -97,11 +97,10 @@ export default async function Home() {
       <section className="max-w-[1400px] mx-auto px-6 py-24 w-full">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <h3 className="text-3xl font-extrabold text-[#201817] mb-3">Khám phá mẫu ly yêu thích</h3>
-            <p className="text-[#6F625E] text-lg">Những mẫu ly được lựa chọn nhiều nhất tuần qua</p>
+            <h3 className="text-3xl font-extrabold text-[#201817] mb-3">{t("products_title" as any)}</h3>
+            <p className="text-[#6F625E] text-lg">{t("products_subtitle" as any)}</p>
           </div>
-          <Link href="/products" className="hidden sm:flex items-center gap-2 font-bold text-[#201817] hover:text-[#4A2A25] transition-colors">
-            Xem tất cả <ArrowRight className="w-5 h-5" />
+          <Link href="/products" className="hidden sm:flex items-center gap-2 font-bold text-[#201817] hover:text-[#4A2A25] transition-colors">{t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
           </Link>
         </div>
         
@@ -127,9 +126,7 @@ export default async function Home() {
                   <span className="font-black text-[#201817] text-lg">
                     {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
                   </span>
-                  <span className="text-[#4A2A25] font-bold text-sm bg-[#F7F6F2] px-4 py-2 rounded-full group-hover:bg-[#4A2A25] group-hover:text-white transition-colors">
-                    Xem chi tiết
-                  </span>
+                  <span className="text-[#4A2A25] font-bold text-sm bg-[#F7F6F2] px-4 py-2 rounded-full group-hover:bg-[#4A2A25] group-hover:text-white transition-colors">{t("products_view_detail" as any)}</span>
                 </div>
               </div>
             </Link>
@@ -137,8 +134,7 @@ export default async function Home() {
         </div>
         
         <div className="mt-10 flex justify-center sm:hidden">
-          <Link href="/products" className="px-8 py-4 bg-white text-[#201817] border border-[#DDD8D2] rounded-full font-bold flex items-center gap-2">
-            Xem tất cả <ArrowRight className="w-5 h-5" />
+          <Link href="/products" className="px-8 py-4 bg-white text-[#201817] border border-[#DDD8D2] rounded-full font-bold flex items-center gap-2">{t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
@@ -148,13 +144,13 @@ export default async function Home() {
         <div className="max-w-[1400px] mx-auto bg-[#BFDCEF]/20 rounded-[32px] overflow-hidden flex flex-col md:flex-row items-center relative border border-[#BFDCEF]/30 shadow-sm">
           <div className="w-full md:w-1/2 p-10 md:p-16 lg:p-24 z-10 flex flex-col items-start bg-gradient-to-r from-[#EDECEA] via-[#EDECEA] to-transparent">
             <h3 className="text-4xl md:text-5xl font-extrabold text-[#201817] mb-6 leading-[1.15] tracking-tight">
-              Một chiếc ly không cần giống bất kỳ ai
+              {t("banner_title" as any)}
             </h3>
             <p className="text-lg text-[#6F625E] mb-10 max-w-[440px] leading-relaxed">
-              Bạn có thể thêm tên, ngày kỷ niệm, hình vẽ, sticker, quote hoặc phong cách riêng của mình lên chiếc ly.
+              {t("banner_desc" as any)}
             </p>
             <Link href="/custom-cup" className="px-8 py-4 bg-[#4A2A25] text-white rounded-full font-bold text-lg hover:bg-[#3A211E] transition-all shadow-md inline-block">
-              Bắt đầu thiết kế
+              {t("banner_btn" as any)}
             </Link>
           </div>
           <div className="w-full md:w-1/2 h-[350px] md:h-full md:absolute md:right-0 md:top-0 bottom-0 relative z-0">

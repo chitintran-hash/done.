@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Activity, Box, ShoppingCart, Users, Store } from "lucide-react";
 import { getDashboardStats } from "../actions/admin";
 import Link from 'next/link';

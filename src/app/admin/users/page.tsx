@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { fetchAllUsers } from "../../actions/admin";
 import UsersClient from "./UsersClient";
 

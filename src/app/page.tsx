@@ -15,18 +15,14 @@ export default async function Home() {
       
       {/* PHẦN 1: Banner thương hiệu lớn */}
       <section className="w-full px-4 md:px-6 mb-16 md:mb-24 mt-4">
-        <div className="mx-auto w-full md:w-[88%] h-[300px] md:h-[380px] rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col items-center justify-center bg-gradient-to-r from-[#F7F6F2] to-[#D9ECF8]">
-          <Sparkles className="absolute top-12 left-[20%] text-[#4A2A25] opacity-40 w-8 h-8" />
-          <Star className="absolute bottom-16 right-[25%] text-[#BFDCEF] opacity-80 w-6 h-6 fill-current" />
-          <Star className="absolute top-24 right-[15%] text-[#F7F6F2] opacity-90 w-4 h-4 fill-current" />
-          <Sparkles className="absolute bottom-20 left-[30%] text-[#FFCFE0] opacity-60 w-5 h-5" />
-          
-          <h1 className="text-7xl md:text-[8rem] font-black text-[#3A211E] tracking-widest mb-2 z-10 uppercase">
-            CUPFY
-          </h1>
-          <p className="text-lg md:text-2xl text-[#6F625E] font-medium z-10 text-center px-4 tracking-wide">
-            Chiếc ly của bạn, câu chuyện của bạn
-          </p>
+        <div className="mx-auto w-full md:w-[88%] aspect-[2.7/1] min-h-[250px] max-h-[500px] rounded-[32px] shadow-md relative overflow-hidden flex flex-col items-center justify-center bg-[#FFF3A6]/10">
+          <Image 
+            src="/images/cupfy-brand-banner.jpg" 
+            alt="Cupfy Brand Banner" 
+            fill 
+            className="object-cover object-center"
+            priority 
+          />
         </div>
       </section>
 

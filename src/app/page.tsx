@@ -15,9 +15,9 @@ export default async function Home() {
       
       {/* PHẦN 1: Banner thương hiệu lớn */}
       <section className="w-full px-4 md:px-6 mb-16 md:mb-24 mt-4 md:mt-8">
-        <div className="mx-auto w-full max-w-[1150px] aspect-[2.7/1] min-h-[200px] rounded-[32px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.15)] relative overflow-hidden bg-[#FFF3A6]/10 border border-[#DDD8D2]/50">
+        <div className="mx-auto w-full max-w-[1024px] aspect-[1024/465] min-h-[200px] rounded-[32px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.15)] relative overflow-hidden bg-[#FFF3A6]/10 border border-[#DDD8D2]/50">
           <Image 
-            src="/images/cupfy-brand-banner.jpg" 
+            src="/images/cupfy-brand-banner.png" 
             alt="Cupfy Brand Banner" 
             fill 
             className="object-cover object-center [image-rendering:-webkit-optimize-contrast]"

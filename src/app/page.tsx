@@ -20,7 +20,7 @@ export default async function Home() {
             src="/images/cupfy-brand-banner.jpg" 
             alt="Cupfy Brand Banner" 
             fill 
-            className="object-cover object-center"
+            className="object-cover object-center [image-rendering:-webkit-optimize-contrast]"
             priority 
             quality={100}
             unoptimized

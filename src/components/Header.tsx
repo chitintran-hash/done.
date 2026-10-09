@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Search, User as UserIcon, ShoppingCart, Menu, Heart } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
@@ -62,9 +63,16 @@ export default function Header() {
         <div className="flex items-center gap-10 h-full">
           {/* Logo */}
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-            <span className="text-3xl font-extrabold tracking-tighter text-[#3A211E]">
-              CUPFY<span className="text-xl ml-1 text-[#6B463D]">✨</span>
-            </span>
+            <div className="relative w-12 h-12 md:w-[60px] md:h-[60px] rounded-xl overflow-hidden shadow-sm border border-[#DDD8D2]/50 bg-white">
+              <Image 
+                src="/images/logo.jpg" 
+                alt="Cupfy Logo" 
+                fill
+                className="object-cover"
+                quality={100}
+                unoptimized
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

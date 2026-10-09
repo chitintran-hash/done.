@@ -15,12 +15,12 @@ export default async function Home() {
       
       {/* PHẦN 1: Banner thương hiệu lớn */}
       <section className="w-full px-4 md:px-6 mb-16 md:mb-24 mt-4 md:mt-8">
-        <div className="mx-auto w-full max-w-[1024px] aspect-[1024/465] min-h-[200px] rounded-[32px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.15)] relative overflow-hidden bg-[#FFF3A6]/10 border border-[#DDD8D2]/50">
+        <div className="mx-auto w-full max-w-[1200px] h-[250px] md:h-[350px] lg:h-[400px] rounded-[32px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.15)] relative overflow-hidden bg-[#FDF0C6] border border-[#DDD8D2]/50">
           <Image 
             src="/images/cupfy-brand-banner.png" 
             alt="Cupfy Brand Banner" 
             fill 
-            className="object-cover object-center [image-rendering:-webkit-optimize-contrast]"
+            className="object-contain object-center [image-rendering:-webkit-optimize-contrast]"
             priority 
             quality={100}
             unoptimized
@@ -165,7 +165,7 @@ export default async function Home() {
               src="/images/hero-slider-1.jpg" 
               alt="Custom cup examples" 
               fill
-              className="object-cover object-center"
+              className="object-contain object-center"
             />
             {/* Fade overlay for smooth transition into the image */}
             <div className="absolute inset-0 bg-gradient-to-r from-[#EDECEA] via-transparent to-transparent hidden md:block"></div>

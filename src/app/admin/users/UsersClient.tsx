@@ -1,155 +1,213 @@
 "use client";
 
 import { useState } from 'react';
-import { Search, ShieldAlert, UserCheck, UserX, Trash2, Ban } from 'lucide-react';
-import { suspendUser, activateUser, deleteUser } from '../../actions/admin';
+import { 
+  Search, 
+  Users, 
+  Lock, 
+  Unlock, 
+  Trash2, 
+  ShoppingBag, 
+  Calendar, 
+  Eye, 
+  X,
+  CreditCard,
+  Mail,
+  Phone
+} from 'lucide-react';
+import { toggleCustomerStatus, deleteUser } from '@/app/actions/admin';
 
 export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
   const [users, setUsers] = useState(initialUsers);
   const [search, setSearch] = useState('');
-  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = useState<any | null>(null);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  const formatVND = (num: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+  };
 
   const filteredUsers = users.filter(u => 
-    u.email?.toLowerCase().includes(search.toLowerCase()) || 
-    u.full_name?.toLowerCase().includes(search.toLowerCase())
+    u.name?.toLowerCase().includes(search.toLowerCase()) || 
+    u.email?.toLowerCase().includes(search.toLowerCase()) ||
+    u.phoneNumber?.includes(search)
   );
 
-  const handleSuspend = async (id: string) => {
-    if (!confirm('Bạn có chắc muốn KHÓA tài khoản này? Người dùng sẽ không thể đăng nhập.')) return;
-    setLoadingAction(id);
-    try {
-      await suspendUser(id);
-      setUsers(users.map(u => u.id === id ? { ...u, status: 'suspended' } : u));
-    } catch (e: any) {
-      alert('Lỗi: ' + e.message);
-    }
-    setLoadingAction(null);
-  };
+  const handleToggleStatus = async (user: any) => {
+    const actionName = user.status === 'active' ? 'KHÓA' : 'MỞ KHÓA';
+    if (!confirm(`Bạn có chắc muốn ${actionName} tài khoản ${user.name}?`)) return;
 
-  const handleActivate = async (id: string) => {
-    setLoadingAction(id);
+    setLoadingId(user.id);
     try {
-      await activateUser(id);
-      setUsers(users.map(u => u.id === id ? { ...u, status: 'active' } : u));
+      const res = await toggleCustomerStatus(user.id, user.status);
+      setUsers(users.map(u => u.id === user.id ? { ...u, status: res.nextStatus } : u));
+      if (selectedCustomer && selectedCustomer.id === user.id) {
+        setSelectedCustomer((prev: any) => ({ ...prev, status: res.nextStatus }));
+      }
     } catch (e: any) {
-      alert('Lỗi: ' + e.message);
+      alert("Lỗi: " + e.message);
     }
-    setLoadingAction(null);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('CẢNH BÁO NGUY HIỂM: Bạn có chắc muốn XÓA VĨNH VIỄN tài khoản này?\nHành động này sẽ xóa quyền truy cập của người dùng khỏi Cupfy Họ có thể đăng ký lại bằng email này sau.')) return;
-    setLoadingAction(id);
-    try {
-      await deleteUser(id);
-      setUsers(users.filter(u => u.id !== id));
-    } catch (e: any) {
-      alert('Lỗi: ' + e.message);
-    }
-    setLoadingAction(null);
+    setLoadingId(null);
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
-      <div className="p-4 border-b border-border flex gap-4">
+    <div className="space-y-6">
+      {/* Search Header */}
+      <div className="bg-white p-5 rounded-3xl border border-[#DDD8D2] shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6F625E]" />
           <input 
             type="text" 
-            placeholder="Tìm kiếm email người dùng..." 
+            placeholder="Tìm theo tên khách, email, số điện thoại..." 
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-muted/50 rounded-lg border border-border focus:outline-none focus:border-accent"
+            onChange={e => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-[#F7F6F2] rounded-xl text-xs border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25]"
           />
+        </div>
+
+        <div className="text-xs text-[#6F625E]">
+          Tổng cộng: <strong>{filteredUsers.length}</strong> khách hàng
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-border text-sm text-muted-foreground bg-muted/20">
-              <th className="px-6 py-4 font-medium">Tài khoản (Email)</th>
-              <th className="px-6 py-4 font-medium">Vai trò (Role)</th>
-              <th className="px-6 py-4 font-medium">Trạng thái</th>
-              <th className="px-6 py-4 font-medium">Lần đăng nhập cuối</th>
-              <th className="px-6 py-4 font-medium text-right">Hành động</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm">
-            {filteredUsers.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
-                  Không tìm thấy người dùng nào.
-                </td>
-              </tr>
-            ) : (
-              filteredUsers.map((u) => (
-                <tr key={u.id} className="border-b border-border hover:bg-muted/30">
-                  <td className="px-6 py-4">
-                    <div className="font-medium">{u.email}</div>
-                    {u.full_name && <div className="text-xs text-muted-foreground">{u.full_name}</div>}
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs font-bold rounded-md ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'seller' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
-                      {u.role.toUpperCase()}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    {u.status === 'active' ? (
-                      <div className="flex items-center gap-2 text-green-600 font-medium">
-                        <UserCheck className="w-4 h-4" /> Hoạt động
-                      </div>
-                    ) : u.status === 'suspended' ? (
-                      <div className="flex items-center gap-2 text-red-600 font-medium">
-                        <Ban className="w-4 h-4" /> Bị khóa
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-yellow-600 font-medium">
-                        {u.status}
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-muted-foreground">
-                    {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('vi-VN') : 'Chưa đăng nhập'}
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-2">
-                      {u.status === 'suspended' ? (
-                        <button 
-                          onClick={() => handleActivate(u.id)}
-                          disabled={loadingAction === u.id || u.email === 'tranchitin2006@gmail.com'}
-                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
-                          title="Mở khóa"
-                        >
-                          <UserCheck className="w-4 h-4" />
-                        </button>
-                      ) : (
-                        <button 
-                          onClick={() => handleSuspend(u.id)}
-                          disabled={loadingAction === u.id || u.email === 'tranchitin2006@gmail.com'}
-                          className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
-                          title="Khóa tài khoản"
-                        >
-                          <Ban className="w-4 h-4" />
-                        </button>
-                      )}
-                      
-                      <button 
-                        onClick={() => handleDelete(u.id)}
-                        disabled={loadingAction === u.id || u.email === 'tranchitin2006@gmail.com'}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-                        title="Xóa tài khoản"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
+      {/* Customers Table */}
+      <div className="bg-white rounded-3xl border border-[#DDD8D2] shadow-sm overflow-hidden">
+        {filteredUsers.length === 0 ? (
+          <div className="p-16 text-center text-[#6F625E]">
+            <Users className="w-12 h-12 mx-auto mb-3 opacity-30 text-[#4A2A25]" />
+            <div className="font-bold text-sm text-[#201817]">Không tìm thấy khách hàng nào</div>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#F7F6F2] border-b border-[#DDD8D2] text-[#6F625E]">
+                <tr>
+                  <th className="py-4 px-6 font-semibold">Khách Hàng</th>
+                  <th className="py-4 px-4 font-semibold">Liên Hệ</th>
+                  <th className="py-4 px-4 font-semibold">Ngày Đăng Ký</th>
+                  <th className="py-4 px-4 font-semibold">Đơn Hàng</th>
+                  <th className="py-4 px-4 font-semibold">Tổng Chi Tiêu (LTV)</th>
+                  <th className="py-4 px-4 font-semibold">Trạng Thái</th>
+                  <th className="py-4 px-6 font-semibold text-right">Hành Động</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="divide-y divide-[#DDD8D2]/60">
+                {filteredUsers.map(user => (
+                  <tr key={user.id} className="hover:bg-[#F7F6F2]/40 transition-colors">
+                    <td className="py-4 px-6">
+                      <div className="font-bold text-[#201817] text-sm">{user.name}</div>
+                      <div className="text-[11px] text-[#6F625E] font-mono">ID: {user.id.slice(0, 8)}</div>
+                    </td>
+                    <td className="py-4 px-4">
+                      <div className="text-[#201817] font-medium">{user.email}</div>
+                      <div className="text-[11px] text-[#6F625E]">{user.phoneNumber}</div>
+                    </td>
+                    <td className="py-4 px-4 text-[#6F625E]">
+                      {new Date(user.createdAt).toLocaleDateString('vi-VN')}
+                    </td>
+                    <td className="py-4 px-4 font-bold text-sm text-[#201817]">
+                      {user.totalOrders} đơn
+                    </td>
+                    <td className="py-4 px-4 font-black text-sm text-[#4A2A25]">
+                      {formatVND(user.totalSpent)}
+                    </td>
+                    <td className="py-4 px-4">
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${
+                        user.status === 'active' 
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-200' 
+                          : 'bg-rose-100 text-rose-800 border-rose-200'
+                      }`}>
+                        {user.status === 'active' ? 'Đang hoạt động' : 'Đã khóa'}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-right space-x-2">
+                      <button
+                        onClick={() => setSelectedCustomer(user)}
+                        className="px-3 py-1.5 bg-[#EDECEA] text-[#3A211E] rounded-xl text-xs font-semibold hover:bg-[#DDD8D2]"
+                      >
+                        Lịch Sử
+                      </button>
+                      <button
+                        onClick={() => handleToggleStatus(user)}
+                        disabled={loadingId === user.id}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
+                          user.status === 'active'
+                            ? 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200'
+                            : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                        }`}
+                      >
+                        {user.status === 'active' ? 'Khóa' : 'Mở Khóa'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
+
+      {/* CUSTOMER ORDER HISTORY MODAL */}
+      {selectedCustomer && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full border border-[#DDD8D2] shadow-2xl p-6 space-y-5 text-xs">
+            <div className="flex justify-between items-center border-b border-[#DDD8D2] pb-3">
+              <div>
+                <h3 className="font-bold text-[#3A211E] text-base">{selectedCustomer.name}</h3>
+                <div className="text-[11px] text-[#6F625E]">{selectedCustomer.email}</div>
+              </div>
+              <button onClick={() => setSelectedCustomer(null)} className="text-[#6F625E]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 bg-[#F7F6F2] p-4 rounded-2xl border border-[#DDD8D2]">
+              <div>
+                <div className="text-[#6F625E]">Tổng đơn hàng:</div>
+                <div className="font-bold text-base text-[#201817]">{selectedCustomer.totalOrders} đơn</div>
+              </div>
+              <div>
+                <div className="text-[#6F625E]">Tổng chi tiêu:</div>
+                <div className="font-black text-base text-[#4A2A25]">{formatVND(selectedCustomer.totalSpent)}</div>
+              </div>
+            </div>
+
+            <div>
+              <div className="font-bold text-[#3A211E] mb-2">Lịch Sử Các Đơn Hàng Đã Mua:</div>
+              {selectedCustomer.orders.length === 0 ? (
+                <div className="p-8 text-center text-[#6F625E] bg-[#F7F6F2] rounded-xl">
+                  Khách hàng này chưa có đơn hàng nào được ghi nhận.
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {selectedCustomer.orders.map((o: any) => (
+                    <div key={o.id} className="p-3 rounded-xl bg-[#F7F6F2] border border-[#DDD8D2] flex justify-between items-center">
+                      <div>
+                        <div className="font-mono font-bold text-[#4A2A25]">#{o.id.slice(0, 8).toUpperCase()}</div>
+                        <div className="text-[11px] text-[#6F625E]">
+                          {new Date(o.created_at).toLocaleDateString('vi-VN')} - Trạng thái: {o.status}
+                        </div>
+                      </div>
+                      <div className="font-black text-sm text-[#201817]">
+                        {formatVND(o.total_price)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-[#DDD8D2]">
+              <button 
+                onClick={() => setSelectedCustomer(null)}
+                className="px-5 py-2 bg-[#EDECEA] text-[#3A211E] rounded-xl font-bold"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

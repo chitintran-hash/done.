@@ -5,6 +5,22 @@ import { createClient } from '@/lib/supabase/client';
 import { Package, Search, Truck } from 'lucide-react';
 import Link from 'next/link';
 
+
+const STATUS_LABELS: Record<string, { label: string; color: string }> = {
+  pending: { label: "Chờ xác nhận", color: "bg-amber-100 text-amber-800" },
+  confirmed: { label: "Đã xác nhận", color: "bg-blue-100 text-blue-800" },
+  design_review: { label: "Đang kiểm tra thiết kế", color: "bg-purple-100 text-purple-800" },
+  in_production: { label: "Đang sản xuất", color: "bg-indigo-100 text-indigo-800" },
+  quality_check: { label: "Đang kiểm tra chất lượng", color: "bg-teal-100 text-teal-800" },
+  packaging: { label: "Đang đóng gói", color: "bg-cyan-100 text-cyan-800" },
+  handed_to_carrier: { label: "Đã bàn giao vận chuyển", color: "bg-orange-100 text-orange-800" },
+  shipping: { label: "Đang giao hàng", color: "bg-sky-100 text-sky-800" },
+  delivered: { label: "Giao thành công", color: "bg-emerald-100 text-emerald-800" },
+  completed: { label: "Đã giao thành công", color: "bg-emerald-100 text-emerald-800" },
+  cancelled: { label: "Đã hủy", color: "bg-rose-100 text-rose-800" },
+  returned: { label: "Hoàn trả", color: "bg-gray-200 text-gray-800" }
+};
+
 export default function BuyerOrdersPage() {
   const supabase = createClient();
   const [orders, setOrders] = useState<any[]>([]);
@@ -70,13 +86,11 @@ export default function BuyerOrdersPage() {
                   <p className="font-bold text-sm text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total_price)}</p>
                 </div>
                 <div className="text-right">
-                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
-                    order.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                    order.status === 'completed' ? 'bg-green-100 text-green-700' :
-                    'bg-muted text-muted-foreground'
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+                    STATUS_LABELS[order.status]?.color || 'bg-muted text-muted-foreground'
                   }`}>
-                    <Truck className="w-3 h-3" />
-                    {order.status.toUpperCase()}
+                    <Truck className="w-3.5 h-3.5" />
+                    {STATUS_LABELS[order.status]?.label || order.status.toUpperCase()}
                   </span>
                 </div>
               </div>
@@ -87,7 +101,7 @@ export default function BuyerOrdersPage() {
                     <img src={item.products?.image_url} alt="" className="w-20 h-20 object-cover rounded-lg border border-border" />
                     <div className="flex-1">
                       <h4 className="font-bold text-lg leading-tight mb-1">{item.products?.name}</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Cung cấp bởi: <strong>{item.products?.profiles?.store_name || 'Người bán Cupfy'}</strong></p>
+                      <p className="text-sm text-muted-foreground mb-2">Thương hiệu: <strong>Cupfy Official Store</strong></p>
                       <div className="flex items-center gap-4 text-sm font-medium">
                         <span className="text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</span>
                         <span className="text-muted-foreground">x{item.quantity}</span>

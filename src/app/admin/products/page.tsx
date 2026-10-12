@@ -38,6 +38,7 @@ export default function AdminProductsPage() {
       .select('*')
       .neq('category', 'user_custom')
       .not('category', 'like', 'admin_%')
+      .neq('approval_status', 'archived')
       .order('created_at', { ascending: false });
     if (data) setProducts(data);
     setLoading(false);
@@ -125,12 +126,15 @@ export default function AdminProductsPage() {
     setLoading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này? Hệ thống sẽ lưu trữ an toàn (soft delete) để không ảnh hưởng đến đơn hàng lịch sử.')) return;
+  const handleDelete = async (id: string, name?: string) => {
+    if (!confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN sản phẩm "${name || id}" khỏi hệ thống?`)) return;
     setLoading(true);
     const result = await deleteProduct(id);
     if (!result.success) {
       alert("Không thể xoá sản phẩm: " + result.error);
+    } else {
+      setProducts(prev => prev.filter(p => p.id !== id));
+      alert("Đã xóa sản phẩm thành công!");
     }
     await fetchProducts();
     setLoading(false);
@@ -257,7 +261,7 @@ export default function AdminProductsPage() {
                           Sửa
                         </button>
                         <button 
-                          onClick={() => handleDelete(p.id)} 
+                          onClick={() => handleDelete(p.id, p.name)} 
                           className="px-3 py-1.5 bg-rose-50 text-rose-700 rounded-xl text-xs font-semibold hover:bg-rose-100 border border-rose-200"
                         >
                           Xóa

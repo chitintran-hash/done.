@@ -13,9 +13,10 @@ import {
   RotateCw,
   X,
   FileImage,
-  AlertCircle
+  AlertCircle,
+  Trash2
 } from 'lucide-react';
-import { updateCustomRequestStatus } from '@/app/actions/admin';
+import { updateCustomRequestStatus, deleteCustomRequest } from '@/app/actions/admin';
 
 export default function CustomRequestsClient({ initialRequests }: { initialRequests: any[] }) {
   const [requests, setRequests] = useState(initialRequests);
@@ -25,6 +26,20 @@ export default function CustomRequestsClient({ initialRequests }: { initialReque
 
   const formatVND = (num: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+  };
+
+  const handleDeleteRequest = async (itemId: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa yêu cầu thiết kế này khỏi danh sách?')) return;
+    setLoadingId(itemId);
+    try {
+      await deleteCustomRequest(itemId);
+      setRequests(prev => prev.filter(r => r.itemId !== itemId));
+      if (selectedReq?.itemId === itemId) setSelectedReq(null);
+      alert("Đã xóa yêu cầu thiết kế thành công!");
+    } catch (e: any) {
+      alert("Lỗi xóa yêu cầu: " + e.message);
+    }
+    setLoadingId(null);
   };
 
   const handleStatusChange = async (itemId: string, status: string) => {
@@ -181,6 +196,15 @@ export default function CustomRequestsClient({ initialRequests }: { initialReque
                     Đã In Xong
                   </button>
                 )}
+
+                <button
+                  onClick={() => handleDeleteRequest(req.itemId)}
+                  disabled={loadingId === req.itemId}
+                  className="py-2 px-2.5 bg-rose-50 text-rose-700 rounded-xl text-xs font-bold hover:bg-rose-100 transition-colors border border-rose-200"
+                  title="Xóa yêu cầu thiết kế này"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
           ))}

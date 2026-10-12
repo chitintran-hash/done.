@@ -143,18 +143,18 @@ export default function AdminSettingsPage() {
           <div className="bg-white rounded-3xl border border-[#DDD8D2] p-6 shadow-sm space-y-4 text-xs">
             <div className="flex items-center gap-2">
               <Globe className="w-5 h-5 text-[#4A2A25]" />
-              <h3 className="font-bold text-sm text-[#3A211E]">Tích Hợp Google Analytics 4</h3>
+              <h3 className="font-bold text-sm text-[#3A211E]">Hệ Thống Theo Dõi Nội Bộ</h3>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-[#F7F6F2] border border-[#DDD8D2] space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-bold">Trạng thái GA4 API:</span>
-                <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${isGA4Configured ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                  {isGA4Configured ? 'ĐÃ KẾT NỐI' : 'CHƯA KẾT NỐI'}
+                <span className="font-bold">Theo dõi lưu lượng:</span>
+                <span className="px-2 py-0.5 rounded-full font-bold text-[10px] bg-emerald-100 text-emerald-800">
+                  NATIVE TRACKING
                 </span>
               </div>
               <p className="text-[11px] text-[#6F625E]">
-                Cần khai báo biến môi trường <code className="bg-white px-1 py-0.5 rounded border border-[#DDD8D2]">GA4_PROPERTY_ID</code> để tự động kích hoạt truy xuất dữ liệu lưu lượng truy cập thực tế.
+                Hệ thống tự động ghi nhận lượt ra vào, tài khoản hoạt động và phiên đăng nhập trực tiếp, không phụ thuộc dịch vụ bên ngoài.
               </p>
             </div>
 

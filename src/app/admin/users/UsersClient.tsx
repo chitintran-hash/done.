@@ -15,7 +15,7 @@ import {
   Mail,
   Phone
 } from 'lucide-react';
-import { toggleCustomerStatus, deleteUser } from '@/app/actions/admin';
+import { toggleCustomerStatus, deleteCustomerAccount } from '@/app/actions/admin';
 
 export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
   const [users, setUsers] = useState(initialUsers);
@@ -46,6 +46,21 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
       }
     } catch (e: any) {
       alert("Lỗi: " + e.message);
+    }
+    setLoadingId(null);
+  };
+
+  const handleDeleteCustomer = async (user: any) => {
+    if (!confirm(`Bạn có chắc chắn muốn XÓA VĨNH VIỄN tài khoản ${user.name} (${user.email}) khỏi hệ thống?`)) return;
+
+    setLoadingId(user.id);
+    try {
+      await deleteCustomerAccount(user.id);
+      setUsers(prev => prev.filter(u => u.id !== user.id));
+      if (selectedCustomer?.id === user.id) setSelectedCustomer(null);
+      alert("Đã xóa tài khoản khách hàng thành công!");
+    } catch (e: any) {
+      alert("Lỗi xóa tài khoản: " + e.message);
     }
     setLoadingId(null);
   };
@@ -137,6 +152,15 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                         }`}
                       >
                         {user.status === 'active' ? 'Khóa' : 'Mở Khóa'}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCustomer(user)}
+                        disabled={loadingId === user.id}
+                        className="px-3 py-1.5 bg-rose-100 text-rose-800 rounded-xl text-xs font-semibold hover:bg-rose-200 transition-colors border border-rose-200 inline-flex items-center gap-1"
+                        title="Xóa vĩnh viễn tài khoản"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Xóa
                       </button>
                     </td>
                   </tr>

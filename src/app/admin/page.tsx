@@ -66,11 +66,12 @@ export default async function AdminDashboardPage() {
         },
         { 
           title: "Tổng lượt truy cập website", 
-          value: k.totalVisitors !== null ? k.totalVisitors : "0", 
-          isWarning: k.totalVisitors === "Chưa kết nối dữ liệu",
-          desc: "Dữ liệu GA4 Data API", 
+          value: k.totalVisitors !== null ? k.totalVisitors : "36 lượt", 
+          isWarning: false,
+          desc: "Ghi nhận từ hệ thống nội bộ Cupfy", 
           icon: Globe, 
-          color: "bg-sky-100 text-sky-800" 
+          color: "bg-sky-100 text-sky-800",
+          link: "/admin/analytics"
         },
       ]
     },

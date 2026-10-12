@@ -1,539 +1,726 @@
-
 'use client';
 
-import React, { useState, Suspense, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ChevronLeft, Type, Image as ImageIcon, Smile, ShoppingCart, Save, Layers, Share2, Check, Upload, Box } from 'lucide-react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, Text, useTexture, Decal, RenderTexture } from '@react-three/drei';
-import * as THREE from 'three';
+import { useRouter, useSearchParams } from 'next/navigation';
+import {
+  ChevronLeft,
+  ShoppingCart,
+  Undo2,
+  Redo2,
+  RotateCcw,
+  Check,
+  ShieldAlert,
+  SlidersHorizontal,
+  Eye,
+  FileCheck2,
+  HelpCircle
+} from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useLanguageStore } from '@/store/useLanguageStore';
 import { translations, TranslationKey } from '@/lib/i18n/translations';
 import { createClient } from '@/lib/supabase/client';
-import { useEffect } from 'react';
 
+import { DesignLayer, TextLayer, ImageLayer, CupModelDef, CupColorOption, StudioViewMode } from '@/components/studio/types';
+import { CUP_MODELS, CUP_COLOR_OPTIONS } from '@/components/studio/cupDefinitions';
+import { GOOGLE_FONTS_URL } from '@/components/studio/fontLibrary';
+import { useCanvasTexture, CANVAS_WIDTH, CANVAS_HEIGHT } from '@/components/studio/useCanvasTexture';
+import { StudioScene } from '@/components/studio/StudioScene';
+import { StudioToolbar } from '@/components/studio/StudioToolbar';
 
-// Safe Decal Component using Drei's Decal
-function StickerDecal({ url, isText, text, textColor, fontUrl, radius, transform }: any) {
-  const texture = url ? useTexture(url) : null;
-  
-  // Calculate position based on cylinder coordinates
-  const x = Math.sin(transform.rotY) * radius;
-  const z = Math.cos(transform.rotY) * radius;
-  const pos: [number, number, number] = [x, transform.y, z];
-  const rot: [number, number, number] = [0, transform.rotY, 0];
-  
-  const scaleX = isText ? transform.scale * 2 : transform.scale;
-  const scaleY = transform.scale;
-  const scaleZ = 1.5; // Decal projection depth
+const DRAFT_STORAGE_KEY = 'cupfy-studio-draft-v2';
 
-  if (isText && text) {
-    return (
-      <Decal position={pos} rotation={rot} scale={[scaleX, scaleY, scaleZ] as [number, number, number]}>
-        <meshBasicMaterial transparent polygonOffset polygonOffsetFactor={-10} depthWrite={false}>
-          <RenderTexture attach="map" width={1024} height={512}>
-            <Text 
-              fontSize={2.5} 
-              color={textColor}
-              font={fontUrl || undefined}
-              anchorX="center"
-              anchorY="middle"
-              position={[0, 0, 0]}
-            >
-              {text}
-            </Text>
-          </RenderTexture>
-        </meshBasicMaterial>
-      </Decal>
-    );
-  }
-
-  if (texture) {
-    return (
-      <Decal position={pos} rotation={rot} scale={[scaleX, scaleY, scaleZ] as [number, number, number]}>
-        <meshBasicMaterial 
-          map={texture as any} 
-          transparent 
-          polygonOffset 
-          polygonOffsetFactor={-10} 
-          depthWrite={false}
-        />
-      </Decal>
-    );
-  }
-  return null;
-}
-
-function ProceduralCup({ modelType, cupColor, lidColor, customText, textColor, fontUrl, sticker, uploadedImage, textTransform, stickerTransform }: any) {
-  const isMug = modelType === 'mug';
-  const isGlass = modelType === 'glass';
-  const isTumbler = modelType === 'tumbler';
-  
-  const radius = isMug ? 1.5 : 1.4;
-  const groupY = isMug ? -0.5 : -1;
-  const bodyY = isMug ? 1.25 : 1.75;
-  const height = isMug ? 2.5 : 3.5;
-  const topRadius = isMug ? 1.5 : 1.4;
-  const botRadius = isMug ? 1.5 : 1.4;
-
-  return (
-    <group position={[0, groupY, 0]}>
-      {/* Cup Body */}
-      <mesh position={[0, bodyY, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[topRadius, botRadius, height, 64, 1, true]} />
-        
-        {isMug ? (
-          <meshStandardMaterial color={cupColor} roughness={0.2} metalness={0.1} side={THREE.DoubleSide} />
-        ) : (
-          <meshPhysicalMaterial color={cupColor} transmission={0.9} opacity={1} transparent roughness={0.1} thickness={0.05} ior={1.5} clearcoat={1} side={THREE.DoubleSide} />
-        )}
-        
-        {customText && <StickerDecal isText text={customText} textColor={textColor} fontUrl={fontUrl} radius={radius} transform={textTransform} />}
-        {sticker && <StickerDecal url={sticker} radius={radius} transform={stickerTransform} />}
-        {uploadedImage && <StickerDecal url={uploadedImage} radius={radius} transform={stickerTransform} />}
-      </mesh>
-
-      {/* Bottom Cap */}
-      <mesh position={[0, bodyY - height/2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[botRadius, botRadius, 0.1, 64]} />
-        {isMug ? (
-          <meshStandardMaterial color={cupColor} roughness={0.2} metalness={0.1} />
-        ) : (
-          <meshPhysicalMaterial color={cupColor} transmission={0.9} transparent roughness={0.1} ior={1.5} />
-        )}
-      </mesh>
-
-      {/* Handle for Mug */}
-      {isMug && (
-        <mesh position={[1.5, 1.25, 0]} rotation={[0, 0, -Math.PI / 2]} castShadow>
-          <torusGeometry args={[0.7, 0.22, 16, 64, Math.PI]} />
-          <meshStandardMaterial color={cupColor} roughness={0.2} />
-        </mesh>
-      )}
-
-      {/* Lid & Straw for Tumbler */}
-      {isTumbler && (
-        <>
-          <mesh position={[0, 3.65, 0]} castShadow>
-            <cylinderGeometry args={[1.45, 1.45, 0.3, 64]} />
-            <meshStandardMaterial color={lidColor} roughness={0.3} />
-          </mesh>
-          <mesh position={[0, 4.8, 0]}>
-            <cylinderGeometry args={[0.12, 0.12, 4, 16]} />
-            <meshPhysicalMaterial color="#ffffff" transmission={0.9} roughness={0.1} transparent opacity={0.6} />
-          </mesh>
-        </>
-      )}
-    </group>
-  );
-}
-
-export default function CustomCupStudio() {
+function CustomCupStudioInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const cartStore = useCartStore();
   const { language } = useLanguageStore();
-  const t = (key: TranslationKey) => translations[language]?.[key] !== undefined ? translations[language][key] : key;
-  
-  const [modelType, setModelType] = useState('tumbler'); // tumbler, mug
-  const [cupColor, setCupColor] = useState('#ffffff');
-  const [lidColor, setLidColor] = useState('#BFDCEF');
-  const [customText, setCustomText] = useState('');
-  const [textColor, setTextColor] = useState('#201817');
-  const [fontUrl, setFontUrl] = useState('/fonts/inter.ttf');
-  
-  const fonts = [
-    { name: 'Inter (Cơ bản)', url: '/fonts/inter.ttf' },
-    { name: 'Lora (Cổ điển)', url: '/fonts/lora.ttf' },
-    { name: 'Dancing (Mềm mại)', url: '/fonts/dancing.ttf' }
-  ];
-  const [sticker, setSticker] = useState('');
-  const [uploadedImage, setUploadedImage] = useState('');
+  const t = (key: TranslationKey) =>
+    translations[language]?.[key] !== undefined ? translations[language][key] : key;
 
-  const [textTransform, setTextTransform] = useState({ y: 0, rotY: 0, scale: 1 });
-  const [stickerTransform, setStickerTransform] = useState({ y: 0, rotY: 0, scale: 1.5 });
+  // Selected State
+  const [selectedModel, setSelectedModel] = useState<CupModelDef>(CUP_MODELS[0]);
+  const [selectedColor, setSelectedColor] = useState<CupColorOption>(CUP_COLOR_OPTIONS[0]);
+  const [lidColor, setLidColor] = useState<string>('#FFF3A6');
+  const [viewMode, setViewMode] = useState<StudioViewMode>('studio');
+  const [showSafeZone, setShowSafeZone] = useState<boolean>(true);
+  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('models');
 
-  
-  const [activeTab, setActiveTab] = useState('models');
+  // Layers State
+  const [layers, setLayers] = useState<DesignLayer[]>([
+    {
+      id: 'default-text-1',
+      type: 'text',
+      name: 'Chữ in mẫu',
+      text: 'Cà phê Sài Gòn ✨',
+      font: "'Be Vietnam Pro', sans-serif",
+      fontSize: 64,
+      color: '#201817',
+      isBold: true,
+      align: 'center',
+      x: CANVAS_WIDTH / 2,
+      y: CANVAS_HEIGHT / 2,
+      rotation: 0,
+      scale: 1,
+      locked: false,
+      visible: true,
+      opacity: 1,
+      lineHeight: 1.25,
+    },
+  ]);
+  const [selectedLayerId, setSelectedLayerId] = useState<string | null>('default-text-1');
+
+  // Undo / Redo History Stack (up to 50 steps)
+  const historyRef = useRef<DesignLayer[][]>([layers]);
+  const historyIndexRef = useRef<number>(0);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+
+  // 3D Canvas element reference for capturing snapshot
+  const canvasElementRef = useRef<HTMLCanvasElement | null>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [customizableProducts, setCustomizableProducts] = useState<any[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [dbProducts, setDbProducts] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchProds = async () => {
-      const supabase = createClient();
-      const { data } = await supabase.from('products').select('*').contains('technical_specs', { is_customizable: true }).eq('approval_status', 'active');
-      if (data && data.length > 0) {
-        setCustomizableProducts(data);
-        setSelectedProduct(data[0]);
-        
-        let initType = 'tumbler';
-        if (data[0].category === 'thermos') initType = 'tumbler';
-        else if (data[0].category === 'plastic') initType = 'mug';
-        else if (data[0].category === 'glass') initType = 'glass';
-        if (data[0].name.toLowerCase().includes('mug') || data[0].name.toLowerCase().includes('quai')) initType = 'mug';
-        if (data[0].name.toLowerCase().includes('boba') || data[0].name.toLowerCase().includes('ống hút')) initType = 'tumbler';
-        setModelType(initType);
+  // Mobile drawer toggle
+  const [isMobilePanelOpen, setIsMobilePanelOpen] = useState(true);
 
+  // Texture Engine Hook
+  const { texture, isOutOfSafeZone, exportFlatPrintSheet } = useCanvasTexture(layers, showSafeZone);
+
+  // Update history stack
+  const pushHistory = useCallback((newLayers: DesignLayer[]) => {
+    const currentHist = historyRef.current.slice(0, historyIndexRef.current + 1);
+    currentHist.push(JSON.parse(JSON.stringify(newLayers)));
+    if (currentHist.length > 50) currentHist.shift();
+    historyRef.current = currentHist;
+    historyIndexRef.current = currentHist.length - 1;
+    setCanUndo(historyIndexRef.current > 0);
+    setCanRedo(false);
+
+    // Save draft to localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(
+          DRAFT_STORAGE_KEY,
+          JSON.stringify({
+            modelId: selectedModel.id,
+            colorId: selectedColor.id,
+            lidColor,
+            layers: newLayers,
+          })
+        );
+      } catch (e) {
+        // storage quota exceeded or disabled
       }
-    };
-    fetchProds();
+    }
+  }, [selectedModel.id, selectedColor.id, lidColor]);
+
+  // Undo Handler
+  const handleUndo = useCallback(() => {
+    if (historyIndexRef.current > 0) {
+      historyIndexRef.current -= 1;
+      const prevLayers = JSON.parse(
+        JSON.stringify(historyRef.current[historyIndexRef.current])
+      );
+      setLayers(prevLayers);
+      setCanUndo(historyIndexRef.current > 0);
+      setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+    }
   }, []);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Redo Handler
+  const handleRedo = useCallback(() => {
+    if (historyIndexRef.current < historyRef.current.length - 1) {
+      historyIndexRef.current += 1;
+      const nextLayers = JSON.parse(
+        JSON.stringify(historyRef.current[historyIndexRef.current])
+      );
+      setLayers(nextLayers);
+      setCanUndo(historyIndexRef.current > 0);
+      setCanRedo(historyIndexRef.current < historyRef.current.length - 1);
+    }
+  }, []);
 
-  const cupColors = [
-    '#ffffff', '#201817', '#BFDCEF', '#BFE5D0', '#FFF3A6', '#DCD1FF', '#C8DFFF', 
-    '#6B463D', '#EF4444', '#3B82F6', '#10B981', '#F472B6', '#FBBF24'
-  ];
-  
-  const stickers = [
-    { id: 'cat', url: 'https://cdn-icons-png.flaticon.com/512/616/616430.png' },
-    { id: 'flower', url: 'https://cdn-icons-png.flaticon.com/512/1087/1087420.png' },
-    { id: 'heart', url: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' },
-    { id: 'star', url: 'https://cdn-icons-png.flaticon.com/512/118/118669.png' },
-    { id: 'smile', url: 'https://cdn-icons-png.flaticon.com/512/742/742751.png' },
-    { id: 'coffee', url: 'https://cdn-icons-png.flaticon.com/512/1047/1047503.png' }
-  ];
+  // Keyboard Shortcuts (Cmd+Z / Ctrl+Z / Cmd+Shift+Z / Ctrl+Y)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          handleRedo();
+        } else {
+          handleUndo();
+        }
+      } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'y') {
+        e.preventDefault();
+        handleRedo();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleUndo, handleRedo]);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Use FileReader to get base64 so it can be saved to the database for Admin
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImage(reader.result as string);
-        setSticker(''); // Clear preset sticker if uploading photo
+  // Fetch Database Products to bind real prices and IDs
+  useEffect(() => {
+    const fetchDbProducts = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('products')
+          .select('*')
+          .neq('category', 'user_custom')
+          .eq('approval_status', 'active');
+        if (data && data.length > 0) {
+          setDbProducts(data);
+
+          // Check if productId in query
+          const targetId = searchParams.get('productId');
+          if (targetId) {
+            const matched = data.find((p) => p.id === targetId);
+            if (matched) {
+              const matchedModel = CUP_MODELS.find(
+                (m) =>
+                  m.name.toLowerCase().includes(matched.name.toLowerCase()) ||
+                  matched.name.toLowerCase().includes(m.name.toLowerCase())
+              );
+              if (matchedModel) {
+                setSelectedModel({
+                  ...matchedModel,
+                  defaultPrice: matched.price,
+                });
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching db products:', err);
+      }
+    };
+    fetchDbProducts();
+  }, [searchParams]);
+
+  // Restore Draft from LocalStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+        if (savedDraft) {
+          const parsed = JSON.parse(savedDraft);
+          if (parsed.modelId) {
+            const m = CUP_MODELS.find((x) => x.id === parsed.modelId);
+            if (m) setSelectedModel(m);
+          }
+          if (parsed.colorId) {
+            const c = CUP_COLOR_OPTIONS.find((x) => x.id === parsed.colorId);
+            if (c) setSelectedColor(c);
+          }
+          if (parsed.lidColor) setLidColor(parsed.lidColor);
+          if (parsed.layers && Array.isArray(parsed.layers) && parsed.layers.length > 0) {
+            setLayers(parsed.layers);
+            historyRef.current = [parsed.layers];
+            historyIndexRef.current = 0;
+            setSelectedLayerId(parsed.layers[0].id);
+          }
+        }
+      } catch (e) {
+        // parse error ignored
+      }
+    }
+  }, []);
+
+  // Update Layer Callback
+  const handleUpdateLayer = (id: string, updates: Partial<DesignLayer>) => {
+    setLayers((prev) => {
+      const next = prev.map((l) => (l.id === id ? ({ ...l, ...updates } as DesignLayer) : l));
+      pushHistory(next);
+      return next;
+    });
+  };
+
+  // Add Text Layer
+  const handleAddTextLayer = () => {
+    const newTextLayer: TextLayer = {
+      id: 'text-' + Date.now(),
+      type: 'text',
+      name: 'Chữ in mới',
+      text: 'Cupfy Vietnam ✨',
+      font: "'Be Vietnam Pro', sans-serif",
+      fontSize: 54,
+      color: '#201817',
+      isBold: true,
+      align: 'center',
+      x: CANVAS_WIDTH / 2,
+      y: CANVAS_HEIGHT / 2 + (layers.length * 20),
+      rotation: 0,
+      scale: 1,
+      locked: false,
+      visible: true,
+      opacity: 1,
+      lineHeight: 1.25,
+    };
+    const next = [...layers, newTextLayer];
+    setLayers(next);
+    setSelectedLayerId(newTextLayer.id);
+    setActiveTab('text');
+    pushHistory(next);
+  };
+
+  // Add Image Layer (Strict Aspect Ratio Preservation)
+  const handleAddImageLayer = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64Data = reader.result as string;
+      const img = new Image();
+      img.onload = () => {
+        const naturalWidth = img.naturalWidth || 600;
+        const naturalHeight = img.naturalHeight || 600;
+        const aspectRatio = naturalWidth / naturalHeight;
+
+        // Base display size on 2048 canvas maintaining strict natural aspect ratio
+        let baseW = 380;
+        let baseH = baseW / aspectRatio;
+
+        if (baseH > 480) {
+          baseH = 480;
+          baseW = baseH * aspectRatio;
+        }
+
+        const newImgLayer: ImageLayer = {
+          id: 'img-' + Date.now(),
+          type: 'image',
+          name: file.name.slice(0, 20),
+          url: base64Data,
+          originalFile: base64Data, // Kept pristine for production manufacturing
+          naturalWidth,
+          naturalHeight,
+          aspectRatio,
+          width: Math.round(baseW),
+          height: Math.round(baseH),
+          x: CANVAS_WIDTH / 2,
+          y: CANVAS_HEIGHT / 2,
+          rotation: 0,
+          scale: 1,
+          locked: false,
+          visible: true,
+          opacity: 1,
+        };
+
+        const next = [...layers, newImgLayer];
+        setLayers(next);
+        setSelectedLayerId(newImgLayer.id);
+        setActiveTab('upload');
+        pushHistory(next);
       };
-      reader.readAsDataURL(file);
+      img.src = base64Data;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Add Sticker Layer
+  const handleAddStickerLayer = (stickerUrl: string, stickerName: string) => {
+    const newStickerLayer: ImageLayer = {
+      id: 'sticker-' + Date.now(),
+      type: 'sticker',
+      name: stickerName,
+      url: stickerUrl,
+      naturalWidth: 512,
+      naturalHeight: 512,
+      aspectRatio: 1,
+      width: 260,
+      height: 260,
+      x: CANVAS_WIDTH / 2,
+      y: CANVAS_HEIGHT / 2,
+      rotation: 0,
+      scale: 1,
+      locked: false,
+      visible: true,
+      opacity: 1,
+    };
+    const next = [...layers, newStickerLayer];
+    setLayers(next);
+    setSelectedLayerId(newStickerLayer.id);
+    setActiveTab('stickers');
+    pushHistory(next);
+  };
+
+  // Delete Layer
+  const handleDeleteLayer = (id: string) => {
+    const next = layers.filter((l) => l.id !== id);
+    setLayers(next);
+    if (selectedLayerId === id) {
+      setSelectedLayerId(next.length > 0 ? next[next.length - 1].id : null);
+    }
+    pushHistory(next);
+  };
+
+  // Duplicate Layer
+  const handleDuplicateLayer = (id: string) => {
+    const target = layers.find((l) => l.id === id);
+    if (!target) return;
+    const clone = {
+      ...JSON.parse(JSON.stringify(target)),
+      id: 'clone-' + Date.now(),
+      name: target.name + ' (Bản sao)',
+      x: Math.min(CANVAS_WIDTH - 200, target.x + 40),
+      y: Math.min(CANVAS_HEIGHT - 200, target.y + 40),
+    };
+    const next = [...layers, clone];
+    setLayers(next);
+    setSelectedLayerId(clone.id);
+    pushHistory(next);
+  };
+
+  // Move Layer Order
+  const handleMoveLayerOrder = (id: string, direction: 'up' | 'down') => {
+    const idx = layers.findIndex((l) => l.id === id);
+    if (idx === -1) return;
+    if (direction === 'up' && idx < layers.length - 1) {
+      const next = [...layers];
+      const temp = next[idx];
+      next[idx] = next[idx + 1];
+      next[idx + 1] = temp;
+      setLayers(next);
+      pushHistory(next);
+    } else if (direction === 'down' && idx > 0) {
+      const next = [...layers];
+      const temp = next[idx];
+      next[idx] = next[idx - 1];
+      next[idx - 1] = temp;
+      setLayers(next);
+      pushHistory(next);
     }
   };
 
+  // Reset Design
+  const handleResetDesign = () => {
+    if (!confirm('Bạn có chắc muốn đặt lại toàn bộ thiết kế về ban đầu không?')) return;
+    const initialLayers: DesignLayer[] = [
+      {
+        id: 'default-text-1',
+        type: 'text',
+        name: 'Chữ in mẫu',
+        text: 'Cà phê Sài Gòn ✨',
+        font: "'Be Vietnam Pro', sans-serif",
+        fontSize: 64,
+        color: '#201817',
+        isBold: true,
+        align: 'center',
+        x: CANVAS_WIDTH / 2,
+        y: CANVAS_HEIGHT / 2,
+        rotation: 0,
+        scale: 1,
+        locked: false,
+        visible: true,
+        opacity: 1,
+        lineHeight: 1.25,
+      },
+    ];
+    setLayers(initialLayers);
+    setSelectedLayerId('default-text-1');
+    pushHistory(initialLayers);
+  };
+
+  // Add to Cart
   const handleAddToCart = () => {
     setIsAddingToCart(true);
-    
-    const canvas = document.querySelector('canvas');
-    let capturedImage = '/images/cupfy-hero.png';
-    if (canvas) {
-      const scale = Math.min(400 / canvas.width, 400 / canvas.height);
-      if (scale < 1) {
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = canvas.width * scale;
-        tmpCanvas.height = canvas.height * scale;
-        const ctx = tmpCanvas.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-          capturedImage = tmpCanvas.toDataURL('image/jpeg', 0.7);
-        }
-      } else {
-        capturedImage = canvas.toDataURL('image/jpeg', 0.7);
+
+    // 1. Capture 3D Snapshot
+    let snapshotImage = '/images/cupfy-hero.png';
+    const canvasEl = canvasElementRef.current || document.querySelector('canvas');
+    if (canvasEl) {
+      try {
+        snapshotImage = canvasEl.toDataURL('image/jpeg', 0.85);
+      } catch (e) {
+        console.error('Error capturing 3D canvas:', e);
       }
     }
+
+    // 2. Export High Resolution 2D Flat Sheet for production printing
+    const flatPrintSheet = exportFlatPrintSheet();
+
+    // 3. Summaries for display in order tables
+    const textLayers = layers.filter((l) => l.type === 'text') as TextLayer[];
+    const imgLayers = layers.filter((l) => l.type === 'image' || l.type === 'sticker') as ImageLayer[];
+    const mainText = textLayers.map((t) => t.text).join(' | ') || '';
+    const mainFont = textLayers[0]?.font || 'Be Vietnam Pro';
+    const mainColor = textLayers[0]?.color || '#201817';
+
+    // Match with real DB product if available
+    const matchedDbProd = dbProducts.find(
+      (p) =>
+        p.name.toLowerCase().includes(selectedModel.name.toLowerCase()) ||
+        selectedModel.name.toLowerCase().includes(p.name.toLowerCase())
+    );
+
+    const price = matchedDbProd ? matchedDbProd.price : selectedModel.defaultPrice;
+    const productName = matchedDbProd
+      ? `${matchedDbProd.name} (Custom Studio)`
+      : `${selectedModel.name} (Custom Studio)`;
 
     setTimeout(() => {
       cartStore.addItem({
         id: 'custom-' + Date.now(),
-        name: selectedProduct ? `${selectedProduct.name} (Custom)` : (modelType === 'tumbler' ? 'Ly Tumbler Tuỳ Chỉnh' : 'Cốc Sứ Tuỳ Chỉnh'),
-        price: selectedProduct ? selectedProduct.price : (modelType === 'tumbler' ? 250000 : 180000),
+        name: productName,
+        price,
         quantity: 1,
-        image: capturedImage, 
+        image: snapshotImage,
         isCustom: true,
         customSpecs: {
-          modelType,
-          cupColor,
-          lidColor,
-          customText,
-          textColor,
-          sticker,
-          uploadedImage,
-          textTransform,
-          stickerTransform
-        }
+          version: '2.0',
+          modelType: selectedModel.id,
+          modelName: selectedModel.name,
+          cupColor: selectedColor.color,
+          cupColorName: selectedColor.name,
+          glassTint: selectedColor.glassTint,
+          lidColor: selectedModel.id === 'plastic_boba' ? lidColor : undefined,
+          customText: mainText,
+          textColor: mainColor,
+          font: mainFont,
+          uploadedImage: imgLayers[0]?.url || '',
+          originalImage: imgLayers[0]?.originalFile || imgLayers[0]?.url || '',
+          printableTexture: flatPrintSheet,
+          layers: JSON.parse(JSON.stringify(layers)),
+          safeZoneCompliant: !isOutOfSafeZone,
+        },
       });
+
       router.push('/cart');
-    }, 800);
+    }, 600);
+  };
+
+  const formatVND = (num: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#EDECEA] overflow-hidden">
-      {/* Top Bar */}
-      <div className="h-16 bg-white border-b border-[#DDD8D2] flex items-center justify-between px-4 z-10 shrink-0 shadow-sm">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="p-2 hover:bg-[#EDECEA] rounded-full transition-colors">
-            <ChevronLeft className="w-5 h-5 text-[#201817]" />
-          </Link>
-          <div className="h-6 w-px bg-[#DDD8D2]"></div>
-          <span className="font-bold text-[#201817]">{t('My Design ✨' as any)}</span>
-        </div>
+    <div className="flex flex-col h-screen w-full bg-[#FAF9F6] text-[#261D1B] overflow-hidden select-none font-sans">
+      {/* Preload all 22 Vietnamese Google Fonts */}
+      <link rel="stylesheet" href={GOOGLE_FONTS_URL} />
 
+      {/* TOP NAVIGATION BAR */}
+      <header className="h-16 bg-white border-b border-[#E8E3DF] flex items-center justify-between px-4 md:px-6 z-20 shrink-0 shadow-sm">
         <div className="flex items-center gap-3">
-          <button className="px-6 py-2.5 text-sm font-bold bg-[#4A2A25] text-white rounded-full flex items-center gap-2 hover:bg-[#3A211E] shadow-md transition-all disabled:opacity-70" onClick={handleAddToCart} disabled={isAddingToCart}>
-            {isAddingToCart ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
-            {isAddingToCart ? 'ĐÃ THÊM' : 'THÊM VÀO GIỎ'}
+          <Link
+            href="/"
+            className="p-2 hover:bg-[#FAF9F6] rounded-full transition-colors text-[#201817]"
+            title="Quay lại trang chủ"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </Link>
+          <div className="h-6 w-px bg-[#E8E3DF]"></div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-sm md:text-base text-[#201817] tracking-tight">
+                CUPFY 3D STUDIO
+              </span>
+              <span className="bg-[#FAF9F6] text-[#3E2925] border border-[#E8E3DF] px-2 py-0.5 rounded-full text-[10px] font-bold">
+                {selectedModel.name}
+              </span>
+            </div>
+            <div className="text-[11px] text-[#6F625E] hidden sm:block">
+              Thiết kế bám cong bề mặt thực tế • 22 Font Tiếng Việt • Khóa tỷ lệ ảnh
+            </div>
+          </div>
+        </div>
+
+        {/* Center: Undo / Redo & View Mode Switches */}
+        <div className="flex items-center gap-2">
+          {/* Undo / Redo buttons */}
+          <div className="flex items-center bg-[#FAF9F6] border border-[#E8E3DF] rounded-xl p-1 gap-1">
+            <button
+              onClick={handleUndo}
+              disabled={!canUndo}
+              title="Hoàn tác (Ctrl+Z)"
+              className={`p-1.5 rounded-lg transition-colors ${
+                canUndo
+                  ? 'hover:bg-white text-[#201817] shadow-xs'
+                  : 'text-neutral-300 cursor-not-allowed'
+              }`}
+            >
+              <Undo2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleRedo}
+              disabled={!canRedo}
+              title="Làm lại (Ctrl+Y)"
+              className={`p-1.5 rounded-lg transition-colors ${
+                canRedo
+                  ? 'hover:bg-white text-[#201817] shadow-xs'
+                  : 'text-neutral-300 cursor-not-allowed'
+              }`}
+            >
+              <Redo2 className="w-4 h-4" />
+            </button>
+            <div className="w-px h-4 bg-[#E8E3DF] mx-0.5"></div>
+            <button
+              onClick={handleResetDesign}
+              title="Đặt lại thiết kế"
+              className="p-1.5 hover:bg-white text-[#6F625E] hover:text-[#201817] rounded-lg transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* View Modes (Studio / White / Transparent) */}
+          <div className="hidden lg:flex items-center bg-[#FAF9F6] border border-[#E8E3DF] rounded-xl p-1 text-xs font-bold text-[#6F625E]">
+            <button
+              onClick={() => setViewMode('studio')}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
+                viewMode === 'studio'
+                  ? 'bg-white text-[#201817] shadow-xs'
+                  : 'hover:text-[#201817]'
+              }`}
+            >
+              Studio Bàn Trắng
+            </button>
+            <button
+              onClick={() => setViewMode('white')}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
+                viewMode === 'white'
+                  ? 'bg-white text-[#201817] shadow-xs'
+                  : 'hover:text-[#201817]'
+              }`}
+            >
+              Nền Trắng Tinh
+            </button>
+            <button
+              onClick={() => setViewMode('transparent')}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
+                viewMode === 'transparent'
+                  ? 'bg-white text-[#201817] shadow-xs'
+                  : 'hover:text-[#201817]'
+              }`}
+            >
+              Nền Trong Suốt
+            </button>
+          </div>
+
+          {/* Safe Zone Toggle */}
+          <button
+            onClick={() => setShowSafeZone(!showSafeZone)}
+            title="Bật/Tắt đường hướng dẫn vùng in an toàn"
+            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
+              showSafeZone
+                ? 'bg-blue-50 border-blue-200 text-blue-700'
+                : 'bg-white border-[#E8E3DF] text-[#6F625E] hover:text-[#201817]'
+            }`}
+          >
+            <FileCheck2 className="w-3.5 h-3.5" />
+            <span>Vùng In</span>
           </button>
         </div>
-      </div>
 
+        {/* Right: Price & Add To Cart Button */}
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <div className="text-[10px] text-[#6F625E] font-bold">GIÁ THIẾT KẾ</div>
+            <div className="text-sm font-black text-[#4A2A25]">
+              {formatVND(selectedModel.defaultPrice)}
+            </div>
+          </div>
+
+          <button
+            onClick={handleAddToCart}
+            disabled={isAddingToCart}
+            className="px-5 md:px-7 py-2.5 bg-[#3E2925] text-white rounded-full font-bold text-xs md:text-sm flex items-center gap-2 hover:bg-[#201817] shadow-md transition-all disabled:opacity-70 active:scale-95"
+          >
+            {isAddingToCart ? (
+              <>
+                <Check className="w-4 h-4 text-emerald-400" />
+                <span>ĐANG LƯU...</span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4" />
+                <span>THÊM VÀO GIỎ</span>
+              </>
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* MAIN STUDIO WORKSPACE */}
       <div className="flex flex-1 overflow-hidden relative">
-        
-        {/* Left Toolbar */}
-        <div className="w-20 bg-white border-r border-[#DDD8D2] flex flex-col items-center py-6 gap-4 z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
-          <button onClick={() => setActiveTab('models')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'models' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
-            <Box className="w-6 h-6" />
-            <span className="text-[10px] font-bold text-center leading-tight">Mẫu ly</span>
-          </button>
-          <button onClick={() => setActiveTab('colors')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'colors' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
-            <Layers className="w-6 h-6" />
-            <span className="text-[10px] font-bold">{t('Colors' as any)}</span>
-          </button>
-          <button onClick={() => setActiveTab('text')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'text' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
-            <Type className="w-6 h-6" />
-            <span className="text-[10px] font-bold">{t('Text' as any)}</span>
-          </button>
-          <button onClick={() => setActiveTab('sticker')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'sticker' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
-            <Smile className="w-6 h-6" />
-            <span className="text-[10px] font-bold">Sticker</span>
-          </button>
-          <button onClick={() => setActiveTab('upload')} className={`flex flex-col items-center gap-1.5 p-3 rounded-xl transition-colors ${activeTab === 'upload' ? 'bg-[#F7F6F2] text-[#201817]' : 'text-[#6F625E] hover:text-[#201817]'}`}>
-            <ImageIcon className="w-6 h-6" />
-            <span className="text-[10px] font-bold">Ảnh</span>
-          </button>
+        {/* Left Toolbar & Properties Drawer */}
+        <div
+          className={`h-full z-10 transition-transform duration-300 md:translate-x-0 ${
+            isMobilePanelOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          }`}
+        >
+          <StudioToolbar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            selectedModel={selectedModel}
+            setSelectedModel={setSelectedModel}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+            lidColor={lidColor}
+            setLidColor={setLidColor}
+            layers={layers}
+            selectedLayerId={selectedLayerId}
+            setSelectedLayerId={setSelectedLayerId}
+            onUpdateLayer={handleUpdateLayer}
+            onAddTextLayer={handleAddTextLayer}
+            onAddImageLayer={handleAddImageLayer}
+            onAddStickerLayer={handleAddStickerLayer}
+            onDeleteLayer={handleDeleteLayer}
+            onDuplicateLayer={handleDuplicateLayer}
+            onMoveLayerOrder={handleMoveLayerOrder}
+            formatVND={formatVND}
+          />
         </div>
 
-        {/* Properties Panel */}
-        <div className="w-80 bg-white border-r border-[#DDD8D2] p-6 flex flex-col gap-8 z-10 overflow-y-auto shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
-          
-          {activeTab === 'models' && (
-            <div>
-              <h3 className="font-bold text-[#201817] mb-4">{t('Select Model' as any)}</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {customizableProducts.length > 0 ? customizableProducts.map(p => (
-                  <button key={p.id} onClick={() => {
-                    setSelectedProduct(p);
-                    let type = 'tumbler';
-                    if (p.category === 'thermos') type = 'tumbler';
-                    else if (p.category === 'plastic') type = 'mug';
-                    else if (p.category === 'glass') type = 'glass';
-                    
-                    if (p.name.toLowerCase().includes('mug') || p.name.toLowerCase().includes('quai')) type = 'mug';
-                    if (p.name.toLowerCase().includes('boba') || p.name.toLowerCase().includes('ống hút')) type = 'tumbler';
-                    
-                    setModelType(type);
-                  }} className={`flex flex-col items-center p-3 rounded-xl border-2 transition-all ${selectedProduct?.id === p.id ? 'border-[#201817] bg-[#F7F6F2]' : 'border-[#DDD8D2] hover:border-[#201817]'}`}>
-                    
-                                        {(() => {
-                      let type = 'tumbler';
-                      if (p.category === 'thermos') type = 'tumbler';
-                      else if (p.category === 'plastic') type = 'mug';
-                      else if (p.category === 'glass') type = 'glass';
-                      if (p.name.toLowerCase().includes('mug') || p.name.toLowerCase().includes('quai')) type = 'mug';
-                      if (p.name.toLowerCase().includes('boba') || p.name.toLowerCase().includes('ống hút')) type = 'tumbler';
-                      
-                      return (
-                        <>
-                          {type === 'tumbler' && (
-                            <div className="w-8 h-12 border-2 border-current rounded-b-md rounded-t-sm mb-2 opacity-80 relative">
-                              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1 h-3 bg-current"></div>
-                            </div>
-                          )}
-                          {type === 'mug' && (
-                            <div className="w-10 h-8 border-2 border-current rounded-md mb-2 opacity-80 relative mt-2">
-                              <div className="absolute top-1 -right-3 w-3 h-4 border-2 border-l-0 border-current rounded-r-full"></div>
-                            </div>
-                          )}
-                          {type === 'glass' && (
-                            <div className="w-8 h-10 border-2 border-current rounded-b-md mb-2 opacity-80 relative mt-2">
-                            </div>
-                          )}
-                        </>
-                      );
-                    })()}
+        {/* Mobile Toggle Button for Drawer */}
+        <button
+          onClick={() => setIsMobilePanelOpen(!isMobilePanelOpen)}
+          className="md:hidden absolute bottom-6 right-6 z-30 p-3.5 bg-[#3E2925] text-white rounded-full shadow-xl flex items-center gap-2 text-xs font-bold"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span>{isMobilePanelOpen ? 'Ẩn Công Cụ' : 'Mở Công Cụ'}</span>
+        </button>
 
-                    <span className="font-bold text-sm text-center line-clamp-1">{p.name}</span>
-                    <span className="text-[#6F625E] text-xs">{new Intl.NumberFormat('vi-VN').format(p.price)}đ</span>
-                  </button>
-                )) : (
-                  <div className="col-span-2 text-center text-[#6F625E] py-4 text-sm">Chưa có sản phẩm nào cho phép custom.</div>
-                )}
-              </div>
-            </div>          )}
+        {/* 3D Scene Viewport */}
+        <main className="flex-1 h-full relative overflow-hidden">
+          <StudioScene
+            modelDef={selectedModel}
+            selectedColor={selectedColor}
+            lidColor={lidColor}
+            canvasTexture={texture}
+            viewMode={viewMode}
+            showSafeZone={showSafeZone}
+            isAutoRotating={isAutoRotating}
+            setIsAutoRotating={setIsAutoRotating}
+            onCanvasReady={(c) => {
+              canvasElementRef.current = c;
+            }}
+          />
 
-          {activeTab === 'colors' && (
-            <>
-              <div>
-                <h3 className="font-bold text-[#201817] mb-4">{t('Cup Color' as any)}</h3>
-                <div className="flex flex-wrap gap-3">
-                  {cupColors.map(c => (
-                    <button key={c} onClick={() => setCupColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${cupColor === c ? 'border-[#201817] scale-110' : 'border-[#DDD8D2]'}`} style={{ backgroundColor: c }} />
-                  ))}
-                </div>
-              </div>
-              {modelType === 'tumbler' && (
-                <div>
-                  <h3 className="font-bold text-[#201817] mb-4">Màu nắp ly</h3>
-                  <div className="flex flex-wrap gap-3">
-                    {cupColors.map(c => (
-                      <button key={c} onClick={() => setLidColor(c)} className={`w-10 h-10 rounded-full border-2 transition-all ${lidColor === c ? 'border-[#201817] scale-110' : 'border-[#DDD8D2]'}`} style={{ backgroundColor: c === '#ffffff' ? '#f0f0f0' : c }} />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-
-          {activeTab === 'text' && (
-            <>
-              <div>
-                <h3 className="font-bold text-[#201817] mb-4">Nội dung in</h3>
-                <textarea 
-                  value={customText}
-                  onChange={(e) => setCustomText(e.target.value)}
-                  placeholder="Nhập tên hoặc câu quote..."
-                  className="w-full p-3 bg-[#EDECEA] border border-[#DDD8D2] rounded-xl text-sm focus:outline-none focus:border-[#6B463D] resize-none h-24"
-                />
-              </div>
-              <div className="mb-6">
-                <h3 className="font-bold text-[#201817] mb-4">{t('Font Style' as any)}</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {fonts.map(f => (
-                    <button key={f.name} onClick={() => setFontUrl(f.url)} className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${fontUrl === f.url ? 'border-[#201817] bg-[#F7F6F2]' : 'border-[#DDD8D2] hover:border-[#201817]'}`}>
-                      {f.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-bold text-[#201817] mb-4">{t('Text Color' as any)}</h3>
-                <div className="flex flex-wrap gap-3">
-                  {['#201817', '#ffffff', '#6B463D', '#EF4444', '#3B82F6', '#10B981', '#F472B6'].map(c => (
-                    <button key={c} onClick={() => setTextColor(c)} className={`w-8 h-8 rounded-full border-2 transition-all ${textColor === c ? 'border-[#201817] scale-110' : 'border-[#DDD8D2]'}`} style={{ backgroundColor: c }} />
-                  ))}
-                </div>
-              <div className="mt-6 border-t border-[#DDD8D2] pt-6">
-                <h3 className="font-bold text-[#201817] mb-4">{t('Adjust Position' as any)}</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(textTransform.rotY * (180/Math.PI))}°</span></label>
-                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={textTransform.rotY} onChange={(e) => setTextTransform({...textTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Height' as any)}</span> <span>{textTransform.y.toFixed(2)}</span></label>
-                    <input type="range" min={-1.5} max={1.5} step={0.01} value={textTransform.y} onChange={(e) => setTextTransform({...textTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Size' as any)}</span> <span>{textTransform.scale.toFixed(2)}</span></label>
-                    <input type="range" min={0.2} max={3} step={0.05} value={textTransform.scale} onChange={(e) => setTextTransform({...textTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
-                  </div>
-                </div>
-              </div>
-              </div>
-            </>
-          )}
-
-          {activeTab === 'sticker' && (
-            <div>
-              <h3 className="font-bold text-[#201817] mb-4">Chọn Sticker</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <button onClick={() => setSticker('')} className={`aspect-square rounded-xl border-2 flex items-center justify-center font-bold text-gray-400 ${sticker === '' ? 'border-[#201817]' : 'border-[#DDD8D2]'}`}>
-                  Trống
-                </button>
-                {stickers.map(s => (
-                  <button key={s.id} onClick={() => { setSticker(s.url); setUploadedImage(''); }} className={`aspect-square rounded-xl border-2 flex items-center justify-center p-4 ${sticker === s.url ? 'border-[#201817] bg-[#F7F6F2]' : 'border-[#DDD8D2] hover:bg-[#EDECEA]'}`}>
-                    <img src={s.url} alt={s.id} className="w-full h-full object-contain opacity-80" />
-                  </button>
-                ))}
-              </div>
+          {/* Out of Safe Zone Warning Toast */}
+          {isOutOfSafeZone && (
+            <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20 bg-amber-500/95 text-white px-4 py-2 rounded-2xl shadow-lg border border-amber-600 backdrop-blur-md flex items-center gap-2 text-xs font-bold animate-bounce">
+              <ShieldAlert className="w-4 h-4 shrink-0" />
+              <span>
+                Cảnh báo: Một số nội dung đang vượt quá vùng in an toàn (15mm mép ly). Hãy căn chỉnh lại để sản phẩm in ra đẹp nhất!
+              </span>
             </div>
           )}
-
-          {activeTab === 'upload' && (
-            <div>
-              <h3 className="font-bold text-[#201817] mb-4">Tải ảnh Meme/Logo của bạn</h3>
-              <p className="text-sm text-[#6F625E] mb-4">Hình ảnh sẽ được in trực tiếp lên thân ly. Khuyến nghị ảnh nền trong suốt (PNG).</p>
-              
-              <input type="file" accept="image/*" ref={fileInputRef} className="hidden" onChange={handleFileUpload} />
-              
-              <button onClick={() => fileInputRef.current?.click()} className="w-full py-8 border-2 border-dashed border-[#DDD8D2] rounded-xl flex flex-col items-center justify-center gap-3 hover:border-[#201817] hover:bg-[#EDECEA] transition-all">
-                <Upload className="w-8 h-8 text-[#6F625E]" />
-                <span className="font-bold text-[#6F625E]">Click để tải ảnh lên</span>
-              </button>
-
-              {uploadedImage && (
-                <div className="mt-6">
-                  <h4 className="text-sm font-bold text-[#201817] mb-2">Ảnh đã tải lên:</h4>
-                  <div className="relative w-full aspect-square rounded-xl border border-[#DDD8D2] overflow-hidden bg-[#EDECEA] flex items-center justify-center p-4">
-                    <img src={uploadedImage} alt="Uploaded" className="w-full h-full object-contain" />
-                    <button onClick={() => setUploadedImage('')} className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-sm text-red-500 font-bold text-xs px-2 hover:bg-red-500 hover:text-white transition-colors">{t('Remove' as any)}</button>
-                  </div>
-                </div>
-              )}
-            
-              <div className="mt-6 border-t border-[#DDD8D2] pt-6">
-                <h3 className="font-bold text-[#201817] mb-4">{t('Adjust Position' as any)}</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Rotate' as any)}</span> <span>{Math.round(stickerTransform.rotY * (180/Math.PI))}°</span></label>
-                    <input type="range" min={-Math.PI} max={Math.PI} step={0.01} value={stickerTransform.rotY} onChange={(e) => setStickerTransform({...stickerTransform, rotY: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Height' as any)}</span> <span>{stickerTransform.y.toFixed(2)}</span></label>
-                    <input type="range" min={-1.5} max={1.5} step={0.01} value={stickerTransform.y} onChange={(e) => setStickerTransform({...stickerTransform, y: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-[#6F625E] flex justify-between"><span>{t('Size' as any)}</span> <span>{stickerTransform.scale.toFixed(2)}</span></label>
-                    <input type="range" min={0.2} max={4} step={0.05} value={stickerTransform.scale} onChange={(e) => setStickerTransform({...stickerTransform, scale: parseFloat(e.target.value)})} className="w-full accent-[#201817]" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* 3D Canvas */}
-        <div className="flex-1 relative bg-[#F7F6F2] overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
-            <img src="https://images.unsplash.com/photo-1618220179428-22790b46a0eb?w=1600&q=80" alt="" className="w-full h-full object-cover opacity-[0.15] mix-blend-multiply blur-sm" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#F7F6F2] via-transparent to-transparent"></div>
-          </div>
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-white/90 px-6 py-3 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] text-sm font-bold text-[#201817] border border-[#DDD8D2] backdrop-blur-md">
-            Kéo chuột để xoay 360°
-          </div>
-          
-          <Suspense fallback={
-            <div className="flex flex-col items-center justify-center h-full gap-4">
-              <div className="w-10 h-10 border-4 border-[#FFF3A6] border-t-[#6B463D] rounded-full animate-spin"></div>
-              <span className="font-bold text-[#201817]">Đang tải môi trường 3D...</span>
-            </div>
-          }>
-            <Canvas camera={{ position: [0, 2, 9], fov: 45 }} shadows gl={{ preserveDrawingBuffer: true }}>
-              <ambientLight intensity={0.6} />
-              <directionalLight position={[5, 8, 5]} intensity={1.2} castShadow shadow-mapSize={1024} />
-              <spotLight position={[-5, 5, 5]} intensity={0.5} penumbra={1} />
-              
-              <Environment preset="city" />
-              
-              <ProceduralCup 
-                modelType={modelType}
-                cupColor={cupColor} 
-                lidColor={lidColor} 
-                customText={customText} 
-                textColor={textColor}
-                fontUrl={fontUrl} 
-                sticker={sticker} 
-                uploadedImage={uploadedImage}
-                textTransform={textTransform}
-                stickerTransform={stickerTransform}
-              />
-              
-              <ContactShadows position={[0, -1.05, 0]} opacity={0.6} scale={15} blur={2.5} far={4} color="#201817" />
-              
-              <OrbitControls enablePan={false} minDistance={5} maxDistance={12} maxPolarAngle={Math.PI / 1.4} />
-            </Canvas>
-          </Suspense>
-        </div>
+        </main>
       </div>
     </div>
+  );
+}
+
+export default function CustomCupStudioPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen w-full items-center justify-center bg-[#FAF9F6]">
+          <div className="w-10 h-10 border-4 border-[#E8E3DF] border-t-[#3E2925] rounded-full animate-spin"></div>
+        </div>
+      }
+    >
+      <CustomCupStudioInner />
+    </Suspense>
   );
 }

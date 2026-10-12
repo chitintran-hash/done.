@@ -807,13 +807,17 @@ export async function fetchCustomRequests() {
       orderStatus: (item.orders as any)?.status,
       cupImage: prod?.image_url,
       modelType: customSpecs.modelType || 'tumbler',
+      modelName: customSpecs.modelName || '',
       cupColor: customSpecs.cupColor || '#ffffff',
       lidColor: customSpecs.lidColor || '#ffffff',
       customText: customSpecs.customText || '',
       textColor: customSpecs.textColor || '#000000',
       uploadedImage: customSpecs.uploadedImage || null,
+      originalImage: customSpecs.originalImage || customSpecs.uploadedImage || null,
+      printableTexture: customSpecs.printableTexture || null,
+      layers: customSpecs.layers || [],
       sticker: customSpecs.sticker || null,
-      fontFamily: customSpecs.fontFamily || 'Inter'
+      fontFamily: customSpecs.font || customSpecs.fontFamily || 'Be Vietnam Pro'
     };
   });
 

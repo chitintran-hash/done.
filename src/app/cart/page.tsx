@@ -50,12 +50,17 @@ export default function CartPage() {
 
                     {item.isCustom && item.customSpecs && (
                       <div className="bg-[#EDECEA] rounded-xl p-3 mt-3 mb-4 text-xs text-[#6F625E] space-y-1.5 border border-[#DDD8D2]">
-                        <p><span className="font-bold">Loại ly:</span> {item.customSpecs.modelType === 'tumbler' ? 'Tumbler (Ống hút)' : 'Mug (Cốc quai)'}</p>
-                        <p><span className="font-bold">Màu thân:</span> {item.customSpecs.cupColor}</p>
-                        {item.customSpecs.modelType === 'tumbler' && <p><span className="font-bold">Màu nắp:</span> {item.customSpecs.lidColor}</p>}
-                        {item.customSpecs.customText && <p><span className="font-bold">Nội dung in:</span> "{item.customSpecs.customText}" (Màu: {item.customSpecs.textColor})</p>}
+                        <div className="flex items-center justify-between">
+                          <p><span className="font-bold">Loại ly:</span> {item.customSpecs.modelName || (item.customSpecs.modelType === 'glass_tall' ? 'Ly Thuỷ Tinh Cao' : item.customSpecs.modelType === 'glass_mug' ? 'Ly Thuỷ Tinh Có Quai' : item.customSpecs.modelType === 'glass_can' ? 'Ly Thuỷ Tinh Cỡ Trung' : item.customSpecs.modelType === 'glass_rocks' ? 'Ly Thuỷ Tinh Thấp' : item.customSpecs.modelType === 'plastic_boba' ? 'Ly Nhựa Có Nắp' : 'Ly Custom')}</p>
+                          <Link href="/custom-cup" className="text-xs font-bold text-[#4A2A25] hover:underline">
+                            Chỉnh sửa
+                          </Link>
+                        </div>
+                        <p><span className="font-bold">Màu sắc:</span> {item.customSpecs.cupColorName || item.customSpecs.cupColor}</p>
+                        {item.customSpecs.lidColor && <p><span className="font-bold">Màu nắp:</span> {item.customSpecs.lidColor}</p>}
+                        {item.customSpecs.customText && <p><span className="font-bold">Nội dung in:</span> "{item.customSpecs.customText}" (Font: {item.customSpecs.font || 'Chuẩn'})</p>}
                         {item.customSpecs.sticker && <p><span className="font-bold">Sticker:</span> Có hình dán</p>}
-                        {item.customSpecs.uploadedImage && <p><span className="font-bold">Ảnh:</span> Khách hàng tải lên</p>}
+                        {item.customSpecs.uploadedImage && <p><span className="font-bold">Ảnh tải lên:</span> Giữ nguyên tỷ lệ gốc 100%</p>}
                       </div>
                     )}
 

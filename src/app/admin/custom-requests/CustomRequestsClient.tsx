@@ -116,7 +116,7 @@ export default function CustomRequestsClient({ initialRequests }: { initialReque
                 )}
 
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[11px] font-bold text-[#4A2A25] border border-[#DDD8D2]">
-                  {req.modelType === 'tumbler' ? 'Ly Tumbler' : 'Ly Cốc Quai'}
+                  {req.modelName || (req.modelType === 'glass_tall' ? 'Ly Thuỷ Tinh Cao' : req.modelType === 'glass_mug' ? 'Ly Thuỷ Tinh Có Quai' : req.modelType === 'glass_can' ? 'Ly Thuỷ Tinh Cỡ Trung' : req.modelType === 'glass_rocks' ? 'Ly Thuỷ Tinh Thấp' : req.modelType === 'plastic_boba' ? 'Ly Nhựa Có Nắp' : 'Ly Custom')}
                 </div>
 
                 <div className="absolute top-4 right-4">
@@ -237,9 +237,9 @@ export default function CustomRequestsClient({ initialRequests }: { initialReque
             <div className="space-y-2">
               <div className="font-bold text-[#3A211E]">Quy Cách In Ấn:</div>
               <div className="bg-[#F7F6F2] p-3 rounded-2xl border border-[#DDD8D2] space-y-1.5 leading-relaxed">
-                <div>- <strong>Phôi ly cơ sở:</strong> {selectedReq.modelType === 'tumbler' ? 'Ly Tumbler Giữ Nhiệt 500ml' : 'Ly Cốc Gốm Sứ / Thủy Tinh Quai'}</div>
+                <div>- <strong>Phôi ly cơ sở:</strong> {selectedReq.modelName || (selectedReq.modelType === 'glass_tall' ? 'Ly Thuỷ Tinh Cao 350ml' : selectedReq.modelType === 'glass_mug' ? 'Ly Thuỷ Tinh Có Quai 400ml' : selectedReq.modelType === 'glass_can' ? 'Ly Thuỷ Tinh Cỡ Trung 380ml' : selectedReq.modelType === 'glass_rocks' ? 'Ly Thuỷ Tinh Thấp 250ml' : selectedReq.modelType === 'plastic_boba' ? 'Ly Nhựa Có Nắp & Ống Hút 500ml' : 'Ly Custom Studio')}</div>
                 <div>- <strong>Mã màu thân ly:</strong> <code className="bg-white px-1 rounded border border-[#DDD8D2]">{selectedReq.cupColor}</code></div>
-                {selectedReq.modelType === 'tumbler' && (
+                {selectedReq.lidColor && (
                   <div>- <strong>Mã màu nắp:</strong> <code className="bg-white px-1 rounded border border-[#DDD8D2]">{selectedReq.lidColor}</code></div>
                 )}
                 <div>- <strong>Phông chữ in:</strong> {selectedReq.fontFamily}</div>
@@ -251,6 +251,27 @@ export default function CustomRequestsClient({ initialRequests }: { initialReque
                 )}
               </div>
             </div>
+
+            {/* Flat Printable Sheet (2D Unrolled Texture ready for UV Flatbed Printer) */}
+            {selectedReq.printableTexture && (
+              <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-2xl space-y-2">
+                <div className="font-bold text-indigo-950 flex items-center justify-between">
+                  <span>Bản in trải phẳng (Dành cho máy in UV / Laser):</span>
+                  <a
+                    href={selectedReq.printableTexture}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download={`ban-in-cupfy-${selectedReq.orderId}.png`}
+                    className="flex items-center gap-1.5 px-3 py-1 bg-indigo-700 text-white rounded-lg text-xs font-bold hover:bg-indigo-800 transition-colors"
+                  >
+                    <Download className="w-3.5 h-3.5" /> Tải Bản In Phẳng
+                  </a>
+                </div>
+                <div className="max-h-36 overflow-hidden rounded-xl border border-indigo-200 bg-white p-2 flex items-center justify-center">
+                  <img src={selectedReq.printableTexture} alt="Printable sheet" className="max-h-32 object-contain" />
+                </div>
+              </div>
+            )}
 
             {/* Customer Uploaded High-Res Asset */}
             {selectedReq.uploadedImage ? (

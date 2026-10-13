@@ -165,8 +165,12 @@ export function StudioScene({
             if (onCanvasReady) onCanvasReady(gl.domElement);
           }}
         >
+          {/* Background color for transmission sampling */}
+          {viewMode === 'studio' && <color attach="background" args={['#FAF9F6']} />}
+          {viewMode === 'white' && <color attach="background" args={['#FFFFFF']} />}
+
           {/* Studio Lights */}
-          <ambientLight intensity={0.65} />
+          <ambientLight intensity={0.7} />
           <directionalLight
             position={[5, 8, 5]}
             intensity={1.4}
@@ -176,6 +180,7 @@ export function StudioScene({
             shadow-bias={-0.0001}
           />
           <directionalLight position={[-5, 4, -3]} intensity={0.5} />
+          <directionalLight position={[0, 2, 6]} intensity={0.75} />
           <spotLight position={[0, 7, 5]} intensity={0.6} penumbra={1} angle={0.7} />
 
           {/* HDR Environment for Photorealistic Glass Refraction & Highlights */}

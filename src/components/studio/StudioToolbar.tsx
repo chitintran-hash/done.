@@ -35,7 +35,7 @@ import {
   CupModelDef,
   CupColorOption
 } from './types';
-import { CUP_MODELS, CUP_COLOR_OPTIONS, LID_COLOR_OPTIONS, PRESET_STICKERS } from './cupDefinitions';
+import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR, PLASTIC_COLOR_OPTIONS, LID_COLOR_OPTIONS, PRESET_STICKERS } from './cupDefinitions';
 import { FONT_LIBRARY, FONT_CATEGORIES } from './fontLibrary';
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from './useCanvasTexture';
 
@@ -131,9 +131,11 @@ export function StudioToolbar({
           }`}
         >
           <div
-            className="w-5 h-5 rounded-full border-2 border-current"
-            style={{ backgroundColor: selectedColor.color }}
-          ></div>
+            className="w-5 h-5 rounded-full border-2 border-current flex items-center justify-center text-[9px]"
+            style={{ backgroundColor: selectedModel.category === 'glass' ? '#ffffff' : selectedColor.color }}
+          >
+            {selectedModel.category === 'glass' ? '✨' : null}
+          </div>
           <span className="text-[10px] font-bold">Màu ly</span>
         </button>
 
@@ -256,53 +258,111 @@ export function StudioToolbar({
         {activeTab === 'colors' && (
           <div className="space-y-6">
             <div>
-              <h3 className="font-bold text-[#201817] text-base">Vật Liệu & Màu Thân Ly</h3>
+              <h3 className="font-bold text-[#201817] text-base">Màu Sắc & Vật Liệu</h3>
               <p className="text-xs text-[#6F625E] mt-1">
-                Chất liệu thủy tinh cao cấp (MeshPhysicalMaterial) khúc xạ ánh sáng chân thực.
+                {selectedModel.name}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
-              {CUP_COLOR_OPTIONS.map((c) => {
-                const isSelected = selectedColor.id === c.id;
-                return (
-                  <button
-                    key={c.id}
-                    onClick={() => setSelectedColor(c)}
-                    className={`p-3 rounded-xl border-2 flex items-center gap-2.5 transition-all text-left ${
-                      isSelected
-                        ? 'border-[#3E2925] bg-[#FAF9F6]'
-                        : 'border-[#E8E3DF] hover:border-[#3E2925]/50'
-                    }`}
-                  >
-                    <span
-                      className="w-6 h-6 rounded-full border border-black/10 shrink-0 shadow-inner"
-                      style={{ backgroundColor: c.color }}
-                    ></span>
-                    <span className="text-xs font-bold text-[#201817] line-clamp-1 leading-tight">
-                      {c.name}
+            {selectedModel.category === 'glass' ? (
+              <div className="bg-[#FAF9F6] p-5 rounded-2xl border border-[#E8E3DF] space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#E8E3DF] shadow-sm flex items-center justify-center text-xl shrink-0">
+                    ✨
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#201817]">Thủy Tinh Pha Lê Nguyên Bản</h4>
+                    <span className="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200 mt-1">
+                      100% Trong Suốt Tự Nhiên
                     </span>
-                  </button>
-                );
-              })}
-            </div>
+                  </div>
+                </div>
 
-            {/* Lid Color for Boba Cup */}
-            {selectedModel.id === 'plastic_boba' && (
-              <div className="border-t border-[#E8E3DF] pt-6 space-y-3">
-                <h4 className="font-bold text-[#201817] text-sm">Màu Nắp Ly Nhựa</h4>
-                <div className="flex flex-wrap gap-2.5">
-                  {LID_COLOR_OPTIONS.map((l) => (
-                    <button
-                      key={l.id}
-                      onClick={() => setLidColor(l.color)}
-                      title={l.name}
-                      className={`w-9 h-9 rounded-full border-2 transition-all ${
-                        lidColor === l.color ? 'border-[#3E2925] scale-110' : 'border-[#E8E3DF]'
-                      }`}
-                      style={{ backgroundColor: l.color }}
-                    />
-                  ))}
+                <p className="text-xs text-[#6F625E] leading-relaxed">
+                  Toàn bộ các dòng <strong>ly thủy tinh</strong> tại Cupfy đều được sản xuất từ chất liệu thủy tinh pha lê trong suốt tự nhiên, không nhuộm màu để giữ trọn độ tinh khiết và an toàn vệ sinh tối đa.
+                </p>
+
+                <div className="bg-white p-3.5 rounded-xl border border-[#E8E3DF] text-xs space-y-2">
+                  <div className="flex justify-between text-[#6F625E]">
+                    <span>Chất liệu:</span>
+                    <strong className="text-[#201817]">Thủy tinh quang học cao cấp</strong>
+                  </div>
+                  <div className="flex justify-between text-[#6F625E]">
+                    <span>Độ truyền sáng (Transmission):</span>
+                    <strong className="text-emerald-700">98% Trong suốt</strong>
+                  </div>
+                  <div className="flex justify-between text-[#6F625E]">
+                    <span>Đổi màu thân ly:</span>
+                    <strong className="text-[#4A2A25]">Chỉ áp dụng cho ly nhựa</strong>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-[#E8E3DF] space-y-2">
+                  <p className="text-[11px] text-[#6F625E]">
+                    Bạn muốn thiết kế mẫu ly có thể tùy chọn nhiều màu sắc thân & nắp ly?
+                  </p>
+                  <button
+                    onClick={() => {
+                      const plastic = CUP_MODELS.find(m => m.id === 'plastic_boba');
+                      if (plastic) {
+                        setSelectedModel(plastic);
+                        setSelectedColor(PLASTIC_COLOR_OPTIONS[0]);
+                      }
+                    }}
+                    className="w-full py-2.5 px-4 bg-[#3E2925] text-white rounded-xl text-xs font-bold hover:bg-[#201817] shadow-sm transition-all flex items-center justify-center gap-2"
+                  >
+                    <Box className="w-4 h-4" />
+                    <span>Chuyển Sang Ly Nhựa Có Nắp</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-bold text-[#201817] text-sm mb-1">Màu Thân Ly Nhựa</h4>
+                  <p className="text-xs text-[#6F625E] mb-3">Nhựa nguyên sinh an toàn BPA-Free, bề mặt mịn cao cấp.</p>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {PLASTIC_COLOR_OPTIONS.map((c) => {
+                      const isSelected = selectedColor.id === c.id;
+                      return (
+                        <button
+                          key={c.id}
+                          onClick={() => setSelectedColor(c)}
+                          className={`p-3 rounded-xl border-2 flex items-center gap-2.5 transition-all text-left ${
+                            isSelected
+                              ? 'border-[#3E2925] bg-[#FAF9F6]'
+                              : 'border-[#E8E3DF] hover:border-[#3E2925]/50'
+                          }`}
+                        >
+                          <span
+                            className="w-6 h-6 rounded-full border border-black/10 shrink-0 shadow-inner"
+                            style={{ backgroundColor: c.color }}
+                          ></span>
+                          <span className="text-xs font-bold text-[#201817] line-clamp-1 leading-tight">
+                            {c.name}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Lid Color for Boba Cup */}
+                <div className="border-t border-[#E8E3DF] pt-6 space-y-3">
+                  <h4 className="font-bold text-[#201817] text-sm">Màu Nắp Ly Nhựa</h4>
+                  <div className="flex flex-wrap gap-2.5">
+                    {LID_COLOR_OPTIONS.map((l) => (
+                      <button
+                        key={l.id}
+                        onClick={() => setLidColor(l.color)}
+                        title={l.name}
+                        className={`w-9 h-9 rounded-full border-2 transition-all ${
+                          lidColor === l.color ? 'border-[#3E2925] scale-110' : 'border-[#E8E3DF]'
+                        }`}
+                        style={{ backgroundColor: l.color }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

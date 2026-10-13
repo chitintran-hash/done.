@@ -113,85 +113,85 @@ export function Cup3DModel({
     return new THREE.TubeGeometry(curve, 40, 0.17, 16, false);
   }, [modelDef.id]);
 
-  // 3. Realistic MeshPhysicalMaterial for Glass / Ceramic / Acrylic
+  // 3. Realistic MeshPhysicalMaterial for Glass / Plastic
   const cupMaterial = useMemo(() => {
     const isPlastic = modelDef.category === 'plastic';
-    const isCeramic = !!selectedColor.isCeramic;
-    const isFrosted = !!selectedColor.isFrosted;
-
-    if (isCeramic) {
-      return new THREE.MeshStandardMaterial({
-        color: selectedColor.color,
-        roughness: 0.2,
-        metalness: 0.05,
-        side: THREE.DoubleSide
-      });
-    }
 
     if (isPlastic) {
       return new THREE.MeshPhysicalMaterial({
-        color: selectedColor.glassTint,
-        transmission: 0.90,
+        color: selectedColor.color || '#ffffff',
+        transmission: 0.85,
         opacity: 0.95,
         transparent: true,
-        roughness: 0.18,
+        roughness: 0.15,
         metalness: 0.0,
         ior: 1.49,
-        thickness: 0.5,
+        thickness: 0.22,
         clearcoat: 0.8,
         clearcoatRoughness: 0.1,
-        envMapIntensity: 1.5,
-        side: THREE.DoubleSide
+        envMapIntensity: 1.2,
+        side: THREE.FrontSide
       });
     }
 
-    // Pure Optical Glass
+    // Pure Optical Crystal Clear Glass (No color tinting allowed for glass)
     return new THREE.MeshPhysicalMaterial({
-      color: selectedColor.glassTint,
-      transmission: 0.96,
+      color: '#ffffff',
+      transmission: 0.98,
       opacity: 1,
       transparent: true,
-      roughness: isFrosted ? 0.42 : 0.04,
-      metalness: 0.0,
+      roughness: 0.04,
+      metalness: 0.02,
       ior: 1.52,
-      thickness: 1.25,
+      thickness: 0.18,
       specularIntensity: 1.0,
       specularColor: new THREE.Color('#ffffff'),
       clearcoat: 1.0,
       clearcoatRoughness: 0.05,
-      envMapIntensity: 1.9,
-      side: THREE.DoubleSide
+      envMapIntensity: 1.4,
+      side: THREE.FrontSide
     });
   }, [modelDef.category, selectedColor]);
 
-  // 4. Printable Decal Sleeve Geometry (Curved Cylinder matching cup lateral surface)
+  // 4. Printable Decal Sleeve Geometry (Conforming LatheGeometry precisely offset +0.015 from outer wall)
   const sleeveGeometry = useMemo(() => {
-    const { radiusTop, radiusBottom, height } = modelDef.sleeve;
-    // Sits exactly skin-tight on the outer wall (+0.003 units)
-    const geom = new THREE.CylinderGeometry(
-      radiusTop + 0.003,
-      radiusBottom + 0.003,
-      height,
-      128,
-      1,
-      true
-    );
-    return geom;
-  }, [modelDef.sleeve]);
+    let points: THREE.Vector2[] = [];
+    const offset = 0.015; // Strictly 0.015 units outside outer cup wall to prevent any clipping
 
-  // 5. Safe Print Zone Guideline Cylinder (Subtle dashed wireframe)
-  const safeZoneGeometry = useMemo(() => {
-    if (!showSafeZone) return null;
-    const { radiusTop, radiusBottom, height } = modelDef.sleeve;
-    return new THREE.CylinderGeometry(
-      radiusTop + 0.006,
-      radiusBottom + 0.006,
-      height * 0.88,
-      64,
-      1,
-      true
-    );
-  }, [modelDef.sleeve, showSafeZone]);
+    if (modelDef.id === 'glass_tall') {
+      points = [
+        new THREE.Vector2(1.10 + offset, 0.75),
+        new THREE.Vector2(1.18 + offset, 2.20),
+        new THREE.Vector2(1.27 + offset, 4.05)
+      ];
+    } else if (modelDef.id === 'glass_rocks') {
+      points = [
+        new THREE.Vector2(1.50 + offset, 0.75),
+        new THREE.Vector2(1.56 + offset, 1.70),
+        new THREE.Vector2(1.62 + offset, 2.50)
+      ];
+    } else if (modelDef.id === 'glass_can') {
+      points = [
+        new THREE.Vector2(1.36 + offset, 0.55),
+        new THREE.Vector2(1.36 + offset, 2.85)
+      ];
+    } else if (modelDef.id === 'glass_mug') {
+      points = [
+        new THREE.Vector2(1.36 + offset, 0.50),
+        new THREE.Vector2(1.36 + offset, 3.10)
+      ];
+    } else {
+      // plastic_boba
+      points = [
+        new THREE.Vector2(1.20 + offset, 0.35),
+        new THREE.Vector2(1.54 + offset, 3.85)
+      ];
+    }
+
+    const geom = new THREE.LatheGeometry(points, 128, 0, Math.PI * 2);
+    geom.computeVertexNormals();
+    return geom;
+  }, [modelDef.id]);
 
   // Group centering offset
   const groupY = modelDef.id === 'glass_rocks' ? -1.0 : modelDef.id === 'glass_tall' ? -1.8 : -1.5;
@@ -206,40 +206,23 @@ export function Cup3DModel({
         <mesh geometry={mugHandleGeometry} material={cupMaterial} castShadow />
       )}
 
-      {/* Curved 3D Decal Sleeve with Canvas Texture */}
+      {/* Curved 3D Decal Sleeve with Canvas Texture - Centered u=0.5 facing camera, seam at back */}
       {canvasTexture && (
         <mesh
           geometry={sleeveGeometry}
-          position={[0, modelDef.sleeve.y, 0]}
-          rotation={[0, -Math.PI / 2, 0]}
+          rotation={[0, Math.PI, 0]}
         >
           <meshStandardMaterial
             map={canvasTexture}
             transparent={true}
             opacity={1}
-            roughness={0.25}
+            roughness={0.2}
             metalness={0.02}
             polygonOffset={true}
             polygonOffsetFactor={-4}
             polygonOffsetUnits={-4}
             depthWrite={false}
             side={THREE.FrontSide}
-          />
-        </mesh>
-      )}
-
-      {/* Safe Print Zone Visualizer Guide */}
-      {showSafeZone && safeZoneGeometry && (
-        <mesh
-          geometry={safeZoneGeometry}
-          position={[0, modelDef.sleeve.y, 0]}
-        >
-          <meshBasicMaterial
-            color="#3B82F6"
-            wireframe={true}
-            transparent={true}
-            opacity={0.35}
-            depthWrite={false}
           />
         </mesh>
       )}

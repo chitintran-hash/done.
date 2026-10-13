@@ -73,24 +73,25 @@ export function useCanvasTexture(layers: DesignLayer[], showSafeZone: boolean) {
 
     let hasOutOfBounds = false;
 
-    // 2. Optional Safe Print Zone Guideline overlay
+    // 2. Optional Safe Print Zone Guideline overlay (subtle dashed boundary lines)
     if (showSafeZone) {
       ctx.save();
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.45)';
+      ctx.lineWidth = 3;
       ctx.setLineDash([16, 12]);
-      ctx.strokeRect(
-        SAFE_ZONE.minX,
-        SAFE_ZONE.minY,
-        SAFE_ZONE.maxX - SAFE_ZONE.minX,
-        SAFE_ZONE.maxY - SAFE_ZONE.minY
-      );
+      
+      // Top margin boundary line
+      ctx.beginPath();
+      ctx.moveTo(0, SAFE_ZONE.minY);
+      ctx.lineTo(CANVAS_WIDTH, SAFE_ZONE.minY);
+      ctx.stroke();
 
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.6)';
-      ctx.font = 'bold 24px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('--- VÙNG IN AN TOÀN (15MM CÁCH MIỆNG LY) ---', CANVAS_WIDTH / 2, SAFE_ZONE.minY - 20);
-      ctx.fillText('--- GIỚI HẠN ĐÁY LY (10MM CÁCH ĐÁY) ---', CANVAS_WIDTH / 2, SAFE_ZONE.maxY + 36);
+      // Bottom margin boundary line
+      ctx.beginPath();
+      ctx.moveTo(0, SAFE_ZONE.maxY);
+      ctx.lineTo(CANVAS_WIDTH, SAFE_ZONE.maxY);
+      ctx.stroke();
+
       ctx.restore();
     }
 
@@ -175,11 +176,59 @@ export function useCanvasTexture(layers: DesignLayer[], showSafeZone: boolean) {
     redraw();
   }, [layers, showSafeZone, redraw]);
 
-  // Export High Resolution 2D Flat Sheet for production
+  // Export High Resolution 2D Flat Sheet for production (100% clean, no guidelines)
   const exportFlatPrintSheet = useCallback((): string => {
-    if (!canvasRef.current) return '';
-    return canvasRef.current.toDataURL('image/png');
-  }, []);
+    if (typeof window === 'undefined') return '';
+    const offscreen = document.createElement('canvas');
+    offscreen.width = CANVAS_WIDTH;
+    offscreen.height = CANVAS_HEIGHT;
+    const ctx = offscreen.getContext('2d');
+    if (!ctx) return '';
+
+    layers.forEach((layer) => {
+      if (!layer.visible) return;
+
+      ctx.save();
+      ctx.translate(layer.x, layer.y);
+      ctx.rotate((layer.rotation * Math.PI) / 180);
+      ctx.scale(layer.scale, layer.scale);
+      ctx.globalAlpha = layer.opacity;
+
+      if (layer.type === 'text') {
+        const textLayer = layer as TextLayer;
+        const fontStyle = `${textLayer.isItalic ? 'italic ' : ''}${textLayer.isBold ? 'bold ' : ''}${textLayer.fontSize}px ${textLayer.font}`;
+        ctx.font = fontStyle;
+        ctx.fillStyle = textLayer.color;
+        ctx.textAlign = textLayer.align;
+        ctx.textBaseline = 'middle';
+
+        const lines = (textLayer.text || '').split('\n');
+        const lineHeight = textLayer.fontSize * (textLayer.lineHeight || 1.25);
+        const totalHeight = (lines.length - 1) * lineHeight;
+
+        lines.forEach((line, index) => {
+          const yOffset = index * lineHeight - totalHeight / 2;
+          ctx.fillText(line, 0, yOffset);
+        });
+      } else if (layer.type === 'image' || layer.type === 'sticker') {
+        const imgLayer = layer as ImageLayer;
+        const img = imageCacheRef.current.get(imgLayer.url);
+        if (img && img.complete) {
+          ctx.drawImage(
+            img,
+            -imgLayer.width / 2,
+            -imgLayer.height / 2,
+            imgLayer.width,
+            imgLayer.height
+          );
+        }
+      }
+
+      ctx.restore();
+    });
+
+    return offscreen.toDataURL('image/png');
+  }, [layers]);
 
   return {
     canvasRef,

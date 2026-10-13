@@ -98,57 +98,27 @@ export const CUP_MODELS: CupModelDef[] = [
   }
 ];
 
+export const CLEAR_GLASS_COLOR: CupColorOption = {
+  id: 'clear',
+  name: 'Pha Lê Trong Suốt',
+  color: '#FFFFFF',
+  glassTint: '#ffffff',
+};
+
+export const PLASTIC_COLOR_OPTIONS: CupColorOption[] = [
+  { id: 'white', name: 'Trắng Tinh Khiết', color: '#FFFFFF', glassTint: '#ffffff' },
+  { id: 'black', name: 'Đen Mờ Huyền Bí', color: '#18181B', glassTint: '#18181b' },
+  { id: 'cream', name: 'Vàng Kem Pastel', color: '#FFF3A6', glassTint: '#fff3a6' },
+  { id: 'sky', name: 'Xanh Pastel', color: '#BFDCEF', glassTint: '#bfdcef' },
+  { id: 'matcha', name: 'Xanh Matcha', color: '#BFE5D0', glassTint: '#bfe5d0' },
+  { id: 'lavender', name: 'Tím Lavender', color: '#DCD1FF', glassTint: '#dcd1ff' },
+  { id: 'pink', name: 'Hồng Baby', color: '#FBCFE8', glassTint: '#fbcfe8' },
+  { id: 'coffee', name: 'Nâu Cà Phê', color: '#4A2A25', glassTint: '#4a2a25' }
+];
+
 export const CUP_COLOR_OPTIONS: CupColorOption[] = [
-  {
-    id: 'clear',
-    name: 'Pha Lê Trong Suốt',
-    color: '#F8FAFC',
-    glassTint: '#ffffff',
-  },
-  {
-    id: 'amber',
-    name: 'Hổ Phách Trầm Ấm',
-    color: '#D97706',
-    glassTint: '#d97706',
-  },
-  {
-    id: 'emerald',
-    name: 'Xanh Ngọc Lục Bảo',
-    color: '#059669',
-    glassTint: '#059669',
-  },
-  {
-    id: 'smoke',
-    name: 'Khói Xám Sang Trọng',
-    color: '#475569',
-    glassTint: '#334155',
-  },
-  {
-    id: 'rose',
-    name: 'Hồng Thạch Anh',
-    color: '#DB2777',
-    glassTint: '#db2777',
-  },
-  {
-    id: 'ocean',
-    name: 'Xanh Đại Dương',
-    color: '#2563EB',
-    glassTint: '#2563eb',
-  },
-  {
-    id: 'frosted',
-    name: 'Phun Cát Mờ (Frosted)',
-    color: '#E2E8F0',
-    glassTint: '#f1f5f9',
-    isFrosted: true
-  },
-  {
-    id: 'ceramic',
-    name: 'Men Sứ Trắng (Mug)',
-    color: '#FFFDF9',
-    glassTint: '#ffffff',
-    isCeramic: true
-  }
+  CLEAR_GLASS_COLOR,
+  ...PLASTIC_COLOR_OPTIONS
 ];
 
 export const LID_COLOR_OPTIONS = [

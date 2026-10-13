@@ -22,7 +22,7 @@ import { translations, TranslationKey } from '@/lib/i18n/translations';
 import { createClient } from '@/lib/supabase/client';
 
 import { DesignLayer, TextLayer, ImageLayer, CupModelDef, CupColorOption, StudioViewMode } from '@/components/studio/types';
-import { CUP_MODELS, CUP_COLOR_OPTIONS } from '@/components/studio/cupDefinitions';
+import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR } from '@/components/studio/cupDefinitions';
 import { GOOGLE_FONTS_URL } from '@/components/studio/fontLibrary';
 import { useCanvasTexture, CANVAS_WIDTH, CANVAS_HEIGHT } from '@/components/studio/useCanvasTexture';
 import { StudioScene } from '@/components/studio/StudioScene';
@@ -40,7 +40,7 @@ function CustomCupStudioInner() {
 
   // Selected State
   const [selectedModel, setSelectedModel] = useState<CupModelDef>(CUP_MODELS[0]);
-  const [selectedColor, setSelectedColor] = useState<CupColorOption>(CUP_COLOR_OPTIONS[0]);
+  const [selectedColor, setSelectedColor] = useState<CupColorOption>(CLEAR_GLASS_COLOR);
   const [lidColor, setLidColor] = useState<string>('#FFF3A6');
   const [viewMode, setViewMode] = useState<StudioViewMode>('studio');
   const [showSafeZone, setShowSafeZone] = useState<boolean>(true);
@@ -207,11 +207,17 @@ function CustomCupStudioInner() {
         const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
         if (savedDraft) {
           const parsed = JSON.parse(savedDraft);
+          let loadedModel = CUP_MODELS[0];
           if (parsed.modelId) {
             const m = CUP_MODELS.find((x) => x.id === parsed.modelId);
-            if (m) setSelectedModel(m);
+            if (m) {
+              loadedModel = m;
+              setSelectedModel(m);
+            }
           }
-          if (parsed.colorId) {
+          if (loadedModel.category === 'glass') {
+            setSelectedColor(CLEAR_GLASS_COLOR);
+          } else if (parsed.colorId) {
             const c = CUP_COLOR_OPTIONS.find((x) => x.id === parsed.colorId);
             if (c) setSelectedColor(c);
           }
@@ -228,6 +234,13 @@ function CustomCupStudioInner() {
       }
     }
   }, []);
+
+  const handleSelectModel = (model: CupModelDef) => {
+    setSelectedModel(model);
+    if (model.category === 'glass') {
+      setSelectedColor(CLEAR_GLASS_COLOR);
+    }
+  };
 
   // Update Layer Callback
   const handleUpdateLayer = (id: string, updates: Partial<DesignLayer>) => {
@@ -652,7 +665,7 @@ function CustomCupStudioInner() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             selectedModel={selectedModel}
-            setSelectedModel={setSelectedModel}
+            setSelectedModel={handleSelectModel}
             selectedColor={selectedColor}
             setSelectedColor={setSelectedColor}
             lidColor={lidColor}

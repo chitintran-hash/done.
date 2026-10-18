@@ -127,8 +127,8 @@ export default function CheckoutPage() {
       // Xóa giỏ hàng chỉ khi tạo đơn thành công
       cart.clearCart();
       
-      // Chuyển sang trang theo dõi đơn hàng chi tiết
-      router.push(`/orders/${result.orderId}`);
+      // Chuyển sang trang theo dõi đơn hàng chi tiết kèm cờ báo thành công
+      router.push(`/orders/${result.orderId}?success=true`);
       
     } catch (error: any) {
       console.error('Checkout error:', error);
@@ -393,9 +393,6 @@ export default function CheckoutPage() {
                       ) : (
                         <span className="text-xs text-[#6F625E]">No image</span>
                       )}
-                      <span className="absolute -top-1.5 -right-1.5 bg-[#3A211E] text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold">
-                        {item.quantity}
-                      </span>
                     </div>
 
                     <div className="flex-1 min-w-0">

@@ -8,6 +8,8 @@ import Image from 'next/image';
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   pending: { label: "Chờ xác nhận", color: "bg-amber-100 text-amber-800" },
+  design_review: { label: "Đang kiểm tra thiết kế", color: "bg-amber-100 text-amber-800" },
+  design_rejected: { label: "Cần điều chỉnh thiết kế", color: "bg-orange-100 text-orange-800" },
   confirmed: { label: "Đã xác nhận", color: "bg-blue-100 text-blue-800" },
   in_production: { label: "Đang sản xuất", color: "bg-indigo-100 text-indigo-800" },
   shipping: { label: "Đang giao hàng", color: "bg-sky-100 text-sky-800" },

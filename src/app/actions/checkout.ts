@@ -178,10 +178,70 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
     // 8. Tạo chi tiết đơn hàng (order_items)
     const orderItemsToInsert = [];
 
-    for (const item of validatedItems) {
+    for (let idx = 0; idx < validatedItems.length; idx++) {
+      const item = validatedItems[idx];
       let finalProductId = item.productId;
 
       if (item.isCustom) {
+        let finalImageUrl = item.image || '';
+        let finalPrintUrl = item.customSpecs?.printableTexture || '';
+
+        // Tải ảnh 3D snapshot xem trước lên Supabase Storage nếu là base64
+        if (finalImageUrl && finalImageUrl.startsWith('data:image/')) {
+          try {
+            const matches = finalImageUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+            if (matches && matches.length === 3) {
+              const mimeType = matches[1];
+              const ext = mimeType.includes('png') ? 'png' : 'jpg';
+              const buffer = Buffer.from(matches[2], 'base64');
+              const storagePath = `custom-previews/${order.id}-${idx}-${Date.now()}.${ext}`;
+              const { error: uploadErr } = await supabaseAdmin.storage
+                .from('done-products')
+                .upload(storagePath, buffer, { contentType: mimeType, upsert: true });
+
+              if (!uploadErr) {
+                const { data: { publicUrl } } = supabaseAdmin.storage
+                  .from('done-products')
+                  .getPublicUrl(storagePath);
+                finalImageUrl = publicUrl;
+              }
+            }
+          } catch (e) {
+            console.error('Error uploading 3D preview:', e);
+          }
+        }
+
+        // Tải bản in phẳng (Print Sheet) lên Supabase Storage nếu là base64
+        if (finalPrintUrl && finalPrintUrl.startsWith('data:image/')) {
+          try {
+            const matches = finalPrintUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+            if (matches && matches.length === 3) {
+              const mimeType = matches[1];
+              const ext = mimeType.includes('png') ? 'png' : 'jpg';
+              const buffer = Buffer.from(matches[2], 'base64');
+              const storagePath = `custom-prints/${order.id}-${idx}-${Date.now()}.${ext}`;
+              const { error: uploadErr } = await supabaseAdmin.storage
+                .from('done-products')
+                .upload(storagePath, buffer, { contentType: mimeType, upsert: true });
+
+              if (!uploadErr) {
+                const { data: { publicUrl } } = supabaseAdmin.storage
+                  .from('done-products')
+                  .getPublicUrl(storagePath);
+                finalPrintUrl = publicUrl;
+              }
+            }
+          } catch (e) {
+            console.error('Error uploading print texture:', e);
+          }
+        }
+
+        const snapshotSpecs = {
+          ...(item.customSpecs || {}),
+          previewImage: finalImageUrl,
+          printableTexture: finalPrintUrl,
+        };
+
         // Tạo sản phẩm snapshot lưu trữ thông số thiết kế cho xưởng in
         const { data: customProduct, error: customProdErr } = await supabaseAdmin
           .from('products')
@@ -189,8 +249,9 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
             name: item.name,
             category: 'user_custom',
             price: item.price,
-            description: JSON.stringify(item.customSpecs || {}),
-            image_url: item.image,
+            description: JSON.stringify(snapshotSpecs),
+            technical_specs: snapshotSpecs,
+            image_url: finalImageUrl,
             stock: 1,
             is_available: false, // Ẩn khỏi trang mua sắm công khai
           })

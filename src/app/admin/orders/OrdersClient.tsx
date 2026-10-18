@@ -51,6 +51,7 @@ const ORDER_STATUS_MAP: Record<string, { label: string; color: string }> = {
   pending: { label: "Chờ xác nhận", color: "bg-amber-100 text-amber-800 border-amber-200" },
   confirmed: { label: "Đã xác nhận", color: "bg-blue-100 text-blue-800 border-blue-200" },
   design_review: { label: "Đang kiểm tra thiết kế", color: "bg-purple-100 text-purple-800 border-purple-200" },
+  design_rejected: { label: "Yêu cầu chỉnh sửa", color: "bg-orange-100 text-orange-800 border-orange-200" },
   in_production: { label: "Đang sản xuất", color: "bg-indigo-100 text-indigo-800 border-indigo-200" },
   quality_check: { label: "Đang kiểm tra chất lượng", color: "bg-teal-100 text-teal-800 border-teal-200" },
   packaging: { label: "Đang đóng gói", color: "bg-cyan-100 text-cyan-800 border-cyan-200" },

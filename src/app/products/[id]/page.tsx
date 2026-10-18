@@ -11,50 +11,68 @@ import AuthRequiredModal from '@/components/AuthRequiredModal';
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const id = params.id as string;
+  const id = typeof params?.id === 'string' ? params.id : Array.isArray(params?.id) ? params.id[0] : '';
   const supabase = createClient();
   const router = useRouter();
 
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [addedSuccess, setAddedSuccess] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const cart = useCartStore();
 
   useEffect(() => {
+    if (!id) return;
+    let isMounted = true;
     const fetchProduct = async () => {
-      const { data } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
-      
-      if (data) {
-        setProduct(data);
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', id)
+          .single();
+        
+        if (isMounted) {
+          if (data && !error) {
+            setProduct(data);
+          }
+          setLoading(false);
+        }
+      } catch (err) {
+        if (isMounted) setLoading(false);
       }
-      setLoading(false);
     };
     fetchProduct();
-  }, [id]);
+    return () => {
+      isMounted = false;
+    };
+  }, [id, supabase]);
 
   if (loading) {
-    return <div className="min-h-[60vh] flex items-center justify-center text-primary">Đang tải...</div>;
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center pt-32">
+        <div className="w-10 h-10 border-4 border-[#3A211E] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-[#3A211E] font-medium">Đang tải thông tin sản phẩm...</p>
+      </div>
+    );
   }
 
   if (!product) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center">
-        <h2 className="text-3xl font-serif font-bold mb-4 text-foreground">Không tìm thấy sản phẩm</h2>
-        <Link href="/products" className="text-primary hover:underline">Quay lại Shop</Link>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center pt-32 text-center px-4">
+        <h2 className="text-3xl font-serif font-bold mb-4 text-[#3A211E]">Không tìm thấy sản phẩm</h2>
+        <p className="text-[#6F625E] mb-6">Sản phẩm này có thể đã ngừng kinh doanh hoặc đường dẫn không chính xác.</p>
+        <Link href="/products" className="px-6 py-3 bg-[#3A211E] text-white rounded-full font-bold text-sm hover:bg-[#4A2A25] transition-colors">
+          Quay lại Cửa hàng
+        </Link>
       </div>
     );
   }
 
   const isOutOfStock = product.stock <= 0;
   const specs = product.technical_specs || {};
-
-  const [addedSuccess, setAddedSuccess] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleAddToCart = () => {
     cart.addItem({

@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag, Sparkles, Star } from "lucide-react";
+import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getTranslation } from "@/lib/i18n/server";
-import HeroSlider from "@/components/HeroSlider";
 
 export default async function Home() {
   const { t } = await getTranslation();
@@ -11,57 +10,96 @@ export default async function Home() {
   const { data: latestProducts } = await supabase.from("products").select("*").neq("category", "user_custom").limit(4);
 
   return (
-    <main className="flex flex-col min-h-screen pt-[112px] bg-[#F7F6F2]">
+    <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#F7F6F2]">
       
-      {/* PHẦN 1: Banner thương hiệu lớn */}
-      <section className="w-full px-4 md:px-6 mb-16 md:mb-24 mt-4 md:mt-8">
-        <div className="mx-auto w-full max-w-[1200px] aspect-[1024/356] rounded-[32px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.15)] relative overflow-hidden bg-[#FDF0C6] border border-[#DDD8D2]/50">
-          <Image 
-            src="/images/cupfy-brand-banner.png" 
-            alt="Cupfy Brand Banner" 
-            fill 
-            className="object-cover object-center [image-rendering:-webkit-optimize-contrast]"
-            priority 
-            quality={100}
-            unoptimized
-          />
-        </div>
-      </section>
-
-      {/* PHẦN 2: Section giới thiệu chính */}
-      <section className="max-w-[1400px] mx-auto px-6 mb-24 w-full">
-        <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+      {/* PHẦN 1: Hero Section chính */}
+      <section className="max-w-[1400px] mx-auto px-6 mb-20 md:mb-28 w-full">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-14 xl:gap-20">
           
-          {/* Cột trái: Nội dung chữ */}
-          <div className="w-full md:w-1/2 flex flex-col items-start z-10">
-            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold text-[#201817] leading-[1.15] mb-6 tracking-tight">
-              {t("hero_title_1" as any)}<span className="text-[#6B463D] italic font-serif">{t("hero_title_highlight" as any)}</span>{t("hero_title_2" as any)}
-            </h2>
-            <p className="text-lg text-[#6F625E] mb-4 leading-relaxed max-w-[500px]">
-              {t("hero_desc_1" as any)}
+          {/* Cột trái: Nội dung chữ (~48%) */}
+          <div className="w-full lg:w-[48%] flex flex-col items-start z-10">
+            {/* Tiêu đề chính */}
+            <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#3A211E] leading-[1.16] mb-5 tracking-tight">
+              <span className="block">{t("hero_title_line1" as any)}</span>
+              <span className="block mt-1 sm:mt-1.5">
+                {t("hero_title_line2_prefix" as any)}
+                <span className="relative inline-block text-[#4A2A25]">
+                  {t("hero_title_line2_highlight" as any)}
+                  <svg 
+                    aria-hidden="true" 
+                    viewBox="0 0 240 18" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="absolute -bottom-2 left-0 w-full h-[8px] text-[#BFDCEF] stroke-current pointer-events-none"
+                  >
+                    <path 
+                      d="M3 13C60 4 180 4 237 13" 
+                      stroke="currentColor" 
+                      strokeWidth="3.5" 
+                      strokeLinecap="round" 
+                    />
+                  </svg>
+                </span>
+                {t("hero_title_line2_suffix" as any)}
+              </span>
+            </h1>
+
+            {/* Mô tả */}
+            <p className="text-base sm:text-lg text-[#6F625E] leading-[1.7] mb-6 max-w-[500px]">
+              {t("hero_desc" as any)}
             </p>
-            <p className="text-md text-[#6F625E] font-medium mb-10 opacity-80 border-l-2 border-[#B9D9EC] pl-4">
-              {t("hero_desc_2" as any)}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <Link href="/custom-cup" className="px-8 py-4 bg-[#4A2A25] text-white rounded-full font-bold text-lg flex items-center justify-center hover:bg-[#3A211E] transition-colors shadow-[0_8px_20px_rgba(0,0,0,0.1)]">
+
+            {/* Thông điệp ngắn */}
+            <div className="inline-flex items-center px-4 py-2.5 rounded-xl bg-[#BFDCEF]/25 border-l-[3px] border-[#89BBD9] mb-8">
+              <span className="text-[14px] md:text-[15px] font-medium text-[#4A2A25]">
+                {t("hero_short_msg" as any)}
+              </span>
+            </div>
+
+            {/* Hai nút CTA */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+              <Link 
+                href="/custom-cup" 
+                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#3A211E] text-white rounded-full font-semibold text-base transition-colors duration-200 hover:bg-[#4A2A25] shadow-[0_4px_16px_rgba(58,33,30,0.12)] text-center"
+              >
                 {t("hero_btn_design" as any)}
               </Link>
-              <Link href="/templates" className="px-8 py-4 bg-white text-[#201817] border border-[#DDD8D2] rounded-full font-bold text-lg flex items-center justify-center hover:bg-[#EDECEA] transition-colors">
+              <Link 
+                href="/products" 
+                className="inline-flex items-center justify-center px-8 py-3.5 bg-white text-[#3A211E] border border-[#DDD8D2] rounded-full font-semibold text-base transition-colors duration-200 hover:bg-[#EDECEA] text-center"
+              >
                 {t("hero_btn_shop" as any)}
               </Link>
             </div>
           </div>
 
-          {/* Cột phải: Slider ảnh */}
-          <div className="w-full md:w-1/2 flex flex-col gap-5 z-10">
-            <HeroSlider />
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-1 text-sm font-semibold text-[#6F625E]">
-              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> {t("hero_feature_1" as any)}</span>
-              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> {t("hero_feature_2" as any)}</span>
-              <span className="flex items-center gap-1.5"><Star className="w-4 h-4 text-[#4A2A25] fill-current"/> {t("hero_feature_3" as any)}</span>
+          {/* Cột phải: Hình ảnh phong cách lifestyle (~52%) */}
+          <div className="w-full lg:w-[52%] relative flex items-center justify-center z-10">
+            {/* Vầng sáng pastel trang nhã phía sau hình ảnh */}
+            <div 
+              aria-hidden="true" 
+              className="absolute -inset-2 sm:-inset-4 bg-[#BFDCEF]/35 rounded-[36px] blur-2xl -z-10 transform scale-95 pointer-events-none" 
+            />
+
+            <div className="relative w-full aspect-[4/3] rounded-[28px] overflow-hidden border border-[#DDD8D2]/70 shadow-[0_20px_50px_rgba(58,33,30,0.08)] bg-white">
+              <Image 
+                src="/images/hero-slider-1.jpg" 
+                alt="Khách hàng tự thiết kế ly cá nhân hoá cùng Cupfy" 
+                fill 
+                priority 
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 52vw, 700px"
+                className="object-cover object-center"
+                quality={92}
+              />
+              {/* Nhãn nhỏ thương hiệu trang nhã */}
+              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 inline-flex items-center px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md shadow-sm border border-[#DDD8D2]/60 select-none">
+                <span className="text-xs sm:text-sm font-semibold text-[#3A211E] tracking-wide">
+                  Your cup, your story
+                </span>
+              </div>
             </div>
           </div>
+
         </div>
       </section>
 

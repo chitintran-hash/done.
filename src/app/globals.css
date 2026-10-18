@@ -23,6 +23,11 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --font-sans: var(--font-be-vietnam-pro), sans-serif;
+  --font-heading: var(--font-baloo-2), cursive, sans-serif;
+}
+
+.font-heading {
+  font-family: var(--font-baloo-2), cursive, sans-serif;
 }
 
 body {

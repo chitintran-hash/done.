@@ -87,7 +87,6 @@ function ProductCatalogContent() {
   const categories = [
     { id: 'all', name: 'Tất cả ly' },
     { id: 'glass', name: 'Ly thủy tinh' },
-    { id: 'thermos', name: 'Ly giữ nhiệt' },
     { id: 'plastic', name: 'Ly nhựa' },
     { id: 'custom', name: 'Ly custom' }
   ];

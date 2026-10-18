@@ -2,46 +2,188 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { revalidatePath } from 'next/cache';
+import { ensureUserProfile } from './auth';
 
-// Create a Supabase client with the Service Role key to bypass RLS for creating orders and temp products
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
   {
     auth: {
       autoRefreshToken: false,
-      persistSession: false
-    }
+      persistSession: false,
+    },
   }
 );
 
-export async function processCheckout(orderData: any, cartItems: any[]) {
+export interface CheckoutOrderInput {
+  buyer_id: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  ward: string;
+  district: string;
+  city: string;
+  note?: string;
+}
+
+export async function processCheckout(orderData: CheckoutOrderInput, cartItems: any[]) {
   try {
-    // 1. Insert Order
+    // 1. Kiểm tra xác thực khách hàng (Bắt buộc phải đăng nhập)
+    if (!orderData.buyer_id) {
+      return { 
+        success: false, 
+        error: 'Vui lòng đăng nhập tài khoản Cupfy trước khi đặt hàng.' 
+      };
+    }
+
+    // 2. Kiểm tra tính hợp lệ của thông tin nhận hàng
+    if (!orderData.name || !orderData.name.trim()) {
+      return { success: false, error: 'Vui lòng nhập họ và tên người nhận.' };
+    }
+
+    const cleanPhone = (orderData.phone || '').trim().replace(/\s+/g, '');
+    const phoneRegex = /^0[0-9]{9}$/;
+    if (!phoneRegex.test(cleanPhone)) {
+      return { 
+        success: false, 
+        error: 'Số điện thoại nhận hàng không hợp lệ. Vui lòng nhập đúng 10 chữ số bắt đầu bằng số 0.' 
+      };
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!orderData.email || !emailRegex.test(orderData.email.trim())) {
+      return { success: false, error: 'Địa chỉ email nhận thông báo không hợp lệ.' };
+    }
+
+    if (!orderData.address || !orderData.address.trim()) {
+      return { success: false, error: 'Vui lòng nhập số nhà và tên đường.' };
+    }
+    if (!orderData.city || !orderData.city.trim()) {
+      return { success: false, error: 'Vui lòng chọn Tỉnh hoặc Thành phố.' };
+    }
+    if (!orderData.district || !orderData.district.trim()) {
+      return { success: false, error: 'Vui lòng chọn Quận hoặc Huyện.' };
+    }
+    if (!orderData.ward || !orderData.ward.trim()) {
+      return { success: false, error: 'Vui lòng chọn Phường hoặc Xã.' };
+    }
+
+    // 3. Kiểm tra giỏ hàng
+    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
+      return { success: false, error: 'Giỏ hàng của bạn đang trống.' };
+    }
+
+    // 4 & 5. Kiểm tra sản phẩm và xác minh giá bán trên hệ thống server
+    let calculatedSubtotal = 0;
+    const validatedItems: Array<{
+      isCustom: boolean;
+      productId: string | null;
+      name: string;
+      price: number;
+      quantity: number;
+      customSpecs?: any;
+      image?: string;
+    }> = [];
+
+    for (const item of cartItems) {
+      const quantity = Math.max(1, parseInt(item.quantity, 10) || 1);
+      
+      if (item.isCustom) {
+        // Ly cá nhân hóa thiết kế từ studio
+        const unitPrice = Math.max(20000, Number(item.price) || 69000);
+        calculatedSubtotal += unitPrice * quantity;
+        validatedItems.push({
+          isCustom: true,
+          productId: null,
+          name: item.name || 'Ly Custom Studio',
+          price: unitPrice,
+          quantity,
+          customSpecs: item.customSpecs || {},
+          image: item.image || '',
+        });
+      } else {
+        // Sản phẩm có sẵn trong catalog
+        const { data: dbProduct, error: prodErr } = await supabaseAdmin
+          .from('products')
+          .select('id, name, price, is_available')
+          .eq('id', item.id)
+          .single();
+
+        if (prodErr || !dbProduct) {
+          return {
+            success: false,
+            error: `Sản phẩm "${item.name}" hiện không còn tồn tại trên hệ thống.`,
+          };
+        }
+
+        if (dbProduct.is_available === false) {
+          return {
+            success: false,
+            error: `Sản phẩm "${dbProduct.name}" hiện đang tạm ngừng kinh doanh.`,
+          };
+        }
+
+        const unitPrice = Number(dbProduct.price) || 0;
+        calculatedSubtotal += unitPrice * quantity;
+        validatedItems.push({
+          isCustom: false,
+          productId: dbProduct.id,
+          name: dbProduct.name,
+          price: unitPrice,
+          quantity,
+          image: item.image || '',
+        });
+      }
+    }
+
+    // Phí vận chuyển cố định: 30.000 VNĐ cho mỗi đơn hàng
+    const shippingFee = 30000;
+    const calculatedTotal = calculatedSubtotal + shippingFee;
+
+    // 6. ĐỒNG BỘ PROFILE KHÁCH HÀNG (Khắc phục triệt để lỗi orders_buyer_id_fkey)
+    const fullAddress = `${orderData.address.trim()}, ${orderData.ward.trim()}, ${orderData.district.trim()}, ${orderData.city.trim()}`;
+    await ensureUserProfile({
+      userId: orderData.buyer_id,
+      fullName: orderData.name.trim(),
+      email: orderData.email.trim(),
+      phone: cleanPhone,
+      address: fullAddress,
+    });
+
+    // 7. Tạo đơn hàng Master trong bảng orders
+    const structuredAddress = `${fullAddress} | SĐT: ${cleanPhone}${orderData.note ? ' | Ghi chú: ' + orderData.note.trim() : ''} | PT: COD (Chưa thanh toán)`;
+
     const { data: order, error: orderErr } = await supabaseAdmin
       .from('orders')
       .insert({
-        buyer_id: orderData.buyer_id || null,
-        buyer_name_snapshot: orderData.name,
-        buyer_email_snapshot: orderData.email,
-        shipping_address: `${orderData.address}, ${orderData.ward}, ${orderData.district}, ${orderData.city}`,
-        total_price: orderData.total,
-        status: 'pending'
+        buyer_id: orderData.buyer_id,
+        buyer_name_snapshot: orderData.name.trim(),
+        buyer_email_snapshot: orderData.email.trim(),
+        shipping_address: structuredAddress,
+        total_price: calculatedTotal,
+        status: 'pending',
       })
-      .select('id')
+      .select('id, created_at')
       .single();
 
-    if (orderErr) throw orderErr;
+    if (orderErr) {
+      console.error('Lỗi khi chèn đơn hàng vào bảng orders:', orderErr);
+      return { 
+        success: false, 
+        error: 'Không thể hoàn tất đơn hàng. Vui lòng thử lại sau.' 
+      };
+    }
 
-    // 2. Process Items
+    // 8. Tạo chi tiết đơn hàng (order_items)
     const orderItemsToInsert = [];
-    
-    for (const item of cartItems) {
-      let productId = item.id;
-      
+
+    for (const item of validatedItems) {
+      let finalProductId = item.productId;
+
       if (item.isCustom) {
-        // Create a temporary product for the custom design to store specs and snapshot
-        const { data: newProd, error: prodErr } = await supabaseAdmin
+        // Tạo sản phẩm snapshot lưu trữ thông số thiết kế cho xưởng in
+        const { data: customProduct, error: customProdErr } = await supabaseAdmin
           .from('products')
           .insert({
             name: item.name,
@@ -49,40 +191,57 @@ export async function processCheckout(orderData: any, cartItems: any[]) {
             price: item.price,
             description: JSON.stringify(item.customSpecs || {}),
             image_url: item.image,
-            stock: 1
+            stock: 1,
+            is_available: false, // Ẩn khỏi trang mua sắm công khai
           })
           .select('id')
           .single();
-          
-        if (!prodErr && newProd) {
-          productId = newProd.id;
+
+        if (!customProdErr && customProduct) {
+          finalProductId = customProduct.id;
         } else {
-          console.error("Failed to create custom product:", prodErr);
-          productId = null;
+          console.error('Không thể tạo snapshot cho ly custom:', customProdErr);
         }
       }
-      
+
       orderItemsToInsert.push({
         order_id: order.id,
-        product_id: productId === item.id ? (item.isCustom ? null : productId) : productId,
+        product_id: finalProductId,
         quantity: item.quantity,
         price: item.price,
-        status: 'pending'
+        status: 'pending',
       });
     }
 
-    // 3. Insert Order Items
     const { error: itemsErr } = await supabaseAdmin
       .from('order_items')
       .insert(orderItemsToInsert);
 
-    if (itemsErr) throw itemsErr;
+    if (itemsErr) {
+      console.error('Lỗi khi chèn chi tiết order_items:', itemsErr);
+      // Xóa đơn hàng master để đảm bảo tính toàn vẹn (không có đơn hàng rỗng)
+      await supabaseAdmin.from('orders').delete().eq('id', order.id);
+      return { 
+        success: false, 
+        error: 'Không thể hoàn tất đơn hàng. Vui lòng thử lại sau.' 
+      };
+    }
 
-    revalidatePath('/admin/orders');
+    // 9. Revalidate cache
     revalidatePath('/orders');
-    return { success: true, orderId: order.id };
-  } catch (error) {
-    console.error("Checkout Server Action Error:", error);
-    return { success: false, error: (error as Error).message };
+    revalidatePath('/admin/orders');
+
+    return { 
+      success: true, 
+      orderId: order.id,
+      total: calculatedTotal 
+    };
+
+  } catch (error: any) {
+    console.error('Lỗi kỹ thuật trong processCheckout:', error);
+    return { 
+      success: false, 
+      error: 'Không thể hoàn tất đơn hàng. Vui lòng thử lại sau.' 
+    };
   }
 }

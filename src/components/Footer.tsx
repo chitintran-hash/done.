@@ -27,7 +27,6 @@ export default function Footer() {
           <h4 className="font-bold mb-6 text-[#FFFFFF] tracking-wide uppercase text-sm">Shop</h4>
           <ul className="space-y-4">
             <li><Link href="/products?category=glass" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">{t('Glass Cup' as any)}</Link></li>
-            <li><Link href="/products?category=thermos" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">{t('Thermos' as any)}</Link></li>
             <li><Link href="/products?category=plastic" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">{t('Plastic Cup' as any)}</Link></li>
             <li><Link href="/custom-cup" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">Custom Cup</Link></li>
           </ul>

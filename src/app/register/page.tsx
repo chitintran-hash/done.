@@ -1,19 +1,32 @@
 "use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { ensureUserProfile } from '@/app/actions/auth';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-[#3A211E]" /></div>}>
+      <RegisterContent />
+    </Suspense>
+  );
+}
+
+function RegisterContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
   
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || searchParams.get('next') || '';
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,88 +34,160 @@ export default function RegisterPage() {
     setError('');
     setSuccess(false);
 
+    // 1. Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setError('Định dạng email không hợp lệ. Vui lòng nhập đúng địa chỉ email.');
+      setLoading(false);
+      return;
+    }
+
+    // 2. Validate Password Length
+    if (password.length < 6) {
+      setError('Mật khẩu phải có tối thiểu 6 ký tự.');
+      setLoading(false);
+      return;
+    }
+
+    // 3. Validate Confirm Password
+    if (password !== confirmPassword) {
+      setError('Mật khẩu xác nhận không trùng khớp.');
+      setLoading(false);
+      return;
+    }
+
     const supabase = createClient();
     
-    // We pass the email redirect to point back to the app
+    // Pass email redirect
     const { data, error: authError } = await supabase.auth.signUp({
-      email,
+      email: email.trim().toLowerCase(),
       password,
       options: {
         data: {
-          full_name: fullName,
+          full_name: fullName.trim(),
           role: 'customer'
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/auth/callback${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`,
       },
     });
 
     if (authError) {
-      setError(authError.message);
+      let friendlyMsg = authError.message;
+      if (authError.message.includes('already registered')) {
+        friendlyMsg = 'Email này đã được đăng ký. Vui lòng đăng nhập hoặc sử dụng email khác.';
+      } else if (authError.message.includes('Password should be at least')) {
+        friendlyMsg = 'Mật khẩu phải có tối thiểu 6 ký tự.';
+      } else if (authError.message.includes('valid email')) {
+        friendlyMsg = 'Vui lòng nhập địa chỉ email hợp lệ.';
+      }
+      setError(friendlyMsg);
       setLoading(false);
-    } else {
-      setSuccess(true);
-      setLoading(false);
+      return;
     }
+
+    // If user was created, immediately ensure their profile row exists in public.profiles!
+    if (data?.user) {
+      await ensureUserProfile({
+        userId: data.user.id,
+        fullName: fullName.trim(),
+        email: email.trim().toLowerCase(),
+      });
+    }
+
+    // If session is immediately active (e.g. email confirmation disabled or auto-confirmed)
+    if (data?.session) {
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      } else {
+        router.push('/');
+      }
+      router.refresh();
+      return;
+    }
+
+    // Otherwise show verification message
+    setSuccess(true);
+    setLoading(false);
   };
 
+  const loginLink = `/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`;
+
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white border border-border rounded-2xl p-8 shadow-sm mt-16">
-        <h1 className="text-3xl font-bold mb-2">Tạo tài khoản</h1>
-        <p className="text-muted-foreground mb-8">Gia nhập Cupfy để tạo nên chiếc ly của riêng bạn</p>
+    <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center p-6 pt-28 pb-16">
+      <div className="w-full max-w-md bg-white border border-[#DDD8D2] rounded-[24px] p-8 shadow-sm">
+        <h1 className="font-heading text-3xl font-bold text-[#3A211E] mb-2">Tạo tài khoản</h1>
+        <p className="text-[#6F625E] text-sm mb-6">Gia nhập Cupfy để bắt đầu thiết kế và đặt mua những chiếc ly của riêng bạn</p>
 
         {success ? (
-          <div className="bg-[#4A2A25] text-[#FFF3A6] p-6 rounded-xl text-center">
-            <h3 className="font-bold text-lg mb-2">Đăng ký thành công!</h3>
-            <p className="text-sm opacity-90">Vui lòng kiểm tra hộp thư Email của bạn ({email}) để xác thực tài khoản trước khi đăng nhập.</p>
-            <button 
-              onClick={() => router.push('/login')}
-              className="mt-6 w-full py-3 bg-[#FFF3A6] text-[#201817] rounded-full font-bold hover:bg-[#FFF0C7] transition-colors"
+          <div className="bg-[#F7F6F2] border border-[#DDD8D2] p-6 rounded-2xl text-center space-y-4">
+            <div className="w-12 h-12 bg-[#BFDCEF]/40 text-[#3A211E] rounded-full mx-auto flex items-center justify-center font-bold text-xl">
+              ✓
+            </div>
+            <h3 className="font-bold text-lg text-[#3A211E]">Đăng ký thành công!</h3>
+            <p className="text-sm text-[#6F625E] leading-relaxed">
+              Vui lòng kiểm tra hộp thư email ({email}) để kích hoạt tài khoản của bạn, sau đó đăng nhập để tiếp tục.
+            </p>
+            <Link 
+              href={loginLink}
+              className="mt-4 inline-flex w-full py-3.5 bg-[#3A211E] text-white rounded-full font-bold justify-center hover:bg-[#4A2A25] transition-colors"
             >
               Chuyển đến Đăng nhập
-            </button>
+            </Link>
           </div>
         ) : (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Họ và tên</label>
+              <label className="block text-sm font-semibold text-[#3A211E] mb-1.5">Họ và tên *</label>
               <input 
                 type="text" 
                 required
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
                 placeholder="Ví dụ: Nguyễn Văn A"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Email *</label>
+              <label className="block text-sm font-semibold text-[#3A211E] mb-1.5">Email *</label>
               <input 
                 type="email" 
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors bg-muted/30"
+                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
                 placeholder="email@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Mật khẩu</label>
+              <label className="block text-sm font-semibold text-[#3A211E] mb-1.5">Mật khẩu *</label>
               <input 
                 type="password" 
                 required
                 minLength={6}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-border focus:border-[#201817] focus:outline-none transition-colors bg-muted/30"
+                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
                 placeholder="Tối thiểu 6 ký tự"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-[#3A211E] mb-1.5">Xác nhận mật khẩu *</label>
+              <input 
+                type="password" 
+                required
+                minLength={6}
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+                placeholder="Nhập lại mật khẩu"
               />
             </div>
             
             {error && (
-              <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">
+              <div className="p-3.5 bg-red-50 text-red-700 text-sm rounded-xl border border-red-200">
                 {error}
               </div>
             )}
@@ -110,13 +195,16 @@ export default function RegisterPage() {
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full py-4 mt-4 bg-[#4A2A25] hover:bg-[#6F625E] text-white rounded-full font-bold transition-all disabled:opacity-50"
+              className="w-full py-3.5 mt-2 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full font-bold transition-all disabled:opacity-50 text-base shadow-[0_4px_14px_rgba(58,33,30,0.12)]"
             >
-              {loading ? 'Đang xử lý...' : 'Đăng ký'}
+              {loading ? 'Đang xử lý...' : 'Đăng ký tài khoản'}
             </button>
             
-            <p className="text-center text-sm text-muted-foreground pt-4">
-              Đã có tài khoản? <Link href="/login" className="text-[#201817] font-bold hover:underline">Đăng nhập ngay</Link>
+            <p className="text-center text-sm text-[#6F625E] pt-3">
+              Đã có tài khoản?{' '}
+              <Link href={loginLink} className="text-[#3A211E] font-bold hover:underline">
+                Đăng nhập ngay
+              </Link>
             </p>
           </form>
         )}

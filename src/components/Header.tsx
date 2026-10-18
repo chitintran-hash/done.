@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Search, User as UserIcon, ShoppingCart, Menu, Heart } from 'lucide-react';
+import { Search, User as UserIcon, ShoppingCart, Menu, Heart, X, Package } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
@@ -16,6 +16,7 @@ export default function Header() {
   const [user, setUser] = useState<User | null>(null);
   const cart = useCartStore();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, setLanguage } = useLanguageStore();
   const t = (key: TranslationKey) => translations[language][key] !== undefined ? translations[language][key] : key;
 
@@ -48,8 +49,8 @@ export default function Header() {
     const supabase = createClient();
     await supabase.auth.signOut();
   };
-  if (pathname === '/custom-cup' || pathname.startsWith('/admin')) return null;
 
+  if (pathname === '/custom-cup' || pathname.startsWith('/admin')) return null;
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#DDD8D2] ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-[#F7F6F2]"}`}>
@@ -57,7 +58,13 @@ export default function Header() {
         
         {/* Mobile Menu Icon */}
         <div className="lg:hidden flex items-center">
-          <Menu className="w-6 h-6 text-[#201817]" />
+          <button 
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            className="p-2 -ml-2 text-[#201817] hover:text-[#4A2A25] transition-colors"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
         <div className="flex items-center gap-10 h-full">
@@ -75,14 +82,38 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation (Đã xóa hoàn toàn mục Mẫu Ly) */}
           <nav className="hidden lg:flex items-center gap-8 h-full">
-            <Link href="/products" className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#201817] text-[#201817]' : 'border-transparent text-[#6F625E] hover:text-[#201817]'}`}>{t('Shop' as any)}</Link>
-            <Link href="/custom-cup" className="text-[15px] font-bold text-[#201817] bg-[#FFF3A6] px-5 py-2.5 rounded-full hover:bg-[#EDECEA] transition-colors flex items-center gap-2 shadow-sm border border-[#DDD8D2]">{t('Design Your Cup ✨' as any)}</Link>
-            <Link href="/templates" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('Templates' as any)}</Link>
-            <Link href="/community" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('Community' as any)}</Link>
-            <Link href="/gifts" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('Gifts' as any)}</Link>
-            <Link href="/about" className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent">{t('About' as any)}</Link>
+            <Link 
+              href="/products" 
+              className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#201817] text-[#201817]' : 'border-transparent text-[#6F625E] hover:text-[#201817]'}`}
+            >
+              {t('Shop' as any)}
+            </Link>
+            <Link 
+              href="/custom-cup" 
+              className="text-[15px] font-bold text-[#201817] bg-[#FFF3A6] px-5 py-2.5 rounded-full hover:bg-[#EDECEA] transition-colors flex items-center gap-2 shadow-sm border border-[#DDD8D2]"
+            >
+              {t('Design Your Cup ✨' as any)}
+            </Link>
+            <Link 
+              href="/community" 
+              className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent"
+            >
+              {t('Community' as any)}
+            </Link>
+            <Link 
+              href="/gifts" 
+              className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent"
+            >
+              {t('Gifts' as any)}
+            </Link>
+            <Link 
+              href="/about" 
+              className="text-[15px] font-bold transition-colors text-[#6F625E] hover:text-[#201817] h-full flex items-center border-b-2 border-transparent"
+            >
+              {t('About' as any)}
+            </Link>
           </nav>
         </div>
 
@@ -98,56 +129,74 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-5 text-[#201817]">
-          {/* Language Toggle */}
-          <div className="hidden md:flex bg-[#DDD8D2] rounded-full p-1 border border-[#DDD8D2]">
-            <button 
-              onClick={() => {
-                setLanguage('vi');
-                document.cookie = "NEXT_LOCALE=vi; path=/; max-age=31536000";
-                window.location.reload();
-              }}
-              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'vi' ? 'bg-white text-[#201817] shadow-sm' : 'text-[#6F625E] hover:text-[#201817]'}`}
-            >
-              VI
-            </button>
-            <button 
-              onClick={() => {
-                setLanguage('en');
-                document.cookie = "NEXT_LOCALE=en; path=/; max-age=31536000";
-                window.location.reload();
-              }}
-              className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white text-[#201817] shadow-sm' : 'text-[#6F625E] hover:text-[#201817]'}`}
-            >
-              EN
-            </button>
-          </div>
+            {/* Language Toggle */}
+            <div className="hidden md:flex bg-[#DDD8D2] rounded-full p-1 border border-[#DDD8D2]">
+              <button 
+                onClick={() => {
+                  setLanguage('vi');
+                  document.cookie = "NEXT_LOCALE=vi; path=/; max-age=31536000";
+                  window.location.reload();
+                }}
+                className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'vi' ? 'bg-white text-[#201817] shadow-sm' : 'text-[#6F625E] hover:text-[#201817]'}`}
+              >
+                VI
+              </button>
+              <button 
+                onClick={() => {
+                  setLanguage('en');
+                  document.cookie = "NEXT_LOCALE=en; path=/; max-age=31536000";
+                  window.location.reload();
+                }}
+                className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${language === 'en' ? 'bg-white text-[#201817] shadow-sm' : 'text-[#6F625E] hover:text-[#201817]'}`}
+              >
+                EN
+              </button>
+            </div>
+
+            {/* Profile Dropdown */}
             {user ? (
               <div className="relative group">
-                <Link href="/account" className="hover:text-[#6B463D] transition-colors flex items-center">
+                <Link href="/account" className="hover:text-[#6B463D] transition-colors flex items-center p-1">
                   <UserIcon className="w-[22px] h-[22px]" strokeWidth={2} />
                 </Link>
-                <div className="absolute right-0 top-full pt-4 w-52 hidden group-hover:block z-50">
+                <div className="absolute right-0 top-full pt-4 w-56 hidden group-hover:block z-50">
                   <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-[#DDD8D2]">
-                  <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">{t('Profile' as any)}</Link>
-                  <Link href="/orders" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">Đơn hàng</Link>
-                  <Link href="/wishlist" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium flex items-center justify-between">Wishlist <Heart className="w-3 h-3"/></Link>
-                  {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
-                    <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-[#6B463D]">Quản trị Admin</Link>
-                  )}
-                  <button onClick={handleSignOut} className="w-full text-left px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-red-500 border-t border-[#DDD8D2]">{t('Logout' as any)}</button>
+                    <Link href="/account" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium border-b border-[#DDD8D2]/40">
+                      {t('Profile' as any)}
+                    </Link>
+                    <Link href="/orders" className="flex items-center justify-between px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">
+                      <span>Đơn hàng của tôi</span>
+                      <Package className="w-4 h-4 text-[#6F625E]" />
+                    </Link>
+                    <Link href="/wishlist" className="flex items-center justify-between px-4 py-3 text-sm hover:bg-[#EDECEA] text-[#201817] font-medium">
+                      <span>Sản phẩm yêu thích</span>
+                      <Heart className="w-3.5 h-3.5 text-[#6F625E]" />
+                    </Link>
+                    {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
+                      <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-[#6B463D] border-t border-[#DDD8D2]/40">
+                        Quản trị Admin
+                      </Link>
+                    )}
+                    <button 
+                      onClick={handleSignOut} 
+                      className="w-full text-left px-4 py-3 text-sm hover:bg-[#EDECEA] font-bold text-red-500 border-t border-[#DDD8D2]"
+                    >
+                      {t('Logout' as any)}
+                    </button>
                   </div>
                 </div>
               </div>
             ) : (
-              <Link href="/login" className="hover:text-[#6B463D] transition-colors">
+              <Link href="/login" className="hover:text-[#6B463D] transition-colors p-1" title="Đăng nhập">
                 <UserIcon className="w-[22px] h-[22px]" strokeWidth={2} />
               </Link>
             )}
 
-            <Link href="/cart" className="relative hover:text-[#6B463D] transition-colors">
+            {/* Cart Icon */}
+            <Link href="/cart" className="relative hover:text-[#6B463D] transition-colors p-1" title="Giỏ hàng">
               <ShoppingCart className="w-[22px] h-[22px]" strokeWidth={2} />
               {cart.items.length >= 0 && (
-                <span className="absolute -top-1.5 -right-2.5 w-[18px] h-[18px] bg-[#4A2A25] text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-[#F7F6F2]">
+                <span className="absolute -top-1 -right-1.5 w-[18px] h-[18px] bg-[#4A2A25] text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-[#F7F6F2]">
                   {cart.items.reduce((sum, item) => sum + item.quantity, 0)}
                 </span>
               )}
@@ -155,6 +204,57 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-white border-b border-[#DDD8D2] px-6 py-6 shadow-lg animate-in slide-in-from-top-2 duration-200">
+          <nav className="flex flex-col gap-4">
+            <Link 
+              href="/products" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-bold text-[#201817] py-2 border-b border-[#DDD8D2]/50"
+            >
+              {t('Shop' as any)}
+            </Link>
+            <Link 
+              href="/custom-cup" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-bold text-[#201817] bg-[#FFF3A6] px-4 py-3 rounded-xl flex items-center justify-between"
+            >
+              <span>{t('Design Your Cup ✨' as any)}</span>
+              <span>→</span>
+            </Link>
+            <Link 
+              href="/community" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-bold text-[#201817] py-2 border-b border-[#DDD8D2]/50"
+            >
+              {t('Community' as any)}
+            </Link>
+            <Link 
+              href="/gifts" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-bold text-[#201817] py-2 border-b border-[#DDD8D2]/50"
+            >
+              {t('Gifts' as any)}
+            </Link>
+            <Link 
+              href="/about" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-bold text-[#201817] py-2 border-b border-[#DDD8D2]/50"
+            >
+              {t('About' as any)}
+            </Link>
+            <Link 
+              href="/orders" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-bold text-[#4A2A25] py-2 flex items-center gap-2"
+            >
+              <Package className="w-4 h-4" /> Đơn hàng của tôi
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

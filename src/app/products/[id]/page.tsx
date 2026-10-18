@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useParams } from 'next/navigation';
-import { ChevronRight, Plus, Minus, Info, ShieldCheck, Heart } from 'lucide-react';
+import { ChevronRight, Plus, Minus, Info, ShieldCheck, Heart, Check } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCartStore } from '@/store/useCartStore';
+import AuthRequiredModal from '@/components/AuthRequiredModal';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -52,6 +53,9 @@ export default function ProductDetailPage() {
   const isOutOfStock = product.stock <= 0;
   const specs = product.technical_specs || {};
 
+  const [addedSuccess, setAddedSuccess] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   const handleAddToCart = () => {
     cart.addItem({
       id: product.id,
@@ -61,13 +65,26 @@ export default function ProductDetailPage() {
       quantity: quantity,
       isCustom: false
     });
-    // Hiển thị thông báo hoặc chuyển hướng
-    alert("Đã thêm vào giỏ hàng");
+    setAddedSuccess(true);
+    setTimeout(() => setAddedSuccess(false), 3000);
   };
 
-  const handleBuyNow = () => {
-    handleAddToCart();
-    router.push('/cart');
+  const handleBuyNow = async () => {
+    cart.addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image_url,
+      quantity: quantity,
+      isCustom: false
+    });
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setShowAuthModal(true);
+    } else {
+      router.push('/checkout');
+    }
   };
 
   const handleCustomize = () => {
@@ -150,6 +167,13 @@ export default function ProductDetailPage() {
 
           {/* Actions */}
           <div className="flex flex-col gap-4">
+            {addedSuccess && (
+              <div className="p-3 bg-emerald-50 text-emerald-800 rounded-2xl border border-emerald-200 text-sm font-semibold flex items-center gap-2 animate-in fade-in duration-200">
+                <Check className="w-4 h-4 text-emerald-600" />
+                <span>Đã thêm sản phẩm vào giỏ hàng thành công!</span>
+              </div>
+            )}
+
             <div className="flex gap-4">
               <div className="flex items-center border border-border rounded-full h-14 w-32 justify-between px-4">
                 <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-muted-foreground hover:text-foreground">
@@ -163,29 +187,35 @@ export default function ProductDetailPage() {
               <button 
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
-                className="flex-1 h-14 rounded-full bg-foreground text-white font-medium hover:bg-black transition-colors disabled:opacity-50"
+                className="flex-1 h-14 rounded-full bg-[#3A211E] text-white font-bold hover:bg-[#4A2A25] transition-colors disabled:opacity-50"
               >
-                Add to Cart
+                Thêm vào giỏ
               </button>
             </div>
             
             <button 
               onClick={handleBuyNow}
               disabled={isOutOfStock}
-              className="w-full h-14 rounded-full border border-primary text-primary font-medium hover:bg-primary/5 transition-colors disabled:opacity-50"
+              className="w-full h-14 rounded-full border-2 border-[#3A211E] text-[#3A211E] font-bold hover:bg-[#EDECEA] transition-colors disabled:opacity-50"
             >
-              Buy Now
+              Mua ngay
             </button>
 
             {specs.is_customizable && (
               <button 
                 onClick={handleCustomize}
-                className="w-full h-14 mt-4 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                className="w-full h-14 mt-2 rounded-full bg-[#FFF3A6] text-[#201817] font-bold hover:bg-[#EDECEA] transition-colors border border-[#DDD8D2]"
               >
-                Customize This Cup
+                Tự thiết kế mẫu ly này ✨
               </button>
             )}
           </div>
+
+          <AuthRequiredModal 
+            isOpen={showAuthModal} 
+            onClose={() => setShowAuthModal(false)} 
+            redirectUrl="/checkout" 
+          />
           
           <div className="mt-12 space-y-4">
             <div className="flex gap-4 items-start">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { 
   Search, 
   Filter, 
@@ -242,12 +243,12 @@ export default function OrdersClient({ initialOrders }: { initialOrders: Order[]
                         </span>
                       </td>
                       <td className="py-4 px-6 text-right space-x-2">
-                        <button 
-                          onClick={() => setSelectedOrder(order)}
-                          className="px-3 py-1.5 bg-[#EDECEA] text-[#3A211E] rounded-xl text-xs font-semibold hover:bg-[#DDD8D2] transition-colors"
+                        <Link 
+                          href={`/admin/orders/${order.id}`}
+                          className="px-3 py-1.5 bg-[#EDECEA] text-[#3A211E] rounded-xl text-xs font-semibold hover:bg-[#DDD8D2] transition-colors inline-block"
                         >
                           Chi Tiết
-                        </button>
+                        </Link>
                         <button 
                           onClick={() => {
                             setEditingOrderId(order.id);

@@ -334,7 +334,6 @@ export default function AdminProductsPage() {
                     className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl font-medium"
                   >
                     <option value="glass">Ly thủy tinh</option>
-                    <option value="thermos">Ly giữ nhiệt</option>
                     <option value="plastic">Ly nhựa</option>
                     <option value="custom">Ly custom phôi</option>
                   </select>

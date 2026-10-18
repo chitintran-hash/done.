@@ -266,6 +266,24 @@ export async function fetchAdminOrders(filters?: { status?: string; search?: str
   return result;
 }
 
+export async function fetchAdminOrderDetail(orderId: string) {
+  await verifyAdmin();
+  const adminClient = getAdminClient();
+
+  const { data: order, error } = await adminClient
+    .from('orders')
+    .select(`
+      id, buyer_id, created_at, total_price, status, buyer_name_snapshot, buyer_email_snapshot, shipping_address,
+      profiles:buyer_id(id, full_name, phone_number, store_name),
+      order_items(id, quantity, price, status, product_id, products(id, name, image_url, description, category, technical_specs))
+    `)
+    .eq('id', orderId)
+    .single();
+
+  if (error || !order) return null;
+  return order;
+}
+
 export async function updateOrderStatus(orderId: string, status: string, trackingInfo?: { carrier?: string; trackingNumber?: string; shippingFee?: number }) {
   await verifyAdmin();
   const adminClient = getAdminClient();

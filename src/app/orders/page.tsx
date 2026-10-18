@@ -2,23 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Package, Search, Truck } from 'lucide-react';
+import { Package, Truck, ArrowRight, Eye, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
-
+import Image from 'next/image';
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   pending: { label: "Chờ xác nhận", color: "bg-amber-100 text-amber-800" },
   confirmed: { label: "Đã xác nhận", color: "bg-blue-100 text-blue-800" },
-  design_review: { label: "Đang kiểm tra thiết kế", color: "bg-purple-100 text-purple-800" },
   in_production: { label: "Đang sản xuất", color: "bg-indigo-100 text-indigo-800" },
-  quality_check: { label: "Đang kiểm tra chất lượng", color: "bg-teal-100 text-teal-800" },
-  packaging: { label: "Đang đóng gói", color: "bg-cyan-100 text-cyan-800" },
-  handed_to_carrier: { label: "Đã bàn giao vận chuyển", color: "bg-orange-100 text-orange-800" },
   shipping: { label: "Đang giao hàng", color: "bg-sky-100 text-sky-800" },
-  delivered: { label: "Giao thành công", color: "bg-emerald-100 text-emerald-800" },
-  completed: { label: "Đã giao thành công", color: "bg-emerald-100 text-emerald-800" },
+  delivered: { label: "Đã giao hàng", color: "bg-emerald-100 text-emerald-800" },
+  completed: { label: "Đã giao hàng", color: "bg-emerald-100 text-emerald-800" },
   cancelled: { label: "Đã hủy", color: "bg-rose-100 text-rose-800" },
-  returned: { label: "Hoàn trả", color: "bg-gray-200 text-gray-800" }
 };
 
 export default function BuyerOrdersPage() {
@@ -32,16 +27,18 @@ export default function BuyerOrdersPage() {
 
   const fetchOrders = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
-    // Fetch master orders for the buyer
     const { data, error } = await supabase
       .from('orders')
       .select(`
         id, created_at, status, total_price, shipping_address,
         order_items (
           id, quantity, price, status,
-          products ( name, image_url, profiles (store_name) )
+          products ( id, name, image_url, category )
         )
       `)
       .eq('buyer_id', user.id)
@@ -54,76 +51,145 @@ export default function BuyerOrdersPage() {
   };
 
   if (loading) {
-    return <div className="p-12 text-center text-muted-foreground">Đang tải đơn hàng...</div>;
+    return (
+      <div className="min-h-screen bg-[#F7F6F2] flex flex-col items-center justify-center pt-28">
+        <RefreshCw className="w-8 h-8 animate-spin text-[#3A211E] mb-3" />
+        <p className="text-sm text-[#6F625E]">Đang tải danh sách đơn hàng...</p>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 pt-32 pb-12 min-h-[80vh]">
-      <h1 className="text-3xl font-bold mb-8">Đơn hàng của tôi</h1>
-
-      {orders.length === 0 ? (
-        <div className="text-center py-20 bg-muted/20 rounded-3xl border border-border border-dashed">
-          <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-xl font-bold mb-2">Chưa có đơn hàng nào</h3>
-          <p className="text-muted-foreground mb-6">Bạn chưa mua bất kỳ sản phẩm nào trên Cupfy</p>
-          <Link href="/products" className="px-6 py-3 bg-foreground text-background rounded-full font-medium">Mua sắm ngay</Link>
+    <div className="min-h-screen bg-[#F7F6F2] pt-28 pb-20">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="font-heading text-3xl font-bold text-[#3A211E]">
+              Đơn hàng của tôi
+            </h1>
+            <p className="text-sm text-[#6F625E] mt-1">
+              Theo dõi và quản lý toàn bộ đơn hàng của bạn tại Cupfy
+            </p>
+          </div>
         </div>
-      ) : (
-        <div className="space-y-6">
-          {orders.map((order) => (
-            <div key={order.id} className="bg-white border border-border rounded-2xl overflow-hidden shadow-sm">
-              <div className="bg-muted/30 px-6 py-4 border-b border-border flex flex-wrap gap-4 items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Mã đơn hàng</p>
-                  <p className="font-mono font-bold text-sm">#{order.id.split('-')[0].toUpperCase()}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Ngày đặt</p>
-                  <p className="font-bold text-sm">{new Date(order.created_at).toLocaleDateString('vi-VN')}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Tổng tiền</p>
-                  <p className="font-bold text-sm text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total_price)}</p>
-                </div>
-                <div className="text-right">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                    STATUS_LABELS[order.status]?.color || 'bg-muted text-muted-foreground'
-                  }`}>
-                    <Truck className="w-3.5 h-3.5" />
-                    {STATUS_LABELS[order.status]?.label || order.status.toUpperCase()}
-                  </span>
-                </div>
-              </div>
 
-              <div className="divide-y divide-border">
-                {order.order_items.map((item: any) => (
-                  <div key={item.id} className="p-6 flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                    <img src={item.products?.image_url} alt="" className="w-20 h-20 object-cover rounded-lg border border-border" />
-                    <div className="flex-1">
-                      <h4 className="font-bold text-lg leading-tight mb-1">{item.products?.name}</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Thương hiệu: <strong>Cupfy Official Store</strong></p>
-                      <div className="flex items-center gap-4 text-sm font-medium">
-                        <span className="text-accent">{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}</span>
-                        <span className="text-muted-foreground">x{item.quantity}</span>
+        {orders.length === 0 ? (
+          <div className="text-center py-20 px-6 bg-white rounded-[28px] border border-[#DDD8D2] shadow-sm">
+            <div className="w-20 h-20 bg-[#F7F6F2] rounded-3xl border border-[#DDD8D2] flex items-center justify-center text-3xl mx-auto mb-4">
+              <Package className="w-10 h-10 text-[#6F625E]" />
+            </div>
+            <h3 className="font-heading text-2xl font-bold text-[#3A211E] mb-2">
+              Bạn chưa có đơn hàng nào.
+            </h3>
+            <p className="text-sm text-[#6F625E] max-w-md mx-auto mb-8">
+              Hãy bắt đầu mua sắm hoặc tự tay thiết kế chiếc ly đặc biệt cho bản thân nhé!
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link 
+                href="/products" 
+                className="px-8 py-3.5 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full font-bold text-sm transition-colors shadow-sm"
+              >
+                Khám phá cửa hàng
+              </Link>
+              <Link 
+                href="/custom-cup" 
+                className="px-8 py-3.5 bg-white text-[#3A211E] border border-[#DDD8D2] hover:bg-[#EDECEA] rounded-full font-bold text-sm transition-colors"
+              >
+                Thiết kế ly ngay
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {orders.map((order) => {
+              const formattedCode = `#${order.id.slice(0, 8).toUpperCase()}`;
+              const totalItems = (order.order_items || []).reduce((sum: number, it: any) => sum + (it.quantity || 1), 0);
+              const firstItem = order.order_items?.[0]?.products;
+
+              return (
+                <div 
+                  key={order.id} 
+                  className="bg-white border border-[#DDD8D2] rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                >
+                  {/* Header card */}
+                  <div className="bg-[#F7F6F2] px-6 py-4 border-b border-[#DDD8D2] flex flex-wrap gap-4 items-center justify-between text-sm">
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <p className="text-xs text-[#6F625E]">Mã đơn hàng</p>
+                        <p className="font-mono font-bold text-[#3A211E]">{formattedCode}</p>
+                      </div>
+                      <div className="hidden sm:block border-l border-[#DDD8D2] pl-4">
+                        <p className="text-xs text-[#6F625E]">Ngày đặt</p>
+                        <p className="font-semibold text-[#3A211E]">
+                          {new Date(order.created_at).toLocaleDateString('vi-VN')}
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right w-full sm:w-auto">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${
-                        item.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                        item.status === 'preparing' ? 'bg-blue-100 text-blue-700' :
-                        item.status === 'shipped' ? 'bg-green-100 text-green-700' :
-                        'bg-muted text-muted-foreground'
+
+                    <div className="flex items-center gap-4">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+                        STATUS_LABELS[order.status]?.color || 'bg-muted text-muted-foreground'
                       }`}>
-                        {item.status.toUpperCase()}
+                        <Truck className="w-3.5 h-3.5" />
+                        {STATUS_LABELS[order.status]?.label || order.status}
                       </span>
+
+                      <Link
+                        href={`/orders/${order.id}`}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full text-xs font-bold transition-colors shadow-sm"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        Xem chi tiết
+                      </Link>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+
+                  {/* Body card: Preview sản phẩm */}
+                  <div className="p-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="relative w-16 h-16 rounded-xl bg-[#F7F6F2] border border-[#DDD8D2] overflow-hidden shrink-0 flex items-center justify-center p-1">
+                          {firstItem?.image_url ? (
+                            <Image 
+                              src={firstItem.image_url} 
+                              alt={firstItem.name || 'Sản phẩm'} 
+                              fill 
+                              className="object-contain p-1" 
+                            />
+                          ) : (
+                            <span className="text-xs text-[#6F625E]">Ly Cupfy</span>
+                          )}
+                        </div>
+
+                        <div>
+                          <h4 className="font-bold text-base text-[#3A211E]">
+                            {firstItem?.name || 'Sản phẩm Cupfy'}
+                            {order.order_items?.length > 1 && (
+                              <span className="text-xs text-[#6F625E] font-normal ml-2">
+                                + {order.order_items.length - 1} sản phẩm khác
+                              </span>
+                            )}
+                          </h4>
+                          <p className="text-xs text-[#6F625E] mt-0.5">
+                            Tổng cộng {totalItems} sản phẩm
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-left sm:text-right border-t sm:border-t-0 pt-3 sm:pt-0 w-full sm:w-auto">
+                        <span className="text-xs text-[#6F625E] block">Tổng thanh toán</span>
+                        <span className="font-heading font-bold text-xl text-[#3A211E]">
+                          {Number(order.total_price).toLocaleString('vi-VN')} ₫
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

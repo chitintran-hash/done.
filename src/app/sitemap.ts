@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { BLOG_ARTICLES } from '@/data/blogArticles';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.cupfy.space';
@@ -117,5 +118,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap products:', e);
   }
 
-  return [...staticRoutes, ...productRoutes];
+  // 3. Blog & Hướng dẫn SEO
+  const blogRoutes: MetadataRoute.Sitemap = BLOG_ARTICLES.map((article) => ({
+    url: `${baseUrl}/blog/${article.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.75,
+  }));
+
+  return [...staticRoutes, ...blogRoutes, ...productRoutes];
 }

@@ -805,9 +805,15 @@ export async function fetchCustomRequests() {
   const requests = validCustomItems.map(item => {
     const prod = item.products as any;
     let customSpecs: any = {};
-    if (prod?.description) {
+    if (prod?.technical_specs && typeof prod.technical_specs === 'object' && Object.keys(prod.technical_specs).length > 0) {
+      customSpecs = prod.technical_specs;
+    } else if (prod?.description) {
       try {
-        customSpecs = JSON.parse(prod.description);
+        if (typeof prod.description === 'string' && prod.description.startsWith('{')) {
+          customSpecs = JSON.parse(prod.description);
+        } else if (typeof prod.description === 'object') {
+          customSpecs = prod.description;
+        }
       } catch (e) {
         customSpecs = prod.technical_specs || {};
       }
@@ -823,11 +829,16 @@ export async function fetchCustomRequests() {
       quantity: item.quantity,
       itemStatus: item.status,
       orderStatus: (item.orders as any)?.status,
-      cupImage: prod?.image_url,
+      productName: prod?.name || 'Chiếc Ly Cá Nhân Hóa',
+      cupImage: customSpecs.previewImage || prod?.image_url,
+      previewImage: customSpecs.previewImage || prod?.image_url,
       modelType: customSpecs.modelType || 'tumbler',
       modelName: customSpecs.modelName || '',
+      capacity: customSpecs.capacity || '',
       cupColor: customSpecs.cupColor || '#ffffff',
-      lidColor: customSpecs.lidColor || '#ffffff',
+      cupColorName: customSpecs.cupColorName || '',
+      lidColor: customSpecs.lidColor || '#FFF3A6',
+      strawColor: customSpecs.strawColor || null,
       customText: customSpecs.customText || '',
       textColor: customSpecs.textColor || '#000000',
       uploadedImage: customSpecs.uploadedImage || null,
@@ -835,7 +846,10 @@ export async function fetchCustomRequests() {
       printableTexture: customSpecs.printableTexture || null,
       layers: customSpecs.layers || [],
       sticker: customSpecs.sticker || null,
-      fontFamily: customSpecs.font || customSpecs.fontFamily || 'Be Vietnam Pro'
+      fontFamily: customSpecs.font || customSpecs.fontFamily || 'Be Vietnam Pro',
+      customSpecs: customSpecs,
+      products: prod,
+      orders: item.orders
     };
   });
 

@@ -1,54 +1,108 @@
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Gift, Package, Star } from 'lucide-react';
+import { Gift, Package, Star, Sparkles, Heart } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Ly Cá Nhân Hóa Làm Quà Tặng | Cupfy',
+  description: 'Khám phá ý tưởng quà tặng từ những chiếc ly cá nhân hóa tại Cupfy. Tự thiết kế ly in tên, hình ảnh và lời nhắn dành cho người thân, bạn bè.',
+  alternates: {
+    canonical: 'https://www.cupfy.space/gifts',
+  },
+  openGraph: {
+    title: 'Ly Cá Nhân Hóa Làm Quà Tặng | Cupfy',
+    description: 'Khám phá ý tưởng quà tặng từ những chiếc ly cá nhân hóa tại Cupfy. Tự thiết kế ly in tên, hình ảnh và lời nhắn dành cho người thân, bạn bè.',
+    url: 'https://www.cupfy.space/gifts',
+    siteName: 'Cupfy',
+    locale: 'vi_VN',
+    type: 'website',
+  },
+};
 
 export default function GiftsPage() {
   return (
-    <div className="min-h-screen pt-[120px] pb-24 bg-[#F7F6F2]">
-      <div className="container mx-auto px-6">
+    <div className="min-h-screen pt-[100px] md:pt-[120px] pb-24 bg-[#F7F6F2]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
-        {/* Hero */}
-        <div className="bg-[#FFF3A6] rounded-[3rem] p-12 md:p-20 flex flex-col md:flex-row items-center gap-12 mb-24">
+        {/* Hero Section */}
+        <div className="bg-[#FFF3A6] rounded-[2.5rem] sm:rounded-[3rem] p-8 sm:p-14 md:p-20 flex flex-col md:flex-row items-center gap-10 md:gap-14 mb-20 shadow-xs border border-[#DDD8D2]">
           <div className="w-full md:w-1/2">
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-[#3B2725] mb-6 leading-tight">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#DDD8D2] text-[11px] font-bold text-[#4A2A25] uppercase tracking-wider mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+              Quà Tặng Cá Nhân Hóa
+            </div>
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-[#3B2725] mb-5 leading-tight tracking-tight">
               Gói Trọn <br/><span className="text-[#D9788F]">Yêu Thương</span>
             </h1>
-            <p className="text-[#6F625E] text-lg mb-8 max-w-md">
-              Những chiếc ly độc bản sẽ càng ý nghĩa hơn khi được bọc trong những hộp quà xinh xắn từ Cupfy. Dành tặng cho những người đặc biệt nhất.
+            <p className="text-[#6F625E] text-sm sm:text-base mb-8 max-w-md leading-relaxed">
+              Những chiếc ly độc bản sẽ càng ý nghĩa hơn khi được in tên, hình ảnh kỷ niệm và lời chúc yêu thương từ Cupfy dành tặng cho những người đặc biệt nhất.
             </p>
-            <Link href="/products" className="bg-[#3B2725] text-white px-8 py-4 rounded-full font-bold hover:bg-[#201514] transition-colors inline-block">
-              Chọn Quà Ngay
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link 
+                href="/custom-cup" 
+                className="px-7 py-3.5 bg-[#3B2725] text-white rounded-full font-bold text-sm hover:bg-[#201514] transition-colors shadow-sm flex items-center gap-2"
+              >
+                <Sparkles className="w-4 h-4 text-[#FFF3A6]" />
+                Thiết kế món quà của bạn
+              </Link>
+              <Link 
+                href="/products" 
+                className="px-7 py-3.5 bg-white text-[#3B2725] border border-[#DDD8D2] rounded-full font-bold text-sm hover:bg-[#EDECEA] transition-colors"
+              >
+                Chọn Quà Có Sẵn
+              </Link>
+            </div>
           </div>
-          <div className="w-full md:w-1/2 relative aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
-            <Image src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80" alt="Gifts" fill className="object-cover" />
+          <div className="w-full md:w-1/2 relative aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-[#DDD8D2]">
+            <Image 
+              src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80" 
+              alt="Hộp quà tặng ly cá nhân hóa cao cấp tại Cupfy" 
+              fill 
+              priority
+              className="object-cover" 
+            />
           </div>
         </div>
 
         {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-20">
           {[
-            { icon: Gift, title: "Hộp Quà Cao Cấp", desc: "Hộp quà thiết kế riêng với lót nhung và thiệp viết tay." },
-            { icon: Package, title: "Đóng Gói Chống Sốc", desc: "Đảm bảo ly thủy tinh an toàn tuyệt đối trong quá trình vận chuyển." },
-            { icon: Star, title: "Quà Tặng Doanh Nghiệp", desc: "In logo số lượng lớn với chiết khấu hấp dẫn cho doanh nghiệp." }
+            { icon: Gift, title: "Hộp Quà Cao Cấp", desc: "Hộp quà thiết kế riêng với lót nhung bảo vệ và thiệp viết tay nhắn gửi lời chúc chân thành." },
+            { icon: Package, title: "Đóng Gói Chống Sốc An Toàn", desc: "Đảm bảo ly thủy tinh và ly nhựa an toàn tuyệt đối 100% trong suốt quá trình vận chuyển toàn quốc." },
+            { icon: Star, title: "Quà Tặng Doanh Nghiệp", desc: "In logo thương hiệu theo yêu cầu với chiết khấu hấp dẫn cho quán cà phê, trà sữa và doanh nghiệp." }
           ].map((feat, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-3xl text-center shadow-sm border border-border">
-              <div className="w-16 h-16 bg-[#F7F6F2] rounded-full flex items-center justify-center mx-auto mb-6 text-[#D9788F]">
+            <div key={idx} className="bg-white p-8 rounded-3xl text-center shadow-xs border border-[#DDD8D2] flex flex-col items-center">
+              <div className="w-16 h-16 bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-5 text-[#D9788F] border border-[#DDD8D2]">
                 <feat.icon className="w-8 h-8" />
               </div>
-              <h3 className="font-bold text-xl text-[#3B2725] mb-4">{feat.title}</h3>
-              <p className="text-[#6F625E]">{feat.desc}</p>
+              <h3 className="font-bold text-lg sm:text-xl text-[#3B2725] mb-2">{feat.title}</h3>
+              <p className="text-xs sm:text-sm text-[#6F625E] leading-relaxed">{feat.desc}</p>
             </div>
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="text-center">
-          <h2 className="text-3xl font-serif font-bold text-[#3B2725] mb-6">Bạn đang tìm quà cho Doanh nghiệp?</h2>
-          <p className="text-[#6F625E] mb-8">Liên hệ trực tiếp với chúng tôi để nhận báo giá tốt nhất cho đơn hàng số lượng lớn.</p>
-          <a href="mailto:hello@cupfy.vn" className="inline-block border-2 border-[#3B2725] text-[#3B2725] px-8 py-3 rounded-full font-bold hover:bg-[#3B2725] hover:text-white transition-colors">
-            Liên hệ báo giá
-          </a>
+        {/* Corporate CTA */}
+        <div className="bg-white rounded-3xl border border-[#DDD8D2] p-8 sm:p-12 text-center max-w-3xl mx-auto shadow-xs">
+          <h2 className="text-2xl sm:text-3xl font-black text-[#3B2725] mb-3">
+            Bạn Đang Tìm Quà Tặng Cho Doanh Nghiệp Hoặc Quán Cà Phê?
+          </h2>
+          <p className="text-sm text-[#6F625E] mb-6 max-w-xl mx-auto leading-relaxed">
+            Cupfy nhận thiết kế và in ly thủy tinh, ly nhựa số lượng lớn với nhận diện thương hiệu độc quyền. Liên hệ trực tiếp với chúng tôi để nhận báo giá ưu đãi nhất.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a 
+              href="mailto:support@cupfy.space" 
+              className="px-8 py-3.5 bg-[#3B2725] text-white rounded-full font-bold text-sm hover:bg-[#201514] transition-colors shadow-sm"
+            >
+              Liên hệ báo giá: support@cupfy.space
+            </a>
+            <Link 
+              href="/custom-cup" 
+              className="px-8 py-3.5 bg-[#FAF9F6] border border-[#DDD8D2] text-[#3B2725] rounded-full font-bold text-sm hover:bg-[#EDECEA] transition-colors"
+            >
+              Thử thiết kế mẫu ngay
+            </Link>
+          </div>
         </div>
 
       </div>

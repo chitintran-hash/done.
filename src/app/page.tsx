@@ -156,7 +156,7 @@ export default async function Home() {
                 {product.image_url ? (
                   <Image
                     src={product.image_url}
-                    alt={product.name}
+                    alt={`${product.name} - Ly đẹp chính hãng Cupfy`}
                     fill
                     className="object-contain p-8 group-hover:scale-105 transition-transform duration-500"
                   />
@@ -201,7 +201,7 @@ export default async function Home() {
           <div className="w-full md:w-1/2 h-[350px] md:h-full md:absolute md:right-0 md:top-0 bottom-0 relative z-0">
             <Image 
               src="/images/hero-slider-1.jpg" 
-              alt="Custom cup examples" 
+              alt="Bộ sưu tập ly thủy tinh và ly nhựa cá nhân hóa Cupfy tại Việt Nam" 
               fill
               className="object-contain object-center"
             />

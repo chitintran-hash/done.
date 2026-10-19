@@ -3,7 +3,9 @@ import AboutClient from './AboutClient';
 import { getPosts, checkIsAdmin } from '@/app/actions/posts';
 
 export const metadata: Metadata = {
-  title: 'Giới Thiệu Cupfy | Thương Hiệu Ly Cá Nhân Hóa',
+  title: {
+    absolute: 'Giới Thiệu Cupfy | Thương Hiệu Ly Cá Nhân Hóa',
+  },
   description: 'Tìm hiểu Cupfy, thương hiệu ly uống nước và ly cá nhân hóa trực tuyến tại Việt Nam, nơi bạn có thể tự thiết kế những chiếc ly mang dấu ấn riêng.',
   alternates: {
     canonical: 'https://www.cupfy.space/about',

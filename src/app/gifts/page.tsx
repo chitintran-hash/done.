@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { Gift, Package, Star, Sparkles, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Ly Cá Nhân Hóa Làm Quà Tặng | Cupfy',
+  title: {
+    absolute: 'Ly Cá Nhân Hóa Làm Quà Tặng | Cupfy',
+  },
   description: 'Khám phá ý tưởng quà tặng từ những chiếc ly cá nhân hóa tại Cupfy. Tự thiết kế ly in tên, hình ảnh và lời nhắn dành cho người thân, bạn bè.',
   alternates: {
     canonical: 'https://www.cupfy.space/gifts',

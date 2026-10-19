@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Tự Thiết Kế Ly Online, Xem Trước 3D | Cupfy',
+  title: {
+    absolute: 'Tự Thiết Kế Ly Online, Xem Trước 3D | Cupfy',
+  },
   description: 'Tự thiết kế ly cá nhân hóa tại Cupfy. Thêm tên, hình ảnh, logo và họa tiết yêu thích, xem trước mẫu ly 3D và đặt hàng trực tiếp trên website.',
   alternates: {
     canonical: 'https://www.cupfy.space/custom-cup',

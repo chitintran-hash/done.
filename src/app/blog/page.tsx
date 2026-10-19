@@ -5,7 +5,9 @@ import { BookOpen, Sparkles, Clock, User, ArrowRight } from 'lucide-react';
 import { BLOG_ARTICLES } from '@/data/blogArticles';
 
 export const metadata: Metadata = {
-  title: 'Cẩm Nang Thiết Kế & Chọn Ly Uống Nước | Cupfy',
+  title: {
+    absolute: 'Cẩm Nang Thiết Kế & Chọn Ly Uống Nước | Cupfy',
+  },
   description: 'Tổng hợp kinh nghiệm tự thiết kế ly online, chọn hình in sắc nét, ý tưởng quà tặng ly độc bản và giải pháp ly in logo cho quán cà phê từ Cupfy.',
   alternates: {
     canonical: 'https://www.cupfy.space/blog',

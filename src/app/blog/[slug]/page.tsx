@@ -21,7 +21,9 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   }
 
   return {
-    title: `${article.title} | Cupfy`,
+    title: {
+      absolute: `${article.title} | Cupfy`,
+    },
     description: article.excerpt,
     alternates: {
       canonical: `https://www.cupfy.space/blog/${article.slug}`,

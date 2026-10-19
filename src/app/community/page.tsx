@@ -3,7 +3,9 @@ import CommunityClient from './CommunityClient';
 import { getPosts, checkIsAdmin } from '@/app/actions/posts';
 
 export const metadata: Metadata = {
-  title: 'Cộng Đồng Sáng Tạo Ly Độc Bản | Cupfy',
+  title: {
+    absolute: 'Cộng Đồng Sáng Tạo Ly Độc Bản | Cupfy',
+  },
   description: 'Khám phá những thiết kế ly cá nhân hóa ấn tượng, hình ảnh thực tế và các câu chuyện sáng tạo từ cộng đồng khách hàng Cupfy.',
   alternates: {
     canonical: 'https://www.cupfy.space/community',

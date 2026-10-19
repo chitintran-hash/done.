@@ -29,7 +29,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     : `Khám phá ${product.name} tại Cupfy với thiết kế tối giản, phù hợp sử dụng hằng ngày. Xem thông tin sản phẩm và đặt mua trực tuyến.`;
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     alternates: {
       canonical: `https://www.cupfy.space/products/${product.id}`,

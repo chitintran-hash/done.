@@ -5,15 +5,31 @@ import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/useCartStore';
 import { Trash2, Plus, Minus, ArrowRight, Truck } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import AuthRequiredModal from '@/components/AuthRequiredModal';
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, updateQuantity, removeItem } = useCartStore();
+  const { items, updateQuantity, removeItem, addItem } = useCartStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(false);
+  const [giftBoxes, setGiftBoxes] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchGiftBoxes = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .in('category', ['gift_box', 'gift'])
+        .eq('is_available', true)
+        .order('price', { ascending: true });
+      if (data) setGiftBoxes(data);
+    };
+
+    fetchGiftBoxes();
+  }, []);
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shippingFee = items.length > 0 ? 30000 : 0;
@@ -156,6 +172,73 @@ export default function CartPage() {
                   </div>
                 </div>
               ))}
+
+              {/* Mua kèm hộp quà tặng */}
+              {giftBoxes.length > 0 && (
+                <div className="bg-white p-6 rounded-[24px] shadow-sm border border-[#DDD8D2]">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">🎁</span>
+                      <h3 className="font-bold text-base text-[#3A211E]">
+                        Mua kèm hộp quà tặng & đóng gói
+                      </h3>
+                    </div>
+                    <span className="text-xs text-[#6F625E]">Phụ kiện đóng gói</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {giftBoxes.map((box) => {
+                      const isAdded = items.some((i) => i.id === box.id);
+                      return (
+                        <div
+                          key={box.id}
+                          className="p-3 rounded-2xl bg-[#FAF9F6] border border-[#DDD8D2] flex items-center justify-between gap-3"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="w-12 h-12 rounded-xl bg-white border border-[#DDD8D2] overflow-hidden shrink-0 relative">
+                              <img
+                                src={box.image_url || 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300&q=80'}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="min-w-0">
+                              <h4 className="font-bold text-xs text-[#201817] truncate">
+                                {box.name}
+                              </h4>
+                              <p className="text-xs font-bold text-[#4A2A25]">
+                                +{Number(box.price).toLocaleString('vi-VN')} ₫
+                              </p>
+                            </div>
+                          </div>
+
+                          {isAdded ? (
+                            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 shrink-0">
+                              ✓ Đã thêm
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                addItem({
+                                  id: box.id,
+                                  name: box.name,
+                                  price: Number(box.price) || 0,
+                                  image: box.image_url || '',
+                                  quantity: 1,
+                                  isCustom: false,
+                                })
+                              }
+                              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#4A2A25] text-white hover:bg-[#3A211E] transition-colors shrink-0 shadow-2xs"
+                            >
+                              + Thêm
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="bg-white p-6 sm:p-8 rounded-[24px] shadow-sm border border-[#DDD8D2] h-fit sticky top-28">

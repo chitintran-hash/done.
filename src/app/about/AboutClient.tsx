@@ -51,11 +51,11 @@ export default function AboutClient({ initialPosts, isAdmin }: AboutClientProps)
             </p>
           </div>
 
-          {/* Hero Lifestyle Image */}
-          <div className="relative w-full aspect-video sm:aspect-[21/9] rounded-3xl overflow-hidden mb-12 shadow-sm border border-[#DDD8D2]">
+          {/* Official Cupfy Cover Banner */}
+          <div className="relative w-full aspect-[1024/378] rounded-3xl overflow-hidden mb-12 shadow-sm border border-[#DDD8D2] bg-[#FDF4B8]">
             <Image 
-              src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=1200&q=80" 
-              alt="Không gian sáng tạo ly cá nhân hóa Cupfy tại Việt Nam" 
+              src="/images/cupfy-cover-banner.jpg" 
+              alt="Ảnh bìa nhận diện thương hiệu chính thức Cupfy" 
               fill 
               priority
               className="object-cover" 

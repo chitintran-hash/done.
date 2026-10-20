@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: 'Nếu ly bị nứt vỡ trong lúc vận chuyển thì tôi phải làm sao?',
-    a: 'Cupfy cam kết bảo hành 100% rủi ro bể vỡ trong quá trình giao nhận! Bạn chỉ cần chụp ảnh hoặc quay video kiện hàng và liên hệ với chúng tôi qua email support@cupfy.space hoặc hotline. Cupfy sẽ gửi sản phẩm mới hoàn toàn miễn phí hoặc hoàn tiền theo yêu cầu.'
+    a: 'Cupfy cam kết bảo hành 100% rủi ro bể vỡ trong quá trình giao nhận! Bạn chỉ cần chụp ảnh hoặc quay video kiện hàng và liên hệ với chúng tôi qua email tranchitin2006@gmail.com hoặc hotline 0916 799 627. Cupfy sẽ gửi sản phẩm mới hoàn toàn miễn phí hoặc hoàn tiền theo yêu cầu.'
   },
   {
     q: 'Tôi có thể hủy đơn hàng ly custom sau khi đặt không?',

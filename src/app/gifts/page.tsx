@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Gift, Package, Star, Sparkles, Heart } from 'lucide-react';
+import { Gift, Package, Star, Sparkles, Heart, Phone, Mail } from 'lucide-react';
+import GiftBoxList from './GiftBoxList';
+import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +23,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GiftsPage() {
+export default async function GiftsPage() {
+  const supabase = await createClient();
+  const { data: giftBoxes } = await supabase
+    .from('products')
+    .select('id, name, price, description, image_url, stock')
+    .in('category', ['gift_box', 'gift'])
+    .eq('is_available', true)
+    .order('price', { ascending: true });
   return (
     <div className="min-h-screen pt-[100px] md:pt-[120px] pb-24 bg-[#F7F6F2]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -83,6 +92,9 @@ export default function GiftsPage() {
           ))}
         </div>
 
+        {/* Gift Boxes Showcase */}
+        <GiftBoxList initialGiftBoxes={giftBoxes || []} />
+
         {/* Corporate CTA */}
         <div className="bg-white rounded-3xl border border-[#DDD8D2] p-8 sm:p-12 text-center max-w-3xl mx-auto shadow-xs">
           <h2 className="text-2xl sm:text-3xl font-black text-[#3B2725] mb-3">
@@ -91,16 +103,24 @@ export default function GiftsPage() {
           <p className="text-sm text-[#6F625E] mb-6 max-w-xl mx-auto leading-relaxed">
             Cupfy nhận thiết kế và in ly thủy tinh, ly nhựa số lượng lớn với nhận diện thương hiệu độc quyền. Liên hệ trực tiếp với chúng tôi để nhận báo giá ưu đãi nhất.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-3">
             <a 
-              href="mailto:support@cupfy.space" 
-              className="px-8 py-3.5 bg-[#3B2725] text-white rounded-full font-bold text-sm hover:bg-[#201514] transition-colors shadow-sm"
+              href="mailto:tranchitin2006@gmail.com" 
+              className="px-6 py-3.5 bg-[#3B2725] text-white rounded-full font-bold text-sm hover:bg-[#201514] transition-colors shadow-sm flex items-center gap-2"
             >
-              Liên hệ báo giá: support@cupfy.space
+              <Mail className="w-4 h-4 text-[#FFF3A6]" />
+              tranchitin2006@gmail.com
+            </a>
+            <a 
+              href="tel:0916799627" 
+              className="px-6 py-3.5 bg-[#FFF3A6] text-[#4A2A25] rounded-full font-bold text-sm hover:bg-[#ffe978] transition-colors shadow-sm flex items-center gap-2 border border-[#DDD8D2]"
+            >
+              <Phone className="w-4 h-4" />
+              Hotline: 0916 799 627
             </a>
             <Link 
               href="/custom-cup" 
-              className="px-8 py-3.5 bg-[#FAF9F6] border border-[#DDD8D2] text-[#3B2725] rounded-full font-bold text-sm hover:bg-[#EDECEA] transition-colors"
+              className="px-6 py-3.5 bg-[#FAF9F6] border border-[#DDD8D2] text-[#3B2725] rounded-full font-bold text-sm hover:bg-[#EDECEA] transition-colors"
             >
               Thử thiết kế mẫu ngay
             </Link>

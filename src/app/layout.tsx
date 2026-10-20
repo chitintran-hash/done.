@@ -78,6 +78,8 @@ export default function RootLayout({
       "@type": "PostalAddress",
       "addressCountry": "VN",
     },
+    "telephone": "+84916799627",
+    "email": "tranchitin2006@gmail.com",
     "sameAs": [
       "https://facebook.com",
       "https://instagram.com",

@@ -32,8 +32,8 @@ export default function ContactPage() {
             </div>
             <h3 className="font-bold text-[#3A211E] text-base mb-1">Email Hỗ Trợ</h3>
             <p className="text-xs text-[#6F625E] mb-3">Phản hồi trong vòng 2-4 giờ làm việc</p>
-            <a href="mailto:support@cupfy.space" className="text-sm font-bold text-[#4A2A25] hover:underline">
-              support@cupfy.space
+            <a href="mailto:tranchitin2006@gmail.com" className="text-sm font-bold text-[#4A2A25] hover:underline">
+              tranchitin2006@gmail.com
             </a>
           </div>
 
@@ -43,9 +43,9 @@ export default function ContactPage() {
             </div>
             <h3 className="font-bold text-[#3A211E] text-base mb-1">Hotline / Zalo</h3>
             <p className="text-xs text-[#6F625E] mb-3">Hỗ trợ tư vấn & xác nhận đơn</p>
-            <span className="text-sm font-bold text-[#4A2A25]">
-              0987 654 321
-            </span>
+            <a href="tel:0916799627" className="text-sm font-bold text-[#4A2A25] hover:underline">
+              0916 799 627
+            </a>
           </div>
 
           <div className="bg-white p-6 rounded-3xl border border-[#DDD8D2] shadow-xs text-center flex flex-col items-center">

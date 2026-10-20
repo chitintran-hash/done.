@@ -122,11 +122,11 @@ export default function PolicyLayout({
             </div>
             <div className="flex flex-wrap items-center gap-3 text-xs">
               <a 
-                href="mailto:support@cupfy.space" 
+                href="mailto:tranchitin2006@gmail.com" 
                 className="px-4 py-2 bg-white text-[#3A211E] font-bold rounded-xl border border-[#DDD8D2] hover:bg-[#EDECEA] transition-colors flex items-center gap-1.5"
               >
                 <Mail className="w-3.5 h-3.5 text-[#4A2A25]" />
-                support@cupfy.space
+                tranchitin2006@gmail.com
               </a>
               <Link
                 href="/contact"

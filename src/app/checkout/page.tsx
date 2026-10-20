@@ -35,10 +35,23 @@ export default function CheckoutPage() {
   const shippingFee = 30000; // Phí giao hàng toàn quốc 30.000 VNĐ
   const total = subtotal + shippingFee;
 
+  const [giftBoxes, setGiftBoxes] = useState<any[]>([]);
+
   useEffect(() => {
     const supabase = createClient();
     
     async function checkAuthAndPrefill() {
+      // Fetch available gift boxes for upsell
+      const { data: dbBoxes } = await supabase
+        .from('products')
+        .select('*')
+        .in('category', ['gift_box', 'gift'])
+        .eq('is_available', true)
+        .order('price', { ascending: true });
+      if (dbBoxes) {
+        setGiftBoxes(dbBoxes);
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         setUser(null);
@@ -334,6 +347,94 @@ export default function CheckoutPage() {
                 </div>
               </form>
             </div>
+
+            {/* MUA KÈM HỘP QUÀ TẶNG & ĐÓNG GÓI */}
+            {giftBoxes.length > 0 && (
+              <div className="bg-white rounded-[24px] p-6 sm:p-8 border border-[#DDD8D2] shadow-sm">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div>
+                    <h2 className="font-heading text-xl sm:text-2xl font-bold text-[#3A211E] flex items-center gap-2">
+                      <span>🎁</span> Mua Kèm Hộp Quà Tặng
+                    </h2>
+                    <p className="text-xs sm:text-sm text-[#6F625E] mt-1">
+                      Đóng gói sang trọng kèm thiệp viết tay theo yêu cầu, thích hợp làm quà tặng người thân, bạn bè.
+                    </p>
+                  </div>
+                  <span className="text-[11px] font-bold bg-[#FFF3A6] text-[#4A2A25] px-3 py-1 rounded-full shrink-0 border border-[#DDD8D2]">
+                    Gợi ý kèm đơn
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  {giftBoxes.map((box) => {
+                    const isSelected = cart.items.some((i) => i.id === box.id);
+                    return (
+                      <div
+                        key={box.id}
+                        className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
+                          isSelected
+                            ? 'border-[#4A2A25] bg-[#FBF7F4] shadow-xs ring-1 ring-[#4A2A25]'
+                            : 'border-[#DDD8D2] bg-[#FAF9F6] hover:border-[#BFDCEF]'
+                        }`}
+                      >
+                        <div className="flex gap-3">
+                          <div className="w-16 h-16 rounded-xl bg-white border border-[#DDD8D2] overflow-hidden shrink-0 relative p-1">
+                            <img
+                              src={box.image_url || 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300&q=80'}
+                              alt={box.name}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-xs sm:text-sm text-[#201817] line-clamp-1">
+                              {box.name}
+                            </h4>
+                            <p className="text-[11px] text-[#6F625E] line-clamp-2 mt-0.5">
+                              {box.description || 'Hộp quà cao cấp lót rơm bảo vệ ly kèm thiệp nhắn gửi lời chúc.'}
+                            </p>
+                            <div className="font-bold text-xs sm:text-sm text-[#4A2A25] mt-1.5">
+                              +{Number(box.price).toLocaleString('vi-VN')} ₫
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 pt-2.5 border-t border-[#DDD8D2]/60 flex items-center justify-between">
+                          <span className="text-[11px] font-medium text-[#6F625E]">
+                            {isSelected ? '✓ Đã thêm vào đơn' : 'Chưa chọn'}
+                          </span>
+                          {isSelected ? (
+                            <button
+                              type="button"
+                              onClick={() => cart.removeItem(box.id)}
+                              className="px-3 py-1.5 rounded-lg text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 transition-colors"
+                            >
+                              Bỏ chọn
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                cart.addItem({
+                                  id: box.id,
+                                  name: box.name,
+                                  price: Number(box.price) || 0,
+                                  image: box.image_url || '',
+                                  quantity: 1,
+                                  isCustom: false,
+                                })
+                              }
+                              className="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#4A2A25] text-white hover:bg-[#3A211E] transition-colors shadow-2xs"
+                            >
+                              + Thêm vào đơn
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* PHƯƠNG THỨC THANH TOÁN */}
             <div className="bg-white rounded-[24px] p-6 sm:p-8 border border-[#DDD8D2] shadow-sm">

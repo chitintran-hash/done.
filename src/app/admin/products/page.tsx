@@ -10,6 +10,7 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
@@ -140,10 +141,16 @@ export default function AdminProductsPage() {
     setLoading(false);
   };
 
-  const filteredProducts = products.filter(p => 
-    p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.sku?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products.filter(p => {
+    const matchSearch = p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.sku?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchCategory = selectedCategory === 'all'
+      ? true
+      : selectedCategory === 'gift_box'
+      ? (p.category === 'gift_box' || p.category === 'gift')
+      : p.category === selectedCategory;
+    return matchSearch && matchCategory;
+  });
 
   const formatVND = (num: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
@@ -175,8 +182,8 @@ export default function AdminProductsPage() {
 
       {/* Table Container */}
       <div className="bg-white rounded-3xl border border-[#DDD8D2] shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-[#DDD8D2]">
-          <div className="relative max-w-md">
+        <div className="p-4 border-b border-[#DDD8D2] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          <div className="relative max-w-md w-full">
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6F625E]" />
             <input 
               type="text" 
@@ -185,6 +192,32 @@ export default function AdminProductsPage() {
               onChange={e => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-[#F7F6F2] rounded-xl text-xs border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25]"
             />
+          </div>
+
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
+            {[
+              { id: 'all', label: 'Tất cả', count: products.length },
+              { id: 'glass', label: 'Ly thủy tinh', count: products.filter(p => p.category === 'glass').length },
+              { id: 'plastic', label: 'Ly nhựa', count: products.filter(p => p.category === 'plastic').length },
+              { id: 'gift_box', label: '🎁 Hộp quà tặng', count: products.filter(p => p.category === 'gift_box' || p.category === 'gift').length },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedCategory(tab.id)}
+                className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
+                  selectedCategory === tab.id
+                    ? 'bg-[#4A2A25] text-white shadow-xs'
+                    : 'bg-[#F7F6F2] text-[#6F625E] hover:bg-[#EDECEA]'
+                }`}
+              >
+                <span>{tab.label}</span>
+                <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                  selectedCategory === tab.id ? 'bg-white/20 text-white' : 'bg-black/5 text-[#6F625E]'
+                }`}>
+                  {tab.count}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
 
@@ -238,10 +271,16 @@ export default function AdminProductsPage() {
                         )}
                       </td>
                       <td className="py-4 px-4">
-                        <span className="px-2.5 py-0.5 rounded-full bg-[#EDECEA] text-[#3A211E] text-[11px] font-bold capitalize">
+                        <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                          p.category === 'gift_box' || p.category === 'gift'
+                            ? 'bg-rose-100 text-rose-800'
+                            : 'bg-[#EDECEA] text-[#3A211E]'
+                        }`}>
                           {p.category === 'glass' ? 'Ly thủy tinh' :
                            p.category === 'thermos' ? 'Ly giữ nhiệt' :
-                           p.category === 'plastic' ? 'Ly nhựa' : p.category}
+                           p.category === 'plastic' ? 'Ly nhựa' :
+                           p.category === 'custom' ? 'Ly custom phôi' :
+                           p.category === 'gift_box' || p.category === 'gift' ? '🎁 Hộp quà' : p.category}
                         </span>
                       </td>
                       <td className="py-4 px-4">
@@ -335,6 +374,7 @@ export default function AdminProductsPage() {
                   >
                     <option value="glass">Ly thủy tinh</option>
                     <option value="plastic">Ly nhựa</option>
+                    <option value="gift_box">🎁 Hộp quà tặng (Phụ kiện mua kèm)</option>
                     <option value="custom">Ly custom phôi</option>
                   </select>
                 </div>

@@ -59,7 +59,8 @@ export default function Footer() {
             <li><a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">Instagram</a></li>
             <li><a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">Facebook</a></li>
             <li><a href="https://tiktok.com" target="_blank" rel="noreferrer" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">TikTok</a></li>
-            <li><a href="mailto:support@cupfy.space" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">support@cupfy.space</a></li>
+            <li><a href="mailto:tranchitin2006@gmail.com" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">tranchitin2006@gmail.com</a></li>
+            <li><a href="tel:0916799627" className="text-[#EDECEA] hover:text-[#FFF3A6] text-sm transition-colors">Hotline: 0916 799 627</a></li>
           </ul>
         </div>
 

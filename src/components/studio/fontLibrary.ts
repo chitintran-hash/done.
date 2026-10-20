@@ -13,7 +13,7 @@ export const FONT_LIBRARY: FontItem[] = [
     name: 'Be Vietnam Pro',
     family: "'Be Vietnam Pro', sans-serif",
     category: 'modern',
-    previewText: 'Cà phê Sài Gòn ✨',
+    previewText: 'YOUR LOGO',
     sampleDescription: 'Chuẩn tiếng Việt hiện đại, tối ưu dấu'
   },
   {

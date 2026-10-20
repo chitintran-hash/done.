@@ -52,8 +52,8 @@ function CustomCupStudioInner() {
     {
       id: 'default-text-1',
       type: 'text',
-      name: 'Chữ in mẫu',
-      text: 'Cà phê Sài Gòn ✨',
+      name: 'Logo mẫu',
+      text: 'YOUR LOGO',
       font: "'Be Vietnam Pro', sans-serif",
       fontSize: 64,
       color: '#201817',
@@ -412,8 +412,8 @@ function CustomCupStudioInner() {
       {
         id: 'default-text-1',
         type: 'text',
-        name: 'Chữ in mẫu',
-        text: 'Cà phê Sài Gòn ✨',
+        name: 'Logo mẫu',
+        text: 'YOUR LOGO',
         font: "'Be Vietnam Pro', sans-serif",
         fontSize: 64,
         color: '#201817',

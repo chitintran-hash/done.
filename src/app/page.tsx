@@ -20,10 +20,10 @@ export default async function Home() {
       
       {/* PHẦN 1: Hero Section phong cách Banner HIPPEAS (Nền vàng Cupfy #FFBF00 + Chữ bên trái) */}
       <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
-        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FFBF00] shadow-[0_20px_60px_rgba(255,191,0,0.25)] border border-[#FFBF00]/40 min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex flex-col lg:flex-row items-center justify-between">
+        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FFBF00] shadow-[0_20px_60px_rgba(255,191,0,0.25)] border border-[#FFBF00]/40 min-h-[480px] md:min-h-[540px] lg:min-h-[580px] flex flex-col lg:flex-row items-center justify-between">
           
           {/* Cột trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}
-          <div className="relative z-10 w-full lg:w-[54%] p-8 sm:p-12 md:p-16 flex flex-col items-start">
+          <div className="relative z-10 w-full lg:w-[48%] xl:w-[46%] p-6 sm:p-10 lg:p-12 xl:p-14 flex flex-col items-start">
             
             {/* Tag nhỏ thương hiệu */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/35 backdrop-blur-md border border-white/50 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-sm">
@@ -32,7 +32,7 @@ export default async function Home() {
             </div>
 
             {/* Tiêu đề khổng lồ đặc trưng Hippeas: Trắng + Nâu chocolate */}
-            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none">
+            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[72px] xl:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none">
               <span className="block text-white drop-shadow-sm">
                 CUSTOMIZE
               </span>
@@ -42,7 +42,7 @@ export default async function Home() {
             </h1>
 
             {/* Mô tả phụ: Nâu chocolate */}
-            <p className="text-base sm:text-lg md:text-xl text-[#3A211E] font-medium leading-relaxed mb-8 max-w-[480px]">
+            <p className="text-base sm:text-lg md:text-xl text-[#3A211E] font-medium leading-relaxed mb-8 max-w-[460px]">
               Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!
             </p>
 
@@ -65,8 +65,8 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Cột phải: Slider hình ảnh thực tế kèm thanh tự động trượt ngang */}
-          <div className="w-full lg:w-[46%] flex items-center justify-center p-6 sm:p-8 lg:p-10 relative">
+          {/* Cột phải: Slider hình ảnh lớn tràn viền không khung, tự động trượt ngang */}
+          <div className="w-full lg:w-[52%] xl:w-[54%] flex items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-10 relative">
             <HeroSlider />
           </div>
 

@@ -8,6 +8,8 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import AddToCartButton from '@/components/AddToCartButton';
 
+import { matchesSearchQuery } from '@/lib/utils/search';
+
 export default function ProductCatalogPage() {
   return (
     <Suspense fallback={<div className="flex justify-center items-center min-h-[50vh]"><Loader2 className="w-8 h-8 animate-spin text-[#FFBF00]" /></div>}>
@@ -21,10 +23,11 @@ function ProductCatalogContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category') || 'all';
   const collectionParam = searchParams.get('collection') || 'all';
+  const queryParam = searchParams.get('q') || searchParams.get('search') || '';
 
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(queryParam);
   
   // States cho filter
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
@@ -33,6 +36,12 @@ function ProductCatalogContent() {
   useEffect(() => {
     setSelectedCategory(categoryParam);
   }, [categoryParam]);
+
+  useEffect(() => {
+    if (queryParam !== undefined) {
+      setSearchTerm(queryParam);
+    }
+  }, [queryParam]);
 
   useEffect(() => {
     let ignore = false;
@@ -57,14 +66,16 @@ function ProductCatalogContent() {
 
   let displayed = [...products];
 
-  if (searchTerm) {
+  if (searchTerm.trim()) {
     displayed = displayed.filter(p => 
-      p.name.toLowerCase().includes(searchTerm.toLowerCase())
+      matchesSearchQuery(`${p.name} ${p.technical_specs?.capacity || ''} ${p.technical_specs?.material || ''} ${p.category || ''}`, searchTerm)
     );
   }
 
   if (selectedCategory === 'all') {
-    displayed = displayed.filter(p => p.category !== 'gift_box' && p.category !== 'gift');
+    if (!searchTerm.trim()) {
+      displayed = displayed.filter(p => p.category !== 'gift_box' && p.category !== 'gift');
+    }
   } else if (selectedCategory === 'gift_box') {
     displayed = displayed.filter(p => p.category === 'gift_box' || p.category === 'gift');
   } else {

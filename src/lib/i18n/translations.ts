@@ -11,6 +11,9 @@ export const translations = {
     "Search products, templates...": "Tìm sản phẩm, mẫu...",
     "Cart": "Giỏ hàng",
     "Profile": "Tài khoản",
+    "My Orders": "Đơn hàng của tôi",
+    "Wishlist": "Sản phẩm yêu thích",
+    "Admin Dashboard": "Quản trị Admin",
     
     // Auth & Generic
     "Logout": "Đăng xuất",
@@ -44,7 +47,7 @@ export const translations = {
     "Classic": "Cổ điển",
     "Creative": "Phá cách",
     
-    // Homepage
+    // Homepage & Hero
     "Find your cup. Make it yours.": "Find your cup. Make it yours.",
     "Everyday cups with your own story.": "Những chiếc ly nhỏ xinh cho mọi khoảnh khắc hằng ngày của bạn.",
     "Start Designing": "Thiết kế ngay",
@@ -56,12 +59,25 @@ export const translations = {
     "Glass Cup": "Ly thuỷ tinh",
     "Thermos": "Ly giữ nhiệt",
     "Plastic Cup": "Ly nhựa",
+    "Custom Cup": "Custom Cup",
+    "Gift Sets": "Bộ quà tặng",
     "Customer Care": "Chăm sóc khách hàng",
     "Shipping Policy": "Chính sách giao hàng",
     "Return Policy": "Chính sách đổi trả",
+    "Return & Refund Policy": "Chính sách đổi trả & hoàn tiền",
+    "Privacy Policy": "Chính sách bảo mật",
+    "Terms of Service": "Điều khoản sử dụng",
+    "Cookie Policy": "Chính sách Cookie",
     "FAQ": "Câu hỏi thường gặp",
     "Contact": "Liên hệ",
     "Connect": "Kết nối",
+    "Privacy": "Bảo mật",
+    "Terms": "Điều khoản",
+    "Cookie": "Cookie",
+    "Shipping": "Giao hàng",
+    "Returns & Refunds": "Đổi trả & Hoàn tiền",
+    "Home": "Trang chủ",
+    "Terms & Policies": "Quy chế & Chính sách",
     "Design": "Thiết kế",
     "Total": "Tổng cộng",
     "Subtotal": "Tạm tính",
@@ -69,7 +85,9 @@ export const translations = {
     "Empty Cart": "Giỏ hàng trống",
     "Continue Shopping": "Tiếp tục mua sắm",
 
-    // Homepage New
+    // Homepage Hero & Sections
+    "hero_tag": "Cá nhân hóa mọi chiếc ly",
+    "hero_subtitle_banner": "Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!",
     "hero_title_line1": "Tự thiết kế chiếc ly",
     "hero_title_line2_prefix": "mang ",
     "hero_title_line2_highlight": "dấu ấn riêng",
@@ -116,6 +134,9 @@ export const translations = {
     "Search products, templates...": "Search products, templates...",
     "Cart": "Cart",
     "Profile": "Profile",
+    "My Orders": "My Orders",
+    "Wishlist": "Wishlist",
+    "Admin Dashboard": "Admin Dashboard",
     
     // Auth & Generic
     "Logout": "Logout",
@@ -149,7 +170,7 @@ export const translations = {
     "Classic": "Classic",
     "Creative": "Creative",
     
-    // Homepage
+    // Homepage & Hero
     "Find your cup. Make it yours.": "Find your cup. Make it yours.",
     "Everyday cups with your own story.": "Everyday cups with your own story.",
     "Start Designing": "Start Designing",
@@ -161,12 +182,25 @@ export const translations = {
     "Glass Cup": "Glass Cup",
     "Thermos": "Thermos",
     "Plastic Cup": "Plastic Cup",
+    "Custom Cup": "Custom Cup",
+    "Gift Sets": "Gift Sets",
     "Customer Care": "Customer Care",
     "Shipping Policy": "Shipping Policy",
     "Return Policy": "Return Policy",
+    "Return & Refund Policy": "Return & Refund Policy",
+    "Privacy Policy": "Privacy Policy",
+    "Terms of Service": "Terms of Service",
+    "Cookie Policy": "Cookie Policy",
     "FAQ": "FAQ",
     "Contact": "Contact",
     "Connect": "Connect",
+    "Privacy": "Privacy",
+    "Terms": "Terms",
+    "Cookie": "Cookie",
+    "Shipping": "Shipping",
+    "Returns & Refunds": "Returns & Refunds",
+    "Home": "Home",
+    "Terms & Policies": "Terms & Policies",
     "Design": "Design",
     "Total": "Total",
     "Subtotal": "Subtotal",
@@ -174,7 +208,9 @@ export const translations = {
     "Empty Cart": "Empty Cart",
     "Continue Shopping": "Continue Shopping",
 
-    // Homepage New
+    // Homepage Hero & Sections
+    "hero_tag": "Personalize Every Cup",
+    "hero_subtitle_banner": "Design your own cup with a personal touch. 3D 360° interactive preview, print on demand from 1 piece!",
     "hero_title_line1": "Design your own cup",
     "hero_title_line2_prefix": "with your ",
     "hero_title_line2_highlight": "unique touch",
@@ -214,7 +250,6 @@ export const translations = {
 export type TranslationKey = keyof typeof translations.en;
 
 export function useTranslation() {
-  // We'll import useLanguageStore where this is used
   return (key: TranslationKey, lang: 'vi' | 'en') => {
     return translations[lang][key] !== undefined ? translations[lang][key] : key;
   };

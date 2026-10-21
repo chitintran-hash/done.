@@ -23,38 +23,38 @@ export default function Footer() {
           </Link>
           <p className="text-white/80 text-sm leading-relaxed">
             Find your cup. Make it yours. <br />
-            Những chiếc ly nhỏ xinh cho mọi khoảnh khắc hằng ngày của bạn.
+            {t("Everyday cups with your own story." as any)}
           </p>
         </div>
         
         {/* Shop Column */}
         <div>
-          <h4 className="font-bold mb-6 text-white tracking-wide uppercase text-sm">Shop</h4>
+          <h4 className="font-bold mb-6 text-white tracking-wide uppercase text-sm">{t('Shop' as any)}</h4>
           <ul className="space-y-3.5">
-            <li><Link href="/products?category=glass" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Ly thuỷ tinh</Link></li>
-            <li><Link href="/products?category=plastic" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Ly nhựa</Link></li>
-            <li><Link href="/custom-cup" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Custom Cup</Link></li>
-            <li><Link href="/gifts" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Bộ quà tặng</Link></li>
+            <li><Link href="/products?category=glass" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Glass Cup' as any)}</Link></li>
+            <li><Link href="/products?category=plastic" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Plastic Cup' as any)}</Link></li>
+            <li><Link href="/custom-cup" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Custom Cup' as any)}</Link></li>
+            <li><Link href="/gifts" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Gift Sets' as any)}</Link></li>
           </ul>
         </div>
         
         {/* Customer Care & Policies */}
         <div>
-          <h4 className="font-bold mb-6 text-white tracking-wide uppercase text-sm">Chăm sóc khách hàng</h4>
+          <h4 className="font-bold mb-6 text-white tracking-wide uppercase text-sm">{t('Customer Care' as any)}</h4>
           <ul className="space-y-3">
-            <li><Link href="/shipping" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Chính sách giao hàng</Link></li>
-            <li><Link href="/returns" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Chính sách đổi trả & hoàn tiền</Link></li>
-            <li><Link href="/privacy" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Chính sách bảo mật</Link></li>
-            <li><Link href="/terms" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Điều khoản sử dụng</Link></li>
-            <li><Link href="/cookies" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Chính sách Cookie</Link></li>
-            <li><Link href="/faq" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Câu hỏi thường gặp</Link></li>
-            <li><Link href="/contact" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Liên hệ</Link></li>
+            <li><Link href="/shipping" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Shipping Policy' as any)}</Link></li>
+            <li><Link href="/returns" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Return & Refund Policy' as any)}</Link></li>
+            <li><Link href="/privacy" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Privacy Policy' as any)}</Link></li>
+            <li><Link href="/terms" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Terms of Service' as any)}</Link></li>
+            <li><Link href="/cookies" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Cookie Policy' as any)}</Link></li>
+            <li><Link href="/faq" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('FAQ' as any)}</Link></li>
+            <li><Link href="/contact" className="text-white/80 hover:text-white hover:underline text-sm transition-all">{t('Contact' as any)}</Link></li>
           </ul>
         </div>
         
         {/* Social Connect */}
         <div>
-          <h4 className="font-bold mb-6 text-white tracking-wide uppercase text-sm">Kết nối</h4>
+          <h4 className="font-bold mb-6 text-white tracking-wide uppercase text-sm">{t('Connect' as any)}</h4>
           <ul className="space-y-3.5">
             <li><a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Instagram</a></li>
             <li><a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-white/80 hover:text-white hover:underline text-sm transition-all">Facebook</a></li>
@@ -71,15 +71,15 @@ export default function Footer() {
         <p className="text-xs text-white/70">© 2026 CUPFY. All rights reserved.</p>
         
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-white/70">
-          <Link href="/privacy" className="hover:text-white hover:underline transition-all">Bảo mật</Link>
+          <Link href="/privacy" className="hover:text-white hover:underline transition-all">{t('Privacy' as any)}</Link>
           <span>•</span>
-          <Link href="/terms" className="hover:text-white hover:underline transition-all">Điều khoản</Link>
+          <Link href="/terms" className="hover:text-white hover:underline transition-all">{t('Terms' as any)}</Link>
           <span>•</span>
-          <Link href="/cookies" className="hover:text-white hover:underline transition-all">Cookie</Link>
+          <Link href="/cookies" className="hover:text-white hover:underline transition-all">{t('Cookie' as any)}</Link>
           <span>•</span>
-          <Link href="/shipping" className="hover:text-white hover:underline transition-all">Giao hàng</Link>
+          <Link href="/shipping" className="hover:text-white hover:underline transition-all">{t('Shipping' as any)}</Link>
           <span>•</span>
-          <Link href="/returns" className="hover:text-white hover:underline transition-all">Đổi trả & Hoàn tiền</Link>
+          <Link href="/returns" className="hover:text-white hover:underline transition-all">{t('Returns & Refunds' as any)}</Link>
         </div>
       </div>
     </footer>

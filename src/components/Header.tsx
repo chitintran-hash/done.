@@ -86,7 +86,7 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-8 h-full">
             <Link 
               href="/products" 
-              className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
+              className={`text-[15px] font-extrabold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/products') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
             >
               {t('Shop' as any)}
             </Link>
@@ -94,26 +94,26 @@ export default function Header() {
             {/* Nút Thiết Kế Ly: Nền vàng #FFBF00, chữ nâu #3A211E, không emoji, không icon lấp lánh */}
             <Link 
               href="/custom-cup" 
-              className="text-[15px] font-bold text-[#3A211E] bg-[#FFBF00] px-5 py-2.5 rounded-full hover:bg-[#FFD147] hover:shadow-md transition-all duration-200 border border-[#E8DFD8] shadow-sm flex items-center"
+              className="text-[15px] font-extrabold uppercase tracking-wider text-[#3A211E] bg-[#FFBF00] px-5 py-2.5 rounded-full hover:bg-[#FFD147] hover:shadow-md transition-all duration-200 border border-[#E8DFD8] shadow-sm flex items-center"
             >
               {t('Design Your Cup' as any)}
             </Link>
 
             <Link 
               href="/community" 
-              className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/community') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
+              className={`text-[15px] font-extrabold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/community') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
             >
               {t('Community' as any)}
             </Link>
             <Link 
               href="/gifts" 
-              className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/gifts') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
+              className={`text-[15px] font-extrabold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/gifts') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
             >
               {t('Gifts' as any)}
             </Link>
             <Link 
               href="/about" 
-              className={`text-[15px] font-bold transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/about') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
+              className={`text-[15px] font-extrabold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/about') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
             >
               {t('About' as any)}
             </Link>
@@ -168,16 +168,16 @@ export default function Header() {
                       {t('Profile' as any)}
                     </Link>
                     <Link href="/orders" className="flex items-center justify-between px-4 py-3 text-sm hover:bg-[#FFF9E8] text-[#3A211E] font-medium">
-                      <span>Đơn hàng của tôi</span>
+                      <span>{t('My Orders' as any)}</span>
                       <Package className="w-4 h-4 text-[#765B52]" />
                     </Link>
                     <Link href="/wishlist" className="flex items-center justify-between px-4 py-3 text-sm hover:bg-[#FFF9E8] text-[#3A211E] font-medium">
-                      <span>Sản phẩm yêu thích</span>
+                      <span>{t('Wishlist' as any)}</span>
                       <Heart className="w-3.5 h-3.5 text-[#765B52]" />
                     </Link>
                     {user.email?.toLowerCase().trim() === 'tranchitin2006@gmail.com' && (
                       <Link href="/admin" className="block px-4 py-3 text-sm hover:bg-[#FFF3C4] font-bold text-[#3A211E] border-t border-[#E8DFD8]">
-                        Quản trị Admin
+                        {t('Admin Dashboard' as any)}
                       </Link>
                     )}
                     <button 
@@ -190,13 +190,13 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <Link href="/login" className="hover:text-[#765B52] transition-colors p-1" title="Đăng nhập">
+              <Link href="/login" className="hover:text-[#765B52] transition-colors p-1" title={t('Login' as any)}>
                 <UserIcon className="w-[22px] h-[22px]" strokeWidth={2} />
               </Link>
             )}
 
             {/* Cart Icon */}
-            <Link href="/cart" className="relative hover:text-[#765B52] transition-colors p-1" title="Giỏ hàng">
+            <Link href="/cart" className="relative hover:text-[#765B52] transition-colors p-1" title={t('Cart' as any)}>
               <ShoppingCart className="w-[22px] h-[22px]" strokeWidth={2} />
               {cart.items.length >= 0 && (
                 <span className="absolute -top-1 -right-1.5 w-[18px] h-[18px] bg-[#3A211E] text-white text-[10px] font-bold rounded-full flex items-center justify-center border border-white">
@@ -215,14 +215,14 @@ export default function Header() {
             <Link 
               href="/products" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-bold text-[#3A211E] py-2 border-b border-[#E8DFD8]"
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] py-2 border-b border-[#E8DFD8]"
             >
               {t('Shop' as any)}
             </Link>
             <Link 
               href="/custom-cup" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-bold text-[#3A211E] bg-[#FFBF00] px-4 py-3 rounded-xl flex items-center justify-between"
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] bg-[#FFBF00] px-4 py-3 rounded-xl flex items-center justify-between"
             >
               <span>{t('Design Your Cup' as any)}</span>
               <span>→</span>
@@ -230,30 +230,30 @@ export default function Header() {
             <Link 
               href="/community" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-bold text-[#3A211E] py-2 border-b border-[#E8DFD8]"
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] py-2 border-b border-[#E8DFD8]"
             >
               {t('Community' as any)}
             </Link>
             <Link 
               href="/gifts" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-bold text-[#3A211E] py-2 border-b border-[#E8DFD8]"
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] py-2 border-b border-[#E8DFD8]"
             >
               {t('Gifts' as any)}
             </Link>
             <Link 
               href="/about" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-bold text-[#3A211E] py-2 border-b border-[#E8DFD8]"
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] py-2 border-b border-[#E8DFD8]"
             >
               {t('About' as any)}
             </Link>
             <Link 
               href="/orders" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-base font-bold text-[#3A211E] py-2 flex items-center gap-2"
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] py-2 flex items-center gap-2"
             >
-              <Package className="w-4 h-4 text-[#765B52]" /> Đơn hàng của tôi
+              <Package className="w-4 h-4 text-[#765B52]" /> {t('My Orders' as any)}
             </Link>
           </nav>
         </div>

@@ -16,6 +16,9 @@ import {
   HelpCircle
 } from 'lucide-react';
 
+import { useLanguageStore } from '@/store/useLanguageStore';
+import { translations, TranslationKey } from '@/lib/i18n/translations';
+
 interface PolicyLayoutProps {
   title: string;
   subtitle?: string;
@@ -24,12 +27,12 @@ interface PolicyLayoutProps {
   children: React.ReactNode;
 }
 
-const POLICIES = [
-  { slug: 'privacy', href: '/privacy', label: 'Bảo mật thông tin', icon: ShieldCheck },
-  { slug: 'terms', href: '/terms', label: 'Điều khoản sử dụng', icon: FileText },
-  { slug: 'cookies', href: '/cookies', label: 'Chính sách Cookie', icon: Cookie },
-  { slug: 'shipping', href: '/shipping', label: 'Chính sách giao hàng', icon: Truck },
-  { slug: 'returns', href: '/returns', label: 'Đổi trả & hoàn tiền', icon: RotateCcw },
+const POLICIES: { slug: 'privacy' | 'terms' | 'cookies' | 'shipping' | 'returns'; href: string; labelKey: TranslationKey; icon: any }[] = [
+  { slug: 'privacy', href: '/privacy', labelKey: 'Privacy Policy', icon: ShieldCheck },
+  { slug: 'terms', href: '/terms', labelKey: 'Terms of Service', icon: FileText },
+  { slug: 'cookies', href: '/cookies', labelKey: 'Cookie Policy', icon: Cookie },
+  { slug: 'shipping', href: '/shipping', labelKey: 'Shipping Policy', icon: Truck },
+  { slug: 'returns', href: '/returns', labelKey: 'Return & Refund Policy', icon: RotateCcw },
 ];
 
 export default function PolicyLayout({
@@ -40,6 +43,8 @@ export default function PolicyLayout({
   children,
 }: PolicyLayoutProps) {
   const pathname = usePathname();
+  const { language } = useLanguageStore();
+  const t = (key: TranslationKey) => translations[language]?.[key] || key;
 
   return (
     <div className="min-h-screen pt-[100px] md:pt-[120px] pb-24 bg-[#FFF9E8]">
@@ -47,9 +52,9 @@ export default function PolicyLayout({
         
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs text-[#765B52] mb-6 font-medium">
-          <Link href="/" className="hover:text-[#3A211E] transition-colors">Trang chủ</Link>
+          <Link href="/" className="hover:text-[#3A211E] transition-colors">{t('Home' as any)}</Link>
           <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-          <span>Quy chế & Chính sách</span>
+          <span>{t('Terms & Policies' as any)}</span>
           <ChevronRight className="w-3.5 h-3.5 opacity-60" />
           <span className="text-[#3A211E] font-bold">{title}</span>
         </nav>
@@ -70,7 +75,7 @@ export default function PolicyLayout({
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#FFBF00]' : 'text-[#765B52]'}`} />
-                <span>{p.label}</span>
+                <span>{t(p.labelKey)}</span>
               </Link>
             );
           })}

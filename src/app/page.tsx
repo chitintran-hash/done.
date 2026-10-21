@@ -28,7 +28,7 @@ export default async function Home() {
             {/* Tag nhỏ thương hiệu */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#E8DFD8] text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-xs">
               <Sparkles className="w-4 h-4 text-[#FFBF00]" />
-              <span>Cá nhân hóa mọi chiếc ly</span>
+              <span>{t("hero_tag" as any)}</span>
             </div>
 
             {/* Tiêu đề khổng lồ: Nâu chocolate #3A211E sang trọng, độ tương phản cao */}
@@ -43,7 +43,7 @@ export default async function Home() {
 
             {/* Mô tả phụ: Nâu chocolate */}
             <p className="text-base sm:text-lg md:text-xl text-[#3A211E]/85 font-medium leading-relaxed mb-8 max-w-[460px]">
-              Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!
+              {t("hero_subtitle_banner" as any)}
             </p>
 
             {/* Nút bấm CTA: Nền nâu chocolate chữ trắng, nút phụ nền trắng chữ nâu */}

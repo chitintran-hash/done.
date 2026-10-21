@@ -19,7 +19,7 @@ export default async function Home() {
       
       {/* PHẦN 1: Hero Section phong cách Banner HIPPEAS */}
       <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
-        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FDB813] shadow-[0_20px_60px_rgba(253,184,19,0.22)] border border-[#FDB813]/40 min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex items-center">
+        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FCBF02] shadow-[0_20px_60px_rgba(252,191,2,0.25)] border border-[#FCBF02]/40 min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex items-center">
           
           {/* Nền hoạt hoạ ly thuỷ tinh Cupfy xếp nghiêng 25 độ ở bên phải */}
           <div className="absolute inset-0 z-0 pointer-events-none select-none">
@@ -28,11 +28,11 @@ export default async function Home() {
               alt="Bộ sưu tập ly thuỷ tinh Cupfy cá nhân hoá"
               fill
               priority
-              quality={92}
+              quality={95}
               className="object-cover object-right md:object-center"
             />
             {/* Lớp phủ chuyển màu giúp chữ luôn nổi bật trên mọi thiết bị */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FDB813] via-[#FDB813]/90 md:via-[#FDB813]/40 to-transparent z-[1]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FCBF02] via-[#FCBF02]/90 md:via-[#FCBF02]/25 to-transparent z-[1]" />
           </div>
 
           {/* Nội dung bên trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}

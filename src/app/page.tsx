@@ -91,11 +91,6 @@ export default async function Home() {
               { icon: ShoppingBag, title: t("how_step4_title" as any), desc: t("how_step4_desc" as any) }
             ].map((step, i) => (
               <div key={i} className="relative bg-white rounded-[24px] p-8 text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300 border border-[#E8DFD8] shadow-sm hover:shadow-md z-10 overflow-hidden group">
-                {/* Large background number */}
-                <span className="absolute -bottom-4 -right-2 text-[100px] font-black text-[#FFF3C4] opacity-60 group-hover:scale-110 transition-transform duration-500 pointer-events-none select-none">
-                  0{i + 1}
-                </span>
-
                 <div className="w-20 h-20 bg-[#FFF3C4] text-[#3A211E] rounded-full flex items-center justify-center mb-6 shadow-sm relative z-10 border border-[#E8DFD8]/60">
                   <step.icon className="w-8 h-8" strokeWidth={2} />
                 </div>

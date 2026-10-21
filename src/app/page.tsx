@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getTranslation } from "@/lib/i18n/server";
+import HeroSlider from "@/components/HeroSlider";
 
 export default async function Home() {
   const { t } = await getTranslation();
@@ -64,9 +65,9 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Cột phải: Để trống chờ hình ảnh kèm thanh trượt từ người dùng */}
-          <div className="w-full lg:w-[46%] min-h-[200px] lg:min-h-full flex items-center justify-center p-8 relative">
-            {/* Chỗ trống sẵn sàng cho slider hình ảnh */}
+          {/* Cột phải: Slider hình ảnh thực tế kèm thanh tự động trượt ngang */}
+          <div className="w-full lg:w-[46%] flex items-center justify-center p-6 sm:p-8 lg:p-10 relative">
+            <HeroSlider />
           </div>
 
         </div>

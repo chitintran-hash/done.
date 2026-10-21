@@ -29,7 +29,10 @@ export default function AdminProductsPage() {
     material: '',
     capacity: '',
     color: '',
-    is_customizable: false
+    is_customizable: false,
+    vibe: 'Cute',
+    card_bg: '#FCE7F3',
+    icon: '✨'
   });
 
   const fetchProducts = async () => {
@@ -66,7 +69,10 @@ export default function AdminProductsPage() {
         material: product.technical_specs?.material || '',
         capacity: product.technical_specs?.capacity || '',
         color: product.technical_specs?.color || '',
-        is_customizable: product.technical_specs?.is_customizable || false
+        is_customizable: product.technical_specs?.is_customizable || false,
+        vibe: product.technical_specs?.vibe || 'Cute',
+        card_bg: product.technical_specs?.card_bg || '#FCE7F3',
+        icon: product.technical_specs?.icon || '✨'
       });
     } else {
       setEditingProduct(null);
@@ -84,7 +90,10 @@ export default function AdminProductsPage() {
         material: '',
         capacity: '',
         color: '',
-        is_customizable: false
+        is_customizable: false,
+        vibe: 'Cute',
+        card_bg: '#FCE7F3',
+        icon: '✨'
       });
     }
     setShowModal(true);
@@ -102,7 +111,11 @@ export default function AdminProductsPage() {
       is_customizable: formData.is_customizable,
       images: formData.images,
       cost_price: Number(formData.cost_price) || 0,
-      low_stock_threshold: Number(formData.low_stock_threshold) || 10
+      low_stock_threshold: Number(formData.low_stock_threshold) || 10,
+      vibe: formData.vibe,
+      card_bg: formData.card_bg,
+      icon: formData.icon,
+      is_template: formData.category === 'template'
     };
 
     const payload = {
@@ -204,6 +217,7 @@ export default function AdminProductsPage() {
               { id: 'all', label: 'Tất cả', count: products.length },
               { id: 'glass', label: 'Ly thủy tinh', count: products.filter(p => p.category === 'glass').length },
               { id: 'plastic', label: 'Ly nhựa', count: products.filter(p => p.category === 'plastic').length },
+              { id: 'template', label: 'Mẫu có sẵn', count: products.filter(p => p.category === 'template').length },
               { id: 'gift_box', label: 'Hộp quà tặng', count: products.filter(p => p.category === 'gift_box' || p.category === 'gift').length },
             ].map(tab => (
               <button
@@ -286,13 +300,16 @@ export default function AdminProductsPage() {
                       </td>
                       <td className="py-4 px-4">
                         <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                          p.category === 'gift_box' || p.category === 'gift'
+                          p.category === 'template'
+                            ? 'bg-purple-100 text-purple-900 border border-purple-300'
+                            : p.category === 'gift_box' || p.category === 'gift'
                             ? 'bg-[#FFF3C4] text-[#3A211E] border border-[#FFBF00]'
                             : 'bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8]'
                         }`}>
                           {p.category === 'glass' ? 'Ly thủy tinh' :
                            p.category === 'thermos' ? 'Ly giữ nhiệt' :
                            p.category === 'plastic' ? 'Ly nhựa' :
+                           p.category === 'template' ? 'Mẫu có sẵn' :
                            p.category === 'custom' ? 'Ly custom phôi' :
                            p.category === 'gift_box' || p.category === 'gift' ? 'Hộp quà' : p.category}
                         </span>
@@ -397,6 +414,7 @@ export default function AdminProductsPage() {
                   >
                     <option value="glass">Ly thủy tinh</option>
                     <option value="plastic">Ly nhựa</option>
+                    <option value="template">Mẫu có sẵn (Template thiết kế theo Vibe)</option>
                     <option value="gift_box">Hộp quà tặng (Phụ kiện mua kèm)</option>
                     <option value="custom">Ly custom phôi</option>
                   </select>
@@ -411,6 +429,50 @@ export default function AdminProductsPage() {
                   />
                 </div>
               </div>
+
+              {/* Các trường cấu hình riêng cho MẪU CÓ SẴN (Template) */}
+              {formData.category === 'template' && (
+                <div className="bg-amber-50/80 p-4 rounded-2xl border border-amber-200 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div>
+                    <label className="font-bold text-[#3A211E] block mb-1 text-xs">Vibe / Thẻ phân loại *</label>
+                    <input 
+                      type="text" 
+                      value={formData.vibe} 
+                      onChange={e => setFormData({...formData, vibe: e.target.value})} 
+                      placeholder="VD: Cute, Cozy, Retro..."
+                      className="w-full p-2 bg-white border border-[#E8DFD8] rounded-xl text-xs font-bold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold text-[#3A211E] block mb-1 text-xs">Màu nền thẻ (Card Color) *</label>
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="color" 
+                        value={formData.card_bg} 
+                        onChange={e => setFormData({...formData, card_bg: e.target.value})} 
+                        className="w-8 h-8 rounded-lg cursor-pointer border border-[#E8DFD8] p-0.5 shrink-0"
+                      />
+                      <input 
+                        type="text" 
+                        value={formData.card_bg} 
+                        onChange={e => setFormData({...formData, card_bg: e.target.value})} 
+                        placeholder="#FCE7F3"
+                        className="w-full p-2 bg-white border border-[#E8DFD8] rounded-xl text-xs font-mono font-bold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="font-bold text-[#3A211E] block mb-1 text-xs">Icon đại diện / Emoji</label>
+                    <input 
+                      type="text" 
+                      value={formData.icon} 
+                      onChange={e => setFormData({...formData, icon: e.target.value})} 
+                      placeholder="VD: 🐱, 🍵, ✦..."
+                      className="w-full p-2 bg-white border border-[#E8DFD8] rounded-xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
+                    />
+                  </div>
+                </div>
+              )}
               
               {/* Image upload */}
               <div>

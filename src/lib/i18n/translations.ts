@@ -4,7 +4,7 @@ export const translations = {
     "Shop": "Cửa hàng",
     "Design Your Cup": "Thiết Kế Ly",
     "Design Your Cup ✨": "Thiết Kế Ly",
-    "Templates": "Mẫu Ly",
+    "Templates": "Mẫu có sẵn",
     "Community": "Cộng Đồng",
     "Gifts": "Quà Tặng",
     "About": "Giới Thiệu",
@@ -131,6 +131,12 @@ export const translations = {
     "banner_title": "Một chiếc ly không cần giống bất kỳ ai",
     "banner_desc": "Bạn có thể thêm tên, ngày kỷ niệm, hình vẽ, sticker, quote hoặc phong cách riêng của mình lên chiếc ly.",
     "banner_btn": "Bắt đầu thiết kế",
+    "templates_vibe_tag": "THEO VIBE",
+    "templates_section_title": "Không biết thiết kế? Bắt đầu từ mẫu có sẵn.",
+    "templates_section_btn": "Khám phá mẫu",
+    "use_this_template": "Dùng mẫu này",
+    "save_template": "Lưu",
+    "saved_template": "Đã lưu",
   },
   en: {
     // Header
@@ -264,6 +270,12 @@ export const translations = {
     "banner_title": "A cup that is uniquely yours",
     "banner_desc": "You can add names, anniversaries, drawings, stickers, quotes, or your own style to the cup.",
     "banner_btn": "Start designing",
+    "templates_vibe_tag": "BY VIBE",
+    "templates_section_title": "Don't know how to design? Start from ready-made templates.",
+    "templates_section_btn": "Explore templates",
+    "use_this_template": "Use this template",
+    "save_template": "Save",
+    "saved_template": "Saved",
   }
 };
 

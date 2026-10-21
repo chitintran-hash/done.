@@ -90,12 +90,20 @@ export default function Header() {
               {t('Shop' as any)}
             </Link>
             
-            {/* Nút Thiết Kế Ly: Nền vàng #FFBF00, chữ nâu #3A211E, không emoji, không icon lấp lánh */}
+            {/* Nút Thiết Kế Ly: Nền vàng #FFBF00, chữ nâu #3A211E */}
             <Link 
               href="/custom-cup" 
               className="text-[15px] font-extrabold uppercase tracking-wider text-[#3A211E] bg-[#FFBF00] px-5 py-2.5 rounded-full hover:bg-[#FFD147] hover:shadow-md transition-all duration-200 border border-[#E8DFD8] shadow-sm flex items-center"
             >
               {t('Design Your Cup' as any)}
+            </Link>
+
+            {/* Mẫu có sẵn */}
+            <Link 
+              href="/templates" 
+              className={`text-[15px] font-extrabold uppercase tracking-wider transition-colors h-full flex items-center border-b-2 ${pathname.startsWith('/templates') ? 'border-[#3A211E] text-[#3A211E]' : 'border-transparent text-[#765B52] hover:text-[#3A211E]'}`}
+            >
+              {t('Templates' as any)}
             </Link>
 
             <Link 
@@ -225,6 +233,13 @@ export default function Header() {
             >
               <span>{t('Design Your Cup' as any)}</span>
               <span>→</span>
+            </Link>
+            <Link 
+              href="/templates" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-base font-extrabold uppercase tracking-wider text-[#3A211E] py-2 border-b border-[#E8DFD8]"
+            >
+              {t('Templates' as any)}
             </Link>
             <Link 
               href="/community" 

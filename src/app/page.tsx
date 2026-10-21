@@ -5,16 +5,61 @@ import { createClient } from "@/lib/supabase/server";
 import { getTranslation } from "@/lib/i18n/server";
 import HeroSlider from "@/components/HeroSlider";
 import AddToCartButton from "@/components/AddToCartButton";
+import TemplateCardActions from "@/components/TemplateCardActions";
 
 export default async function Home() {
   const { t } = await getTranslation();
   const supabase = await createClient();
+  
   const { data: latestProducts } = await supabase
     .from("products")
     .select("*")
     .neq("category", "user_custom")
-    .not("category", "in", '("gift_box","gift","admin_community_post","admin_about_post")')
+    .not("category", "in", '("gift_box","gift","admin_community_post","admin_about_post","template")')
     .limit(4);
+
+  const { data: dbTemplates } = await supabase
+    .from("products")
+    .select("*")
+    .eq("category", "template")
+    .eq("is_available", true)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  const fallbackTemplates = [
+    {
+      id: "4f8cc6e6-16d0-4437-8188-81a867f96286",
+      name: "Mochi Cat",
+      image_url: "",
+      technical_specs: {
+        vibe: "Cute",
+        card_bg: "#FCE7F3",
+        icon: "🐱",
+      },
+    },
+    {
+      id: "29440931-5abe-4663-aafc-7823cedaa392",
+      name: "Matcha Morning",
+      image_url: "",
+      technical_specs: {
+        vibe: "Cozy",
+        card_bg: "#DCFCE7",
+        icon: "🍵",
+      },
+    },
+    {
+      id: "21e4cf22-5bd9-43e8-aaf5-609e59732a58",
+      name: "Retro Orange",
+      image_url: "",
+      technical_specs: {
+        vibe: "Retro",
+        card_bg: "#FBBF24",
+        icon: "✦",
+      },
+    },
+  ];
+
+  const templates = dbTemplates && dbTemplates.length > 0 ? dbTemplates : fallbackTemplates;
 
   return (
     <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#FFF9E8]">
@@ -236,7 +281,90 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* PHẦN 4: Section custom banner */}
+      {/* PHẦN 4: Section Mẫu có sẵn (THEO VIBE: Không biết thiết kế? Bắt đầu từ mẫu có sẵn.) */}
+      <section className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 my-16 sm:my-20">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+          <div>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#F06806] block mb-2">
+              {t("templates_vibe_tag" as any)}
+            </span>
+            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-[#171717] tracking-tight leading-tight">
+              {t("templates_section_title" as any)}
+            </h2>
+          </div>
+          <Link
+            href="/templates"
+            className="self-start sm:self-auto inline-flex items-center justify-center px-6 py-3.5 bg-[#F5A623] hover:bg-[#E59716] text-[#171717] rounded-2xl font-black text-sm sm:text-base transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md shrink-0"
+          >
+            {t("templates_section_btn" as any)}
+          </Link>
+        </div>
+
+        {/* 3 Template Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          {templates.map((tmpl) => {
+            const cardBg = tmpl.technical_specs?.card_bg || "#FCE7F3";
+            const vibe = tmpl.technical_specs?.vibe || "Cute";
+            const icon = tmpl.technical_specs?.icon || "🐱";
+
+            return (
+              <div
+                key={tmpl.id}
+                className="bg-white rounded-[28px] p-3.5 sm:p-4 border border-[#EBE3DC] shadow-[0_4px_25px_rgba(58,33,30,0.04)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+              >
+                {/* Colored Top Area */}
+                <div
+                  className="w-full h-[220px] sm:h-[240px] rounded-[22px] flex items-center justify-center relative overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]"
+                  style={{ backgroundColor: cardBg }}
+                >
+                  {/* Floating White Card */}
+                  <div className="w-[120px] h-[160px] sm:w-[130px] sm:h-[170px] rounded-[22px] bg-white/95 shadow-[0_12px_28px_rgba(0,0,0,0.07)] border border-white/60 flex items-center justify-center p-3 select-none transition-transform duration-300 group-hover:scale-105">
+                    {tmpl.image_url && !tmpl.technical_specs?.icon ? (
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={tmpl.image_url}
+                          alt={tmpl.name}
+                          fill
+                          className="object-contain"
+                          sizes="130px"
+                        />
+                      </div>
+                    ) : (
+                      <span className="text-5xl sm:text-6xl drop-shadow-xs select-none">
+                        {icon}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bottom Info Area */}
+                <div className="px-1.5 pt-3.5 pb-1 flex flex-col flex-grow">
+                  {/* Vibe Tag */}
+                  <div className="mb-2">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#F4EFEA] text-[#171717] font-extrabold text-xs select-none">
+                      {vibe}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg sm:text-xl font-heading font-black text-[#171717] mb-3.5 line-clamp-1">
+                    {tmpl.name}
+                  </h3>
+
+                  {/* Action Buttons: Dùng mẫu này & Lưu */}
+                  <TemplateCardActions
+                    templateId={tmpl.id}
+                    templateName={tmpl.name}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* PHẦN 5: Section custom banner */}
       <section className="w-full px-4 md:px-6 mb-24">
         <div className="max-w-[1400px] mx-auto bg-[#FFF9E8] rounded-[32px] overflow-hidden flex flex-col md:flex-row items-center relative border border-[#E8DFD8] shadow-sm">
           <div className="w-full md:w-1/2 p-8 sm:p-12 md:p-14 lg:p-20 z-10 flex flex-col items-start bg-[#FFF9E8]">

@@ -79,60 +79,43 @@ export default function DemoBannerPage() {
           <div className="relative z-10 w-full lg:w-[50%] flex flex-col items-start text-left">
             
             {/* Tag nhỏ thương hiệu */}
-            <div className="text-[12px] sm:text-[13px] font-black uppercase tracking-[0.22em] text-[#A66002] mb-3 sm:mb-4 select-none">
-              CUPFY · CUSTOM CUP STUDIO
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white/70 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-xs">
+              <Sparkles className="w-4 h-4 text-[#FFBF00]" />
+              <span>Cá nhân hóa mọi chiếc ly</span>
             </div>
 
-            {/* Tiêu đề khổng lồ */}
-            <h1 className="font-heading font-black text-4xl sm:text-5xl md:text-6xl lg:text-[62px] xl:text-[66px] leading-[1.04] tracking-tight text-[#171717] mb-6 select-none">
-              Tự tạo chiếc ly<br />
-              mang đúng<br />
-              chất bạn.
+            {/* Tiêu đề khổng lồ: Nâu chocolate #3A211E sang trọng */}
+            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[72px] xl:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none text-[#3A211E]">
+              <span className="block text-[#3A211E]">
+                CUSTOMIZE
+              </span>
+              <span className="block text-[#3A211E] mt-1.5">
+                YOUR CUP
+              </span>
             </h1>
 
-            {/* Đoạn mô tả chi tiết */}
-            <p className="text-base sm:text-lg text-[#1F1A17]/90 font-medium leading-relaxed max-w-[480px] mb-8">
-              Chọn ly, thêm tên hoặc hình ảnh, xem trước 360°, kiểm tra chất lượng và đặt sản xuất — tất cả trên một website.
+            {/* Đoạn mô tả phụ gốc */}
+            <p className="text-base sm:text-lg md:text-xl text-[#3A211E]/85 font-medium leading-relaxed mb-8 max-w-[460px]">
+              Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!
             </p>
 
-            {/* Cặp nút bấm CTA */}
-            <div className="flex flex-wrap items-center gap-4 mb-8">
+            {/* Cặp nút bấm CTA: Nút chính nâu chocolate chữ trắng, nút phụ nền trắng chữ nâu */}
+            <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/custom-cup"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#171717] text-white rounded-full font-extrabold text-sm sm:text-base transition-all duration-200 hover:bg-[#2A201C] hover:scale-105 shadow-[0_12px_28px_rgba(23,23,23,0.25)] group"
+                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_12px_28px_rgba(58,33,30,0.22)] group"
               >
-                <span className="text-amber-400">✨</span>
-                <span>Thiết kế ly của bạn</span>
+                <span>Thiết kế ly ngay</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
 
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center px-7 py-4 bg-white text-[#171717] rounded-full font-bold text-sm sm:text-base transition-all duration-200 hover:bg-[#FFF9E8] hover:scale-102 border border-white/60 shadow-sm"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-[#FFF9E8] text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-white/80 shadow-xs hover:shadow-sm"
               >
-                Xem sản phẩm
+                Khám phá cửa hàng
               </Link>
             </div>
-
-            {/* 4 Checkmark tính năng dưới nút bấm */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs sm:text-sm font-bold text-[#1F1A17]">
-              <div className="flex items-center gap-2">
-                <span className="text-[#171717] font-black">✓</span>
-                <span>Xem trước 360°</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#171717] font-black">✓</span>
-                <span>Cảnh báo ảnh mờ</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#171717] font-black">✓</span>
-                <span>Giá cập nhật trực tiếp</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[#171717] font-black">✓</span>
-                <span>Lưu thiết kế</span>
-              </div>
-            </div>
-
           </div>
 
           {/* CỘT PHẢI: Khung ảnh chiếc ly + 4 Icon Badge nổi bao quanh */}

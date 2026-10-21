@@ -16,17 +16,21 @@ export default async function Home() {
     .limit(4);
 
   return (
-    <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-white">
+    <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#FFF9E8]">
       
-      {/* PHẦN 1: Hero Section phong cách Banner (Nền vàng nhạt #FFF3C4 + Chữ bên trái) */}
+      {/* PHẦN 1: Hero Section phong cách Banner Gradient Vàng Ấm + Khung Ly & 4 Badges */}
       <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
-        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FFF3C4] shadow-[0_20px_50px_rgba(58,33,30,0.08)] border border-[#E8DFD8] min-h-[480px] md:min-h-[540px] lg:min-h-[580px] flex flex-col lg:flex-row items-center justify-between">
+        <div className="relative w-full rounded-[36px] md:rounded-[48px] overflow-hidden bg-gradient-to-br from-[#FCB827] via-[#FDC640] via-60% to-[#FFD868] shadow-[0_25px_60px_rgba(252,188,47,0.28)] border border-amber-300/60 min-h-[540px] md:min-h-[580px] lg:min-h-[600px] flex flex-col lg:flex-row items-center justify-between p-6 sm:p-10 lg:p-12 xl:p-16 gap-10">
           
-          {/* Cột trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}
-          <div className="relative z-10 w-full lg:w-[48%] xl:w-[46%] p-6 sm:p-10 lg:p-12 xl:p-14 flex flex-col items-start">
+          {/* Lớp ánh sáng tỏa (Ambient Glows) */}
+          <div className="absolute -right-24 -top-24 w-[420px] h-[420px] bg-white/25 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -left-20 -bottom-20 w-[360px] h-[360px] bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+          {/* Cột trái: Nội dung chữ gốc CUSTOMIZE YOUR CUP + Nút CTA */}
+          <div className="relative z-10 w-full lg:w-[48%] xl:w-[46%] flex flex-col items-start text-left">
             
             {/* Tag nhỏ thương hiệu */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#E8DFD8] text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white/70 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-xs">
               <Sparkles className="w-4 h-4 text-[#FFBF00]" />
               <span>{t("hero_tag" as any)}</span>
             </div>
@@ -41,16 +45,16 @@ export default async function Home() {
               </span>
             </h1>
 
-            {/* Mô tả phụ: Nâu chocolate */}
+            {/* Đoạn mô tả phụ gốc */}
             <p className="text-base sm:text-lg md:text-xl text-[#3A211E]/85 font-medium leading-relaxed mb-8 max-w-[460px]">
               {t("hero_subtitle_banner" as any)}
             </p>
 
-            {/* Nút bấm CTA: Nền nâu chocolate chữ trắng, nút phụ nền trắng chữ nâu */}
+            {/* Cặp nút bấm CTA: Nút chính nâu chocolate chữ trắng, nút phụ nền trắng chữ nâu */}
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/custom-cup"
-                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_10px_25px_rgba(58,33,30,0.18)] group"
+                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_12px_28px_rgba(58,33,30,0.22)] group"
               >
                 <span>{t("hero_btn_design" as any)}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -58,16 +62,44 @@ export default async function Home() {
 
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-[#FFF9E8] text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-[#E8DFD8] shadow-xs hover:shadow-sm"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-[#FFF9E8] text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-white/80 shadow-xs hover:shadow-sm"
               >
                 {t("hero_btn_shop" as any)}
               </Link>
             </div>
+
           </div>
 
-          {/* Cột phải: Slider hình ảnh lớn tràn viền không khung, tự động trượt ngang */}
-          <div className="w-full lg:w-[52%] xl:w-[54%] flex items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-10 relative">
-            <HeroSlider />
+          {/* Cột phải: Slider hình ảnh với khung viền bo cong trắng 3D + 4 Badges */}
+          <div className="relative z-10 w-full lg:w-[52%] xl:w-[54%] flex items-center justify-center p-2 sm:p-4 lg:p-6">
+            <div className="relative w-full max-w-[620px]">
+
+              {/* BADGE 1: DRAG & DROP (Góc trên bên trái) */}
+              <div className="absolute -top-4 -left-3 sm:-top-5 sm:-left-5 z-30 bg-white text-[#171717] font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(0,0,0,0.18)] border border-white/80 -rotate-6 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>DRAG & DROP</span>
+              </div>
+
+              {/* BADGE 2: 360° PREVIEW (Góc trên bên phải) */}
+              <div className="absolute top-4 -right-3 sm:top-5 sm:-right-5 z-30 bg-[#A0091F] text-white font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(160,9,31,0.35)] rotate-8 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>360° PREVIEW</span>
+              </div>
+
+              {/* BADGE 3: PRINT READY ✓ (Góc dưới bên trái) */}
+              <div className="absolute bottom-10 -left-3 sm:bottom-12 sm:-left-5 z-30 bg-[#EF6807] text-white font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(239,104,7,0.35)] -rotate-6 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>PRINT READY ✓</span>
+              </div>
+
+              {/* BADGE 4: SAVE DESIGN (Góc dưới bên phải) */}
+              <div className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-4 z-30 bg-[#2C9EC6] text-white font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(44,158,198,0.35)] rotate-6 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>SAVE DESIGN</span>
+              </div>
+
+              {/* KHUNG BO VIỀN TRẮNG NỔI 3D CHỨA SLIDER */}
+              <div className="p-2 sm:p-3 bg-white/75 backdrop-blur-md rounded-[34px] md:rounded-[42px] border-[3px] border-white/95 shadow-[0_22px_55px_rgba(58,33,30,0.18)]">
+                <HeroSlider />
+              </div>
+
+            </div>
           </div>
 
         </div>

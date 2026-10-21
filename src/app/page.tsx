@@ -156,26 +156,27 @@ export default async function Home() {
       {/* PHẦN 4: Section custom banner */}
       <section className="w-full px-4 md:px-6 mb-24">
         <div className="max-w-[1400px] mx-auto bg-[#FFF9E8] rounded-[32px] overflow-hidden flex flex-col md:flex-row items-center relative border border-[#E8DFD8] shadow-sm">
-          <div className="w-full md:w-1/2 p-10 md:p-16 lg:p-24 z-10 flex flex-col items-start bg-gradient-to-r from-[#FFF9E8] via-[#FFF9E8] to-transparent">
-            <h3 className="text-4xl md:text-5xl font-extrabold text-[#3A211E] mb-6 leading-[1.15] tracking-tight">
+          <div className="w-full md:w-1/2 p-8 sm:p-12 md:p-14 lg:p-20 z-10 flex flex-col items-start bg-[#FFF9E8]">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#3A211E] mb-6 leading-[1.15] tracking-tight">
               {t("banner_title" as any)}
             </h3>
-            <p className="text-lg text-[#765B52] mb-10 max-w-[440px] leading-relaxed">
+            <p className="text-base sm:text-lg text-[#765B52] mb-8 md:mb-10 max-w-[440px] leading-relaxed">
               {t("banner_desc" as any)}
             </p>
-            <Link href="/custom-cup" className="px-8 py-4 bg-[#3A211E] text-white rounded-full font-bold text-lg hover:bg-[#201817] transition-all shadow-md inline-block">
+            <Link href="/custom-cup" className="px-8 py-4 bg-[#3A211E] text-white rounded-full font-bold text-base sm:text-lg hover:bg-[#201817] transition-all shadow-md inline-block">
               {t("banner_btn" as any)}
             </Link>
           </div>
-          <div className="w-full md:w-1/2 h-[350px] md:h-full md:absolute md:right-0 md:top-0 bottom-0 relative z-0">
-            <Image 
-              src="/images/hero-slider-1.jpg" 
-              alt="Bộ sưu tập ly thủy tinh và ly nhựa cá nhân hóa Cupfy tại Việt Nam" 
-              fill
-              className="object-contain object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FFF9E8] via-transparent to-transparent hidden md:block"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-[#FFF9E8] via-transparent to-transparent md:hidden"></div>
+          <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 flex items-center justify-center relative z-0">
+            <div className="relative w-full max-w-[480px] aspect-square rounded-[28px] overflow-hidden">
+              <Image 
+                src="/images/cupfy-custom-cups.jpg" 
+                alt="Bộ sưu tập 4 mẫu ly thủy tinh đính họa tiết cá nhân hóa Cupfy" 
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 480px"
+              />
+            </div>
           </div>
         </div>
       </section>

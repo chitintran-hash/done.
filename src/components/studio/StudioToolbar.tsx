@@ -26,14 +26,17 @@ import {
   ArrowUp,
   ArrowDown,
   Sparkles,
-  Info
+  Info,
+  Gift
 } from 'lucide-react';
 import {
   DesignLayer,
   TextLayer,
   ImageLayer,
   CupModelDef,
-  CupColorOption
+  CupColorOption,
+  StudioAddon,
+  StudioPricingBreakdown
 } from './types';
 import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR, PLASTIC_COLOR_OPTIONS, LID_COLOR_OPTIONS, PRESET_STICKERS } from './cupDefinitions';
 import { FONT_LIBRARY, FONT_CATEGORIES } from './fontLibrary';
@@ -59,6 +62,10 @@ interface StudioToolbarProps {
   onDuplicateLayer: (id: string) => void;
   onMoveLayerOrder: (id: string, direction: 'up' | 'down') => void;
   formatVND: (num: number) => string;
+  addons?: StudioAddon[];
+  onToggleAddon?: (id: string) => void;
+  onUpdateAddonNote?: (id: string, note: string) => void;
+  pricing?: StudioPricingBreakdown;
 }
 
 export function StudioToolbar({
@@ -81,6 +88,10 @@ export function StudioToolbar({
   onDuplicateLayer,
   onMoveLayerOrder,
   formatVND,
+  addons = [],
+  onToggleAddon,
+  onUpdateAddonNote,
+  pricing,
 }: StudioToolbarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fontSearch, setFontSearch] = useState('');
@@ -179,6 +190,19 @@ export function StudioToolbar({
             <span className="absolute top-1 right-2 w-4 h-4 bg-[#D97706] text-white rounded-full text-[9px] font-bold flex items-center justify-center">
               {layers.length}
             </span>
+          )}
+        </button>
+
+        <button
+          onClick={() => setActiveTab('pricing')}
+          className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all relative ${
+            activeTab === 'pricing' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
+          }`}
+        >
+          <Gift className="w-5 h-5" />
+          <span className="text-[10px] font-bold text-center leading-tight">Phụ kiện</span>
+          {addons.some((a) => a.selected) && (
+            <span className="absolute top-1 right-2 w-2 h-2 bg-[#D97706] rounded-full"></span>
           )}
         </button>
       </div>
@@ -1008,6 +1032,117 @@ export function StudioToolbar({
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ==================== TAB: PHỤ KIỆN & BÁO GIÁ ==================== */}
+        {activeTab === 'pricing' && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-bold text-[#3A211E] text-base">Phụ Kiện & Báo Giá</h3>
+              <p className="text-xs text-[#765B52] mt-1">
+                Tự động tính chi phí thiết kế và chọn thêm phụ kiện quà tặng.
+              </p>
+            </div>
+
+            {/* Phụ kiện mua kèm */}
+            <div className="space-y-3">
+              <span className="text-[11px] font-black uppercase tracking-wider text-[#765B52] block">
+                Phụ kiện đóng gói
+              </span>
+              <div className="space-y-2.5">
+                {addons.map((addon) => (
+                  <div
+                    key={addon.id}
+                    className={`p-3.5 rounded-2xl border transition-all ${
+                      addon.selected
+                        ? 'bg-[#FFF9E8] border-[#FFBF00] shadow-xs'
+                        : 'bg-white border-[#E8DFD8]'
+                    }`}
+                  >
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={addon.selected}
+                        onChange={() => onToggleAddon && onToggleAddon(addon.id)}
+                        className="mt-0.5 w-4 h-4 rounded text-[#FFBF00] focus:ring-[#FFBF00] cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-xs text-[#3A211E]">{addon.name}</span>
+                          <span className="font-black text-xs text-[#3A211E]">
+                            +{formatVND(addon.price)}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#765B52] mt-0.5 leading-snug">
+                          {addon.description}
+                        </p>
+                      </div>
+                    </label>
+
+                    {addon.id === 'card' && addon.selected && onUpdateAddonNote && (
+                      <div className="mt-2.5 pt-2 border-t border-[#E8DFD8]">
+                        <label className="text-[10px] font-bold text-[#3A211E] block mb-1">
+                          Lời nhắn thiệp:
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={addon.note || ''}
+                          onChange={(e) => onUpdateAddonNote(addon.id, e.target.value)}
+                          placeholder="Nhập lời chúc muốn gửi..."
+                          className="w-full p-2 bg-white border border-[#E8DFD8] rounded-xl text-xs text-[#3A211E]"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Tóm tắt chi phí */}
+            {pricing && (
+              <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#E8DFD8] space-y-2 text-xs">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#765B52] block mb-1">
+                  Chi tiết giá
+                </span>
+                <div className="flex justify-between text-[#765B52]">
+                  <span>Ly phôi ({pricing.modelName}):</span>
+                  <span className="font-bold text-[#3A211E]">{formatVND(pricing.baseCupPrice)}</span>
+                </div>
+                {pricing.hasText && (
+                  <div className="flex justify-between text-[#765B52]">
+                    <span>Phí in chữ ({pricing.textCount} chữ):</span>
+                    <span className="font-bold text-[#3A211E]">+{formatVND(pricing.textFee)}</span>
+                  </div>
+                )}
+                {pricing.hasImage && (
+                  <div className="flex justify-between text-[#765B52]">
+                    <span>Phí in ảnh ({pricing.imageCount} ảnh):</span>
+                    <span className="font-bold text-[#3A211E]">+{formatVND(pricing.imageFee)}</span>
+                  </div>
+                )}
+                {pricing.hasSticker && (
+                  <div className="flex justify-between text-[#765B52]">
+                    <span>Sticker trang trí:</span>
+                    <span className="font-bold text-[#3A211E]">
+                      {pricing.hasText ? 'Miễn phí (0₫)' : `+${formatVND(pricing.stickerFee)}`}
+                    </span>
+                  </div>
+                )}
+                {pricing.selectedAddons.map((ad) => (
+                  <div key={ad.id} className="flex justify-between text-[#765B52]">
+                    <span>{ad.name}:</span>
+                    <span className="font-bold text-[#3A211E]">+{formatVND(ad.price)}</span>
+                  </div>
+                ))}
+                <div className="pt-2 border-t border-[#E8DFD8] flex items-center justify-between">
+                  <span className="font-extrabold text-sm text-[#3A211E]">TỔNG GIÁ:</span>
+                  <span className="font-black text-lg text-[#3A211E]">
+                    {formatVND(pricing.totalPrice)}
+                  </span>
+                </div>
               </div>
             )}
           </div>

@@ -14,19 +14,30 @@ import {
   SlidersHorizontal,
   Eye,
   FileCheck2,
-  HelpCircle
+  HelpCircle,
+  Gift
 } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { useLanguageStore } from '@/store/useLanguageStore';
 import { translations, TranslationKey } from '@/lib/i18n/translations';
 import { createClient } from '@/lib/supabase/client';
 
-import { DesignLayer, TextLayer, ImageLayer, CupModelDef, CupColorOption, StudioViewMode } from '@/components/studio/types';
+import {
+  DesignLayer,
+  TextLayer,
+  ImageLayer,
+  CupModelDef,
+  CupColorOption,
+  StudioViewMode,
+  StudioAddon,
+  StudioPricingBreakdown
+} from '@/components/studio/types';
 import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR } from '@/components/studio/cupDefinitions';
 import { GOOGLE_FONTS_URL } from '@/components/studio/fontLibrary';
 import { useCanvasTexture, CANVAS_WIDTH, CANVAS_HEIGHT } from '@/components/studio/useCanvasTexture';
 import { StudioScene } from '@/components/studio/StudioScene';
 import { StudioToolbar } from '@/components/studio/StudioToolbar';
+import { StudioPricingSidebar } from '@/components/studio/StudioPricingSidebar';
 
 const DRAFT_STORAGE_KEY = 'cupfy-studio-draft-v2';
 
@@ -46,6 +57,46 @@ function CustomCupStudioInner() {
   const [showSafeZone, setShowSafeZone] = useState<boolean>(true);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('models');
+
+  // Addons State (Hộp quà, Charm, Thiệp)
+  const [addons, setAddons] = useState<StudioAddon[]>([
+    {
+      id: 'gift_box',
+      name: 'Gói quà / Hộp quà cao cấp',
+      price: 30000,
+      description: 'Hộp carton cứng, nơ ruy băng sang trọng, lót rơm chống sốc.',
+      selected: false,
+    },
+    {
+      id: 'charm',
+      name: 'Charm trang trí ly',
+      price: 15000,
+      description: 'Charm mini đính quai ly dễ thương, tạo điểm nhấn cá nhân.',
+      selected: false,
+    },
+    {
+      id: 'card',
+      name: 'Thiệp chúc mừng viết tay',
+      price: 5000,
+      description: 'Thiệp viết tay gửi người thương kèm lời chúc ý nghĩa.',
+      selected: false,
+      note: '',
+    },
+  ]);
+
+  const [isMobilePricingOpen, setIsMobilePricingOpen] = useState(false);
+
+  const handleToggleAddon = (id: string) => {
+    setAddons((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, selected: !a.selected } : a))
+    );
+  };
+
+  const handleUpdateAddonNote = (id: string, note: string) => {
+    setAddons((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, note } : a))
+    );
+  };
 
   // Layers State
   const [layers, setLayers] = useState<DesignLayer[]>([
@@ -467,7 +518,7 @@ function CustomCupStudioInner() {
         selectedModel.name.toLowerCase().includes(p.name.toLowerCase())
     );
 
-    const price = matchedDbProd ? matchedDbProd.price : selectedModel.defaultPrice;
+    const price = pricingBreakdown.totalPrice;
     const productName = matchedDbProd
       ? `${matchedDbProd.name} (Custom Studio)`
       : `${selectedModel.name} (Custom Studio)`;
@@ -485,6 +536,16 @@ function CustomCupStudioInner() {
           baseProductId: matchedDbProd ? matchedDbProd.id : null,
           modelType: selectedModel.id,
           modelName: selectedModel.name,
+          basePrice: pricingBreakdown.baseCupPrice,
+          textFee: pricingBreakdown.textFee,
+          imageFee: pricingBreakdown.imageFee,
+          stickerFee: pricingBreakdown.stickerFee,
+          addons: pricingBreakdown.selectedAddons.map((a) => ({
+            id: a.id,
+            name: a.name,
+            price: a.price,
+            note: a.note || '',
+          })),
           category: selectedModel.category,
           capacity: selectedModel.capacity,
           heightMm: selectedModel.heightMm,
@@ -509,6 +570,55 @@ function CustomCupStudioInner() {
       router.push('/cart');
     }, 600);
   };
+
+  // Pricing calculation (Real-time dynamic breakdown)
+  const pricingBreakdown: StudioPricingBreakdown = React.useMemo(() => {
+    const matchedDbProd = dbProducts.find(
+      (p) =>
+        p.name.toLowerCase().includes(selectedModel.name.toLowerCase()) ||
+        selectedModel.name.toLowerCase().includes(p.name.toLowerCase())
+    );
+    const baseCupPrice = matchedDbProd ? matchedDbProd.price : selectedModel.defaultPrice;
+
+    const textLayers = layers.filter((l) => l.type === 'text');
+    const imageLayers = layers.filter((l) => l.type === 'image');
+    const stickerLayers = layers.filter((l) => l.type === 'sticker');
+
+    const hasText = textLayers.length > 0;
+    const hasImage = imageLayers.length > 0;
+    const hasSticker = stickerLayers.length > 0;
+
+    // In chữ / Khắc tên: 15.000₫ nếu có chữ
+    const textFee = hasText ? 15000 : 0;
+
+    // In hình ảnh / Logo: 20.000₫ nếu có ảnh
+    const imageFee = hasImage ? 20000 : 0;
+
+    // Sticker: Đã bao gồm trong phí in chữ (nếu có chữ thì 0₫, nếu chỉ có sticker thì +15.000₫)
+    const stickerFee = !hasText && hasSticker ? 15000 : 0;
+
+    const selectedAddons = addons.filter((a) => a.selected);
+    const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+
+    const totalPrice = baseCupPrice + textFee + imageFee + stickerFee + addonsTotal;
+
+    return {
+      baseCupPrice,
+      modelName: selectedModel.name,
+      hasText,
+      textCount: textLayers.length,
+      textFee,
+      hasImage,
+      imageCount: imageLayers.length,
+      imageFee,
+      hasSticker,
+      stickerCount: stickerLayers.length,
+      stickerFee,
+      selectedAddons,
+      addonsTotal,
+      totalPrice,
+    };
+  }, [dbProducts, selectedModel, layers, addons]);
 
   const formatVND = (num: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
@@ -634,17 +744,24 @@ function CustomCupStudioInner() {
 
         {/* Right: Price & Add To Cart Button */}
         <div className="flex items-center gap-3">
-          <div className="text-right hidden sm:block">
-            <div className="text-[10px] text-[#765B52] font-bold">GIÁ THIẾT KẾ</div>
-            <div className="text-sm font-black text-[#3A211E]">
-              {formatVND(selectedModel.defaultPrice)}
+          <button
+            onClick={() => setIsMobilePricingOpen(true)}
+            className="text-right flex flex-col items-end cursor-pointer group"
+            title="Nhấn để xem chi tiết chi phí và phụ kiện"
+          >
+            <div className="text-[10px] text-[#765B52] font-bold group-hover:text-[#FFBF00] transition-colors flex items-center gap-1">
+              <span>GIÁ THIẾT KẾ</span>
+              <Gift className="w-3 h-3 text-[#FFBF00]" />
             </div>
-          </div>
+            <div className="text-sm md:text-base font-black text-[#3A211E] group-hover:text-[#FFBF00] transition-colors">
+              {formatVND(pricingBreakdown.totalPrice)}
+            </div>
+          </button>
 
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="px-5 md:px-7 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00]"
+            className="px-4 sm:px-6 md:px-7 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer"
           >
             {isAddingToCart ? (
               <>
@@ -689,13 +806,26 @@ function CustomCupStudioInner() {
             onDuplicateLayer={handleDuplicateLayer}
             onMoveLayerOrder={handleMoveLayerOrder}
             formatVND={formatVND}
+            addons={addons}
+            onToggleAddon={handleToggleAddon}
+            onUpdateAddonNote={handleUpdateAddonNote}
+            pricing={pricingBreakdown}
           />
         </div>
+
+        {/* Mobile Toggle Button for Pricing & Accessories */}
+        <button
+          onClick={() => setIsMobilePricingOpen(true)}
+          className="lg:hidden absolute bottom-6 left-6 z-30 p-3 bg-[#FFBF00] text-[#3A211E] rounded-full shadow-xl flex items-center gap-2 text-xs font-black border border-amber-300 active:scale-95 cursor-pointer"
+        >
+          <Gift className="w-4 h-4" />
+          <span>Báo giá & Phụ kiện</span>
+        </button>
 
         {/* Mobile Toggle Button for Drawer */}
         <button
           onClick={() => setIsMobilePanelOpen(!isMobilePanelOpen)}
-          className="md:hidden absolute bottom-6 right-6 z-30 p-3.5 bg-[#3A211E] text-white rounded-full shadow-xl flex items-center gap-2 text-xs font-bold"
+          className="md:hidden absolute bottom-6 right-6 z-30 p-3 bg-[#3A211E] text-white rounded-full shadow-xl flex items-center gap-2 text-xs font-bold active:scale-95 cursor-pointer"
         >
           <SlidersHorizontal className="w-4 h-4" />
           <span>{isMobilePanelOpen ? 'Ẩn Công Cụ' : 'Mở Công Cụ'}</span>
@@ -727,6 +857,49 @@ function CustomCupStudioInner() {
             </div>
           )}
         </main>
+
+        {/* Right Sidebar: StudioPricingSidebar (Desktop: lg+) */}
+        <div className="hidden lg:flex h-full w-80 xl:w-88 border-l border-[#E8DFD8] bg-white z-10 shrink-0 flex-col">
+          <StudioPricingSidebar
+            selectedModel={selectedModel}
+            layers={layers}
+            selectedLayerId={selectedLayerId}
+            onUpdateLayer={handleUpdateLayer}
+            onDeleteLayer={handleDeleteLayer}
+            isOutOfSafeZone={isOutOfSafeZone}
+            addons={addons}
+            onToggleAddon={handleToggleAddon}
+            onUpdateAddonNote={handleUpdateAddonNote}
+            pricing={pricingBreakdown}
+            onAddToCart={handleAddToCart}
+            isAddingToCart={isAddingToCart}
+            formatVND={formatVND}
+          />
+        </div>
+
+        {/* Mobile Slide-up Drawer for Pricing & Addons */}
+        {isMobilePricingOpen && (
+          <div className="lg:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex flex-col justify-end animate-in fade-in duration-150">
+            <div className="bg-white rounded-t-3xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200">
+              <StudioPricingSidebar
+                selectedModel={selectedModel}
+                layers={layers}
+                selectedLayerId={selectedLayerId}
+                onUpdateLayer={handleUpdateLayer}
+                onDeleteLayer={handleDeleteLayer}
+                isOutOfSafeZone={isOutOfSafeZone}
+                addons={addons}
+                onToggleAddon={handleToggleAddon}
+                onUpdateAddonNote={handleUpdateAddonNote}
+                pricing={pricingBreakdown}
+                onAddToCart={handleAddToCart}
+                isAddingToCart={isAddingToCart}
+                formatVND={formatVND}
+                onCloseMobile={() => setIsMobilePricingOpen(false)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

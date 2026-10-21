@@ -147,6 +147,22 @@ export default function CartPage() {
                         {item.customSpecs.customText && (
                           <p><span className="font-bold text-[#3A211E]">Nội dung in:</span> "{item.customSpecs.customText}" (Font: {item.customSpecs.font || 'Chuẩn'})</p>
                         )}
+                        {item.customSpecs.addons && item.customSpecs.addons.length > 0 && (
+                          <div className="pt-2 border-t border-[#E8DFD8]/70 mt-2">
+                            <span className="font-bold text-[#3A211E]">Phụ kiện đi kèm:</span>
+                            <div className="flex flex-col gap-1 mt-1 pl-1">
+                              {item.customSpecs.addons.map((ad: any, idx: number) => (
+                                <div key={idx} className="flex items-start justify-between text-[11px]">
+                                  <span>
+                                    • {ad.name}
+                                    {ad.note && <span className="italic text-[#3A211E]"> (Lời chúc: &quot;{ad.note}&quot;)</span>}
+                                  </span>
+                                  <span className="font-bold text-[#3A211E]">+{Number(ad.price).toLocaleString('vi-VN')} ₫</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
 

@@ -70,3 +70,29 @@ export interface CupColorOption {
   isFrosted?: boolean;
   isCeramic?: boolean;
 }
+
+export interface StudioAddon {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  selected: boolean;
+  note?: string;
+}
+
+export interface StudioPricingBreakdown {
+  baseCupPrice: number;
+  modelName: string;
+  hasText: boolean;
+  textCount: number;
+  textFee: number;
+  hasImage: boolean;
+  imageCount: number;
+  imageFee: number;
+  hasSticker: boolean;
+  stickerCount: number;
+  stickerFee: number;
+  selectedAddons: StudioAddon[];
+  addonsTotal: number;
+  totalPrice: number;
+}

@@ -17,26 +17,12 @@ export default async function Home() {
   return (
     <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#F7F6F2]">
       
-      {/* PHẦN 1: Hero Section phong cách Banner HIPPEAS */}
+      {/* PHẦN 1: Hero Section phong cách Banner HIPPEAS (Nền vàng + Chữ bên trái) */}
       <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
-        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FCBF02] shadow-[0_20px_60px_rgba(252,191,2,0.25)] border border-[#FCBF02]/40 min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex items-center">
+        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FCBF02] shadow-[0_20px_60px_rgba(252,191,2,0.25)] border border-[#FCBF02]/40 min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex flex-col lg:flex-row items-center justify-between">
           
-          {/* Nền hoạt hoạ ly thuỷ tinh Cupfy xếp nghiêng 25 độ ở bên phải */}
-          <div className="absolute inset-0 z-0 pointer-events-none select-none">
-            <Image
-              src="/images/cupfy-hippeas-bg.jpg"
-              alt="Bộ sưu tập ly thuỷ tinh Cupfy cá nhân hoá"
-              fill
-              priority
-              quality={95}
-              className="object-cover object-right md:object-center"
-            />
-            {/* Lớp phủ chuyển màu giúp chữ luôn nổi bật trên mọi thiết bị */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#FCBF02] via-[#FCBF02]/90 md:via-[#FCBF02]/25 to-transparent z-[1]" />
-          </div>
-
-          {/* Nội dung bên trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}
-          <div className="relative z-10 w-full lg:w-[52%] p-8 sm:p-12 md:p-16 flex flex-col items-start">
+          {/* Cột trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}
+          <div className="relative z-10 w-full lg:w-[54%] p-8 sm:p-12 md:p-16 flex flex-col items-start">
             
             {/* Tag nhỏ thương hiệu */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/35 backdrop-blur-md border border-white/50 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-sm">
@@ -63,7 +49,7 @@ export default async function Home() {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/custom-cup"
-                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-[#FDB813] hover:text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_10px_25px_rgba(58,33,30,0.25)] group"
+                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-[#FCBF02] hover:text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_10px_25px_rgba(58,33,30,0.25)] group"
               >
                 <span>{t("hero_btn_design" as any)} ✨</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -76,6 +62,11 @@ export default async function Home() {
                 {t("hero_btn_shop" as any)}
               </Link>
             </div>
+          </div>
+
+          {/* Cột phải: Để trống chờ hình ảnh kèm thanh trượt từ người dùng */}
+          <div className="w-full lg:w-[46%] min-h-[200px] lg:min-h-full flex items-center justify-center p-8 relative">
+            {/* Chỗ trống sẵn sàng cho slider hình ảnh */}
           </div>
 
         </div>

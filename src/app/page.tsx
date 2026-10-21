@@ -4,6 +4,7 @@ import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag, Sparkles } fro
 import { createClient } from "@/lib/supabase/server";
 import { getTranslation } from "@/lib/i18n/server";
 import HeroSlider from "@/components/HeroSlider";
+import AddToCartButton from "@/components/AddToCartButton";
 
 export default async function Home() {
   const { t } = await getTranslation();
@@ -105,83 +106,133 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* PHẦN 2: Cách hoạt động */}
-      <section className="bg-[#FFF9E8]/50 py-24 border-y border-[#E8DFD8]">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-3xl font-extrabold text-[#3A211E] mb-4">{t("how_title" as any)}</h3>
-            <p className="text-[#765B52] text-lg">{t("how_subtitle" as any)}</p>
+      {/* PHẦN 2: Cách thức hoạt động (Kiểu thẻ hiện đại với Badge số đa sắc màu từ ảnh mẫu) */}
+      <section className="py-20 md:py-24 bg-[#FFF9E8]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+          <div className="text-center mb-14 md:mb-16">
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-[#3A211E] mb-3">{t("how_title" as any)}</h3>
+            <p className="text-[#765B52] text-base sm:text-lg">{t("how_subtitle" as any)}</p>
           </div>
-          <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {/* Decorative dashed line */}
-            <div className="hidden md:block absolute top-[44px] left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-[#E8DFD8] z-0"></div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
             {[
-              { icon: MousePointer2, title: t("how_step1_title" as any), desc: t("how_step1_desc" as any) },
-              { icon: Paintbrush, title: t("how_step2_title" as any), desc: t("how_step2_desc" as any) },
-              { icon: Eye, title: t("how_step3_title" as any), desc: t("how_step3_desc" as any) },
-              { icon: ShoppingBag, title: t("how_step4_title" as any), desc: t("how_step4_desc" as any) }
-            ].map((step, i) => (
-              <div key={i} className="relative bg-white rounded-[24px] p-8 text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300 border border-[#E8DFD8] shadow-sm hover:shadow-md z-10 overflow-hidden group">
-                <div className="w-20 h-20 bg-[#FFF3C4] text-[#3A211E] rounded-full flex items-center justify-center mb-6 shadow-sm relative z-10 border border-[#E8DFD8]/60">
-                  <step.icon className="w-8 h-8" strokeWidth={2} />
+              {
+                step: "01",
+                badgeBg: "bg-[#F5B738]", // Vàng ấm rực rỡ
+                title: t("how_step1_title" as any),
+                desc: t("how_step1_desc" as any),
+              },
+              {
+                step: "02",
+                badgeBg: "bg-[#F6CFC0]", // Cam đào pastel ấm áp
+                title: t("how_step2_title" as any),
+                desc: t("how_step2_desc" as any),
+              },
+              {
+                step: "03",
+                badgeBg: "bg-[#CDE5EE]", // Xanh đá tuyết pastel mát mẻ
+                title: t("how_step3_title" as any),
+                desc: t("how_step3_desc" as any),
+              },
+              {
+                step: "04",
+                badgeBg: "bg-[#DFD7F5]", // Tím oải hương pastel mộng mơ
+                title: t("how_step4_title" as any),
+                desc: t("how_step4_desc" as any),
+              },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-[28px] sm:rounded-[32px] p-7 sm:p-8 flex flex-col items-start text-left border border-[#E8DFD8] shadow-[0_8px_30px_rgba(58,33,30,0.04)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
+              >
+                {/* Badge số thứ tự có màu sắc bắt mắt */}
+                <div
+                  className={`w-11 h-9 sm:w-12 sm:h-10 rounded-xl ${item.badgeBg} text-[#171717] font-black text-xs sm:text-sm flex items-center justify-center mb-6 shadow-xs select-none`}
+                >
+                  {item.step}
                 </div>
-                
-                <h4 className="text-xl font-bold text-[#3A211E] mb-3 relative z-10">{step.title}</h4>
-                <p className="text-sm text-[#765B52] leading-relaxed relative z-10">{step.desc}</p>
+
+                {/* Tiêu đề bước */}
+                <h4 className="text-xl sm:text-2xl font-bold text-[#171717] mb-3 leading-snug">
+                  {item.title}
+                </h4>
+
+                {/* Mô tả chi tiết */}
+                <p className="text-sm sm:text-base text-[#765B52] font-medium leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PHẦN 3: Sản phẩm nổi bật */}
-      <section className="max-w-[1400px] mx-auto px-6 py-24 w-full">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <h3 className="text-3xl font-extrabold text-[#3A211E] mb-3">{t("products_title" as any)}</h3>
-            <p className="text-[#765B52] text-lg">{t("products_subtitle" as any)}</p>
+      {/* PHẦN 3: Khám phá mẫu ly yêu thích (Nền trắng toàn phần + Nút Thêm vào giỏ hàng) */}
+      <section className="w-full bg-white py-20 sm:py-24 border-y border-[#E8DFD8]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h3 className="text-3xl font-extrabold text-[#3A211E] mb-3">{t("products_title" as any)}</h3>
+              <p className="text-[#765B52] text-lg">{t("products_subtitle" as any)}</p>
+            </div>
+            <Link href="/products" className="hidden sm:flex items-center gap-2 font-bold text-[#3A211E] hover:text-[#765B52] transition-colors">
+              {t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
-          <Link href="/products" className="hidden sm:flex items-center gap-2 font-bold text-[#3A211E] hover:text-[#765B52] transition-colors">
-            {t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {latestProducts?.map((product) => (
-            <Link href={`/products/${product.id}`} key={product.id} className="group bg-white rounded-[24px] overflow-hidden border border-[#E8DFD8] hover:border-[#FFBF00] transition-colors flex flex-col h-full shadow-sm hover:shadow-md">
-              <div className="relative aspect-square bg-white overflow-hidden p-8 flex items-center justify-center border-b border-[#E8DFD8]">
-                {product.image_url ? (
-                  <Image
-                    src={product.image_url}
-                    alt={`${product.name} - Ly đẹp chính hãng Cupfy`}
-                    fill
-                    className="object-contain p-8 group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div className="text-[#765B52] text-sm">No image</div>
-                )}
-              </div>
-              <div className="p-6 flex flex-col flex-grow bg-white">
-                <h4 className="font-bold text-lg text-[#3A211E] mb-2 line-clamp-2 leading-tight">{product.name}</h4>
-                <p className="text-sm text-[#765B52] mb-5">{product.capacity || '500ml'}</p>
-                <div className="mt-auto flex items-center justify-between">
-                  <span className="font-black text-[#3A211E] text-lg">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-                  </span>
-                  <span className="text-[#3A211E] font-bold text-sm bg-[#FFBF00] px-4 py-2 rounded-full group-hover:bg-[#3A211E] group-hover:text-white transition-colors">
-                    {t("products_view_detail" as any)}
-                  </span>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {latestProducts?.map((product) => (
+              <div 
+                key={product.id} 
+                className="group bg-white rounded-[24px] sm:rounded-[28px] overflow-hidden border border-[#E8DFD8] hover:border-[#FFBF00] transition-all flex flex-col h-full shadow-[0_4px_20px_rgba(58,33,30,0.04)] hover:shadow-xl"
+              >
+                {/* Khu vực ảnh sản phẩm: Bấm vào xem chi tiết */}
+                <Link 
+                  href={`/products/${product.id}`} 
+                  className="relative aspect-square bg-[#FAF7F2] overflow-hidden p-6 sm:p-8 flex items-center justify-center border-b border-[#E8DFD8]/70 block"
+                >
+                  {product.image_url ? (
+                    <Image
+                      src={product.image_url}
+                      alt={`${product.name} - Ly đẹp chính hãng Cupfy`}
+                      fill
+                      className="object-contain p-6 sm:p-8 group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div className="text-[#765B52] text-sm">No image</div>
+                  )}
+                </Link>
+
+                {/* Thông tin sản phẩm & Nút Thêm vào giỏ hàng */}
+                <div className="p-5 sm:p-6 flex flex-col flex-grow bg-white">
+                  <Link href={`/products/${product.id}`}>
+                    <h4 className="font-bold text-base sm:text-lg text-[#3A211E] mb-1 line-clamp-1 hover:text-[#FFBF00] transition-colors">
+                      {product.name}
+                    </h4>
+                  </Link>
+                  <p className="text-xs sm:text-sm text-[#765B52] mb-4 sm:mb-5">
+                    {product.capacity || '500ml'}
+                  </p>
+                  
+                  {/* Hàng giá tiền & Nút Thêm vào giỏ hàng */}
+                  <div className="mt-auto pt-3 flex items-center justify-between gap-2 border-t border-[#E8DFD8]/50">
+                    <span className="font-black text-[#3A211E] text-lg sm:text-xl">
+                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                    </span>
+                    
+                    <AddToCartButton product={product} />
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+          
+          <div className="mt-10 flex justify-center sm:hidden">
+            <Link href="/products" className="px-8 py-4 bg-white text-[#3A211E] border border-[#E8DFD8] rounded-full font-bold flex items-center gap-2">
+              {t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
             </Link>
-          ))}
-        </div>
-        
-        <div className="mt-10 flex justify-center sm:hidden">
-          <Link href="/products" className="px-8 py-4 bg-white text-[#3A211E] border border-[#E8DFD8] rounded-full font-bold flex items-center gap-2">
-            {t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
-          </Link>
+          </div>
         </div>
       </section>
 

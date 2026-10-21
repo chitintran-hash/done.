@@ -6,6 +6,7 @@ import { Search, Loader2, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import AddToCartButton from '@/components/AddToCartButton';
 
 export default function ProductCatalogPage() {
   return (
@@ -203,9 +204,12 @@ function ProductCatalogContent() {
                       <Link href={`/products/${product.id}`} className="font-bold text-base text-[#3A211E] hover:text-[#765B52] transition-colors mb-1 line-clamp-1">
                         {product.name}
                       </Link>
-                      <span className="text-[#3A211E] font-black text-base mt-auto">
-                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
-                      </span>
+                      <div className="mt-auto pt-2 flex items-center justify-between gap-2">
+                        <span className="text-[#3A211E] font-black text-base">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                        </span>
+                        <AddToCartButton product={product} variant="icon" className="w-8 h-8 !p-0" />
+                      </div>
                     </div>
                   </div>
                 ))}

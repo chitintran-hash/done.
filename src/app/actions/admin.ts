@@ -4,11 +4,15 @@ import { createClient } from '@supabase/supabase-js';
 import { revalidatePath } from 'next/cache';
 import { createClient as createServerSupabase } from '@/lib/supabase/server';
 
+const cleanKey = (key?: string) => key ? key.replace(/^["']|["']$/g, '').trim() : '';
+
 // Create a Supabase admin client using Service Role
 const getAdminClient = () => {
+  const url = cleanKey(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const serviceKey = cleanKey(process.env.SUPABASE_SERVICE_ROLE_KEY) || cleanKey(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    url,
+    serviceKey,
     {
       auth: {
         autoRefreshToken: false,
@@ -1035,19 +1039,23 @@ export async function saveProduct(payload: any, editingId?: string) {
   try {
     const adminClient = getAdminClient();
     if (editingId) {
-      const { error } = await adminClient.from('products').update(payload).eq('id', editingId);
+      const { data, error } = await adminClient.from('products').update(payload).eq('id', editingId).select();
       if (error) throw error;
+      revalidatePath('/admin/products');
+      revalidatePath('/admin/inventory');
+      revalidatePath('/products');
+      return { success: true, data: data?.[0] };
     } else {
-      const { error } = await adminClient.from('products').insert(payload);
+      const { data, error } = await adminClient.from('products').insert(payload).select();
       if (error) throw error;
+      revalidatePath('/admin/products');
+      revalidatePath('/admin/inventory');
+      revalidatePath('/products');
+      return { success: true, data: data?.[0] };
     }
-    revalidatePath('/admin/products');
-    revalidatePath('/admin/inventory');
-    revalidatePath('/products');
-    return { success: true };
   } catch (error: any) {
     console.error("Save product error:", error);
-    return { success: false, error: error.message };
+    return { success: false, error: error.message || String(error) };
   }
 }
 

@@ -56,7 +56,7 @@ export default function AdminProductsPage() {
         name: product.name || '',
         sku: product.sku || '',
         price: product.price || 0,
-        cost_price: product.technical_specs?.cost_price || 0,
+        cost_price: product.technical_specs?.cost_price ?? product.technical_specs?.cost ?? 0,
         category: product.category || 'glass',
         description: product.description || '',
         image_url: product.image_url || '',
@@ -95,6 +95,7 @@ export default function AdminProductsPage() {
     setLoading(true);
 
     const specs = {
+      ...(editingProduct?.technical_specs || {}),
       material: formData.material,
       capacity: formData.capacity,
       color: formData.color,
@@ -110,7 +111,7 @@ export default function AdminProductsPage() {
       price: formData.price,
       category: formData.category,
       description: formData.description,
-      image_url: formData.image_url,
+      image_url: formData.image_url || formData.images[0] || '',
       stock: formData.stock,
       technical_specs: specs,
       is_available: true,
@@ -121,7 +122,11 @@ export default function AdminProductsPage() {
     if (!result.success) {
       alert("Lỗi lưu sản phẩm: " + result.error);
     } else {
+      if (result.data) {
+        setProducts(prev => prev.map(p => p.id === result.data.id ? result.data : p));
+      }
       setShowModal(false);
+      alert("Đã lưu thông tin sản phẩm và giá vốn thành công!");
       await fetchProducts();
     }
     setLoading(false);
@@ -266,8 +271,17 @@ export default function AdminProductsPage() {
                         {formatVND(p.price)}
                       </td>
                       <td className="py-4 px-4 text-[#765B52]">
-                        {costPrice ? formatVND(costPrice) : (
-                          <span className="text-amber-700 italic font-semibold text-[11px]">Chưa nhập</span>
+                        {costPrice && costPrice > 0 ? (
+                          <div>
+                            <span className="font-bold text-[#3A211E] text-xs block">{formatVND(costPrice)}</span>
+                            <span className="inline-block text-[10px] text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded font-semibold border border-emerald-200 mt-0.5">
+                              Lãi: {formatVND(p.price - costPrice)}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-amber-800 bg-amber-50 border border-amber-300 font-bold text-[10px] px-2 py-0.5 rounded-full inline-block">
+                            Chưa nhập
+                          </span>
                         )}
                       </td>
                       <td className="py-4 px-4">
@@ -358,11 +372,20 @@ export default function AdminProductsPage() {
                   <label className="font-bold text-[#3A211E] block mb-1">Giá vốn COGS (VNĐ - Dùng tính lợi nhuận)</label>
                   <input 
                     type="number" 
-                    value={formData.cost_price} 
-                    onChange={e => setFormData({...formData, cost_price: Number(e.target.value)})} 
-                    placeholder="VD: 25000"
+                    value={formData.cost_price === 0 ? '' : formData.cost_price} 
+                    onChange={e => setFormData({...formData, cost_price: e.target.value === '' ? 0 : Number(e.target.value)})} 
+                    placeholder="VD: 18000"
                     className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl font-bold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
+                  {formData.cost_price > 0 && formData.price > 0 && (
+                    <div className="text-[11px] text-emerald-700 font-bold mt-1.5 flex items-center gap-1.5">
+                      <span>✓ Lãi gộp:</span>
+                      <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(formData.price - formData.cost_price)}</span>
+                      <span className="text-emerald-800 bg-emerald-100 px-1.5 py-0.2 rounded text-[10px]">
+                        {Math.round(((formData.price - formData.cost_price) / formData.price) * 100)}%
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="font-bold text-[#3A211E] block mb-1">Danh mục *</label>

@@ -117,7 +117,7 @@ export default function ProductDetailClient({ initialProduct }: ProductDetailCli
             </p>
 
             <p className="text-[#4A3E3D] text-sm sm:text-base leading-relaxed mb-8">
-              {product.description || "Khám phá ly thủy tinh cao tại Cupfy với thiết kế tối giản, phù hợp sử dụng hằng ngày. Xem thông tin sản phẩm và đặt mua trực tuyến."}
+              {product.description || `Khám phá ${product.name} tại Cupfy với thiết kế tối giản, phù hợp sử dụng hằng ngày. Xem thông tin sản phẩm và đặt mua trực tuyến.`}
             </p>
 
             {/* Specifications */}

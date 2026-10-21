@@ -42,7 +42,7 @@ export const CUP_MODELS: CupModelDef[] = [
   {
     id: 'glass_can',
     name: 'Ly Thuỷ Tinh Cỡ Trung',
-    subtitle: 'Dáng vỏ lon soda hiện đại, miệng thắt bo tròn thời thượng',
+    subtitle: 'Dáng Tumbler thon vừa tay, đáy kính đúc nguyên khối dày dặn',
     category: 'glass',
     defaultPrice: 45000,
     capacity: '380ml',
@@ -52,10 +52,10 @@ export const CUP_MODELS: CupModelDef[] = [
     hasHandle: false,
     isParametric: true,
     sleeve: {
-      radiusTop: 1.35,
-      radiusBottom: 1.35,
-      height: 2.3,
-      y: 1.75
+      radiusTop: 1.37,
+      radiusBottom: 1.18,
+      height: 2.75,
+      y: 2.02
     }
   },
   {

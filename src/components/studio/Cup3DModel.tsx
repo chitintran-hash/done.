@@ -50,23 +50,19 @@ export function Cup3DModel({
       points.push(new THREE.Vector2(1.36, 0.80));
       points.push(new THREE.Vector2(0, 0.72));
     } else if (modelDef.id === 'glass_can') {
-      // Can Glass: Dáng vỏ lon bia/soda hiện đại, thắt cổ tinh tế
+      // Ly Thuỷ Tinh Cỡ Trung: Dáng Tumbler vừa tay, đáy đúc nguyên khối dày dặn (khớp 100% ảnh thật)
       points.push(new THREE.Vector2(0, 0));
-      points.push(new THREE.Vector2(1.15, 0));
-      points.push(new THREE.Vector2(1.28, 0.15));
-      points.push(new THREE.Vector2(1.36, 0.50));
-      points.push(new THREE.Vector2(1.36, 2.90)); // Thân lon thẳng
-      points.push(new THREE.Vector2(1.22, 3.25)); // Thắt cổ
-      points.push(new THREE.Vector2(1.10, 3.42)); // Gờ miệng
-      points.push(new THREE.Vector2(1.14, 3.58));
-      points.push(new THREE.Vector2(1.10, 3.60)); // Mép trên
-      points.push(new THREE.Vector2(1.04, 3.58));
-      points.push(new THREE.Vector2(1.02, 3.42));
-      points.push(new THREE.Vector2(1.14, 3.25));
-      points.push(new THREE.Vector2(1.27, 2.90));
-      points.push(new THREE.Vector2(1.27, 0.50));
-      points.push(new THREE.Vector2(1.18, 0.40));
-      points.push(new THREE.Vector2(0, 0.35));
+      points.push(new THREE.Vector2(1.06, 0));
+      points.push(new THREE.Vector2(1.15, 0.12));
+      points.push(new THREE.Vector2(1.18, 0.60)); // Đáy kính đúc đặc dày dặn
+      points.push(new THREE.Vector2(1.28, 2.00)); // Thân ly suôn hơi loe nhẹ
+      points.push(new THREE.Vector2(1.37, 3.48));
+      points.push(new THREE.Vector2(1.35, 3.52)); // Mép miệng bo tròn
+      points.push(new THREE.Vector2(1.29, 3.52));
+      points.push(new THREE.Vector2(1.27, 3.48));
+      points.push(new THREE.Vector2(1.17, 2.00)); // Lòng ly bên trong
+      points.push(new THREE.Vector2(1.06, 0.65));
+      points.push(new THREE.Vector2(0, 0.60)); // Đáy lòng ly trong
     } else if (modelDef.id === 'glass_mug') {
       // Glass Mug: Thân trụ quai cầm
       points.push(new THREE.Vector2(0, 0));
@@ -172,8 +168,9 @@ export function Cup3DModel({
       ];
     } else if (modelDef.id === 'glass_can') {
       points = [
-        new THREE.Vector2(1.36 + offset, 0.55),
-        new THREE.Vector2(1.36 + offset, 2.85)
+        new THREE.Vector2(1.18 + offset, 0.65),
+        new THREE.Vector2(1.28 + offset, 2.00),
+        new THREE.Vector2(1.37 + offset, 3.40)
       ];
     } else if (modelDef.id === 'glass_mug') {
       points = [

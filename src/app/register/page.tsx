@@ -113,23 +113,23 @@ function RegisterContent() {
   const loginLink = `/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`;
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center p-6 pt-28 pb-16">
-      <div className="w-full max-w-md bg-white border border-[#DDD8D2] rounded-[24px] p-8 shadow-sm">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6 pt-28 pb-16">
+      <div className="w-full max-w-md bg-white border border-[#E8DFD8] rounded-[24px] p-8 shadow-xs">
         <h1 className="font-heading text-3xl font-bold text-[#3A211E] mb-2">Tạo tài khoản</h1>
-        <p className="text-[#6F625E] text-sm mb-6">Gia nhập Cupfy để bắt đầu thiết kế và đặt mua những chiếc ly của riêng bạn</p>
+        <p className="text-[#765B52] text-sm mb-6">Gia nhập Cupfy để bắt đầu thiết kế và đặt mua những chiếc ly của riêng bạn</p>
 
         {success ? (
-          <div className="bg-[#F7F6F2] border border-[#DDD8D2] p-6 rounded-2xl text-center space-y-4">
-            <div className="w-12 h-12 bg-[#BFDCEF]/40 text-[#3A211E] rounded-full mx-auto flex items-center justify-center font-bold text-xl">
+          <div className="bg-[#FFF9E8] border border-[#E8DFD8] p-6 rounded-2xl text-center space-y-4">
+            <div className="w-12 h-12 bg-[#FFF3C4] text-[#3A211E] rounded-full mx-auto flex items-center justify-center font-bold text-xl border border-[#FFBF00]">
               ✓
             </div>
             <h3 className="font-bold text-lg text-[#3A211E]">Đăng ký thành công!</h3>
-            <p className="text-sm text-[#6F625E] leading-relaxed">
+            <p className="text-sm text-[#765B52] leading-relaxed">
               Vui lòng kiểm tra hộp thư email ({email}) để kích hoạt tài khoản của bạn, sau đó đăng nhập để tiếp tục.
             </p>
             <Link 
               href={loginLink}
-              className="mt-4 inline-flex w-full py-3.5 bg-[#3A211E] text-white rounded-full font-bold justify-center hover:bg-[#4A2A25] transition-colors"
+              className="mt-4 inline-flex w-full py-3.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-bold justify-center hover:bg-[#FFBF00]/90 transition-colors shadow-xs"
             >
               Chuyển đến Đăng nhập
             </Link>
@@ -143,7 +143,7 @@ function RegisterContent() {
                 required
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:border-[#FFBF00] focus:ring-2 focus:ring-[#FFF3C4] focus:outline-none transition-colors text-sm"
                 placeholder="Ví dụ: Nguyễn Văn A"
               />
             </div>
@@ -155,7 +155,7 @@ function RegisterContent() {
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:border-[#FFBF00] focus:ring-2 focus:ring-[#FFF3C4] focus:outline-none transition-colors text-sm"
                 placeholder="email@example.com"
               />
             </div>
@@ -168,7 +168,7 @@ function RegisterContent() {
                 minLength={6}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:border-[#FFBF00] focus:ring-2 focus:ring-[#FFF3C4] focus:outline-none transition-colors text-sm"
                 placeholder="Tối thiểu 6 ký tự"
               />
             </div>
@@ -181,7 +181,7 @@ function RegisterContent() {
                 minLength={6}
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+                className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:border-[#FFBF00] focus:ring-2 focus:ring-[#FFF3C4] focus:outline-none transition-colors text-sm"
                 placeholder="Nhập lại mật khẩu"
               />
             </div>
@@ -195,12 +195,12 @@ function RegisterContent() {
             <button 
               type="submit" 
               disabled={loading}
-              className="w-full py-3.5 mt-2 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full font-bold transition-all disabled:opacity-50 text-base shadow-[0_4px_14px_rgba(58,33,30,0.12)]"
+              className="w-full py-3.5 mt-2 bg-[#FFBF00] hover:bg-[#FFBF00]/90 text-[#3A211E] rounded-full font-bold transition-all disabled:opacity-50 text-base shadow-xs"
             >
               {loading ? 'Đang xử lý...' : 'Đăng ký tài khoản'}
             </button>
             
-            <p className="text-center text-sm text-[#6F625E] pt-3">
+            <p className="text-center text-sm text-[#765B52] pt-3">
               Đã có tài khoản?{' '}
               <Link href={loginLink} className="text-[#3A211E] font-bold hover:underline">
                 Đăng nhập ngay

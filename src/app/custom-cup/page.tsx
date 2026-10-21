@@ -41,7 +41,7 @@ function CustomCupStudioInner() {
   // Selected State
   const [selectedModel, setSelectedModel] = useState<CupModelDef>(CUP_MODELS[0]);
   const [selectedColor, setSelectedColor] = useState<CupColorOption>(CLEAR_GLASS_COLOR);
-  const [lidColor, setLidColor] = useState<string>('#FFF3A6');
+  const [lidColor, setLidColor] = useState<string>('#FFBF00');
   const [viewMode, setViewMode] = useState<StudioViewMode>('studio');
   const [showSafeZone, setShowSafeZone] = useState<boolean>(true);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
@@ -56,7 +56,7 @@ function CustomCupStudioInner() {
       text: 'YOUR LOGO',
       font: "'Be Vietnam Pro', sans-serif",
       fontSize: 64,
-      color: '#201817',
+      color: '#3A211E',
       isBold: true,
       align: 'center',
       x: CANVAS_WIDTH / 2,
@@ -258,10 +258,10 @@ function CustomCupStudioInner() {
       id: 'text-' + Date.now(),
       type: 'text',
       name: 'Chữ in mới',
-      text: 'Cupfy Vietnam ✨',
+      text: 'Cupfy Vietnam',
       font: "'Be Vietnam Pro', sans-serif",
       fontSize: 54,
-      color: '#201817',
+      color: '#3A211E',
       isBold: true,
       align: 'center',
       x: CANVAS_WIDTH / 2,
@@ -417,7 +417,7 @@ function CustomCupStudioInner() {
         text: 'YOUR LOGO',
         font: "'Be Vietnam Pro', sans-serif",
         fontSize: 64,
-        color: '#201817',
+        color: '#3A211E',
         isBold: true,
         align: 'center',
         x: CANVAS_WIDTH / 2,
@@ -458,7 +458,7 @@ function CustomCupStudioInner() {
     const imgLayers = layers.filter((l) => l.type === 'image' || l.type === 'sticker') as ImageLayer[];
     const mainText = textLayers.map((t) => t.text).join(' | ') || '';
     const mainFont = textLayers[0]?.font || 'Be Vietnam Pro';
-    const mainColor = textLayers[0]?.color || '#201817';
+    const mainColor = textLayers[0]?.color || '#3A211E';
 
     // Match with real DB product if available
     const matchedDbProd = dbProducts.find(
@@ -515,31 +515,31 @@ function CustomCupStudioInner() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#FAF9F6] text-[#261D1B] overflow-hidden select-none font-sans">
+    <div className="flex flex-col h-screen w-full bg-white text-[#3A211E] overflow-hidden select-none font-sans">
       {/* Preload all 22 Vietnamese Google Fonts */}
       <link rel="stylesheet" href={GOOGLE_FONTS_URL} />
 
       {/* TOP NAVIGATION BAR */}
-      <header className="h-16 bg-white border-b border-[#E8E3DF] flex items-center justify-between px-4 md:px-6 z-20 shrink-0 shadow-sm">
+      <header className="h-16 bg-white border-b border-[#E8DFD8] flex items-center justify-between px-4 md:px-6 z-20 shrink-0 shadow-sm">
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="p-2 hover:bg-[#FAF9F6] rounded-full transition-colors text-[#201817]"
+            className="p-2 hover:bg-[#FFF9E8] rounded-full transition-colors text-[#3A211E]"
             title="Quay lại trang chủ"
           >
             <ChevronLeft className="w-5 h-5" />
           </Link>
-          <div className="h-6 w-px bg-[#E8E3DF]"></div>
+          <div className="h-6 w-px bg-[#E8DFD8]"></div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-sm md:text-base text-[#201817] tracking-tight">
+              <span className="font-extrabold text-sm md:text-base text-[#3A211E] tracking-tight">
                 CUPFY 3D STUDIO
               </span>
-              <span className="bg-[#FAF9F6] text-[#3E2925] border border-[#E8E3DF] px-2 py-0.5 rounded-full text-[10px] font-bold">
+              <span className="bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
                 {selectedModel.name}
               </span>
             </div>
-            <div className="text-[11px] text-[#6F625E] hidden sm:block">
+            <div className="text-[11px] text-[#765B52] hidden sm:block">
               Thiết kế bám cong bề mặt thực tế • 22 Font Tiếng Việt • Khóa tỷ lệ ảnh
             </div>
           </div>
@@ -548,14 +548,14 @@ function CustomCupStudioInner() {
         {/* Center: Undo / Redo & View Mode Switches */}
         <div className="flex items-center gap-2">
           {/* Undo / Redo buttons */}
-          <div className="flex items-center bg-[#FAF9F6] border border-[#E8E3DF] rounded-xl p-1 gap-1">
+          <div className="flex items-center bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl p-1 gap-1">
             <button
               onClick={handleUndo}
               disabled={!canUndo}
               title="Hoàn tác (Ctrl+Z)"
               className={`p-1.5 rounded-lg transition-colors ${
                 canUndo
-                  ? 'hover:bg-white text-[#201817] shadow-xs'
+                  ? 'hover:bg-white text-[#3A211E] shadow-xs'
                   : 'text-neutral-300 cursor-not-allowed'
               }`}
             >
@@ -567,30 +567,30 @@ function CustomCupStudioInner() {
               title="Làm lại (Ctrl+Y)"
               className={`p-1.5 rounded-lg transition-colors ${
                 canRedo
-                  ? 'hover:bg-white text-[#201817] shadow-xs'
+                  ? 'hover:bg-white text-[#3A211E] shadow-xs'
                   : 'text-neutral-300 cursor-not-allowed'
               }`}
             >
               <Redo2 className="w-4 h-4" />
             </button>
-            <div className="w-px h-4 bg-[#E8E3DF] mx-0.5"></div>
+            <div className="w-px h-4 bg-[#E8DFD8] mx-0.5"></div>
             <button
               onClick={handleResetDesign}
               title="Đặt lại thiết kế"
-              className="p-1.5 hover:bg-white text-[#6F625E] hover:text-[#201817] rounded-lg transition-colors"
+              className="p-1.5 hover:bg-white text-[#765B52] hover:text-[#3A211E] rounded-lg transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
             </button>
           </div>
 
           {/* View Modes (Studio / White / Transparent) */}
-          <div className="hidden lg:flex items-center bg-[#FAF9F6] border border-[#E8E3DF] rounded-xl p-1 text-xs font-bold text-[#6F625E]">
+          <div className="hidden lg:flex items-center bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl p-1 text-xs font-bold text-[#765B52]">
             <button
               onClick={() => setViewMode('studio')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 viewMode === 'studio'
-                  ? 'bg-white text-[#201817] shadow-xs'
-                  : 'hover:text-[#201817]'
+                  ? 'bg-[#FFBF00] text-[#3A211E] shadow-xs'
+                  : 'hover:text-[#3A211E]'
               }`}
             >
               Studio Bàn Trắng
@@ -599,8 +599,8 @@ function CustomCupStudioInner() {
               onClick={() => setViewMode('white')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 viewMode === 'white'
-                  ? 'bg-white text-[#201817] shadow-xs'
-                  : 'hover:text-[#201817]'
+                  ? 'bg-[#FFBF00] text-[#3A211E] shadow-xs'
+                  : 'hover:text-[#3A211E]'
               }`}
             >
               Nền Trắng Tinh
@@ -609,8 +609,8 @@ function CustomCupStudioInner() {
               onClick={() => setViewMode('transparent')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 viewMode === 'transparent'
-                  ? 'bg-white text-[#201817] shadow-xs'
-                  : 'hover:text-[#201817]'
+                  ? 'bg-[#FFBF00] text-[#3A211E] shadow-xs'
+                  : 'hover:text-[#3A211E]'
               }`}
             >
               Nền Trong Suốt
@@ -623,8 +623,8 @@ function CustomCupStudioInner() {
             title="Bật/Tắt đường hướng dẫn vùng in an toàn"
             className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
               showSafeZone
-                ? 'bg-blue-50 border-blue-200 text-blue-700'
-                : 'bg-white border-[#E8E3DF] text-[#6F625E] hover:text-[#201817]'
+                ? 'bg-[#FFF3C4] border-[#FFBF00] text-[#3A211E]'
+                : 'bg-white border-[#E8DFD8] text-[#765B52] hover:text-[#3A211E]'
             }`}
           >
             <FileCheck2 className="w-3.5 h-3.5" />
@@ -635,8 +635,8 @@ function CustomCupStudioInner() {
         {/* Right: Price & Add To Cart Button */}
         <div className="flex items-center gap-3">
           <div className="text-right hidden sm:block">
-            <div className="text-[10px] text-[#6F625E] font-bold">GIÁ THIẾT KẾ</div>
-            <div className="text-sm font-black text-[#4A2A25]">
+            <div className="text-[10px] text-[#765B52] font-bold">GIÁ THIẾT KẾ</div>
+            <div className="text-sm font-black text-[#3A211E]">
               {formatVND(selectedModel.defaultPrice)}
             </div>
           </div>
@@ -644,11 +644,11 @@ function CustomCupStudioInner() {
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="px-5 md:px-7 py-2.5 bg-[#3E2925] text-white rounded-full font-bold text-xs md:text-sm flex items-center gap-2 hover:bg-[#201817] shadow-md transition-all disabled:opacity-70 active:scale-95"
+            className="px-5 md:px-7 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00]"
           >
             {isAddingToCart ? (
               <>
-                <Check className="w-4 h-4 text-emerald-400" />
+                <Check className="w-4 h-4 text-[#3A211E]" />
                 <span>ĐANG LƯU...</span>
               </>
             ) : (
@@ -695,14 +695,14 @@ function CustomCupStudioInner() {
         {/* Mobile Toggle Button for Drawer */}
         <button
           onClick={() => setIsMobilePanelOpen(!isMobilePanelOpen)}
-          className="md:hidden absolute bottom-6 right-6 z-30 p-3.5 bg-[#3E2925] text-white rounded-full shadow-xl flex items-center gap-2 text-xs font-bold"
+          className="md:hidden absolute bottom-6 right-6 z-30 p-3.5 bg-[#3A211E] text-white rounded-full shadow-xl flex items-center gap-2 text-xs font-bold"
         >
           <SlidersHorizontal className="w-4 h-4" />
           <span>{isMobilePanelOpen ? 'Ẩn Công Cụ' : 'Mở Công Cụ'}</span>
         </button>
 
         {/* 3D Scene Viewport */}
-        <main className="flex-1 h-full relative overflow-hidden">
+        <main className="flex-1 h-full relative overflow-hidden bg-white">
           <StudioScene
             modelDef={selectedModel}
             selectedColor={selectedColor}
@@ -736,8 +736,8 @@ export default function CustomCupStudioPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex h-screen w-full items-center justify-center bg-[#FAF9F6]">
-          <div className="w-10 h-10 border-4 border-[#E8E3DF] border-t-[#3E2925] rounded-full animate-spin"></div>
+        <div className="flex h-screen w-full items-center justify-center bg-white">
+          <div className="w-10 h-10 border-4 border-[#E8DFD8] border-t-[#FFBF00] rounded-full animate-spin"></div>
         </div>
       }
     >

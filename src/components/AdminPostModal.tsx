@@ -79,24 +79,24 @@ export default function AdminPostModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div 
-        className="bg-white rounded-[28px] border border-[#DDD8D2] shadow-2xl max-w-xl w-full p-6 md:p-8 space-y-5 animate-in zoom-in-95 max-h-[92vh] overflow-y-auto"
+        className="bg-white rounded-[28px] border border-[#E8DFD8] shadow-2xl max-w-xl w-full p-6 md:p-8 space-y-5 animate-in zoom-in-95 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-[#DDD8D2] pb-4">
+        <div className="flex items-center justify-between border-b border-[#E8DFD8] pb-4">
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-[#FFF3A6] text-[#4A2A25]">
-              <Sparkles className="w-5 h-5 text-amber-700" />
+            <span className="p-2 rounded-xl bg-[#FFF3C4] text-[#3A211E]">
+              <Sparkles className="w-5 h-5 text-[#3A211E]" />
             </span>
             <div>
               <h3 className="font-bold text-lg text-[#3A211E]">
                 {category === 'community' ? 'Đăng Bài Lên Cộng Đồng' : 'Thêm Nhật Ký / Ảnh Giới Thiệu'}
               </h3>
-              <p className="text-xs text-[#6F625E]">Dành riêng cho Quản trị viên Cupfy</p>
+              <p className="text-xs text-[#765B52]">Dành riêng cho Quản trị viên Cupfy</p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-[#EDECEA] text-[#6F625E] transition-colors"
+            className="p-1.5 rounded-full hover:bg-[#FFF9E8] text-[#765B52] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -112,7 +112,7 @@ export default function AdminPostModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="VD: Chiếc ly thủy tinh kỷ niệm 1 năm của khách hàng..."
-              className="w-full px-4 py-2.5 rounded-xl border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25] bg-[#FAF9F6]"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#E8DFD8] focus:outline-none focus:border-[#FFBF00] bg-[#FFF9E8]"
             />
           </div>
 
@@ -124,7 +124,7 @@ export default function AdminPostModal({
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               placeholder="VD: Cupfy Admin"
-              className="w-full px-4 py-2.5 rounded-xl border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25] bg-[#FAF9F6]"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#E8DFD8] focus:outline-none focus:border-[#FFBF00] bg-[#FFF9E8]"
             />
           </div>
 
@@ -144,16 +144,16 @@ export default function AdminPostModal({
                   type="button"
                   disabled={uploading}
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2.5 bg-[#EDECEA] hover:bg-[#DDD8D2] text-[#3A211E] rounded-xl font-bold flex items-center gap-1.5 transition-colors text-xs"
+                  className="px-4 py-2.5 bg-[#FFF3C4] hover:bg-[#FFE899] text-[#3A211E] rounded-xl font-bold flex items-center gap-1.5 transition-colors text-xs"
                 >
                   {uploading ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin text-amber-700" />
+                      <Loader2 className="w-4 h-4 animate-spin text-[#3A211E]" />
                       Đang tải ảnh lên...
                     </>
                   ) : (
                     <>
-                      <Upload className="w-4 h-4 text-[#4A2A25]" />
+                      <Upload className="w-4 h-4 text-[#3A211E]" />
                       Chọn ảnh từ thiết bị
                     </>
                   )}
@@ -163,13 +163,13 @@ export default function AdminPostModal({
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="Hoặc dán URL ảnh trực tiếp..."
-                  className="flex-1 px-3 py-2 rounded-xl border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25] bg-[#FAF9F6] text-xs"
+                  className="flex-1 px-3 py-2 rounded-xl border border-[#E8DFD8] focus:outline-none focus:border-[#FFBF00] bg-[#FFF9E8] text-xs"
                 />
               </div>
 
               {/* Image Preview */}
               {imageUrl && (
-                <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[#DDD8D2] bg-slate-100 flex items-center justify-center">
+                <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-[#E8DFD8] bg-[#FFF9E8] flex items-center justify-center">
                   <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
                   <button
                     type="button"
@@ -193,23 +193,23 @@ export default function AdminPostModal({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Chia sẻ câu chuyện, ý nghĩa thiết kế hoặc những dòng cảm xúc về chiếc ly..."
-              className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25] bg-[#FAF9F6] resize-y"
+              className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:outline-none focus:border-[#FFBF00] bg-[#FFF9E8] resize-y"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#DDD8D2]">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E8DFD8]">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 bg-[#EDECEA] text-[#3A211E] rounded-full font-bold hover:bg-[#DDD8D2] transition-colors"
+              className="px-5 py-2.5 bg-[#FFF9E8] text-[#765B52] rounded-full font-bold hover:bg-[#FFF3C4] transition-colors"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 bg-[#4A2A25] text-white rounded-full font-bold hover:bg-[#3A211E] transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-2.5 bg-[#3A211E] text-white rounded-full font-bold hover:bg-[#201817] transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2"
             >
               {submitting ? (
                 <>

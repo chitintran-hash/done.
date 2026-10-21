@@ -18,7 +18,7 @@ export default function ReturnsPolicyPage() {
       {/* 5.1 */}
       <section className="space-y-3">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.1</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.1</span>
           Mục đích và phạm vi áp dụng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -33,15 +33,15 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.2 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.2</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.2</span>
           Các trường hợp được hỗ trợ đổi trả
         </h2>
         <p className="text-[#4A3E3D]">
           Cupfy tiếp nhận yêu cầu đổi trả khi sản phẩm được giao không đúng với thông tin đơn hàng đã xác nhận hoặc phát sinh lỗi thuộc trách nhiệm của Cupfy.
         </p>
-        <div className="bg-[#FAF9F6] p-4 rounded-2xl border border-[#DDD8D2] space-y-2 text-xs md:text-sm">
+        <div className="bg-[#FFF9E8] p-4 rounded-2xl border border-[#E8DFD8] space-y-2 text-xs md:text-sm">
           <div className="font-bold text-[#3A211E]">Các trường hợp được tiếp nhận đổi trả bao gồm:</div>
           <ul className="list-disc list-inside space-y-1.5 text-[#4A3E3D]">
             <li>Sản phẩm bị nứt, vỡ, sứt mẻ hoặc hư hỏng khi nhận hàng.</li>
@@ -57,9 +57,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.3 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.3</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.3</span>
           Thời hạn yêu cầu đổi trả
         </h2>
         <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-950 text-xs md:text-sm font-medium flex items-center gap-3">
@@ -77,9 +77,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.4 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.4</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.4</span>
           Điều kiện đổi trả đối với sản phẩm thông thường
         </h2>
         <p className="text-[#4A3E3D]">
@@ -97,9 +97,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.5 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.5</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.5</span>
           Điều kiện đổi trả đối với sản phẩm cá nhân hóa
         </h2>
         <p className="text-[#4A3E3D]">
@@ -117,9 +117,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.6 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.6</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.6</span>
           Các trường hợp cần được xác minh thêm
         </h2>
         <p className="text-[#4A3E3D]">
@@ -137,9 +137,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.7 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.7</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.7</span>
           Quy trình yêu cầu đổi trả
         </h2>
         <p className="text-[#4A3E3D]">
@@ -157,9 +157,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.8 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.8</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.8</span>
           Phương án xử lý đổi trả
         </h2>
         <p className="text-[#4A3E3D]">
@@ -177,9 +177,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.9 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.9</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.9</span>
           Chính sách hoàn tiền
         </h2>
         <p className="text-[#4A3E3D]">
@@ -197,9 +197,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.10 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.10</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.10</span>
           Chi phí vận chuyển khi đổi trả
         </h2>
         <p className="text-[#4A3E3D]">
@@ -214,9 +214,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.11 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.11</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.11</span>
           Hủy đơn hàng trước khi giao
         </h2>
         <p className="text-[#4A3E3D]">
@@ -237,9 +237,9 @@ export default function ReturnsPolicyPage() {
       </section>
 
       {/* 5.12 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">5.12</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">5.12</span>
           Cam kết giải quyết khiếu nại
         </h2>
         <p className="text-[#4A3E3D]">

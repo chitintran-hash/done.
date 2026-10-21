@@ -55,7 +55,7 @@ export default async function AdminDashboardPage() {
           value: k.totalCustomers.toString(), 
           desc: "Tài khoản người mua trong hệ thống", 
           icon: Users, 
-          color: "bg-[#BFDCEF]/40 text-[#201817]" 
+          color: "bg-[#FFF3C4] text-[#3A211E]" 
         },
         { 
           title: "Người dùng đang hoạt động", 
@@ -70,7 +70,7 @@ export default async function AdminDashboardPage() {
           isWarning: false,
           desc: "Ghi nhận từ hệ thống nội bộ Cupfy", 
           icon: Globe, 
-          color: "bg-sky-100 text-sky-800",
+          color: "bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8]",
           link: "/admin/analytics"
         },
       ]
@@ -83,14 +83,14 @@ export default async function AdminDashboardPage() {
           value: k.totalOrders.toString(), 
           desc: "Đơn hàng ghi nhận từ website", 
           icon: ShoppingCart, 
-          color: "bg-[#FFF3A6] text-[#3A211E]" 
+          color: "bg-[#FFBF00] text-[#3A211E]" 
         },
         { 
           title: "Đơn hàng mới", 
           value: k.newOrders.toString(), 
           desc: "Đang chờ admin xác nhận", 
           icon: Clock, 
-          color: "bg-amber-100 text-amber-800",
+          color: "bg-[#FFF3C4] text-[#3A211E] border border-[#FFBF00]",
           link: "/admin/orders?status=pending"
         },
         { 
@@ -98,7 +98,7 @@ export default async function AdminDashboardPage() {
           value: k.processingOrders.toString(), 
           desc: "Đang kiểm tra / in ấn / đóng gói", 
           icon: RefreshCw, 
-          color: "bg-blue-100 text-blue-800",
+          color: "bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8]",
           link: "/admin/orders"
         },
         { 
@@ -106,7 +106,7 @@ export default async function AdminDashboardPage() {
           value: k.shippingOrders.toString(), 
           desc: "Đã bàn giao đơn vị giao vận", 
           icon: Truck, 
-          color: "bg-purple-100 text-purple-800",
+          color: "bg-amber-100 text-amber-900",
           link: "/admin/shipping"
         },
         { 
@@ -135,7 +135,7 @@ export default async function AdminDashboardPage() {
           value: formatVND(k.totalRevenue), 
           desc: "Doanh thu thực tế (đã trừ đơn hủy)", 
           icon: DollarSign, 
-          color: "bg-[#BFDCEF] text-[#201817]" 
+          color: "bg-[#FFBF00] text-[#3A211E]" 
         },
         { 
           title: "Lợi nhuận gộp", 
@@ -143,7 +143,7 @@ export default async function AdminDashboardPage() {
           isWarning: k.hasMissingCosts,
           desc: k.hasMissingCosts ? `Còn ${k.missingCostCount} món chưa có giá vốn` : "Doanh thu thuần - Giá vốn (COGS)", 
           icon: TrendingUp, 
-          color: "bg-teal-100 text-teal-800",
+          color: "bg-emerald-100 text-emerald-800",
           link: "/admin/profit"
         },
         { 
@@ -152,7 +152,7 @@ export default async function AdminDashboardPage() {
           isWarning: k.hasMissingCosts,
           desc: k.hasMissingCosts ? "Vui lòng cập nhật giá vốn ở mục Sản phẩm" : "Lợi nhuận gộp - Chi phí vận hành", 
           icon: PieChart, 
-          color: "bg-indigo-100 text-indigo-800",
+          color: "bg-[#FFF3C4] text-[#3A211E]",
           link: "/admin/profit"
         },
       ]
@@ -165,7 +165,7 @@ export default async function AdminDashboardPage() {
           value: k.totalProducts.toString(), 
           desc: "Mẫu ly đang phân phối", 
           icon: Box, 
-          color: "bg-[#EDECEA] text-[#201817]",
+          color: "bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8]",
           link: "/admin/products"
         },
         { 
@@ -199,13 +199,13 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-10 pb-12">
       {/* Top Banner Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 bg-white p-6 md:p-8 rounded-3xl border border-[#DDD8D2] shadow-sm">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 bg-white p-6 md:p-8 rounded-3xl border border-[#E8DFD8] shadow-xs">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-[#4A2A25] tracking-wide uppercase bg-[#FFF3A6] px-3 py-1 rounded-full w-fit mb-3 border border-[#DDD8D2]">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#3A211E] tracking-wide uppercase bg-[#FFF3C4] px-3 py-1 rounded-full w-fit mb-3 border border-[#FFBF00]">
             D2C Ecommerce Dashboard
           </div>
           <h1 className="text-2xl md:text-3xl font-black text-[#3A211E] tracking-tight">Tổng Quan Hoạt Động Kinh Doanh</h1>
-          <p className="text-sm text-[#6F625E] mt-1.5">
+          <p className="text-sm text-[#765B52] mt-1.5">
             Dữ liệu trực tiếp từ cơ sở dữ liệu bán lẻ Cupfy. Không sử dụng số liệu ảo.
           </p>
         </div>
@@ -213,14 +213,14 @@ export default async function AdminDashboardPage() {
         <div className="flex flex-wrap gap-2.5">
           <Link 
             href="/admin/orders" 
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#4A2A25] text-white rounded-xl text-sm font-semibold hover:bg-[#3A211E] transition-all shadow-sm"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-xl text-sm font-bold hover:bg-[#FFBF00]/90 transition-all shadow-xs"
           >
             <ShoppingCart className="w-4 h-4" />
             Xử Lý Đơn Hàng ({k.newOrders})
           </Link>
           <Link 
             href="/admin/products" 
-            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#DDD8D2] text-[#201817] rounded-xl text-sm font-semibold hover:bg-[#EDECEA] transition-all shadow-sm"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-xl text-sm font-bold hover:bg-[#FFF9E8] transition-all shadow-xs"
           >
             <Box className="w-4 h-4" />
             Kho Sản Phẩm
@@ -232,7 +232,7 @@ export default async function AdminDashboardPage() {
       <div className="space-y-8">
         {kpiSections.map((sec, idx) => (
           <div key={idx} className="space-y-4">
-            <h2 className="text-sm font-bold text-[#6F625E] uppercase tracking-wider px-1">
+            <h2 className="text-sm font-bold text-[#765B52] uppercase tracking-wider px-1">
               {sec.category}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -241,7 +241,7 @@ export default async function AdminDashboardPage() {
                 return (
                   <div 
                     key={i} 
-                    className="bg-white p-5 rounded-2xl border border-[#DDD8D2] shadow-sm hover:shadow-md transition-shadow relative flex flex-col justify-between"
+                    className="bg-white p-5 rounded-2xl border border-[#E8DFD8] shadow-xs hover:shadow-md transition-shadow relative flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex justify-between items-start mb-3">
@@ -249,17 +249,17 @@ export default async function AdminDashboardPage() {
                           <Icon className="w-5 h-5" />
                         </div>
                         {item.link && (
-                          <Link href={item.link} className="text-[#6F625E] hover:text-[#4A2A25]">
+                          <Link href={item.link} className="text-[#765B52] hover:text-[#3A211E]">
                             <ArrowUpRight className="w-4 h-4" />
                           </Link>
                         )}
                       </div>
-                      <h3 className="text-xs font-semibold text-[#6F625E] uppercase tracking-wider">{item.title}</h3>
-                      <div className={`text-2xl font-black mt-1 ${item.isWarning ? 'text-amber-700 text-base font-bold' : 'text-[#201817]'}`}>
+                      <h3 className="text-xs font-semibold text-[#765B52] uppercase tracking-wider">{item.title}</h3>
+                      <div className={`text-2xl font-black mt-1 ${item.isWarning ? 'text-amber-700 text-base font-bold' : 'text-[#3A211E]'}`}>
                         {item.value}
                       </div>
                     </div>
-                    <p className="text-xs text-[#6F625E] mt-3 pt-2.5 border-t border-[#DDD8D2]/60">
+                    <p className="text-xs text-[#765B52] mt-3 pt-2.5 border-t border-[#E8DFD8]/60">
                       {item.desc}
                     </p>
                   </div>
@@ -273,22 +273,22 @@ export default async function AdminDashboardPage() {
       {/* Grid: Recent Orders & Low Stock Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Recent Orders Table */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-[#DDD8D2] p-6 shadow-sm flex flex-col">
+        <div className="lg:col-span-2 bg-white rounded-3xl border border-[#E8DFD8] p-6 shadow-xs flex flex-col">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h3 className="text-lg font-bold text-[#3A211E]">Đơn Hàng Gần Đây</h3>
-              <p className="text-xs text-[#6F625E]">5 đơn hàng mới nhất cần theo dõi</p>
+              <p className="text-xs text-[#765B52]">5 đơn hàng mới nhất cần theo dõi</p>
             </div>
             <Link 
               href="/admin/orders" 
-              className="text-xs font-bold text-[#4A2A25] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#3A211E] hover:underline flex items-center gap-1"
             >
               Xem tất cả đơn <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {data.recentOrders.length === 0 ? (
-            <div className="flex-1 flex flex-col items-center justify-center p-12 text-center text-[#6F625E] bg-[#F7F6F2] rounded-2xl border border-dashed border-[#DDD8D2]">
+            <div className="flex-1 flex flex-col items-center justify-center p-12 text-center text-[#765B52] bg-[#FFF9E8] rounded-2xl border border-dashed border-[#E8DFD8]">
               <Package className="w-10 h-10 mb-2 opacity-50" />
               <p className="text-sm font-medium">Chưa có đơn hàng nào trong hệ thống</p>
             </div>
@@ -296,35 +296,35 @@ export default async function AdminDashboardPage() {
             <div className="overflow-x-auto -mx-6 px-6">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#DDD8D2] text-[#6F625E] text-xs">
-                    <th className="pb-3 font-semibold">Mã đơn</th>
-                    <th className="pb-3 font-semibold">Khách hàng</th>
-                    <th className="pb-3 font-semibold">Tổng tiền</th>
-                    <th className="pb-3 font-semibold">Trạng thái</th>
-                    <th className="pb-3 font-semibold text-right">Chi tiết</th>
+                  <tr className="border-b border-[#E8DFD8] text-[#765B52] text-xs bg-[#FFF9E8]">
+                    <th className="py-3 px-3 font-semibold rounded-l-xl">Mã đơn</th>
+                    <th className="py-3 px-3 font-semibold">Khách hàng</th>
+                    <th className="py-3 px-3 font-semibold">Tổng tiền</th>
+                    <th className="py-3 px-3 font-semibold">Trạng thái</th>
+                    <th className="py-3 px-3 font-semibold text-right rounded-r-xl">Chi tiết</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#DDD8D2]/60">
+                <tbody className="divide-y divide-[#E8DFD8]/60">
                   {data.recentOrders.map((order: any) => (
-                    <tr key={order.id} className="hover:bg-[#F7F6F2]/50 transition-colors">
-                      <td className="py-3.5 font-mono text-xs font-bold text-[#4A2A25]">
+                    <tr key={order.id} className="hover:bg-[#FFF9E8] transition-colors">
+                      <td className="py-3.5 px-3 font-mono text-xs font-bold text-[#3A211E]">
                         #{order.id.slice(0, 8).toUpperCase()}
                       </td>
-                      <td className="py-3.5">
-                        <div className="font-semibold text-[#201817]">
+                      <td className="py-3.5 px-3">
+                        <div className="font-semibold text-[#3A211E]">
                           {order.buyer_name_snapshot || 'Khách vãng lai'}
                         </div>
-                        <div className="text-xs text-[#6F625E]">{order.buyer_email_snapshot}</div>
+                        <div className="text-xs text-[#765B52]">{order.buyer_email_snapshot}</div>
                       </td>
-                      <td className="py-3.5 font-bold text-[#201817]">
+                      <td className="py-3.5 px-3 font-bold text-[#3A211E]">
                         {formatVND(Number(order.total_price) || 0)}
                       </td>
-                      <td className="py-3.5">
+                      <td className="py-3.5 px-3">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          order.status === 'pending' ? 'bg-amber-100 text-amber-800' :
+                          order.status === 'pending' ? 'bg-[#FFF3C4] text-[#3A211E]' :
                           order.status === 'delivered' ? 'bg-emerald-100 text-emerald-800' :
                           order.status === 'cancelled' ? 'bg-rose-100 text-rose-800' :
-                          'bg-blue-100 text-blue-800'
+                          'bg-[#FFF3C4] text-[#3A211E]'
                         }`}>
                           {order.status === 'pending' ? 'Chờ xác nhận' :
                            order.status === 'delivered' ? 'Đã giao' :
@@ -332,10 +332,10 @@ export default async function AdminDashboardPage() {
                            order.status === 'shipping' ? 'Đang giao' : order.status}
                         </span>
                       </td>
-                      <td className="py-3.5 text-right">
+                      <td className="py-3.5 px-3 text-right">
                         <Link 
                           href={`/admin/orders`} 
-                          className="text-xs font-bold text-[#4A2A25] hover:underline"
+                          className="text-xs font-bold text-[#3A211E] hover:underline"
                         >
                           Xử lý
                         </Link>
@@ -349,14 +349,14 @@ export default async function AdminDashboardPage() {
         </div>
 
         {/* Right 1 Col: Low Stock Alerts */}
-        <div className="bg-white rounded-3xl border border-[#DDD8D2] p-6 shadow-sm flex flex-col justify-between">
+        <div className="bg-white rounded-3xl border border-[#E8DFD8] p-6 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h3 className="text-lg font-bold text-[#3A211E]">Cảnh Báo Tồn Kho</h3>
-                <p className="text-xs text-[#6F625E]">Sản phẩm cần bổ sung</p>
+                <p className="text-xs text-[#765B52]">Sản phẩm cần bổ sung</p>
               </div>
-              <Link href="/admin/inventory" className="text-xs font-bold text-[#4A2A25] hover:underline">
+              <Link href="/admin/inventory" className="text-xs font-bold text-[#3A211E] hover:underline">
                 Kho hàng
               </Link>
             </div>
@@ -370,10 +370,10 @@ export default async function AdminDashboardPage() {
             ) : (
               <div className="space-y-3 mt-4">
                 {data.lowStockList.map((p: any) => (
-                  <div key={p.id} className="p-3 rounded-xl bg-[#F7F6F2] border border-[#DDD8D2] flex items-center justify-between">
+                  <div key={p.id} className="p-3 rounded-xl bg-[#FFF9E8] border border-[#E8DFD8] flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-xs text-[#201817] truncate max-w-[160px]">{p.name}</div>
-                      <div className="text-[11px] text-[#6F625E]">SKU: {p.sku || p.id.slice(0, 6)}</div>
+                      <div className="font-bold text-xs text-[#3A211E] truncate max-w-[160px]">{p.name}</div>
+                      <div className="text-[11px] text-[#765B52]">SKU: {p.sku || p.id.slice(0, 6)}</div>
                     </div>
                     <div className="text-right">
                       <span className={`px-2 py-0.5 rounded text-xs font-extrabold ${Number(p.stock) <= 0 ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'}`}>
@@ -388,7 +388,7 @@ export default async function AdminDashboardPage() {
 
           <Link 
             href="/admin/inventory" 
-            className="w-full mt-6 py-2.5 px-4 bg-[#EDECEA] text-[#3A211E] rounded-xl text-xs font-bold text-center hover:bg-[#DDD8D2] transition-colors block"
+            className="w-full mt-6 py-2.5 px-4 bg-[#FFF9E8] border border-[#E8DFD8] text-[#3A211E] rounded-xl text-xs font-bold text-center hover:bg-[#FFF3C4] transition-colors block"
           >
             Quản Lý & Nhập Kho
           </Link>

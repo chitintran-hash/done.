@@ -1,5 +1,15 @@
 export const SHIPPING_FEE = 35000;
 
+export const CUPFY_COLORS = {
+  primaryYellow: '#FFBF00',
+  chocolateBrown: '#3A211E',
+  white: '#FFFFFF',
+  softYellow: '#FFF3C4',
+  lightYellow: '#FFF9E8',
+  softBrown: '#765B52',
+  border: '#E8DFD8',
+} as const;
+
 export const CATEGORIES = {
   furniture: [
     { id: 'desk', name: 'Bàn (Desk)' },

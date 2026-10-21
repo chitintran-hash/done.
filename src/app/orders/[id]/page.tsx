@@ -18,9 +18,9 @@ interface OrderDetailPageProps {
 export default function OrderDetailPage({ params }: OrderDetailPageProps) {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-[#F7F6F2] flex flex-col items-center justify-center pt-28">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center pt-28">
         <RefreshCw className="w-8 h-8 animate-spin text-[#3A211E] mb-3" />
-        <p className="text-sm text-[#6F625E]">Đang tải chi tiết đơn hàng...</p>
+        <p className="text-sm text-[#765B52]">Đang tải chi tiết đơn hàng...</p>
       </div>
     }>
       <OrderDetailContent params={params} />
@@ -174,24 +174,24 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F6F2] flex flex-col items-center justify-center pt-28">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center pt-28">
         <RefreshCw className="w-8 h-8 animate-spin text-[#3A211E] mb-3" />
-        <p className="text-sm text-[#6F625E]">Đang tải chi tiết đơn hàng...</p>
+        <p className="text-sm text-[#765B52]">Đang tải chi tiết đơn hàng...</p>
       </div>
     );
   }
 
   if (error || !order) {
     return (
-      <div className="min-h-[70vh] bg-[#F7F6F2] flex flex-col items-center justify-center pt-28 pb-16 px-6 text-center">
+      <div className="min-h-[70vh] bg-white flex flex-col items-center justify-center pt-28 pb-16 px-6 text-center">
         <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-600 mb-4">
           <ShieldAlert className="w-8 h-8" />
         </div>
         <h2 className="font-heading text-2xl font-bold text-[#3A211E] mb-2">Truy cập bị từ chối</h2>
-        <p className="text-sm text-[#6F625E] max-w-md mb-6">{error}</p>
+        <p className="text-sm text-[#765B52] max-w-md mb-6">{error}</p>
         <Link 
           href="/orders" 
-          className="px-6 py-3 bg-[#3A211E] text-white rounded-full font-bold text-sm hover:bg-[#4A2A25] transition-colors"
+          className="px-6 py-3 bg-[#3A211E] text-white rounded-full font-bold text-sm hover:bg-[#201817] transition-colors"
         >
           Quay lại danh sách đơn hàng
         </Link>
@@ -275,14 +275,14 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] pt-28 pb-20">
+    <div className="min-h-screen bg-white pt-28 pb-20">
       <div className="max-w-[1100px] mx-auto px-6">
         
         {/* Navigation & Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <Link 
             href="/orders" 
-            className="inline-flex items-center gap-2 text-sm text-[#6F625E] hover:text-[#3A211E] font-medium transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-[#765B52] hover:text-[#3A211E] font-medium transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Danh sách đơn hàng
           </Link>
@@ -290,7 +290,7 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-2 text-xs font-bold text-[#3A211E] bg-white px-4 py-2 rounded-full border border-[#DDD8D2] hover:bg-[#EDECEA] transition-colors self-start sm:self-auto shadow-sm"
+            className="inline-flex items-center gap-2 text-xs font-bold text-[#3A211E] bg-[#FFF9E8] px-4 py-2 rounded-full border border-[#E8DFD8] hover:bg-[#FFF3C4] transition-colors self-start sm:self-auto shadow-xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
             Cập nhật trạng thái
@@ -313,17 +313,17 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                   <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#3A211E]">
                     Đặt hàng thành công!
                   </h2>
-                  <p className="text-sm text-[#6F625E] mt-1 max-w-xl">
+                  <p className="text-sm text-[#765B52] mt-1 max-w-xl">
                     Cảm ơn bạn đã mua sắm tại Cupfy. Đơn hàng của bạn đã được ghi nhận và đang chờ xác nhận.
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:items-end gap-1.5 w-full sm:w-auto bg-[#F7F6F2] sm:bg-transparent p-4 sm:p-0 rounded-2xl shrink-0">
-                <div className="text-xs text-[#6F625E]">
+              <div className="flex flex-col sm:items-end gap-1.5 w-full sm:w-auto bg-[#FFF9E8] sm:bg-transparent p-4 sm:p-0 rounded-2xl shrink-0">
+                <div className="text-xs text-[#765B52]">
                   Mã đơn: <strong className="font-mono text-[#3A211E]">{formattedCode}</strong>
                 </div>
-                <div className="text-xs text-[#6F625E]">
+                <div className="text-xs text-[#765B52]">
                   Tổng thanh toán COD: <strong className="text-sm text-[#3A211E]">{formatVND(order.total_price)}</strong>
                 </div>
                 <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
@@ -332,19 +332,19 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 mt-6 pt-5 border-t border-[#DDD8D2]">
+            <div className="flex flex-wrap items-center gap-3 mt-6 pt-5 border-t border-[#E8DFD8]">
               <button
                 onClick={() => {
                   const el = document.getElementById('order-items-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-5 py-2.5 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full text-xs font-bold transition-colors shadow-sm"
+                className="px-5 py-2.5 bg-[#3A211E] hover:bg-[#201817] text-white rounded-full text-xs font-bold transition-colors shadow-sm"
               >
                 Xem đơn hàng
               </button>
               <Link
                 href="/products"
-                className="px-5 py-2.5 bg-white border border-[#DDD8D2] hover:bg-[#EDECEA] text-[#3A211E] rounded-full text-xs font-bold transition-colors"
+                className="px-5 py-2.5 bg-[#FFF9E8] border border-[#E8DFD8] hover:bg-[#FFF3C4] text-[#3A211E] rounded-full text-xs font-bold transition-colors"
               >
                 Tiếp tục mua sắm
               </Link>
@@ -361,22 +361,22 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
         )}
 
         {/* Tiêu đề trang đơn hàng */}
-        <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#DDD8D2] shadow-sm mb-8 text-center sm:text-left">
+        <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#E8DFD8] shadow-xs mb-8 text-center sm:text-left">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#BFDCEF]/40 border border-[#BFDCEF] text-xs font-bold text-[#3A211E] mb-3">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF3C4] border border-[#FFBF00] text-xs font-bold text-[#3A211E] mb-3">
                 <FileText className="w-3.5 h-3.5" /> Mã đơn: {formattedCode}
               </div>
               <h1 className="font-heading text-2xl sm:text-3xl font-bold text-[#3A211E] mb-2">
                 Chi tiết đơn hàng {formattedCode}
               </h1>
-              <p className="text-sm text-[#6F625E]">
+              <p className="text-sm text-[#765B52]">
                 Cảm ơn bạn đã mua sắm tại Cupfy. Tiến độ xử lý đơn hàng được cập nhật tự động theo thời gian thực.
               </p>
             </div>
 
             <div className="text-center sm:text-right shrink-0">
-              <span className="text-xs text-[#6F625E] block">Thời gian đặt</span>
+              <span className="text-xs text-[#765B52] block">Thời gian đặt</span>
               <span className="font-bold text-sm text-[#3A211E]">
                 {new Date(order.created_at).toLocaleString('vi-VN', {
                   hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric'
@@ -387,14 +387,14 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
         </div>
 
         {/* THANH TIẾN TRÌNH ĐƠN HÀNG (Phần 6.3) */}
-        <div className="bg-white rounded-[28px] p-6 sm:p-10 border border-[#DDD8D2] shadow-sm mb-8">
+        <div className="bg-white rounded-[28px] p-6 sm:p-10 border border-[#E8DFD8] shadow-xs mb-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-heading text-xl font-bold text-[#3A211E]">
               Tiến độ đơn hàng
             </h2>
             {hasCustomCup && (
-              <span className="text-xs font-bold text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                ✦ Quy trình sản xuất ly cá nhân hóa (6 bước)
+              <span className="text-xs font-bold text-[#3A211E] bg-[#FFF3C4] px-3 py-1 rounded-full border border-[#FFBF00]">
+                Quy trình sản xuất ly cá nhân hóa (6 bước)
               </span>
             )}
           </div>
@@ -414,7 +414,7 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
               {/* Progress Bar for Desktop & Mobile */}
               <div className="relative">
                 {/* Horizontal line for desktop */}
-                <div className="hidden md:block absolute top-[22px] left-[8%] right-[8%] h-[3px] bg-[#EDECEA] z-0">
+                <div className="hidden md:block absolute top-[22px] left-[8%] right-[8%] h-[3px] bg-[#E8DFD8] z-0">
                   <div 
                     className="h-full bg-[#3A211E] transition-all duration-500"
                     style={{ width: `${(Math.max(0, currentStepIdx) / (steps.length - 1)) * 100}%` }}
@@ -433,18 +433,18 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                             isCompleted 
                               ? 'bg-[#3A211E] border-[#3A211E] text-white' 
                               : isCurrent 
-                              ? 'bg-white border-[#3A211E] text-[#3A211E] ring-4 ring-[#BFDCEF]' 
-                              : 'bg-[#F7F6F2] border-[#DDD8D2] text-[#6F625E]'
+                              ? 'bg-[#FFBF00] border-[#FFBF00] text-[#3A211E] ring-4 ring-[#FFF3C4]' 
+                              : 'bg-[#FFF9E8] border-[#E8DFD8] text-[#765B52]'
                           }`}
                         >
                           {isCompleted ? <Check className="w-5 h-5 stroke-[2.5]" /> : idx + 1}
                         </div>
 
                         <div>
-                          <p className={`text-sm font-bold ${isCurrent ? 'text-[#3A211E]' : isCompleted ? 'text-[#3A211E]' : 'text-[#6F625E]'}`}>
+                          <p className={`text-sm font-bold ${isCurrent ? 'text-[#3A211E]' : isCompleted ? 'text-[#3A211E]' : 'text-[#765B52]'}`}>
                             {step.label}
                           </p>
-                          <p className="text-[11px] text-[#6F625E] mt-0.5 max-w-[170px] leading-relaxed hidden md:block">
+                          <p className="text-[11px] text-[#765B52] mt-0.5 max-w-[170px] leading-relaxed hidden md:block">
                             {step.desc}
                           </p>
                         </div>
@@ -468,8 +468,8 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                         Ghi chú từ kỹ thuật viên: "{designRejectionReason}"
                       </div>
                     )}
-                    <p className="text-xs text-[#6F625E] mt-3">
-                      Vui lòng liên hệ Hotline/Zalo Cupfy (0901234567) hoặc nhấp "Xem thiết kế" bên dưới để tạo bản thiết kế mới.
+                    <p className="text-xs text-[#765B52] mt-3">
+                      Vui lòng liên hệ Hotline/Zalo Cupfy (0916799627) hoặc nhấp "Xem thiết kế" bên dưới để tạo bản thiết kế mới.
                     </p>
                   </div>
                 </div>
@@ -482,12 +482,12 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
         <div id="order-items-section" className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Cột trái: Danh sách sản phẩm (7 cols) */}
-          <div className="lg:col-span-7 bg-white rounded-[28px] p-6 sm:p-8 border border-[#DDD8D2] shadow-sm">
+          <div className="lg:col-span-7 bg-white rounded-[28px] p-6 sm:p-8 border border-[#E8DFD8] shadow-xs">
             <h2 className="font-heading text-xl font-bold text-[#3A211E] mb-6">
               Sản phẩm trong đơn ({order.order_items?.length || 0})
             </h2>
 
-            <div className="divide-y divide-[#DDD8D2]/70">
+            <div className="divide-y divide-[#E8DFD8]/70">
               {order.order_items?.map((item: any) => {
                 const prod = item.products || {};
                 const isCustom = prod.category === 'user_custom';
@@ -518,7 +518,7 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                       {/* Product Image: Clean, crisp, no overlays (Phần 7) */}
                       <div 
                         onClick={() => isCustom && setSelectedCustomItem(item)}
-                        className={`relative w-22 h-22 bg-[#F7F6F2] rounded-2xl border border-[#DDD8D2] overflow-hidden shrink-0 flex items-center justify-center p-1.5 ${
+                        className={`relative w-22 h-22 bg-[#FFF9E8] rounded-2xl border border-[#E8DFD8] overflow-hidden shrink-0 flex items-center justify-center p-1.5 ${
                           isCustom ? 'cursor-pointer hover:border-[#3A211E] transition-colors group' : ''
                         }`}
                       >
@@ -529,11 +529,11 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                             className="w-full h-full object-contain p-1 rounded-xl" 
                           />
                         ) : (
-                          <span className="text-xs text-[#6F625E]">No image</span>
+                          <span className="text-xs text-[#765B52]">No image</span>
                         )}
                         {isCustom && (
                           <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
-                            <span className="text-[10px] text-white font-bold bg-black/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span className="text-[10px] text-[#3A211E] font-bold bg-[#FFBF00] px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
                               <Eye className="w-3 h-3" /> Xem 3D
                             </span>
                           </div>
@@ -550,12 +550,12 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                         </div>
 
                         {isCustom && (
-                          <p className="text-xs text-[#4A2A25] font-semibold mt-0.5 flex items-center gap-1">
-                            ✦ Ly thiết kế riêng
+                          <p className="text-xs text-[#3A211E] font-semibold mt-0.5 flex items-center gap-1">
+                            Ly thiết kế riêng
                           </p>
                         )}
 
-                        <div className="mt-1 flex items-center justify-between text-xs text-[#6F625E]">
+                        <div className="mt-1 flex items-center justify-between text-xs text-[#765B52]">
                           <span>
                             Số lượng: <strong className="text-[#3A211E]">{item.quantity}</strong> × {formatVND(Number(item.price))}
                           </span>
@@ -566,9 +566,9 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                           <div className="mt-3 flex flex-wrap items-center gap-2">
                             <button
                               onClick={() => setSelectedCustomItem(item)}
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FAF9F6] border border-[#DDD8D2] text-[#3A211E] text-xs font-bold hover:bg-[#EDECEA] transition-colors shadow-xs"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FFF9E8] border border-[#E8DFD8] text-[#3A211E] text-xs font-bold hover:bg-[#FFF3C4] transition-colors shadow-xs"
                             >
-                              <Eye className="w-3.5 h-3.5 text-amber-700" />
+                              <Eye className="w-3.5 h-3.5 text-[#3A211E]" />
                               Xem thiết kế 3D của bạn
                             </button>
                           </div>
@@ -583,12 +583,12 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                           ) : isCancelRequested ? (
                             <div className="p-2.5 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-800 space-y-0.5">
                               <span className="font-bold block">⏳ Đang chờ Admin duyệt yêu cầu hủy sản phẩm</span>
-                              <span className="text-[11px] text-[#6F625E] block">Lý do: "{cancelRequestReason}"</span>
+                              <span className="text-[11px] text-[#765B52] block">Lý do: "{cancelRequestReason}"</span>
                             </div>
                           ) : isCancelRejected ? (
                             <div className="p-2.5 bg-neutral-100 rounded-xl border border-neutral-300 text-xs text-neutral-700 space-y-0.5">
                               <span className="font-bold block">Yêu cầu hủy đã bị từ chối</span>
-                              <span className="text-[11px] text-[#6F625E] block">Lý do: "{cancelRejectReason}"</span>
+                              <span className="text-[11px] text-[#765B52] block">Lý do: "{cancelRejectReason}"</span>
                             </div>
                           ) : canRequestCancel ? (
                             <button
@@ -602,7 +602,7 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                               Yêu cầu hủy sản phẩm
                             </button>
                           ) : !['pending', 'design_review'].includes(order.status) ? (
-                            <span className="text-[11px] text-[#6F625E]">
+                            <span className="text-[11px] text-[#765B52]">
                               Vui lòng liên hệ Cupfy để được hỗ trợ nếu cần thay đổi sản phẩm.
                             </span>
                           ) : null}
@@ -620,68 +620,68 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
           <div className="lg:col-span-5 space-y-6">
             
             {/* THÔNG TIN NHẬN HÀNG */}
-            <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#DDD8D2] shadow-sm space-y-4">
+            <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#E8DFD8] shadow-xs space-y-4">
               <h3 className="font-heading font-bold text-lg text-[#3A211E]">
                 Thông tin nhận hàng
               </h3>
 
               <div className="text-sm space-y-2.5">
                 <div>
-                  <span className="text-xs text-[#6F625E] block">Người nhận</span>
+                  <span className="text-xs text-[#765B52] block">Người nhận</span>
                   <span className="font-bold text-[#3A211E]">{order.buyer_name_snapshot}</span>
                 </div>
 
                 <div>
-                  <span className="text-xs text-[#6F625E] block">Số điện thoại</span>
+                  <span className="text-xs text-[#765B52] block">Số điện thoại</span>
                   <span className="font-semibold text-[#3A211E]">{deliveryPhone}</span>
                 </div>
 
                 <div>
-                  <span className="text-xs text-[#6F625E] block">Địa chỉ giao hàng</span>
+                  <span className="text-xs text-[#765B52] block">Địa chỉ giao hàng</span>
                   <span className="text-[#3A211E] leading-relaxed block">{deliveryAddress}</span>
                 </div>
 
                 {deliveryNote && (
                   <div>
-                    <span className="text-xs text-[#6F625E] block">Ghi chú giao hàng</span>
-                    <span className="italic text-[#6F625E] block">{deliveryNote}</span>
+                    <span className="text-xs text-[#765B52] block">Ghi chú giao hàng</span>
+                    <span className="italic text-[#765B52] block">{deliveryNote}</span>
                   </div>
                 )}
               </div>
             </div>
 
             {/* THANH TOÁN & TỔNG CỘNG */}
-            <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#DDD8D2] shadow-sm space-y-4">
+            <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#E8DFD8] shadow-xs space-y-4">
               <h3 className="font-heading font-bold text-lg text-[#3A211E]">
                 Thanh toán
               </h3>
 
-              <div className="p-3.5 rounded-xl bg-[#F7F6F2] border border-[#DDD8D2] flex items-center justify-between">
+              <div className="p-3.5 rounded-xl bg-[#FFF9E8] border border-[#E8DFD8] flex items-center justify-between">
                 <div>
                   <p className="font-bold text-sm text-[#3A211E]">Thanh toán khi nhận hàng (COD)</p>
-                  <p className="text-xs text-[#6F625E] mt-0.5">Tiền mặt cho nhân viên giao hàng</p>
+                  <p className="text-xs text-[#765B52] mt-0.5">Tiền mặt cho nhân viên giao hàng</p>
                 </div>
                 <span className={`text-xs px-2.5 py-1 rounded-full font-bold ${
                   order.status === 'delivered' 
                     ? 'bg-emerald-100 text-emerald-800' 
-                    : 'bg-amber-100 text-amber-800'
+                    : 'bg-[#FFF3C4] text-[#3A211E]'
                 }`}>
                   {order.status === 'delivered' ? 'Đã thanh toán' : 'Chưa thanh toán'}
                 </span>
               </div>
 
               <div className="space-y-2.5 text-sm pt-2">
-                <div className="flex justify-between text-[#6F625E]">
+                <div className="flex justify-between text-[#765B52]">
                   <span>Tạm tính</span>
                   <span className="font-semibold text-[#3A211E]">{formatVND(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-[#6F625E]">
+                <div className="flex justify-between text-[#765B52]">
                   <span>Phí giao hàng</span>
                   <span className="font-semibold text-[#3A211E]">
                     {shippingFee > 0 ? formatVND(shippingFee) : '0 ₫'}
                   </span>
                 </div>
-                <div className="border-t border-[#DDD8D2] pt-3 flex justify-between items-baseline">
+                <div className="border-t border-[#E8DFD8] pt-3 flex justify-between items-baseline">
                   <span className="font-bold text-base text-[#3A211E]">Tổng thanh toán COD</span>
                   <span className="font-heading text-2xl font-extrabold text-[#3A211E]">
                     {formatVND(Number(order.total_price))}
@@ -707,21 +707,21 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
       {/* MODAL XÁC NHẬN HỦY SẢN PHẨM (Phần 5) */}
       {cancellingItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-[28px] border border-[#DDD8D2] shadow-2xl max-w-md w-full p-6 space-y-5 animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-[#DDD8D2] pb-4">
+          <div className="bg-white rounded-[28px] border border-[#E8DFD8] shadow-2xl max-w-md w-full p-6 space-y-5 animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-[#E8DFD8] pb-4">
               <h3 className="font-heading text-lg font-bold text-[#3A211E]">
                 Bạn muốn hủy sản phẩm này?
               </h3>
               <button 
                 onClick={() => { setCancellingItem(null); setCancelReason(''); setCancelError(''); }}
-                className="text-[#6F625E] hover:text-[#3A211E]"
+                className="text-[#765B52] hover:text-[#3A211E]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex items-center gap-3 bg-[#FAF9F6] p-3 rounded-2xl border border-[#DDD8D2]">
-              <div className="w-14 h-14 bg-white rounded-xl border border-[#DDD8D2] shrink-0 overflow-hidden relative flex items-center justify-center">
+            <div className="flex items-center gap-3 bg-[#FFF9E8] p-3 rounded-2xl border border-[#E8DFD8]">
+              <div className="w-14 h-14 bg-white rounded-xl border border-[#E8DFD8] shrink-0 overflow-hidden relative flex items-center justify-center">
                 {cancellingItem.products?.image_url ? (
                   <img 
                     src={cancellingItem.products.image_url} 
@@ -729,12 +729,12 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                     className="w-full h-full object-contain p-1" 
                   />
                 ) : (
-                  <span className="text-xs text-[#6F625E]">No image</span>
+                  <span className="text-xs text-[#765B52]">No image</span>
                 )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-sm text-[#3A211E] truncate">{cancellingItem.products?.name}</p>
-                <p className="text-xs text-[#6F625E] mt-0.5">
+                <p className="text-xs text-[#765B52] mt-0.5">
                   Số lượng: <strong>{cancellingItem.quantity}</strong> • Tổng: <strong>{formatVND(cancellingItem.price * cancellingItem.quantity)}</strong>
                 </p>
               </div>
@@ -749,7 +749,7 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="Nhập lý do hủy (ví dụ: muốn đổi mẫu thiết kế khác, đặt nhầm số lượng...)"
-                className="w-full p-3 bg-[#FAF9F6] border border-[#DDD8D2] rounded-2xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#3A211E]/30 resize-none"
+                className="w-full p-3 bg-[#FFF9E8] border border-[#E8DFD8] rounded-2xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00] resize-none"
               />
               {cancelError && (
                 <p className="text-xs text-rose-600 mt-1">{cancelError}</p>
@@ -760,7 +760,7 @@ function OrderDetailPageInner({ orderId }: { orderId: string }) {
               <button
                 onClick={() => { setCancellingItem(null); setCancelReason(''); setCancelError(''); }}
                 disabled={submittingCancel}
-                className="px-5 py-2.5 rounded-full border border-[#DDD8D2] text-[#3A211E] text-xs font-bold hover:bg-[#EDECEA]"
+                className="px-5 py-2.5 rounded-full border border-[#E8DFD8] text-[#3A211E] text-xs font-bold hover:bg-[#FFF9E8]"
               >
                 Giữ sản phẩm
               </button>

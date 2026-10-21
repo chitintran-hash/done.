@@ -159,38 +159,38 @@ export default function AdminProductsPage() {
   return (
     <div className="space-y-8 pb-12">
       {/* Page Title */}
-      <div className="bg-white p-6 md:p-8 rounded-3xl border border-[#DDD8D2] shadow-sm flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+      <div className="bg-white p-6 md:p-8 rounded-3xl border border-[#E8DFD8] shadow-xs flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-[#4A2A25] tracking-wide uppercase bg-[#FFF3A6] px-3 py-1 rounded-full w-fit mb-3 border border-[#DDD8D2]">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#3A211E] tracking-wide uppercase bg-[#FFF3C4] px-3 py-1 rounded-full w-fit mb-3 border border-[#FFBF00]">
             Catalog & Price Architecture
           </div>
           <h1 className="text-2xl md:text-3xl font-black text-[#3A211E] tracking-tight">
             Quản Lý Danh Mục Sản Phẩm
           </h1>
-          <p className="text-sm text-[#6F625E] mt-1.5">
+          <p className="text-sm text-[#765B52] mt-1.5">
             Cấu hình giá bán, giá vốn (COGS), mã SKU, tồn kho và các tùy chọn in ấn thiết kế 3D.
           </p>
         </div>
 
         <button 
           onClick={() => handleOpenModal()} 
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#4A2A25] text-white rounded-xl text-xs font-bold hover:bg-[#3A211E] transition-all shadow-sm"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-xl text-xs font-bold hover:bg-[#FFBF00]/90 transition-all shadow-xs"
         >
           <Plus className="w-4 h-4" /> Thêm Sản Phẩm Mới
         </button>
       </div>
 
       {/* Table Container */}
-      <div className="bg-white rounded-3xl border border-[#DDD8D2] shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-[#DDD8D2] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div className="bg-white rounded-3xl border border-[#E8DFD8] shadow-xs overflow-hidden">
+        <div className="p-4 border-b border-[#E8DFD8] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           <div className="relative max-w-md w-full">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6F625E]" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#765B52]" />
             <input 
               type="text" 
               placeholder="Tìm theo tên sản phẩm, mã SKU..." 
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#F7F6F2] rounded-xl text-xs border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25]"
+              className="w-full pl-10 pr-4 py-2 bg-[#FFF9E8] rounded-xl text-xs border border-[#E8DFD8] focus:outline-none focus:border-[#FFBF00]"
             />
           </div>
 
@@ -199,20 +199,20 @@ export default function AdminProductsPage() {
               { id: 'all', label: 'Tất cả', count: products.length },
               { id: 'glass', label: 'Ly thủy tinh', count: products.filter(p => p.category === 'glass').length },
               { id: 'plastic', label: 'Ly nhựa', count: products.filter(p => p.category === 'plastic').length },
-              { id: 'gift_box', label: '🎁 Hộp quà tặng', count: products.filter(p => p.category === 'gift_box' || p.category === 'gift').length },
+              { id: 'gift_box', label: 'Hộp quà tặng', count: products.filter(p => p.category === 'gift_box' || p.category === 'gift').length },
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setSelectedCategory(tab.id)}
                 className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-colors flex items-center gap-1.5 ${
                   selectedCategory === tab.id
-                    ? 'bg-[#4A2A25] text-white shadow-xs'
-                    : 'bg-[#F7F6F2] text-[#6F625E] hover:bg-[#EDECEA]'
+                    ? 'bg-[#FFBF00] text-[#3A211E] shadow-xs'
+                    : 'bg-[#FFF9E8] text-[#765B52] hover:bg-[#FFF3C4]'
                 }`}
               >
                 <span>{tab.label}</span>
                 <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                  selectedCategory === tab.id ? 'bg-white/20 text-white' : 'bg-black/5 text-[#6F625E]'
+                  selectedCategory === tab.id ? 'bg-white/40 text-[#3A211E]' : 'bg-black/5 text-[#765B52]'
                 }`}>
                   {tab.count}
                 </span>
@@ -223,12 +223,12 @@ export default function AdminProductsPage() {
 
         {loading ? (
           <div className="p-16 flex justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-[#4A2A25]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#FFBF00]" />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F7F6F2] border-b border-[#DDD8D2] text-[#6F625E]">
+              <thead className="bg-[#FFF9E8] border-b border-[#E8DFD8] text-[#765B52]">
                 <tr>
                   <th className="py-4 px-6 font-semibold">Sản Phẩm</th>
                   <th className="py-4 px-4 font-semibold">SKU</th>
@@ -239,33 +239,33 @@ export default function AdminProductsPage() {
                   <th className="py-4 px-6 font-semibold text-right">Thao Tác</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#DDD8D2]/60">
+              <tbody className="divide-y divide-[#E8DFD8]/60">
                 {filteredProducts.map(p => {
                   const costPrice = p.technical_specs?.cost_price;
                   return (
-                    <tr key={p.id} className="hover:bg-[#F7F6F2]/40 transition-colors">
+                    <tr key={p.id} className="hover:bg-[#FFF9E8] transition-colors">
                       <td className="py-4 px-6 flex items-center gap-3">
                         <img 
                           src={p.image_url || 'https://via.placeholder.com/50'} 
                           alt="" 
-                          className="w-12 h-12 rounded-xl object-contain bg-[#EDECEA] border border-[#DDD8D2] p-1" 
+                          className="w-12 h-12 rounded-xl object-contain bg-[#FFF9E8] border border-[#E8DFD8] p-1" 
                         />
                         <div>
-                          <div className="font-bold text-[#201817] text-sm">{p.name}</div>
+                          <div className="font-bold text-[#3A211E] text-sm">{p.name}</div>
                           {p.technical_specs?.is_customizable && (
-                            <span className="text-[10px] font-bold text-[#4A2A25] bg-[#FFF3A6] px-2 py-0.5 rounded-full border border-[#DDD8D2]">
-                              Custom Studio ✨
+                            <span className="text-[10px] font-bold text-[#3A211E] bg-[#FFF3C4] px-2 py-0.5 rounded-full border border-[#FFBF00]">
+                              Custom Studio
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="py-4 px-4 font-mono font-bold text-[#4A2A25]">
+                      <td className="py-4 px-4 font-mono font-bold text-[#3A211E]">
                         {p.sku || `CUP-${p.id.slice(0, 6)}`}
                       </td>
-                      <td className="py-4 px-4 font-bold text-[#201817] text-sm">
+                      <td className="py-4 px-4 font-bold text-[#3A211E] text-sm">
                         {formatVND(p.price)}
                       </td>
-                      <td className="py-4 px-4 text-[#6F625E]">
+                      <td className="py-4 px-4 text-[#765B52]">
                         {costPrice ? formatVND(costPrice) : (
                           <span className="text-amber-700 italic font-semibold text-[11px]">Chưa nhập</span>
                         )}
@@ -273,14 +273,14 @@ export default function AdminProductsPage() {
                       <td className="py-4 px-4">
                         <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                           p.category === 'gift_box' || p.category === 'gift'
-                            ? 'bg-rose-100 text-rose-800'
-                            : 'bg-[#EDECEA] text-[#3A211E]'
+                            ? 'bg-[#FFF3C4] text-[#3A211E] border border-[#FFBF00]'
+                            : 'bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8]'
                         }`}>
                           {p.category === 'glass' ? 'Ly thủy tinh' :
                            p.category === 'thermos' ? 'Ly giữ nhiệt' :
                            p.category === 'plastic' ? 'Ly nhựa' :
                            p.category === 'custom' ? 'Ly custom phôi' :
-                           p.category === 'gift_box' || p.category === 'gift' ? '🎁 Hộp quà' : p.category}
+                           p.category === 'gift_box' || p.category === 'gift' ? 'Hộp quà' : p.category}
                         </span>
                       </td>
                       <td className="py-4 px-4">
@@ -295,7 +295,7 @@ export default function AdminProductsPage() {
                       <td className="py-4 px-6 text-right space-x-2">
                         <button 
                           onClick={() => handleOpenModal(p)} 
-                          className="px-3 py-1.5 bg-[#EDECEA] text-[#3A211E] rounded-xl text-xs font-semibold hover:bg-[#DDD8D2]"
+                          className="px-3 py-1.5 bg-[#FFF9E8] border border-[#E8DFD8] text-[#3A211E] rounded-xl text-xs font-bold hover:bg-[#FFF3C4] shadow-xs"
                         >
                           Sửa
                         </button>
@@ -318,83 +318,83 @@ export default function AdminProductsPage() {
       {/* PRODUCT FORM MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-[#DDD8D2] shadow-2xl space-y-5 text-xs">
+          <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-[#E8DFD8] shadow-2xl space-y-5 text-xs">
             <h2 className="text-xl font-bold text-[#3A211E]">
               {editingProduct ? 'Chỉnh Sửa Sản Phẩm' : 'Thêm Sản Phẩm Mới'}
             </h2>
             <form onSubmit={handleSave} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Tên sản phẩm *</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Tên sản phẩm *</label>
                   <input 
                     required 
                     type="text" 
                     value={formData.name} 
                     onChange={e => setFormData({...formData, name: e.target.value})} 
-                    className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl" 
+                    className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Mã SKU *</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Mã SKU *</label>
                   <input 
                     required 
                     type="text" 
                     value={formData.sku} 
                     onChange={e => setFormData({...formData, sku: e.target.value})} 
-                    className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl font-mono" 
+                    className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl font-mono text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Giá bán lẻ (VNĐ) *</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Giá bán lẻ (VNĐ) *</label>
                   <input 
                     required 
                     type="number" 
                     value={formData.price} 
                     onChange={e => setFormData({...formData, price: Number(e.target.value)})} 
-                    className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl font-bold" 
+                    className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl font-bold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Giá vốn COGS (VNĐ - Dùng tính lợi nhuận)</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Giá vốn COGS (VNĐ - Dùng tính lợi nhuận)</label>
                   <input 
                     type="number" 
                     value={formData.cost_price} 
                     onChange={e => setFormData({...formData, cost_price: Number(e.target.value)})} 
                     placeholder="VD: 25000"
-                    className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl font-bold text-[#4A2A25]" 
+                    className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl font-bold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Danh mục *</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Danh mục *</label>
                   <select 
                     required 
                     value={formData.category} 
                     onChange={e => setFormData({...formData, category: e.target.value})} 
-                    className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl font-medium"
+                    className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl font-semibold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]"
                   >
                     <option value="glass">Ly thủy tinh</option>
                     <option value="plastic">Ly nhựa</option>
-                    <option value="gift_box">🎁 Hộp quà tặng (Phụ kiện mua kèm)</option>
+                    <option value="gift_box">Hộp quà tặng (Phụ kiện mua kèm)</option>
                     <option value="custom">Ly custom phôi</option>
                   </select>
                 </div>
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Tồn kho ban đầu</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Tồn kho ban đầu</label>
                   <input 
                     type="number" 
                     value={formData.stock} 
                     onChange={e => setFormData({...formData, stock: Number(e.target.value)})} 
-                    className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl font-bold" 
+                    className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl font-bold text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
               </div>
               
               {/* Image upload */}
               <div>
-                <label className="font-bold text-[#201817] block mb-2">Hình ảnh sản phẩm</label>
+                <label className="font-bold text-[#3A211E] block mb-2">Hình ảnh sản phẩm</label>
                 <div className="flex flex-wrap gap-3 mb-2">
                   {formData.images.map((url, idx) => (
-                    <div key={idx} className="relative w-20 h-20 border border-[#DDD8D2] rounded-2xl overflow-hidden group bg-[#F7F6F2] p-1">
+                    <div key={idx} className="relative w-20 h-20 border border-[#E8DFD8] rounded-2xl overflow-hidden group bg-[#FFF9E8] p-1">
                       <img src={url} className="w-full h-full object-contain" />
                       <button 
                         type="button" 
@@ -406,15 +406,15 @@ export default function AdminProductsPage() {
                             image_url: formData.image_url === url ? (newImages[0] || '') : formData.image_url
                           });
                         }} 
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-1 right-1 bg-rose-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
                   ))}
-                  <label className="w-20 h-20 border-2 border-dashed border-[#DDD8D2] rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-[#F7F6F2] transition-colors text-center p-1">
-                    <Plus className="w-5 h-5 text-[#6F625E]" />
-                    <span className="text-[10px] text-[#6F625E]">Thêm ảnh</span>
+                  <label className="w-20 h-20 border-2 border-dashed border-[#E8DFD8] rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-[#FFF9E8] transition-colors text-center p-1">
+                    <Plus className="w-5 h-5 text-[#765B52]" />
+                    <span className="text-[10px] text-[#765B52]">Thêm ảnh</span>
                     <input 
                       type="file" 
                       accept="image/*" 
@@ -447,34 +447,34 @@ export default function AdminProductsPage() {
               </div>
 
               <div>
-                <label className="font-bold text-[#201817] block mb-1">Mô tả sản phẩm</label>
+                <label className="font-bold text-[#3A211E] block mb-1">Mô tả sản phẩm</label>
                 <textarea 
                   rows={3} 
                   value={formData.description} 
                   onChange={e => setFormData({...formData, description: e.target.value})} 
-                  className="w-full p-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl text-xs"
+                  className="w-full p-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-3 border-t border-[#DDD8D2]">
+              <div className="grid grid-cols-2 gap-4 pt-3 border-t border-[#E8DFD8]">
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Chất liệu</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Chất liệu</label>
                   <input 
                     type="text" 
                     value={formData.material} 
                     onChange={e => setFormData({...formData, material: e.target.value})} 
                     placeholder="VD: Thủy tinh Borosilicate, Inox 304..."
-                    className="w-full p-2 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl text-xs" 
+                    className="w-full p-2 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-[#201817] block mb-1">Dung tích (ml)</label>
+                  <label className="font-bold text-[#3A211E] block mb-1">Dung tích (ml)</label>
                   <input 
                     type="text" 
                     value={formData.capacity} 
                     onChange={e => setFormData({...formData, capacity: e.target.value})} 
                     placeholder="VD: 350ml, 500ml..."
-                    className="w-full p-2 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl text-xs" 
+                    className="w-full p-2 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00]" 
                   />
                 </div>
               </div>
@@ -484,25 +484,25 @@ export default function AdminProductsPage() {
                   type="checkbox" 
                   checked={formData.is_customizable} 
                   onChange={e => setFormData({...formData, is_customizable: e.target.checked})} 
-                  className="w-4 h-4 accent-[#4A2A25]" 
+                  className="w-4 h-4 accent-[#FFBF00]" 
                   id="customCheck" 
                 />
-                <label htmlFor="customCheck" className="font-bold text-[#201817] cursor-pointer">
+                <label htmlFor="customCheck" className="font-bold text-[#3A211E] cursor-pointer">
                   Mở tính năng Custom Cup 3D Studio cho mẫu ly này
                 </label>
               </div>
 
-              <div className="flex justify-end gap-2 pt-4 border-t border-[#DDD8D2]">
+              <div className="flex justify-end gap-2 pt-4 border-t border-[#E8DFD8]">
                 <button 
                   type="button" 
                   onClick={() => setShowModal(false)} 
-                  className="px-4 py-2 bg-[#EDECEA] text-[#3A211E] rounded-xl font-bold"
+                  className="px-4 py-2 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-xl font-bold hover:bg-[#FFF9E8]"
                 >
                   Hủy
                 </button>
                 <button 
                   type="submit" 
-                  className="px-5 py-2 bg-[#4A2A25] text-white rounded-xl font-bold hover:bg-[#3A211E]"
+                  className="px-5 py-2 bg-[#FFBF00] text-[#3A211E] rounded-xl font-bold hover:bg-[#FFBF00]/90 shadow-xs"
                 >
                   Lưu Sản Phẩm
                 </button>

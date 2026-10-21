@@ -114,7 +114,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
         />
       </head>
-      <body className={`${beVietnamPro.variable} ${baloo2.variable} font-sans antialiased bg-[#F7F6F2] text-[#201817]`}>
+      <body className={`${beVietnamPro.variable} ${baloo2.variable} font-sans antialiased bg-white text-[#3A211E]`}>
         <Header />
         <main className="min-h-screen">
           {children}

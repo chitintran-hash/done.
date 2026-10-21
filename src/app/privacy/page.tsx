@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
       {/* 1.1 */}
       <section className="space-y-3">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.1</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.1</span>
           Giới thiệu chung
         </h2>
         <p className="text-[#4A3E3D]">
@@ -33,9 +33,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.2 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.2</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.2</span>
           Thông tin cá nhân được thu thập
         </h2>
         <p className="text-[#4A3E3D]">
@@ -56,9 +56,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.3 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.3</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.3</span>
           Mục đích sử dụng thông tin
         </h2>
         <p className="text-[#4A3E3D]">
@@ -76,9 +76,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.4 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.4</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.4</span>
           Phạm vi chia sẻ thông tin
         </h2>
         <p className="text-[#4A3E3D]">
@@ -96,9 +96,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.5 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.5</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.5</span>
           Lưu trữ và bảo vệ thông tin
         </h2>
         <p className="text-[#4A3E3D]">
@@ -113,9 +113,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.6 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.6</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.6</span>
           Quyền của khách hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -130,9 +130,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.7 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.7</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.7</span>
           Bảo mật dữ liệu thiết kế cá nhân hóa
         </h2>
         <p className="text-[#4A3E3D]">
@@ -150,9 +150,9 @@ export default function PrivacyPolicyPage() {
       </section>
 
       {/* 1.8 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">1.8</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">1.8</span>
           Thay đổi chính sách
         </h2>
         <p className="text-[#4A3E3D]">

@@ -63,20 +63,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center p-6 text-[#201817]">
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#DDD8D2] text-center max-w-sm w-full">
-          <div className="w-12 h-12 rounded-full bg-[#BFDCEF]/40 flex items-center justify-center mx-auto mb-4 text-[#3A211E]">
+      <div className="min-h-screen bg-white flex items-center justify-center p-6 text-[#3A211E]">
+        <div className="bg-white p-8 rounded-2xl shadow-xs border border-[#E8DFD8] text-center max-w-sm w-full">
+          <div className="w-12 h-12 rounded-full bg-[#FFF3C4] border border-[#FFBF00] flex items-center justify-center mx-auto mb-4 text-[#3A211E]">
             <ShieldCheck className="w-6 h-6 animate-pulse" />
           </div>
           <h2 className="font-bold text-lg text-[#3A211E]">Đang kiểm tra quyền truy cập...</h2>
-          <p className="text-sm text-[#6F625E] mt-2">Hệ thống quản trị thương hiệu Cupfy</p>
+          <p className="text-sm text-[#765B52] mt-2">Hệ thống quản trị thương hiệu Cupfy</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen bg-[#F7F6F2] text-[#201817] overflow-hidden">
+    <div className="flex h-screen bg-white text-[#3A211E] overflow-hidden">
       {/* Mobile Menu Backdrop */}
       {isMobileMenuOpen && (
         <div 
@@ -87,24 +87,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Sidebar */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-[#DDD8D2] flex flex-col transition-transform duration-300
+        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-white border-r border-[#E8DFD8] flex flex-col transition-transform duration-300
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Brand Header */}
-        <div className="p-6 border-b border-[#DDD8D2] flex items-center justify-between">
+        <div className="p-6 border-b border-[#E8DFD8] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#FFF3A6] border border-[#DDD8D2] flex items-center justify-center font-bold text-[#3A211E] text-xl shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#FFBF00] border border-[#E8DFD8] flex items-center justify-center font-bold text-[#3A211E] text-xl shadow-xs">
               ☕
             </div>
             <div>
               <div className="font-black text-xl text-[#3A211E] tracking-tight">CUPFY ADMIN</div>
-              <div className="text-xs text-[#6F625E] font-medium flex items-center gap-1.5 mt-0.5">
+              <div className="text-xs text-[#765B52] font-medium flex items-center gap-1.5 mt-0.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span> D2C Management
               </div>
             </div>
           </div>
           <button 
-            className="lg:hidden p-1.5 text-[#6F625E] hover:text-[#201817]"
+            className="lg:hidden p-1.5 text-[#765B52] hover:text-[#3A211E]"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <X className="w-5 h-5" />
@@ -126,11 +126,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`flex items-center gap-3.5 px-4 py-2.5 rounded-xl font-medium text-sm transition-all ${
                   isActive 
-                    ? 'bg-[#4A2A25] text-white shadow-sm font-semibold' 
-                    : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#EDECEA]'
+                    ? 'bg-[#FFBF00] text-[#3A211E] shadow-xs font-bold' 
+                    : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#6F625E]'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-[#3A211E]' : 'text-[#765B52]'}`} />
                 {item.label}
               </Link>
             );
@@ -138,15 +138,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Footer Admin Info & Return to Store */}
-        <div className="p-4 border-t border-[#DDD8D2] bg-[#F7F6F2]/50 space-y-2">
-          <div className="px-3 py-2 bg-white rounded-xl border border-[#DDD8D2] text-xs">
-            <div className="text-[#6F625E]">Tài khoản quản trị:</div>
-            <div className="font-medium text-[#201817] truncate mt-0.5">{userEmail}</div>
+        <div className="p-4 border-t border-[#E8DFD8] bg-[#FFF9E8] space-y-2">
+          <div className="px-3 py-2 bg-white rounded-xl border border-[#E8DFD8] text-xs">
+            <div className="text-[#765B52]">Tài khoản quản trị:</div>
+            <div className="font-medium text-[#3A211E] truncate mt-0.5">{userEmail}</div>
           </div>
 
           <Link 
             href="/" 
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-white border border-[#DDD8D2] text-[#3A211E] text-xs font-bold hover:bg-[#EDECEA] transition-colors shadow-sm"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-white border border-[#E8DFD8] text-[#3A211E] text-xs font-bold hover:bg-[#FFF3C4] transition-colors shadow-xs"
           >
             <Home className="w-4 h-4" />
             Về Cửa Hàng Khách
@@ -157,21 +157,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Top bar for mobile trigger & breadcrumbs */}
-        <header className="lg:hidden bg-white border-b border-[#DDD8D2] px-6 py-4 flex items-center justify-between">
+        <header className="lg:hidden bg-white border-b border-[#E8DFD8] px-6 py-4 flex items-center justify-between">
           <button 
             onClick={() => setIsMobileMenuOpen(true)}
-            className="p-2 -ml-2 text-[#201817] hover:bg-[#EDECEA] rounded-lg"
+            className="p-2 -ml-2 text-[#3A211E] hover:bg-[#FFF9E8] rounded-lg"
           >
             <Menu className="w-6 h-6" />
           </button>
           <div className="font-bold text-sm text-[#3A211E]">CUPFY Quản Trị</div>
-          <Link href="/" className="text-xs text-[#4A2A25] font-semibold underline">
+          <Link href="/" className="text-xs text-[#3A211E] font-semibold underline">
             Cửa hàng
           </Link>
         </header>
 
         {/* Page Content Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-[#FFF9E8]/30">
           <div className="max-w-[1500px] mx-auto">
             {children}
           </div>

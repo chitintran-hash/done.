@@ -49,7 +49,7 @@ export default function CartPage() {
   };
 
   return (
-    <div className="bg-[#F7F6F2] min-h-screen pt-28 pb-24">
+    <div className="bg-white min-h-screen pt-28 pb-24">
       {/* Modal yêu cầu đăng nhập trước khi thanh toán */}
       <AuthRequiredModal 
         isOpen={showAuthModal} 
@@ -63,26 +63,26 @@ export default function CartPage() {
         </h1>
 
         {items.length === 0 ? (
-          <div className="bg-white rounded-[24px] p-12 text-center shadow-sm border border-[#DDD8D2]">
-            <div className="w-20 h-20 bg-[#F7F6F2] rounded-3xl border border-[#DDD8D2] flex items-center justify-center text-3xl mx-auto mb-4">
+          <div className="bg-white rounded-[24px] p-12 text-center shadow-sm border border-[#E8DFD8]">
+            <div className="w-20 h-20 bg-[#FFF9E8] rounded-3xl border border-[#E8DFD8] flex items-center justify-center text-3xl mx-auto mb-4">
               🛒
             </div>
             <h2 className="font-heading text-2xl font-bold text-[#3A211E] mb-3">
               Giỏ hàng đang trống
             </h2>
-            <p className="text-[#6F625E] text-sm mb-8 max-w-md mx-auto">
+            <p className="text-[#765B52] text-sm mb-8 max-w-md mx-auto">
               Hãy ghé thăm cửa hàng hoặc tự tay sáng tạo chiếc ly mang dấu ấn độc bản của riêng bạn nhé!
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link 
                 href="/custom-cup" 
-                className="inline-flex bg-[#3A211E] text-white font-bold px-8 py-3.5 rounded-full hover:bg-[#4A2A25] transition-colors shadow-sm"
+                className="inline-flex bg-[#3A211E] text-white font-bold px-8 py-3.5 rounded-full hover:bg-[#3A211E] transition-colors shadow-sm"
               >
-                Bắt đầu thiết kế ✨
+                Bắt đầu thiết kế
               </Link>
               <Link 
                 href="/products" 
-                className="inline-flex bg-white text-[#3A211E] font-bold px-8 py-3.5 rounded-full hover:bg-[#EDECEA] transition-colors border border-[#DDD8D2]"
+                className="inline-flex bg-white text-[#3A211E] font-bold px-8 py-3.5 rounded-full hover:bg-[#EDECEA] transition-colors border border-[#E8DFD8]"
               >
                 Khám phá cửa hàng
               </Link>
@@ -94,17 +94,17 @@ export default function CartPage() {
               {items.map((item) => (
                 <div 
                   key={item.id} 
-                  className="bg-white p-6 rounded-[24px] shadow-sm border border-[#DDD8D2] flex flex-col sm:flex-row gap-6 relative"
+                  className="bg-white p-6 rounded-[24px] shadow-sm border border-[#E8DFD8] flex flex-col sm:flex-row gap-6 relative"
                 >
                   <button 
                     onClick={() => removeItem(item.id)}
-                    className="absolute top-5 right-5 text-[#6F625E] hover:text-red-500 transition-colors p-1"
+                    className="absolute top-5 right-5 text-[#765B52] hover:text-red-500 transition-colors p-1"
                     title="Xóa sản phẩm"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
 
-                  <div className="w-24 h-24 bg-[#F7F6F2] rounded-2xl flex items-center justify-center shrink-0 border border-[#DDD8D2] overflow-hidden relative p-2 self-start">
+                  <div className="w-24 h-24 bg-[#FFF9E8] rounded-2xl flex items-center justify-center shrink-0 border border-[#E8DFD8] overflow-hidden relative p-2 self-start">
                     {item.image ? (
                       <Image 
                         src={item.image} 
@@ -113,7 +113,7 @@ export default function CartPage() {
                         className="object-contain p-2" 
                       />
                     ) : (
-                      <span className="text-xs text-[#6F625E]">No image</span>
+                      <span className="text-xs text-[#765B52]">No image</span>
                     )}
                   </div>
 
@@ -121,20 +121,20 @@ export default function CartPage() {
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h3 className="font-bold text-lg text-[#3A211E]">{item.name}</h3>
-                        <p className="text-base font-bold text-[#4A2A25] mt-0.5">
+                        <p className="text-base font-bold text-[#3A211E] mt-0.5">
                           {item.price.toLocaleString('vi-VN')} ₫
                         </p>
                       </div>
                     </div>
 
                     {item.isCustom && item.customSpecs && (
-                      <div className="bg-[#F7F6F2] rounded-xl p-3.5 mt-3 mb-4 text-xs text-[#6F625E] space-y-1.5 border border-[#DDD8D2]/80">
+                      <div className="bg-[#FFF9E8] rounded-xl p-3.5 mt-3 mb-4 text-xs text-[#765B52] space-y-1.5 border border-[#E8DFD8]/80">
                         <div className="flex items-center justify-between">
                           <p>
                             <span className="font-bold text-[#3A211E]">Mẫu ly:</span>{' '}
                             {item.customSpecs.modelName || 'Ly Custom Studio'}
                           </p>
-                          <Link href="/custom-cup" className="text-xs font-bold text-[#4A2A25] hover:underline">
+                          <Link href="/custom-cup" className="text-xs font-bold text-[#3A211E] hover:underline">
                             Chỉnh sửa
                           </Link>
                         </div>
@@ -150,7 +150,7 @@ export default function CartPage() {
                       </div>
                     )}
 
-                    <div className="flex items-center gap-3 bg-[#F7F6F2] w-fit rounded-full px-1.5 py-1 border border-[#DDD8D2]">
+                    <div className="flex items-center gap-3 bg-[#FFF9E8] w-fit rounded-full px-1.5 py-1 border border-[#E8DFD8]">
                       <button 
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="w-8 h-8 flex items-center justify-center bg-white rounded-full text-[#3A211E] shadow-sm hover:bg-[#EDECEA] transition-colors"
@@ -175,7 +175,7 @@ export default function CartPage() {
 
               {/* Mua kèm hộp quà tặng */}
               {giftBoxes.length > 0 && (
-                <div className="bg-white p-6 rounded-[24px] shadow-sm border border-[#DDD8D2]">
+                <div className="bg-white p-6 rounded-[24px] shadow-sm border border-[#E8DFD8]">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <span className="text-xl">🎁</span>
@@ -183,7 +183,7 @@ export default function CartPage() {
                         Mua kèm hộp quà tặng & đóng gói
                       </h3>
                     </div>
-                    <span className="text-xs text-[#6F625E]">Phụ kiện đóng gói</span>
+                    <span className="text-xs text-[#765B52]">Phụ kiện đóng gói</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -192,10 +192,10 @@ export default function CartPage() {
                       return (
                         <div
                           key={box.id}
-                          className="p-3 rounded-2xl bg-[#FAF9F6] border border-[#DDD8D2] flex items-center justify-between gap-3"
+                          className="p-3 rounded-2xl bg-[#FFF9E8] border border-[#E8DFD8] flex items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-12 h-12 rounded-xl bg-white border border-[#DDD8D2] overflow-hidden shrink-0 relative">
+                            <div className="w-12 h-12 rounded-xl bg-white border border-[#E8DFD8] overflow-hidden shrink-0 relative">
                               <img
                                 src={box.image_url || 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=300&q=80'}
                                 alt=""
@@ -203,10 +203,10 @@ export default function CartPage() {
                               />
                             </div>
                             <div className="min-w-0">
-                              <h4 className="font-bold text-xs text-[#201817] truncate">
+                              <h4 className="font-bold text-xs text-[#3A211E] truncate">
                                 {box.name}
                               </h4>
-                              <p className="text-xs font-bold text-[#4A2A25]">
+                              <p className="text-xs font-bold text-[#3A211E]">
                                 +{Number(box.price).toLocaleString('vi-VN')} ₫
                               </p>
                             </div>
@@ -228,7 +228,7 @@ export default function CartPage() {
                                   isCustom: false,
                                 })
                               }
-                              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#4A2A25] text-white hover:bg-[#3A211E] transition-colors shrink-0 shadow-2xs"
+                              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#3A211E] text-white hover:bg-[#3A211E] transition-colors shrink-0 shadow-2xs"
                             >
                               + Thêm
                             </button>
@@ -241,12 +241,12 @@ export default function CartPage() {
               )}
             </div>
 
-            <div className="bg-white p-6 sm:p-8 rounded-[24px] shadow-sm border border-[#DDD8D2] h-fit sticky top-28">
+            <div className="bg-white p-6 sm:p-8 rounded-[24px] shadow-sm border border-[#E8DFD8] h-fit sticky top-28">
               <h3 className="font-heading font-bold text-xl text-[#3A211E] mb-6">
                 Tổng đơn hàng
               </h3>
               
-              <div className="space-y-3.5 text-sm text-[#6F625E] mb-6 border-b border-[#DDD8D2] pb-6">
+              <div className="space-y-3.5 text-sm text-[#765B52] mb-6 border-b border-[#E8DFD8] pb-6">
                 <div className="flex justify-between">
                   <span>Tạm tính</span>
                   <span className="font-semibold text-[#3A211E]">
@@ -255,7 +255,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-[#4A2A25]" /> Phí vận chuyển (COD)
+                    <Truck className="w-4 h-4 text-[#3A211E]" /> Phí vận chuyển (COD)
                   </span>
                   <span className="font-semibold text-[#3A211E]">
                     {shippingFee.toLocaleString('vi-VN')} ₫
@@ -273,13 +273,13 @@ export default function CartPage() {
               <button
                 onClick={handleProceedToCheckout}
                 disabled={checkingAuth}
-                className="w-full bg-[#3A211E] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#4A2A25] transition-colors shadow-[0_6px_20px_rgba(58,33,30,0.18)] text-base disabled:opacity-60"
+                className="w-full bg-[#3A211E] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#3A211E] transition-colors shadow-[0_6px_20px_rgba(58,33,30,0.18)] text-base disabled:opacity-60"
               >
                 <span>TIẾP TỤC THANH TOÁN</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
               
-              <p className="text-xs text-center text-[#6F625E] mt-4">
+              <p className="text-xs text-center text-[#765B52] mt-4">
                 Thanh toán tiền mặt khi nhận hàng (COD). Kiểm tra hàng trước khi thanh toán.
               </p>
             </div>

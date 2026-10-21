@@ -12,18 +12,18 @@ export default function TemplatesPage() {
   ];
 
   return (
-    <div className="min-h-screen pt-[120px] pb-24 bg-[#F7F6F2]">
+    <div className="min-h-screen pt-[120px] pb-24 bg-[#FFF9E8]">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#3B2725] mb-6">Mẫu thiết kế (Templates)</h1>
-          <p className="text-[#6F625E] text-lg">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#3A211E] mb-6">Mẫu thiết kế (Templates)</h1>
+          <p className="text-[#765B52] text-lg">
             Khởi đầu nhanh chóng với hàng loạt mẫu thiết kế đẹp mắt được tạo sẵn. Chọn mẫu bạn thích và bắt đầu tuỳ chỉnh theo ý muốn!
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {templates.map(template => (
-            <div key={template.id} className="group flex flex-col bg-white rounded-3xl p-6 shadow-sm border border-border hover:shadow-lg transition-all">
+            <div key={template.id} className="group flex flex-col bg-white rounded-3xl p-6 shadow-sm border border-[#E8DFD8] hover:shadow-lg transition-all">
               <div 
                 className="w-full aspect-square rounded-2xl overflow-hidden mb-6 relative"
                 style={{ backgroundColor: template.color }}
@@ -35,10 +35,10 @@ export default function TemplatesPage() {
                   className="object-cover mix-blend-multiply opacity-90 group-hover:scale-105 transition-transform duration-700"
                 />
               </div>
-              <h3 className="font-bold text-xl text-[#3B2725] mb-2">{template.name}</h3>
+              <h3 className="font-bold text-xl text-[#3A211E] mb-2">{template.name}</h3>
               <p className="text-muted-foreground mb-6">Chỉnh sửa màu sắc, thêm chữ, thay đổi sticker...</p>
               
-              <Link href="/custom-cup" className="mt-auto block text-center w-full bg-[#F7F6F2] text-[#3B2725] border border-[#DDD8D2] py-3 rounded-full font-bold hover:bg-[#FFF3A6] transition-colors">
+              <Link href="/custom-cup" className="mt-auto block text-center w-full bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8] py-3 rounded-full font-bold hover:bg-[#FFBF00] transition-colors">
                 Dùng mẫu này
               </Link>
             </div>

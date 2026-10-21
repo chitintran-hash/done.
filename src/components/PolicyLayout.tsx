@@ -42,11 +42,11 @@ export default function PolicyLayout({
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen pt-[100px] md:pt-[120px] pb-24 bg-[#F7F6F2]">
+    <div className="min-h-screen pt-[100px] md:pt-[120px] pb-24 bg-[#FFF9E8]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs text-[#6F625E] mb-6 font-medium">
+        <nav className="flex items-center gap-2 text-xs text-[#765B52] mb-6 font-medium">
           <Link href="/" className="hover:text-[#3A211E] transition-colors">Trang chủ</Link>
           <ChevronRight className="w-3.5 h-3.5 opacity-60" />
           <span>Quy chế & Chính sách</span>
@@ -66,10 +66,10 @@ export default function PolicyLayout({
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
                   isActive
                     ? 'bg-[#3A211E] text-white border-[#3A211E] shadow-sm'
-                    : 'bg-white text-[#6F625E] hover:text-[#201817] hover:bg-[#EDECEA] border-[#DDD8D2]'
+                    : 'bg-white text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8] border-[#E8DFD8]'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#FFF3A6]' : 'text-[#6F625E]'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#FFBF00]' : 'text-[#765B52]'}`} />
                 <span>{p.label}</span>
               </Link>
             );
@@ -77,11 +77,11 @@ export default function PolicyLayout({
         </div>
 
         {/* Main Content Card */}
-        <article className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 md:p-14 shadow-xs border border-[#DDD8D2]">
+        <article className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 md:p-14 shadow-xs border border-[#E8DFD8]">
           
           {/* Header */}
-          <header className="border-b border-[#DDD8D2] pb-8 mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3A6] border border-[#DDD8D2] text-[11px] font-bold text-[#4A2A25] uppercase tracking-wider mb-4">
+          <header className="border-b border-[#E8DFD8] pb-8 mb-8">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3C4] border border-[#FFBF00]/40 text-[11px] font-bold text-[#3A211E] uppercase tracking-wider mb-4">
               <ShieldCheck className="w-3.5 h-3.5" />
               Chính sách chính thức Cupfy
             </div>
@@ -91,13 +91,13 @@ export default function PolicyLayout({
             </h1>
 
             {subtitle && (
-              <p className="text-sm md:text-base text-[#6F625E] mt-3 leading-relaxed">
+              <p className="text-sm md:text-base text-[#765B52] mt-3 leading-relaxed">
                 {subtitle}
               </p>
             )}
 
-            <div className="flex items-center gap-2 mt-4 text-xs font-medium text-[#6F625E]">
-              <Clock className="w-3.5 h-3.5 text-amber-700" />
+            <div className="flex items-center gap-2 mt-4 text-xs font-medium text-[#765B52]">
+              <Clock className="w-3.5 h-3.5 text-[#FFBF00]" />
               <span>Ngày ban hành: <strong>{effectiveDate}</strong></span>
               <span>•</span>
               <span>Phạm vi: <strong>Toàn quốc & Website Cupfy.space</strong></span>
@@ -110,27 +110,27 @@ export default function PolicyLayout({
           </div>
 
           {/* Footer Contact Support */}
-          <footer className="mt-12 pt-8 border-t border-[#DDD8D2] bg-[#FAF9F6] -mx-6 sm:-mx-10 md:-mx-14 -mb-6 sm:-mb-10 md:-mb-14 p-6 sm:p-8 rounded-b-[2rem] sm:rounded-b-[3rem] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <footer className="mt-12 pt-8 border-t border-[#E8DFD8] bg-[#FFF9E8] -mx-6 sm:-mx-10 md:-mx-14 -mb-6 sm:-mb-10 md:-mb-14 p-6 sm:p-8 rounded-b-[2rem] sm:rounded-b-[3rem] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h4 className="font-bold text-[#3A211E] text-sm flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-amber-700" />
+                <HelpCircle className="w-4 h-4 text-[#3A211E]" />
                 Bạn cần hỗ trợ thêm về chính sách này?
               </h4>
-              <p className="text-xs text-[#6F625E] mt-1">
+              <p className="text-xs text-[#765B52] mt-1">
                 Đội ngũ hỗ trợ Cupfy luôn sẵn sàng giải đáp thắc mắc và đồng hành cùng bạn.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3 text-xs">
               <a 
                 href="mailto:tranchitin2006@gmail.com" 
-                className="px-4 py-2 bg-white text-[#3A211E] font-bold rounded-xl border border-[#DDD8D2] hover:bg-[#EDECEA] transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 bg-white text-[#3A211E] font-bold rounded-xl border border-[#E8DFD8] hover:bg-[#FFF3C4] transition-colors flex items-center gap-1.5"
               >
-                <Mail className="w-3.5 h-3.5 text-[#4A2A25]" />
+                <Mail className="w-3.5 h-3.5 text-[#3A211E]" />
                 tranchitin2006@gmail.com
               </a>
               <Link
                 href="/contact"
-                className="px-4 py-2 bg-[#4A2A25] text-white font-bold rounded-xl hover:bg-[#3A211E] transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 bg-[#3A211E] text-white font-bold rounded-xl hover:bg-[#201817] transition-colors flex items-center gap-1.5"
               >
                 <Phone className="w-3.5 h-3.5" />
                 Liên hệ hỗ trợ

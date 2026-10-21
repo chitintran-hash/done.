@@ -18,7 +18,7 @@ export default function ShippingPolicyPage() {
       {/* 4.1 */}
       <section className="space-y-3">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.1</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.1</span>
           Phạm vi giao hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -33,17 +33,17 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.2 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.2</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.2</span>
           Phí giao hàng
         </h2>
-        <div className="p-4 bg-[#FFF3A6]/50 rounded-2xl border border-[#DDD8D2] flex items-center justify-between">
+        <div className="p-4 bg-[#FFF3C4]/60 rounded-2xl border border-[#E8DFD8] flex items-center justify-between">
           <div>
             <div className="font-bold text-[#3A211E] text-base">Cước phí giao hàng toàn quốc: 30.000 VNĐ</div>
-            <p className="text-xs text-[#6F625E] mt-0.5">Áp dụng cố định cho toàn bộ đơn hàng (không tính theo từng chiếc ly)</p>
+            <p className="text-xs text-[#765B52] mt-0.5">Áp dụng cố định cho toàn bộ đơn hàng (không tính theo từng chiếc ly)</p>
           </div>
-          <span className="px-3 py-1 rounded-full bg-[#4A2A25] text-white text-xs font-bold shrink-0">
+          <span className="px-3 py-1 rounded-full bg-[#3A211E] text-white text-xs font-bold shrink-0">
             Cố định 30.000đ
           </span>
         </div>
@@ -62,9 +62,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.3 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.3</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.3</span>
           Thời gian xử lý đơn hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -85,9 +85,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.4 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.4</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.4</span>
           Thời gian giao hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -108,9 +108,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.5 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.5</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.5</span>
           Quy trình giao nhận
         </h2>
         <p className="text-[#4A3E3D]">
@@ -131,9 +131,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.6 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.6</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.6</span>
           Thanh toán khi nhận hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -151,9 +151,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.7 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.7</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.7</span>
           Kiểm tra hàng khi nhận
         </h2>
         <p className="text-[#4A3E3D]">
@@ -174,9 +174,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.8 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.8</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.8</span>
           Giao hàng không thành công
         </h2>
         <p className="text-[#4A3E3D]">
@@ -191,9 +191,9 @@ export default function ShippingPolicyPage() {
       </section>
 
       {/* 4.9 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">4.9</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">4.9</span>
           Trách nhiệm khi hàng hóa bị hư hỏng
         </h2>
         <p className="text-[#4A3E3D]">

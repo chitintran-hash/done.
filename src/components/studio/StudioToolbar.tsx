@@ -109,13 +109,11 @@ export function StudioToolbar({
   return (
     <div className="flex h-full select-none">
       {/* 1. Left Vertical Icon Sidebar */}
-      <div className="w-20 bg-white border-r border-[#E8E3DF] flex flex-col items-center py-6 gap-3 z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
+      <div className="w-20 bg-white border-r border-[#E8DFD8] flex flex-col items-center py-6 gap-3 z-10 shrink-0 shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
         <button
           onClick={() => setActiveTab('models')}
           className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all ${
-            activeTab === 'models'
-              ? 'bg-[#3E2925] text-white shadow-md'
-              : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#F7F6F2]'
+            activeTab === 'models' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
           }`}
         >
           <Box className="w-5 h-5" />
@@ -125,16 +123,14 @@ export function StudioToolbar({
         <button
           onClick={() => setActiveTab('colors')}
           className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all ${
-            activeTab === 'colors'
-              ? 'bg-[#3E2925] text-white shadow-md'
-              : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#F7F6F2]'
+            activeTab === 'colors' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
           }`}
         >
           <div
             className="w-5 h-5 rounded-full border-2 border-current flex items-center justify-center text-[9px]"
             style={{ backgroundColor: selectedModel.category === 'glass' ? '#ffffff' : selectedColor.color }}
           >
-            {selectedModel.category === 'glass' ? '✨' : null}
+            {selectedModel.category === 'glass' ? <Sparkles className="w-2.5 h-2.5 text-[#3A211E]" /> : null}
           </div>
           <span className="text-[10px] font-bold">Màu ly</span>
         </button>
@@ -142,9 +138,7 @@ export function StudioToolbar({
         <button
           onClick={() => setActiveTab('text')}
           className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all ${
-            activeTab === 'text'
-              ? 'bg-[#3E2925] text-white shadow-md'
-              : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#F7F6F2]'
+            activeTab === 'text' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
           }`}
         >
           <Type className="w-5 h-5" />
@@ -154,9 +148,7 @@ export function StudioToolbar({
         <button
           onClick={() => setActiveTab('upload')}
           className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all ${
-            activeTab === 'upload'
-              ? 'bg-[#3E2925] text-white shadow-md'
-              : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#F7F6F2]'
+            activeTab === 'upload' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
           }`}
         >
           <Upload className="w-5 h-5" />
@@ -166,23 +158,19 @@ export function StudioToolbar({
         <button
           onClick={() => setActiveTab('stickers')}
           className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all ${
-            activeTab === 'stickers'
-              ? 'bg-[#3E2925] text-white shadow-md'
-              : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#F7F6F2]'
+            activeTab === 'stickers' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
           }`}
         >
           <Smile className="w-5 h-5" />
           <span className="text-[10px] font-bold">Sticker</span>
         </button>
 
-        <div className="w-8 h-px bg-[#E8E3DF] my-1"></div>
+        <div className="w-8 h-px bg-[#E8DFD8] my-1"></div>
 
         <button
           onClick={() => setActiveTab('layers')}
           className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl w-16 transition-all relative ${
-            activeTab === 'layers'
-              ? 'bg-[#3E2925] text-white shadow-md'
-              : 'text-[#6F625E] hover:text-[#201817] hover:bg-[#F7F6F2]'
+            activeTab === 'layers' ? 'bg-[#FFBF00] text-[#3A211E] shadow-sm font-bold' : 'text-[#765B52] hover:text-[#3A211E] hover:bg-[#FFF9E8]'
           }`}
         >
           <Layers className="w-5 h-5" />
@@ -196,13 +184,13 @@ export function StudioToolbar({
       </div>
 
       {/* 2. Flyout Properties Drawer Panel */}
-      <div className="w-80 md:w-96 bg-white border-r border-[#E8E3DF] p-6 flex flex-col gap-6 z-10 overflow-y-auto shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
+      <div className="w-80 md:w-96 bg-white border-r border-[#E8DFD8] p-6 flex flex-col gap-6 z-10 overflow-y-auto shadow-[4px_0_12px_rgba(0,0,0,0.02)]">
         {/* ==================== TAB: MẪU LY ==================== */}
         {activeTab === 'models' && (
           <div className="space-y-4">
             <div>
-              <h3 className="font-bold text-[#201817] text-base">Chọn Mẫu Ly Thực Tế</h3>
-              <p className="text-xs text-[#6F625E] mt-1">
+              <h3 className="font-bold text-[#3A211E] text-base">Chọn Mẫu Ly Thực Tế</h3>
+              <p className="text-xs text-[#765B52] mt-1">
                 Tất cả mẫu ly đều có hình dạng và tỷ lệ tham số 3D chuẩn xác.
               </p>
             </div>
@@ -216,24 +204,24 @@ export function StudioToolbar({
                     onClick={() => setSelectedModel(m)}
                     className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex flex-col gap-2 ${
                       isSelected
-                        ? 'border-[#3E2925] bg-[#FAF9F6] shadow-sm'
-                        : 'border-[#E8E3DF] hover:border-[#3E2925]/60 hover:bg-white'
+                        ? 'border-[#3A211E] bg-[#FFF9E8] shadow-sm'
+                        : 'border-[#E8DFD8] hover:border-[#3A211E]/60 hover:bg-white'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-sm text-[#201817] flex items-center gap-1.5">
+                      <span className="font-bold text-sm text-[#3A211E] flex items-center gap-1.5">
                         {m.name}
                         {isSelected && <Check className="w-4 h-4 text-[#059669]" />}
                       </span>
-                      <span className="font-black text-sm text-[#4A2A25]">
+                      <span className="font-black text-sm text-[#3A211E]">
                         {formatVND(m.defaultPrice)}
                       </span>
                     </div>
 
-                    <p className="text-xs text-[#6F625E]">{m.subtitle}</p>
+                    <p className="text-xs text-[#765B52]">{m.subtitle}</p>
 
-                    <div className="flex items-center gap-2 pt-1 border-t border-[#E8E3DF]/60 text-[11px] text-[#6F625E]">
-                      <span className="bg-white px-2 py-0.5 rounded-md border border-[#E8E3DF] font-bold">
+                    <div className="flex items-center gap-2 pt-1 border-t border-[#E8DFD8]/60 text-[11px] text-[#765B52]">
+                      <span className="bg-white px-2 py-0.5 rounded-md border border-[#E8DFD8] font-bold">
                         {m.capacity}
                       </span>
                       <span>Cao: {m.heightMm}</span>
@@ -245,7 +233,7 @@ export function StudioToolbar({
               })}
             </div>
 
-            <div className="bg-[#FAF9F6] p-3.5 rounded-2xl border border-[#E8E3DF] flex items-start gap-2 text-xs text-[#6F625E]">
+            <div className="bg-[#FFF9E8] p-3.5 rounded-2xl border border-[#E8DFD8] flex items-start gap-2 text-xs text-[#765B52]">
               <Info className="w-4 h-4 text-[#D97706] shrink-0 mt-0.5" />
               <span>
                 Mô hình 3D được dựng tham số chuẩn xác có thành đôi, độ dày đáy đúc thực tế và viền miệng kính.
@@ -258,47 +246,47 @@ export function StudioToolbar({
         {activeTab === 'colors' && (
           <div className="space-y-6">
             <div>
-              <h3 className="font-bold text-[#201817] text-base">Màu Sắc & Vật Liệu</h3>
-              <p className="text-xs text-[#6F625E] mt-1">
+              <h3 className="font-bold text-[#3A211E] text-base">Màu Sắc & Vật Liệu</h3>
+              <p className="text-xs text-[#765B52] mt-1">
                 {selectedModel.name}
               </p>
             </div>
 
             {selectedModel.category === 'glass' ? (
-              <div className="bg-[#FAF9F6] p-5 rounded-2xl border border-[#E8E3DF] space-y-4">
+              <div className="bg-[#FFF9E8] p-5 rounded-2xl border border-[#E8DFD8] space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#E8E3DF] shadow-sm flex items-center justify-center text-xl shrink-0">
-                    ✨
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#E8DFD8] shadow-sm flex items-center justify-center shrink-0">
+                    <Sparkles className="w-6 h-6 text-[#FFBF00]" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-[#201817]">Thủy Tinh Pha Lê Nguyên Bản</h4>
+                    <h4 className="font-bold text-sm text-[#3A211E]">Thủy Tinh Pha Lê Nguyên Bản</h4>
                     <span className="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200 mt-1">
                       100% Trong Suốt Tự Nhiên
                     </span>
                   </div>
                 </div>
 
-                <p className="text-xs text-[#6F625E] leading-relaxed">
+                <p className="text-xs text-[#765B52] leading-relaxed">
                   Toàn bộ các dòng <strong>ly thủy tinh</strong> tại Cupfy đều được sản xuất từ chất liệu thủy tinh pha lê trong suốt tự nhiên, không nhuộm màu để giữ trọn độ tinh khiết và an toàn vệ sinh tối đa.
                 </p>
 
-                <div className="bg-white p-3.5 rounded-xl border border-[#E8E3DF] text-xs space-y-2">
-                  <div className="flex justify-between text-[#6F625E]">
+                <div className="bg-white p-3.5 rounded-xl border border-[#E8DFD8] text-xs space-y-2">
+                  <div className="flex justify-between text-[#765B52]">
                     <span>Chất liệu:</span>
-                    <strong className="text-[#201817]">Thủy tinh quang học cao cấp</strong>
+                    <strong className="text-[#3A211E]">Thủy tinh quang học cao cấp</strong>
                   </div>
-                  <div className="flex justify-between text-[#6F625E]">
+                  <div className="flex justify-between text-[#765B52]">
                     <span>Độ truyền sáng (Transmission):</span>
                     <strong className="text-emerald-700">98% Trong suốt</strong>
                   </div>
-                  <div className="flex justify-between text-[#6F625E]">
+                  <div className="flex justify-between text-[#765B52]">
                     <span>Đổi màu thân ly:</span>
-                    <strong className="text-[#4A2A25]">Chỉ áp dụng cho ly nhựa</strong>
+                    <strong className="text-[#3A211E]">Chỉ áp dụng cho ly nhựa</strong>
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#E8E3DF] space-y-2">
-                  <p className="text-[11px] text-[#6F625E]">
+                <div className="pt-2 border-t border-[#E8DFD8] space-y-2">
+                  <p className="text-[11px] text-[#765B52]">
                     Bạn muốn thiết kế mẫu ly có thể tùy chọn nhiều màu sắc thân & nắp ly?
                   </p>
                   <button
@@ -309,7 +297,7 @@ export function StudioToolbar({
                         setSelectedColor(PLASTIC_COLOR_OPTIONS[0]);
                       }
                     }}
-                    className="w-full py-2.5 px-4 bg-[#3E2925] text-white rounded-xl text-xs font-bold hover:bg-[#201817] shadow-sm transition-all flex items-center justify-center gap-2"
+                    className="w-full py-2.5 px-4 bg-[#3A211E] text-white rounded-xl text-xs font-bold hover:bg-[#3A211E] shadow-sm transition-all flex items-center justify-center gap-2"
                   >
                     <Box className="w-4 h-4" />
                     <span>Chuyển Sang Ly Nhựa Có Nắp</span>
@@ -319,8 +307,8 @@ export function StudioToolbar({
             ) : (
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-bold text-[#201817] text-sm mb-1">Màu Thân Ly Nhựa</h4>
-                  <p className="text-xs text-[#6F625E] mb-3">Nhựa nguyên sinh an toàn BPA-Free, bề mặt mịn cao cấp.</p>
+                  <h4 className="font-bold text-[#3A211E] text-sm mb-1">Màu Thân Ly Nhựa</h4>
+                  <p className="text-xs text-[#765B52] mb-3">Nhựa nguyên sinh an toàn BPA-Free, bề mặt mịn cao cấp.</p>
                   <div className="grid grid-cols-2 gap-2.5">
                     {PLASTIC_COLOR_OPTIONS.map((c) => {
                       const isSelected = selectedColor.id === c.id;
@@ -330,15 +318,15 @@ export function StudioToolbar({
                           onClick={() => setSelectedColor(c)}
                           className={`p-3 rounded-xl border-2 flex items-center gap-2.5 transition-all text-left ${
                             isSelected
-                              ? 'border-[#3E2925] bg-[#FAF9F6]'
-                              : 'border-[#E8E3DF] hover:border-[#3E2925]/50'
+                              ? 'border-[#3A211E] bg-[#FFF9E8]'
+                              : 'border-[#E8DFD8] hover:border-[#3A211E]/50'
                           }`}
                         >
                           <span
                             className="w-6 h-6 rounded-full border border-black/10 shrink-0 shadow-inner"
                             style={{ backgroundColor: c.color }}
                           ></span>
-                          <span className="text-xs font-bold text-[#201817] line-clamp-1 leading-tight">
+                          <span className="text-xs font-bold text-[#3A211E] line-clamp-1 leading-tight">
                             {c.name}
                           </span>
                         </button>
@@ -348,8 +336,8 @@ export function StudioToolbar({
                 </div>
 
                 {/* Lid Color for Boba Cup */}
-                <div className="border-t border-[#E8E3DF] pt-6 space-y-3">
-                  <h4 className="font-bold text-[#201817] text-sm">Màu Nắp Ly Nhựa</h4>
+                <div className="border-t border-[#E8DFD8] pt-6 space-y-3">
+                  <h4 className="font-bold text-[#3A211E] text-sm">Màu Nắp Ly Nhựa</h4>
                   <div className="flex flex-wrap gap-2.5">
                     {LID_COLOR_OPTIONS.map((l) => (
                       <button
@@ -357,7 +345,7 @@ export function StudioToolbar({
                         onClick={() => setLidColor(l.color)}
                         title={l.name}
                         className={`w-9 h-9 rounded-full border-2 transition-all ${
-                          lidColor === l.color ? 'border-[#3E2925] scale-110' : 'border-[#E8E3DF]'
+                          lidColor === l.color ? 'border-[#3A211E] scale-110' : 'border-[#E8DFD8]'
                         }`}
                         style={{ backgroundColor: l.color }}
                       />
@@ -374,21 +362,21 @@ export function StudioToolbar({
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-[#201817] text-base">Dán Chữ Cong Lên Thân Ly</h3>
-                <p className="text-xs text-[#6F625E]">Chữ uốn cong tự nhiên theo độ cong của ly.</p>
+                <h3 className="font-bold text-[#3A211E] text-base">Dán Chữ Cong Lên Thân Ly</h3>
+                <p className="text-xs text-[#765B52]">Chữ uốn cong tự nhiên theo độ cong của ly.</p>
               </div>
               <button
                 onClick={onAddTextLayer}
-                className="px-3.5 py-2 bg-[#3E2925] text-white rounded-xl text-xs font-bold hover:bg-[#201817] shadow-sm flex items-center gap-1.5 transition-all"
+                className="px-3.5 py-2 bg-[#3A211E] text-white rounded-xl text-xs font-bold hover:bg-[#3A211E] shadow-sm flex items-center gap-1.5 transition-all"
               >
                 + Thêm Chữ
               </button>
             </div>
 
             {selectedLayer && selectedLayer.type === 'text' ? (
-              <div className="space-y-5 bg-[#FAF9F6] p-4 rounded-2xl border border-[#E8E3DF]">
+              <div className="space-y-5 bg-[#FFF9E8] p-4 rounded-2xl border border-[#E8DFD8]">
                 <div>
-                  <label className="text-xs font-bold text-[#201817] mb-1.5 block">
+                  <label className="text-xs font-bold text-[#3A211E] mb-1.5 block">
                     Nội dung in (Hỗ trợ nhiều dòng & dấu tiếng Việt):
                   </label>
                   <textarea
@@ -397,26 +385,26 @@ export function StudioToolbar({
                       onUpdateLayer(selectedLayer.id, { text: e.target.value })
                     }
                     placeholder="Nhập tên hoặc câu quote tiếng Việt..."
-                    className="w-full p-3 bg-white border border-[#E8E3DF] rounded-xl text-sm focus:outline-none focus:border-[#3E2925] resize-none h-20 shadow-sm"
+                    className="w-full p-3 bg-white border border-[#E8DFD8] rounded-xl text-sm focus:outline-none focus:border-[#3A211E] resize-none h-20 shadow-sm"
                   />
                 </div>
 
                 {/* Font Category and Search */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-bold text-[#201817]">
+                    <label className="text-xs font-bold text-[#3A211E]">
                       Thư viện Font Tiếng Việt (22 font):
                     </label>
                   </div>
 
                   <div className="relative mb-2">
-                    <Search className="w-3.5 h-3.5 text-[#6F625E] absolute left-2.5 top-1/2 -translate-y-1/2" />
+                    <Search className="w-3.5 h-3.5 text-[#765B52] absolute left-2.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       placeholder="Tìm font chữ..."
                       value={fontSearch}
                       onChange={(e) => setFontSearch(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 bg-white border border-[#E8E3DF] rounded-lg text-xs focus:outline-none focus:border-[#3E2925]"
+                      className="w-full pl-8 pr-3 py-1.5 bg-white border border-[#E8DFD8] rounded-lg text-xs focus:outline-none focus:border-[#3A211E]"
                     />
                   </div>
 
@@ -427,8 +415,8 @@ export function StudioToolbar({
                         onClick={() => setFontCategory(cat.key)}
                         className={`px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors ${
                           fontCategory === cat.key
-                            ? 'bg-[#3E2925] text-white'
-                            : 'bg-white border border-[#E8E3DF] text-[#6F625E] hover:text-[#201817]'
+                            ? 'bg-[#FFBF00] text-[#3A211E] font-bold'
+                            : 'bg-white border border-[#E8DFD8] text-[#765B52] hover:text-[#3A211E]'
                         }`}
                       >
                         {cat.label}
@@ -449,16 +437,16 @@ export function StudioToolbar({
                           }
                           className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between ${
                             isSelected
-                              ? 'border-[#3E2925] bg-white shadow-sm ring-1 ring-[#3E2925]'
-                              : 'border-[#E8E3DF] bg-white hover:border-[#3E2925]/60'
+                              ? 'border-[#3A211E] bg-white shadow-sm ring-1 ring-[#3A211E]'
+                              : 'border-[#E8DFD8] bg-white hover:border-[#3A211E]/60'
                           }`}
                         >
                           <div>
-                            <span className="font-bold text-xs text-[#201817] block">
+                            <span className="font-bold text-xs text-[#3A211E] block">
                               {f.name}
                             </span>
                             <span
-                              className="text-xs text-[#4A2A25] line-clamp-1 mt-0.5"
+                              className="text-xs text-[#3A211E] line-clamp-1 mt-0.5"
                               style={{ fontFamily: f.family }}
                             >
                               {f.previewText}
@@ -473,7 +461,7 @@ export function StudioToolbar({
 
                 {/* Text Formatting Tools */}
                 <div>
-                  <label className="text-xs font-bold text-[#201817] mb-2 block">
+                  <label className="text-xs font-bold text-[#3A211E] mb-2 block">
                     Định dạng & Căn lề:
                   </label>
                   <div className="flex items-center gap-2">
@@ -485,8 +473,8 @@ export function StudioToolbar({
                       }
                       className={`p-2 rounded-lg border text-xs font-bold ${
                         (selectedLayer as TextLayer).isBold
-                          ? 'bg-[#3E2925] text-white border-[#3E2925]'
-                          : 'bg-white border-[#E8E3DF] text-[#201817]'
+                          ? 'bg-[#FFBF00] text-[#3A211E] border-[#FFBF00] font-bold'
+                          : 'bg-white border-[#E8DFD8] text-[#3A211E]'
                       }`}
                     >
                       <Bold className="w-4 h-4" />
@@ -499,21 +487,21 @@ export function StudioToolbar({
                       }
                       className={`p-2 rounded-lg border text-xs font-bold ${
                         (selectedLayer as TextLayer).isItalic
-                          ? 'bg-[#3E2925] text-white border-[#3E2925]'
-                          : 'bg-white border-[#E8E3DF] text-[#201817]'
+                          ? 'bg-[#FFBF00] text-[#3A211E] border-[#FFBF00] font-bold'
+                          : 'bg-white border-[#E8DFD8] text-[#3A211E]'
                       }`}
                     >
                       <Italic className="w-4 h-4" />
                     </button>
-                    <div className="h-6 w-px bg-[#E8E3DF] mx-1"></div>
+                    <div className="h-6 w-px bg-[#E8DFD8] mx-1"></div>
                     <button
                       onClick={() =>
                         onUpdateLayer(selectedLayer.id, { align: 'left' })
                       }
                       className={`p-2 rounded-lg border ${
                         (selectedLayer as TextLayer).align === 'left'
-                          ? 'bg-[#3E2925] text-white border-[#3E2925]'
-                          : 'bg-white border-[#E8E3DF] text-[#201817]'
+                          ? 'bg-[#FFBF00] text-[#3A211E] border-[#FFBF00] font-bold'
+                          : 'bg-white border-[#E8DFD8] text-[#3A211E]'
                       }`}
                     >
                       <AlignLeft className="w-4 h-4" />
@@ -524,8 +512,8 @@ export function StudioToolbar({
                       }
                       className={`p-2 rounded-lg border ${
                         (selectedLayer as TextLayer).align === 'center'
-                          ? 'bg-[#3E2925] text-white border-[#3E2925]'
-                          : 'bg-white border-[#E8E3DF] text-[#201817]'
+                          ? 'bg-[#FFBF00] text-[#3A211E] border-[#FFBF00] font-bold'
+                          : 'bg-white border-[#E8DFD8] text-[#3A211E]'
                       }`}
                     >
                       <AlignCenter className="w-4 h-4" />
@@ -536,8 +524,8 @@ export function StudioToolbar({
                       }
                       className={`p-2 rounded-lg border ${
                         (selectedLayer as TextLayer).align === 'right'
-                          ? 'bg-[#3E2925] text-white border-[#3E2925]'
-                          : 'bg-white border-[#E8E3DF] text-[#201817]'
+                          ? 'bg-[#FFBF00] text-[#3A211E] border-[#FFBF00] font-bold'
+                          : 'bg-white border-[#E8DFD8] text-[#3A211E]'
                       }`}
                     >
                       <AlignRight className="w-4 h-4" />
@@ -547,14 +535,14 @@ export function StudioToolbar({
 
                 {/* Text Color */}
                 <div>
-                  <label className="text-xs font-bold text-[#201817] mb-2 block">
+                  <label className="text-xs font-bold text-[#3A211E] mb-2 block">
                     Màu chữ in:
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {[
-                      '#201817',
+                      '#3A211E',
                       '#FFFFFF',
-                      '#4A2A25',
+                      '#3A211E',
                       '#D97706',
                       '#DC2626',
                       '#2563EB',
@@ -568,8 +556,8 @@ export function StudioToolbar({
                         }
                         className={`w-7 h-7 rounded-full border-2 transition-transform ${
                           (selectedLayer as TextLayer).color === col
-                            ? 'border-[#3E2925] scale-110'
-                            : 'border-[#E8E3DF]'
+                            ? 'border-[#3A211E] scale-110'
+                            : 'border-[#E8DFD8]'
                         }`}
                         style={{ backgroundColor: col }}
                       />
@@ -580,15 +568,15 @@ export function StudioToolbar({
                       onChange={(e) =>
                         onUpdateLayer(selectedLayer.id, { color: e.target.value })
                       }
-                      className="w-7 h-7 rounded-full border border-[#E8E3DF] cursor-pointer overflow-hidden p-0"
+                      className="w-7 h-7 rounded-full border border-[#E8DFD8] cursor-pointer overflow-hidden p-0"
                     />
                   </div>
                 </div>
 
                 {/* Size and Position Sliders */}
-                <div className="space-y-3 pt-3 border-t border-[#E8E3DF]">
+                <div className="space-y-3 pt-3 border-t border-[#E8DFD8]">
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Cỡ chữ:</span>
                       <span>{(selectedLayer as TextLayer).fontSize} px</span>
                     </div>
@@ -602,12 +590,12 @@ export function StudioToolbar({
                           fontSize: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Vị trí xoay quanh ly:</span>
                       <span>{Math.round((selectedLayer.x / CANVAS_WIDTH) * 360)}°</span>
                     </div>
@@ -621,12 +609,12 @@ export function StudioToolbar({
                           x: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Độ cao trên thân ly:</span>
                       <span>{Math.round(selectedLayer.y)} px</span>
                     </div>
@@ -640,12 +628,12 @@ export function StudioToolbar({
                           y: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Góc nghiêng:</span>
                       <span>{selectedLayer.rotation}°</span>
                     </div>
@@ -659,7 +647,7 @@ export function StudioToolbar({
                           rotation: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
@@ -672,13 +660,13 @@ export function StudioToolbar({
                           rotation: 0,
                         })
                       }
-                      className="flex-1 py-2 px-3 bg-white border border-[#E8E3DF] text-[#201817] rounded-xl text-xs font-bold hover:bg-[#FAF9F6] transition-colors"
+                      className="flex-1 py-2 px-3 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-xl text-xs font-bold hover:bg-[#FFF9E8] transition-colors"
                     >
                       Căn Giữa Ly
                     </button>
                     <button
                       onClick={() => onDuplicateLayer(selectedLayer.id)}
-                      className="p-2 bg-white border border-[#E8E3DF] text-[#201817] rounded-xl text-xs hover:bg-[#FAF9F6]"
+                      className="p-2 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-xl text-xs hover:bg-[#FFF9E8]"
                       title="Nhân bản chữ"
                     >
                       <Copy className="w-4 h-4" />
@@ -694,15 +682,15 @@ export function StudioToolbar({
                 </div>
               </div>
             ) : (
-              <div className="p-8 text-center text-[#6F625E] border-2 border-dashed border-[#E8E3DF] rounded-2xl bg-[#FAF9F6]">
-                <Type className="w-8 h-8 mx-auto mb-2 opacity-40 text-[#3E2925]" />
-                <p className="text-xs font-bold text-[#201817]">Chưa chọn chữ nào</p>
-                <p className="text-[11px] text-[#6F625E] mt-1 mb-4">
+              <div className="p-8 text-center text-[#765B52] border-2 border-dashed border-[#E8DFD8] rounded-2xl bg-[#FFF9E8]">
+                <Type className="w-8 h-8 mx-auto mb-2 opacity-40 text-[#3A211E]" />
+                <p className="text-xs font-bold text-[#3A211E]">Chưa chọn chữ nào</p>
+                <p className="text-[11px] text-[#765B52] mt-1 mb-4">
                   Bấm "+ Thêm Chữ" để viết tên, câu chúc hoặc quote yêu thích.
                 </p>
                 <button
                   onClick={onAddTextLayer}
-                  className="px-4 py-2 bg-[#3E2925] text-white rounded-xl text-xs font-bold hover:bg-[#201817] shadow-sm inline-block"
+                  className="px-4 py-2 bg-[#3A211E] text-white rounded-xl text-xs font-bold hover:bg-[#3A211E] shadow-sm inline-block"
                 >
                   + Thêm Chữ Mới
                 </button>
@@ -715,8 +703,8 @@ export function StudioToolbar({
         {activeTab === 'upload' && (
           <div className="space-y-6">
             <div>
-              <h3 className="font-bold text-[#201817] text-base">Tải Ảnh / Logo Cá Nhân</h3>
-              <p className="text-xs text-[#6F625E] mt-1">
+              <h3 className="font-bold text-[#3A211E] text-base">Tải Ảnh / Logo Cá Nhân</h3>
+              <p className="text-xs text-[#765B52] mt-1">
                 Tự động giữ nguyên 100% tỷ lệ gốc (Aspect Ratio). Không bao giờ bị méo hình.
               </p>
             </div>
@@ -731,31 +719,31 @@ export function StudioToolbar({
 
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full py-8 border-2 border-dashed border-[#E8E3DF] rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-[#3E2925] hover:bg-[#FAF9F6] transition-all"
+              className="w-full py-8 border-2 border-dashed border-[#E8DFD8] rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-[#3A211E] hover:bg-[#FFF9E8] transition-all"
             >
-              <Upload className="w-8 h-8 text-[#6F625E]" />
-              <span className="font-bold text-xs text-[#201817]">Click hoặc kéo thả ảnh vào đây</span>
-              <span className="text-[10px] text-[#6F625E]">Hỗ trợ JPG, PNG (khuyên dùng PNG trong suốt)</span>
+              <Upload className="w-8 h-8 text-[#765B52]" />
+              <span className="font-bold text-xs text-[#3A211E]">Click hoặc kéo thả ảnh vào đây</span>
+              <span className="text-[10px] text-[#765B52]">Hỗ trợ JPG, PNG (khuyên dùng PNG trong suốt)</span>
             </button>
 
             {selectedLayer && (selectedLayer.type === 'image' || selectedLayer.type === 'sticker') ? (
-              <div className="space-y-4 bg-[#FAF9F6] p-4 rounded-2xl border border-[#E8E3DF]">
+              <div className="space-y-4 bg-[#FFF9E8] p-4 rounded-2xl border border-[#E8DFD8]">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#201817]">Thông tin ảnh:</span>
+                  <span className="text-xs font-bold text-[#3A211E]">Thông tin ảnh:</span>
                   <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
                     Khóa tỷ lệ chuẩn 100%
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-[#E8E3DF]">
+                <div className="flex items-center gap-3 bg-white p-3 rounded-xl border border-[#E8DFD8]">
                   <img
                     src={(selectedLayer as ImageLayer).url}
                     alt="Preview"
-                    className="w-14 h-14 object-contain rounded-lg border border-[#E8E3DF] bg-neutral-100"
+                    className="w-14 h-14 object-contain rounded-lg border border-[#E8DFD8] bg-neutral-100"
                   />
                   <div className="text-xs">
-                    <div className="font-bold text-[#201817] line-clamp-1">{selectedLayer.name}</div>
-                    <div className="text-[11px] text-[#6F625E]">
+                    <div className="font-bold text-[#3A211E] line-clamp-1">{selectedLayer.name}</div>
+                    <div className="text-[11px] text-[#765B52]">
                       Kích thước gốc: {(selectedLayer as ImageLayer).naturalWidth} ×{' '}
                       {(selectedLayer as ImageLayer).naturalHeight} px
                     </div>
@@ -768,7 +756,7 @@ export function StudioToolbar({
                 {/* Image Size and Controls with LOCKED ASPECT RATIO */}
                 <div className="space-y-3 pt-2">
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Thu phóng (Khóa tỷ lệ):</span>
                       <span>{Math.round((selectedLayer as ImageLayer).width * selectedLayer.scale)} px</span>
                     </div>
@@ -783,12 +771,12 @@ export function StudioToolbar({
                           scale: parseFloat(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Vị trí xoay quanh ly:</span>
                       <span>{Math.round((selectedLayer.x / CANVAS_WIDTH) * 360)}°</span>
                     </div>
@@ -802,12 +790,12 @@ export function StudioToolbar({
                           x: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Độ cao trên thân ly:</span>
                       <span>{Math.round(selectedLayer.y)} px</span>
                     </div>
@@ -821,12 +809,12 @@ export function StudioToolbar({
                           y: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
                   <div>
-                    <div className="flex justify-between text-xs font-bold text-[#201817] mb-1">
+                    <div className="flex justify-between text-xs font-bold text-[#3A211E] mb-1">
                       <span>Góc xoay:</span>
                       <span>{selectedLayer.rotation}°</span>
                     </div>
@@ -840,7 +828,7 @@ export function StudioToolbar({
                           rotation: parseInt(e.target.value),
                         })
                       }
-                      className="w-full accent-[#3E2925]"
+                      className="w-full accent-[#FFBF00]"
                     />
                   </div>
 
@@ -853,13 +841,13 @@ export function StudioToolbar({
                           rotation: 0,
                         })
                       }
-                      className="flex-1 py-2 px-3 bg-white border border-[#E8E3DF] text-[#201817] rounded-xl text-xs font-bold hover:bg-[#FAF9F6]"
+                      className="flex-1 py-2 px-3 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-xl text-xs font-bold hover:bg-[#FFF9E8]"
                     >
                       Căn Giữa Ly
                     </button>
                     <button
                       onClick={() => onDuplicateLayer(selectedLayer.id)}
-                      className="p-2 bg-white border border-[#E8E3DF] text-[#201817] rounded-xl text-xs hover:bg-[#FAF9F6]"
+                      className="p-2 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-xl text-xs hover:bg-[#FFF9E8]"
                       title="Nhân bản ảnh"
                     >
                       <Copy className="w-4 h-4" />
@@ -882,8 +870,8 @@ export function StudioToolbar({
         {activeTab === 'stickers' && (
           <div className="space-y-4">
             <div>
-              <h3 className="font-bold text-[#201817] text-base">Họa Tiết & Sticker Độc Quyền</h3>
-              <p className="text-xs text-[#6F625E] mt-1">
+              <h3 className="font-bold text-[#3A211E] text-base">Họa Tiết & Sticker Độc Quyền</h3>
+              <p className="text-xs text-[#765B52] mt-1">
                 Các mẫu sticker dễ thương và nghệ thuật chuẩn chất lượng cao.
               </p>
             </div>
@@ -893,14 +881,14 @@ export function StudioToolbar({
                 <button
                   key={s.id}
                   onClick={() => onAddStickerLayer(s.url, s.name)}
-                  className="aspect-square p-4 rounded-2xl border border-[#E8E3DF] bg-[#FAF9F6] hover:bg-white hover:border-[#3E2925] transition-all flex flex-col items-center justify-center gap-2 group"
+                  className="aspect-square p-4 rounded-2xl border border-[#E8DFD8] bg-[#FFF9E8] hover:bg-white hover:border-[#3A211E] transition-all flex flex-col items-center justify-center gap-2 group"
                 >
                   <img
                     src={s.url}
                     alt={s.name}
                     className="w-12 h-12 object-contain group-hover:scale-110 transition-transform"
                   />
-                  <span className="text-[11px] font-bold text-[#6F625E] group-hover:text-[#201817]">
+                  <span className="text-[11px] font-bold text-[#765B52] group-hover:text-[#3A211E]">
                     {s.name}
                   </span>
                 </button>
@@ -913,17 +901,17 @@ export function StudioToolbar({
         {activeTab === 'layers' && (
           <div className="space-y-4">
             <div>
-              <h3 className="font-bold text-[#201817] text-base">Quản Lý Các Lớp In (Layers)</h3>
-              <p className="text-xs text-[#6F625E] mt-1">
+              <h3 className="font-bold text-[#3A211E] text-base">Quản Lý Các Lớp In (Layers)</h3>
+              <p className="text-xs text-[#765B52] mt-1">
                 Sắp xếp thứ tự trước sau, khóa vị trí hoặc ẩn layer khi cần.
               </p>
             </div>
 
             {layers.length === 0 ? (
-              <div className="p-8 text-center text-[#6F625E] border border-[#E8E3DF] rounded-2xl bg-[#FAF9F6]">
-                <Layers className="w-8 h-8 mx-auto mb-2 opacity-30 text-[#3E2925]" />
-                <span className="text-xs font-bold text-[#201817]">Chưa có layer nào</span>
-                <p className="text-[11px] text-[#6F625E] mt-1">
+              <div className="p-8 text-center text-[#765B52] border border-[#E8DFD8] rounded-2xl bg-[#FFF9E8]">
+                <Layers className="w-8 h-8 mx-auto mb-2 opacity-30 text-[#3A211E]" />
+                <span className="text-xs font-bold text-[#3A211E]">Chưa có layer nào</span>
+                <p className="text-[11px] text-[#765B52] mt-1">
                   Hãy thêm chữ, tải ảnh hoặc chọn sticker để bắt đầu.
                 </p>
               </div>
@@ -937,8 +925,8 @@ export function StudioToolbar({
                       onClick={() => setSelectedLayerId(layer.id)}
                       className={`p-3 rounded-2xl border-2 transition-all flex items-center justify-between cursor-pointer ${
                         isSelected
-                          ? 'border-[#3E2925] bg-[#FAF9F6] shadow-sm'
-                          : 'border-[#E8E3DF] bg-white hover:border-[#3E2925]/50'
+                          ? 'border-[#3A211E] bg-[#FFF9E8] shadow-sm'
+                          : 'border-[#E8DFD8] bg-white hover:border-[#3A211E]/50'
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
@@ -950,16 +938,16 @@ export function StudioToolbar({
                           <img
                             src={(layer as ImageLayer).url}
                             alt=""
-                            className="w-8 h-8 rounded-lg object-contain bg-neutral-100 border border-[#E8E3DF]"
+                            className="w-8 h-8 rounded-lg object-contain bg-neutral-100 border border-[#E8DFD8]"
                           />
                         )}
                         <div>
-                          <div className="font-bold text-xs text-[#201817] line-clamp-1">
+                          <div className="font-bold text-xs text-[#3A211E] line-clamp-1">
                             {layer.type === 'text'
                               ? `"${(layer as TextLayer).text.slice(0, 16)}"`
                               : layer.name}
                           </div>
-                          <div className="text-[10px] text-[#6F625E]">
+                          <div className="text-[10px] text-[#765B52]">
                             {layer.type === 'text' ? 'Chữ in' : 'Hình ảnh'}
                           </div>
                         </div>
@@ -971,14 +959,14 @@ export function StudioToolbar({
                       >
                         <button
                           onClick={() => onMoveLayerOrder(layer.id, 'up')}
-                          className="p-1.5 hover:bg-[#EDECEA] text-[#6F625E] rounded-lg"
+                          className="p-1.5 hover:bg-[#EDECEA] text-[#765B52] rounded-lg"
                           title="Lên trên"
                         >
                           <ArrowUp className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => onMoveLayerOrder(layer.id, 'down')}
-                          className="p-1.5 hover:bg-[#EDECEA] text-[#6F625E] rounded-lg"
+                          className="p-1.5 hover:bg-[#EDECEA] text-[#765B52] rounded-lg"
                           title="Xuống dưới"
                         >
                           <ArrowDown className="w-3.5 h-3.5" />
@@ -987,7 +975,7 @@ export function StudioToolbar({
                           onClick={() =>
                             onUpdateLayer(layer.id, { visible: !layer.visible })
                           }
-                          className="p-1.5 hover:bg-[#EDECEA] text-[#6F625E] rounded-lg"
+                          className="p-1.5 hover:bg-[#EDECEA] text-[#765B52] rounded-lg"
                           title={layer.visible ? 'Ẩn layer' : 'Hiện layer'}
                         >
                           {layer.visible ? (
@@ -1000,7 +988,7 @@ export function StudioToolbar({
                           onClick={() =>
                             onUpdateLayer(layer.id, { locked: !layer.locked })
                           }
-                          className="p-1.5 hover:bg-[#EDECEA] text-[#6F625E] rounded-lg"
+                          className="p-1.5 hover:bg-[#EDECEA] text-[#765B52] rounded-lg"
                           title={layer.locked ? 'Mở khóa' : 'Khóa'}
                         >
                           {layer.locked ? (

@@ -68,34 +68,34 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
   return (
     <div className="space-y-6">
       {/* Search Header */}
-      <div className="bg-white p-5 rounded-3xl border border-[#DDD8D2] shadow-sm flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+      <div className="bg-white p-5 rounded-3xl border border-[#E8DFD8] shadow-xs flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6F625E]" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#765B52]" />
           <input 
             type="text" 
             placeholder="Tìm theo tên khách, email, số điện thoại..." 
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[#F7F6F2] rounded-xl text-xs border border-[#DDD8D2] focus:outline-none focus:border-[#4A2A25]"
+            className="w-full pl-10 pr-4 py-2 bg-[#FFF9E8] rounded-xl text-xs border border-[#E8DFD8] text-[#3A211E] placeholder-[#765B52]/60 focus:outline-none focus:border-[#FFBF00]"
           />
         </div>
 
-        <div className="text-xs text-[#6F625E]">
+        <div className="text-xs text-[#765B52]">
           Tổng cộng: <strong>{filteredUsers.length}</strong> khách hàng
         </div>
       </div>
 
       {/* Customers Table */}
-      <div className="bg-white rounded-3xl border border-[#DDD8D2] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-[#E8DFD8] shadow-xs overflow-hidden">
         {filteredUsers.length === 0 ? (
-          <div className="p-16 text-center text-[#6F625E]">
-            <Users className="w-12 h-12 mx-auto mb-3 opacity-30 text-[#4A2A25]" />
-            <div className="font-bold text-sm text-[#201817]">Không tìm thấy khách hàng nào</div>
+          <div className="p-16 text-center text-[#765B52]">
+            <Users className="w-12 h-12 mx-auto mb-3 opacity-30 text-[#FFBF00]" />
+            <div className="font-bold text-sm text-[#3A211E]">Không tìm thấy khách hàng nào</div>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#F7F6F2] border-b border-[#DDD8D2] text-[#6F625E]">
+              <thead className="bg-[#FFF9E8] border-b border-[#E8DFD8] text-[#765B52]">
                 <tr>
                   <th className="py-4 px-6 font-semibold">Khách Hàng</th>
                   <th className="py-4 px-4 font-semibold">Liên Hệ</th>
@@ -106,24 +106,24 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                   <th className="py-4 px-6 font-semibold text-right">Hành Động</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#DDD8D2]/60">
+              <tbody className="divide-y divide-[#E8DFD8]">
                 {filteredUsers.map(user => (
-                  <tr key={user.id} className="hover:bg-[#F7F6F2]/40 transition-colors">
+                  <tr key={user.id} className="hover:bg-[#FFF9E8]/40 transition-colors">
                     <td className="py-4 px-6">
-                      <div className="font-bold text-[#201817] text-sm">{user.name}</div>
-                      <div className="text-[11px] text-[#6F625E] font-mono">ID: {user.id.slice(0, 8)}</div>
+                      <div className="font-bold text-[#3A211E] text-sm">{user.name}</div>
+                      <div className="text-[11px] text-[#765B52] font-mono">ID: {user.id.slice(0, 8)}</div>
                     </td>
                     <td className="py-4 px-4">
-                      <div className="text-[#201817] font-medium">{user.email}</div>
-                      <div className="text-[11px] text-[#6F625E]">{user.phoneNumber}</div>
+                      <div className="text-[#3A211E] font-medium">{user.email}</div>
+                      <div className="text-[11px] text-[#765B52]">{user.phoneNumber}</div>
                     </td>
-                    <td className="py-4 px-4 text-[#6F625E]">
+                    <td className="py-4 px-4 text-[#765B52]">
                       {new Date(user.createdAt).toLocaleDateString('vi-VN')}
                     </td>
-                    <td className="py-4 px-4 font-bold text-sm text-[#201817]">
+                    <td className="py-4 px-4 font-bold text-sm text-[#3A211E]">
                       {user.totalOrders} đơn
                     </td>
-                    <td className="py-4 px-4 font-black text-sm text-[#4A2A25]">
+                    <td className="py-4 px-4 font-black text-sm text-[#3A211E]">
                       {formatVND(user.totalSpent)}
                     </td>
                     <td className="py-4 px-4">
@@ -138,7 +138,7 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
                     <td className="py-4 px-6 text-right space-x-2">
                       <button
                         onClick={() => setSelectedCustomer(user)}
-                        className="px-3 py-1.5 bg-[#EDECEA] text-[#3A211E] rounded-xl text-xs font-semibold hover:bg-[#DDD8D2]"
+                        className="px-3 py-1.5 bg-[#FFF3C4] text-[#3A211E] rounded-xl text-xs font-semibold hover:bg-[#FFBF00]/30 transition-colors"
                       >
                         Lịch Sử
                       </button>
@@ -174,45 +174,45 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
       {/* CUSTOMER ORDER HISTORY MODAL */}
       {selectedCustomer && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full border border-[#DDD8D2] shadow-2xl p-6 space-y-5 text-xs">
-            <div className="flex justify-between items-center border-b border-[#DDD8D2] pb-3">
+          <div className="bg-white rounded-3xl max-w-lg w-full border border-[#E8DFD8] shadow-2xl p-6 space-y-5 text-xs">
+            <div className="flex justify-between items-center border-b border-[#E8DFD8] pb-3">
               <div>
                 <h3 className="font-bold text-[#3A211E] text-base">{selectedCustomer.name}</h3>
-                <div className="text-[11px] text-[#6F625E]">{selectedCustomer.email}</div>
+                <div className="text-[11px] text-[#765B52]">{selectedCustomer.email}</div>
               </div>
-              <button onClick={() => setSelectedCustomer(null)} className="text-[#6F625E]">
+              <button onClick={() => setSelectedCustomer(null)} className="text-[#765B52] hover:text-[#3A211E]">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 bg-[#F7F6F2] p-4 rounded-2xl border border-[#DDD8D2]">
+            <div className="grid grid-cols-2 gap-3 bg-[#FFF9E8] p-4 rounded-2xl border border-[#E8DFD8]">
               <div>
-                <div className="text-[#6F625E]">Tổng đơn hàng:</div>
-                <div className="font-bold text-base text-[#201817]">{selectedCustomer.totalOrders} đơn</div>
+                <div className="text-[#765B52]">Tổng đơn hàng:</div>
+                <div className="font-bold text-base text-[#3A211E]">{selectedCustomer.totalOrders} đơn</div>
               </div>
               <div>
-                <div className="text-[#6F625E]">Tổng chi tiêu:</div>
-                <div className="font-black text-base text-[#4A2A25]">{formatVND(selectedCustomer.totalSpent)}</div>
+                <div className="text-[#765B52]">Tổng chi tiêu:</div>
+                <div className="font-black text-base text-[#3A211E]">{formatVND(selectedCustomer.totalSpent)}</div>
               </div>
             </div>
 
             <div>
               <div className="font-bold text-[#3A211E] mb-2">Lịch Sử Các Đơn Hàng Đã Mua:</div>
               {selectedCustomer.orders.length === 0 ? (
-                <div className="p-8 text-center text-[#6F625E] bg-[#F7F6F2] rounded-xl">
+                <div className="p-8 text-center text-[#765B52] bg-[#FFF9E8] rounded-xl border border-[#E8DFD8]">
                   Khách hàng này chưa có đơn hàng nào được ghi nhận.
                 </div>
               ) : (
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {selectedCustomer.orders.map((o: any) => (
-                    <div key={o.id} className="p-3 rounded-xl bg-[#F7F6F2] border border-[#DDD8D2] flex justify-between items-center">
+                    <div key={o.id} className="p-3 rounded-xl bg-[#FFF9E8] border border-[#E8DFD8] flex justify-between items-center">
                       <div>
-                        <div className="font-mono font-bold text-[#4A2A25]">#{o.id.slice(0, 8).toUpperCase()}</div>
-                        <div className="text-[11px] text-[#6F625E]">
+                        <div className="font-mono font-bold text-[#3A211E]">#{o.id.slice(0, 8).toUpperCase()}</div>
+                        <div className="text-[11px] text-[#765B52]">
                           {new Date(o.created_at).toLocaleDateString('vi-VN')} - Trạng thái: {o.status}
                         </div>
                       </div>
-                      <div className="font-black text-sm text-[#201817]">
+                      <div className="font-black text-sm text-[#3A211E]">
                         {formatVND(o.total_price)}
                       </div>
                     </div>
@@ -221,10 +221,10 @@ export default function UsersClient({ initialUsers }: { initialUsers: any[] }) {
               )}
             </div>
 
-            <div className="flex justify-end pt-2 border-t border-[#DDD8D2]">
+            <div className="flex justify-end pt-2 border-t border-[#E8DFD8]">
               <button 
                 onClick={() => setSelectedCustomer(null)}
-                className="px-5 py-2 bg-[#EDECEA] text-[#3A211E] rounded-xl font-bold"
+                className="px-5 py-2 bg-[#FFF3C4] text-[#3A211E] rounded-xl font-bold hover:bg-[#FFBF00]/30 transition-colors"
               >
                 Đóng
               </button>

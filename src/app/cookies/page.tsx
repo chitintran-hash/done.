@@ -18,7 +18,7 @@ export default function CookiePolicyPage() {
       {/* 3.1 */}
       <section className="space-y-3">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.1</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.1</span>
           Giới thiệu
         </h2>
         <p className="text-[#4A3E3D]">
@@ -33,9 +33,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.2 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.2</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.2</span>
           Cookie cần thiết
         </h2>
         <p className="text-[#4A3E3D]">
@@ -50,9 +50,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.3 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.3</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.3</span>
           Cookie chức năng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -67,9 +67,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.4 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.4</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.4</span>
           Cookie phân tích
         </h2>
         <p className="text-[#4A3E3D]">
@@ -84,9 +84,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.5 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.5</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.5</span>
           Cookie tiếp thị
         </h2>
         <p className="text-[#4A3E3D]">
@@ -101,9 +101,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.6 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.6</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.6</span>
           Cookie từ bên thứ ba
         </h2>
         <p className="text-[#4A3E3D]">
@@ -118,9 +118,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.7 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.7</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.7</span>
           Quản lý Cookie
         </h2>
         <p className="text-[#4A3E3D]">
@@ -135,9 +135,9 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* 3.8 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">3.8</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">3.8</span>
           Thay đổi chính sách
         </h2>
         <p className="text-[#4A3E3D]">

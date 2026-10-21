@@ -10,7 +10,7 @@ export default function DemoBannerPage() {
   const [headlineTop, setHeadlineTop] = useState('CUSTOMIZE');
   const [headlineBottom, setHeadlineBottom] = useState('YOUR CUP');
   const [subHeadline, setSubHeadline] = useState('Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!');
-  const [ctaText, setCtaText] = useState('Thiết kế ly ngay ✨');
+  const [ctaText, setCtaText] = useState('Thiết kế ly ngay');
 
   const bgMap = {
     drinks: '/images/cupfy-hippeas-bg.jpg',
@@ -19,13 +19,13 @@ export default function DemoBannerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] pt-24 md:pt-28 pb-20">
+    <div className="min-h-screen bg-[#FFF9E8] pt-24 md:pt-28 pb-20">
       {/* Thanh thông báo chế độ Demo dành cho Admin/Khách hàng */}
       <div className="max-w-[1400px] mx-auto px-6 mb-6">
-        <div className="bg-[#3A211E] text-white rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg border border-[#DDD8D2]/20">
+        <div className="bg-[#3A211E] text-white rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg border border-[#E8DFD8]/20">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#FCBF02] text-[#3A211E] flex items-center justify-center font-bold text-xl shrink-0 shadow-sm">
-              ✨
+            <div className="w-10 h-10 rounded-xl bg-[#FFBF00] text-[#3A211E] flex items-center justify-center font-bold text-xl shrink-0 shadow-sm">
+              <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <h2 className="font-bold text-base md:text-lg flex items-center gap-2">

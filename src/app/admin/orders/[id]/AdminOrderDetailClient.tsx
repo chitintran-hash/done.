@@ -159,7 +159,7 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <Link 
           href="/admin/orders" 
-          className="inline-flex items-center gap-2 text-sm text-[#6F625E] hover:text-[#3A211E] font-medium transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-[#765B52] hover:text-[#3A211E] font-medium transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> Quay lại danh sách đơn hàng
         </Link>
@@ -167,13 +167,13 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
         <div className="flex items-center gap-3">
           <button 
             onClick={refreshOrder}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#DDD8D2] text-[#3A211E] rounded-full text-xs font-bold hover:bg-[#EDECEA] transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-full text-xs font-bold hover:bg-[#FFF9E8] transition-colors shadow-xs"
           >
             <RotateCcw className="w-3.5 h-3.5" /> Làm mới
           </button>
           <button 
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#DDD8D2] text-[#3A211E] rounded-full text-xs font-bold hover:bg-[#EDECEA] transition-colors shadow-xs"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-[#E8DFD8] text-[#3A211E] rounded-full text-xs font-bold hover:bg-[#FFF9E8] transition-colors shadow-xs"
           >
             <Printer className="w-3.5 h-3.5" /> In phiếu đóng gói
           </button>
@@ -181,18 +181,18 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
       </div>
 
       {/* Header Card */}
-      <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#DDD8D2] shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#E8DFD8] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <span className="font-mono text-base font-bold text-[#3A211E] bg-[#F7F6F2] px-3.5 py-1 rounded-full border border-[#DDD8D2]">
+            <span className="font-mono text-base font-bold text-[#3A211E] bg-[#FFF9E8] px-3.5 py-1 rounded-full border border-[#E8DFD8]">
               {formattedCode}
             </span>
-            <span className="text-xs text-[#6F625E]">
+            <span className="text-xs text-[#765B52]">
               {new Date(order.created_at).toLocaleString('vi-VN')}
             </span>
             {hasCustomItems && (
-              <span className="bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-700" /> Đơn có ly Custom 3D
+              <span className="bg-[#FFF3C4] text-[#3A211E] border border-[#FFBF00] text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                <Package className="w-3 h-3 text-[#3A211E]" /> Đơn có ly Custom 3D
               </span>
             )}
           </div>
@@ -343,12 +343,12 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
         
         {/* Products List (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#DDD8D2] shadow-sm">
-            <h3 className="text-lg font-bold text-[#3A211E] mb-6">
+          <div className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#E8DFD8] shadow-xs">
+            <h3 className="font-bold text-lg text-[#3A211E] mb-6">
               Sản phẩm trong đơn ({order.order_items?.length || 0})
             </h3>
 
-            <div className="divide-y divide-[#DDD8D2]/70">
+            <div className="divide-y divide-[#E8DFD8]/70">
               {order.order_items?.map((item: any) => {
                 const prod = item.products || {};
                 const isCustom = prod.category === 'user_custom';
@@ -372,21 +372,21 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
                     {/* Item Row */}
                     <div className="flex gap-4 items-start">
                       
-                      {/* Product Thumbnail (Clean, no weird overlays) */}
+                      {/* Product Thumbnail */}
                       <div 
                         onClick={() => isCustom && setViewingCustomItem(item)}
-                        className={`relative w-22 h-22 bg-[#F7F6F2] rounded-2xl border border-[#DDD8D2] overflow-hidden shrink-0 flex items-center justify-center p-1.5 ${
+                        className={`relative w-22 h-22 bg-[#FFF9E8] rounded-2xl border border-[#E8DFD8] overflow-hidden shrink-0 flex items-center justify-center p-1.5 ${
                           isCustom ? 'cursor-pointer hover:border-[#3A211E] transition-colors group' : ''
                         }`}
                       >
                         {prod.image_url ? (
                           <img src={prod.image_url} alt="" className="w-full h-full object-contain p-1 rounded-xl" />
                         ) : (
-                          <span className="text-xs text-[#6F625E]">No image</span>
+                          <span className="text-xs text-[#765B52]">No image</span>
                         )}
                         {isCustom && (
                           <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
-                            <span className="text-[10px] text-white font-bold bg-black/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <span className="text-[10px] text-[#3A211E] font-bold bg-[#FFBF00] px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
                               <Eye className="w-3 h-3" /> Xem 3D
                             </span>
                           </div>
@@ -402,12 +402,12 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
                         </div>
 
                         {isCustom && (
-                          <span className="inline-block bg-[#BFDCEF]/60 text-[#3A211E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#BFDCEF] mt-1">
-                            ✦ Ly thiết kế riêng (Custom Cup)
+                          <span className="inline-block bg-[#FFF3C4] text-[#3A211E] text-[10px] font-bold px-2 py-0.5 rounded-full border border-[#FFBF00] mt-1">
+                            Ly thiết kế riêng (Custom Cup)
                           </span>
                         )}
 
-                        <p className="text-xs text-[#6F625E] mt-1">
+                        <p className="text-xs text-[#765B52] mt-1">
                           Số lượng: <strong>{item.quantity}</strong> × {formatVND(item.price)}
                         </p>
 
@@ -416,7 +416,7 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
                           <div className="mt-3 flex items-center gap-2">
                             <button
                               onClick={() => setViewingCustomItem(item)}
-                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#3A211E] text-white rounded-full text-xs font-bold hover:bg-[#4A2A25] transition-colors shadow-xs"
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FFBF00] text-[#3A211E] rounded-full text-xs font-bold hover:bg-[#FFBF00]/90 transition-colors shadow-xs"
                             >
                               <Eye className="w-3.5 h-3.5" />
                               Xem thiết kế 3D
@@ -453,7 +453,7 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
                               setItemRejectModalOpen(true);
                             }}
                             disabled={processingItemId === item.id}
-                            className="px-4 py-2 bg-white border border-[#DDD8D2] hover:bg-[#EDECEA] text-[#3A211E] rounded-full text-xs font-bold transition-colors"
+                            className="px-4 py-2 bg-white border border-[#E8DFD8] hover:bg-[#FFF9E8] text-[#3A211E] rounded-full text-xs font-bold transition-colors"
                           >
                             Từ chối hủy
                           </button>
@@ -469,20 +469,20 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
 
                     {/* Custom Specs Snapshot for Production */}
                     {specs && !isItemCancelled && (
-                      <div className="bg-[#FAF9F6] rounded-2xl p-4 border border-[#DDD8D2] text-xs space-y-2">
+                      <div className="bg-[#FFF9E8] rounded-2xl p-4 border border-[#E8DFD8] text-xs space-y-2">
                         <div className="flex items-center justify-between">
                           <p className="font-bold text-[#3A211E] uppercase tracking-wide">
                             Thông số kỹ thuật sản xuất
                           </p>
                           <button
                             onClick={() => setViewingCustomItem(item)}
-                            className="text-[11px] text-amber-800 hover:underline font-bold flex items-center gap-1"
+                            className="text-[11px] text-[#3A211E] hover:underline font-bold flex items-center gap-1"
                           >
                             <Eye className="w-3 h-3" /> Mở công cụ kiểm tra 3D
                           </button>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-[#6F625E]">
+                        <div className="grid grid-cols-2 gap-2 text-[#765B52]">
                           <p><strong className="text-[#3A211E]">Kiểu ly:</strong> {specs.modelName || specs.modelType}</p>
                           <p><strong className="text-[#3A211E]">Màu thân ly:</strong> {specs.cupColorName || specs.cupColor}</p>
                           {specs.lidColor && <p><strong className="text-[#3A211E]">Màu nắp:</strong> {specs.lidColor}</p>}
@@ -491,13 +491,13 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
 
                         {/* Flat Printable Texture for Production */}
                         {specs.printableTexture && (
-                          <div className="pt-2 border-t border-[#DDD8D2] flex items-center justify-between">
+                          <div className="pt-2 border-t border-[#E8DFD8] flex items-center justify-between">
                             <span className="font-bold text-[#3A211E]">Bản in nhiệt phẳng:</span>
                             <a 
                               href={specs.printableTexture} 
                               target="_blank" 
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:underline font-bold"
+                              className="inline-flex items-center gap-1.5 text-xs text-[#3A211E] hover:underline font-bold"
                             >
                               <FileText className="w-3.5 h-3.5" /> Mở file in (2048×1024)
                             </a>
@@ -517,12 +517,12 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
         <div className="lg:col-span-5 space-y-6">
           
           {/* Customer Profile */}
-          <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#DDD8D2] shadow-sm space-y-4">
+          <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#E8DFD8] shadow-xs space-y-4">
             <h3 className="font-bold text-base text-[#3A211E] flex items-center gap-2">
-              <User className="w-4 h-4 text-[#4A2A25]" /> Thông tin khách hàng
+              <User className="w-4 h-4 text-[#3A211E]" /> Thông tin khách hàng
             </h3>
 
-            <div className="text-xs space-y-2.5 text-[#6F625E]">
+            <div className="text-xs space-y-2.5 text-[#765B52]">
               <div className="flex justify-between">
                 <span>Họ và tên:</span>
                 <strong className="text-[#3A211E] text-sm">{order.buyer_name_snapshot || 'Khách vãng lai'}</strong>
@@ -539,15 +539,15 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
           </div>
 
           {/* Delivery & Shipping Info */}
-          <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#DDD8D2] shadow-sm space-y-4">
+          <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#E8DFD8] shadow-xs space-y-4">
             <h3 className="font-bold text-base text-[#3A211E] flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#4A2A25]" /> Địa chỉ giao hàng
+              <MapPin className="w-4 h-4 text-[#3A211E]" /> Địa chỉ giao hàng
             </h3>
 
-            <div className="text-xs space-y-2 text-[#6F625E]">
+            <div className="text-xs space-y-2 text-[#765B52]">
               <p className="leading-relaxed text-[#3A211E] font-medium">{deliveryAddress}</p>
               {deliveryNote && (
-                <div className="p-3 bg-[#F7F6F2] rounded-xl border border-[#DDD8D2] text-[#3A211E] italic mt-2">
+                <div className="p-3 bg-[#FFF9E8] rounded-xl border border-[#E8DFD8] text-[#3A211E] italic mt-2">
                   Ghi chú đơn hàng: "{deliveryNote}"
                 </div>
               )}
@@ -555,12 +555,12 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
           </div>
 
           {/* Payment & Financial Summary */}
-          <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#DDD8D2] shadow-sm space-y-4">
+          <div className="bg-white rounded-[28px] p-6 sm:p-7 border border-[#E8DFD8] shadow-xs space-y-4">
             <h3 className="font-bold text-base text-[#3A211E] flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#4A2A25]" /> Thanh toán & Tổng kết COD
+              <FileText className="w-4 h-4 text-[#3A211E]" /> Thanh toán & Tổng kết COD
             </h3>
 
-            <div className="text-xs space-y-2 text-[#6F625E]">
+            <div className="text-xs space-y-2 text-[#765B52]">
               <div className="flex justify-between">
                 <span>Phương thức thanh toán:</span>
                 <strong className="text-[#3A211E]">COD (Thu tiền khi nhận hàng)</strong>
@@ -570,12 +570,12 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
                 <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
                   order.status === 'delivered' 
                     ? 'bg-emerald-100 text-emerald-800' 
-                    : 'bg-amber-100 text-amber-800'
+                    : 'bg-[#FFF3C4] text-[#3A211E]'
                 }`}>
                   {order.status === 'delivered' ? 'Đã thu tiền' : 'Chưa thu tiền'}
                 </span>
               </div>
-              <div className="border-t border-[#DDD8D2] pt-3 flex justify-between items-baseline">
+              <div className="border-t border-[#E8DFD8] pt-3 flex justify-between items-baseline">
                 <span className="font-bold text-sm text-[#3A211E]">Tổng tiền thu COD:</span>
                 <span className="font-black text-2xl text-[#3A211E]">
                   {formatVND(order.total_price)}
@@ -599,21 +599,21 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
       {/* MODAL YÊU CẦU CHỈNH SỬA THIẾT KẾ (Phần 2.4) */}
       {designRejectModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-[28px] border border-[#DDD8D2] shadow-2xl max-w-md w-full p-6 space-y-4 animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-[#DDD8D2] pb-3">
+          <div className="bg-white rounded-[28px] border border-[#E8DFD8] shadow-2xl max-w-md w-full p-6 space-y-4 animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-[#E8DFD8] pb-3">
               <h3 className="font-bold text-base text-[#3A211E] flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-amber-600" />
                 Yêu cầu khách chỉnh sửa thiết kế
               </h3>
               <button 
                 onClick={() => setDesignRejectModalOpen(false)}
-                className="text-[#6F625E] hover:text-[#3A211E]"
+                className="text-[#765B52] hover:text-[#3A211E]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-[#6F625E]">
+            <p className="text-xs text-[#765B52]">
               Vui lòng nhập lý do cụ thể vì sao thiết kế này chưa đạt chuẩn sản xuất (ví dụ: Hình ảnh quá mờ, chữ in tràn viền an toàn, độ phân giải thấp...).
             </p>
 
@@ -622,13 +622,13 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
               value={designRejectReason}
               onChange={(e) => setDesignRejectReason(e.target.value)}
               placeholder="Nhập lý do gửi đến khách hàng..."
-              className="w-full p-3 bg-[#FAF9F6] border border-[#DDD8D2] rounded-2xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#3A211E]/30 resize-none"
+              className="w-full p-3 bg-[#FFF9E8] border border-[#E8DFD8] rounded-2xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00] resize-none"
             />
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setDesignRejectModalOpen(false)}
-                className="px-5 py-2.5 rounded-full border border-[#DDD8D2] text-[#3A211E] text-xs font-bold hover:bg-[#EDECEA]"
+                className="px-5 py-2.5 rounded-full border border-[#E8DFD8] text-[#3A211E] text-xs font-bold hover:bg-[#FFF9E8]"
               >
                 Hủy bỏ
               </button>
@@ -648,20 +648,20 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
       {/* MODAL TỪ CHỐI HỦY SẢN PHẨM (Phần 5.4) */}
       {itemRejectModalOpen && rejectingItemId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-[28px] border border-[#DDD8D2] shadow-2xl max-w-md w-full p-6 space-y-4 animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-[#DDD8D2] pb-3">
+          <div className="bg-white rounded-[28px] border border-[#E8DFD8] shadow-2xl max-w-md w-full p-6 space-y-4 animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-[#E8DFD8] pb-3">
               <h3 className="font-bold text-base text-[#3A211E]">
                 Từ chối yêu cầu hủy sản phẩm
               </h3>
               <button 
                 onClick={() => setItemRejectModalOpen(false)}
-                className="text-[#6F625E] hover:text-[#3A211E]"
+                className="text-[#765B52] hover:text-[#3A211E]"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-xs text-[#6F625E]">
+            <p className="text-xs text-[#765B52]">
               Nhập lý do từ chối yêu cầu hủy của khách hàng:
             </p>
 
@@ -670,20 +670,20 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
               value={itemRejectReason}
               onChange={(e) => setItemRejectReason(e.target.value)}
               placeholder="Ví dụ: Sản phẩm đã được đưa vào dây chuyền in nhiệt..."
-              className="w-full p-3 bg-[#FAF9F6] border border-[#DDD8D2] rounded-2xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#3A211E]/30 resize-none"
+              className="w-full p-3 bg-[#FFF9E8] border border-[#E8DFD8] rounded-2xl text-xs text-[#3A211E] focus:outline-none focus:ring-2 focus:ring-[#FFBF00] resize-none"
             />
 
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setItemRejectModalOpen(false)}
-                className="px-5 py-2.5 rounded-full border border-[#DDD8D2] text-[#3A211E] text-xs font-bold hover:bg-[#EDECEA]"
+                className="px-5 py-2.5 rounded-full border border-[#E8DFD8] text-[#3A211E] text-xs font-bold hover:bg-[#FFF9E8]"
               >
                 Quay lại
               </button>
               <button
                 onClick={() => handleItemCancelAction(rejectingItemId, false, itemRejectReason)}
                 disabled={!itemRejectReason.trim()}
-                className="px-5 py-2.5 rounded-full bg-[#3A211E] hover:bg-[#4A2A25] text-white text-xs font-bold transition-colors disabled:opacity-50"
+                className="px-5 py-2.5 rounded-full bg-[#3A211E] hover:bg-[#201817] text-white text-xs font-bold transition-colors disabled:opacity-50"
               >
                 Xác nhận từ chối
               </button>
@@ -695,11 +695,11 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
       {/* MODAL HỦY ĐƠN HÀNG */}
       {cancelModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full border border-[#DDD8D2] shadow-xl space-y-4">
+          <div className="bg-white rounded-3xl p-6 max-w-md w-full border border-[#E8DFD8] shadow-xl space-y-4">
             <h3 className="text-lg font-bold text-[#3A211E] flex items-center gap-2">
               <AlertCircle className="w-5 h-5 text-rose-600" /> Xác nhận hủy đơn hàng
             </h3>
-            <p className="text-xs text-[#6F625E]">
+            <p className="text-xs text-[#765B52]">
               Sau khi hủy, số lượng sản phẩm tiêu chuẩn sẽ được tự động hoàn lại vào kho hàng.
             </p>
             <input 
@@ -707,12 +707,12 @@ export default function AdminOrderDetailClient({ order: initialOrder }: { order:
               placeholder="Nhập lý do hủy đơn (ví dụ: Khách đổi ý, Hết hàng...)"
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#F7F6F2] border border-[#DDD8D2] rounded-xl text-xs focus:outline-none focus:border-[#3A211E]"
+              className="w-full px-4 py-2.5 bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl text-xs text-[#3A211E] focus:outline-none focus:border-[#FFBF00]"
             />
             <div className="flex justify-end gap-3 pt-2">
               <button 
                 onClick={() => setCancelModalOpen(false)}
-                className="px-4 py-2 border border-[#DDD8D2] rounded-full text-xs font-bold text-[#6F625E] hover:bg-[#F7F6F2]"
+                className="px-4 py-2 border border-[#E8DFD8] rounded-full text-xs font-bold text-[#765B52] hover:bg-[#FFF9E8]"
               >
                 Quay lại
               </button>

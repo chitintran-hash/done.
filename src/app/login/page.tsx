@@ -68,10 +68,10 @@ function LoginContent() {
   const registerLink = `/register${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`;
 
   return (
-    <div className="min-h-screen bg-[#F7F6F2] flex items-center justify-center p-6 pt-28 pb-16">
-      <div className="w-full max-w-md bg-white border border-[#DDD8D2] rounded-[24px] p-8 shadow-sm">
+    <div className="min-h-screen bg-white flex items-center justify-center p-6 pt-28 pb-16">
+      <div className="w-full max-w-md bg-white border border-[#E8DFD8] rounded-[24px] p-8 shadow-xs">
         <h1 className="font-heading text-3xl font-bold text-[#3A211E] mb-2">Đăng nhập</h1>
-        <p className="text-[#6F625E] text-sm mb-6">Chào mừng bạn trở lại với Cupfy ✨</p>
+        <p className="text-[#765B52] text-sm mb-6">Chào mừng bạn trở lại với Cupfy</p>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -81,7 +81,7 @@ function LoginContent() {
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:border-[#FFBF00] focus:ring-2 focus:ring-[#FFF3C4] focus:outline-none transition-colors text-sm"
               placeholder="Nhập email của bạn"
             />
           </div>
@@ -89,7 +89,7 @@ function LoginContent() {
           <div>
             <div className="flex justify-between items-center mb-1.5">
               <label className="block text-sm font-semibold text-[#3A211E]">Mật khẩu *</label>
-              <Link href="/forgot-password" className="text-xs text-[#4A2A25] hover:underline font-medium">
+              <Link href="/forgot-password" className="text-xs text-[#3A211E] hover:underline font-medium">
                 Quên mật khẩu?
               </Link>
             </div>
@@ -98,7 +98,7 @@ function LoginContent() {
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-[#DDD8D2] focus:border-[#3A211E] focus:outline-none transition-colors text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-[#E8DFD8] focus:border-[#FFBF00] focus:ring-2 focus:ring-[#FFF3C4] focus:outline-none transition-colors text-sm"
               placeholder="Nhập mật khẩu"
             />
           </div>
@@ -112,13 +112,13 @@ function LoginContent() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-3.5 mt-2 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full font-bold transition-all disabled:opacity-50 text-base shadow-[0_4px_14px_rgba(58,33,30,0.12)]"
+            className="w-full py-3.5 mt-2 bg-[#FFBF00] hover:bg-[#FFBF00]/90 text-[#3A211E] rounded-full font-bold transition-all disabled:opacity-50 text-base shadow-xs"
           >
             {loading ? 'Đang xử lý...' : 'Đăng nhập'}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-[#6F625E]">
+        <div className="mt-6 text-center text-sm text-[#765B52]">
           Chưa có tài khoản?{' '}
           <Link href={registerLink} className="text-[#3A211E] font-bold hover:underline">
             Đăng ký ngay

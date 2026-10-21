@@ -19,7 +19,7 @@ const StudioScene = dynamic(
   { 
     ssr: false,
     loading: () => (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-[#FAF9F6] text-[#3A211E]">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-[#FFF9E8] text-[#3A211E]">
         <div className="w-8 h-8 border-3 border-[#3A211E] border-t-transparent rounded-full animate-spin mb-3" />
         <span className="text-xs font-bold">Đang khởi tạo không gian 3D toàn bộ ly...</span>
       </div>
@@ -99,7 +99,7 @@ export default function CustomCupViewerModal({
     return CUP_COLOR_OPTIONS[0];
   }, [specs, item, modelDef]);
 
-  const lidColor = specs?.lidColor || item?.lidColor || '#FFF3A6';
+  const lidColor = specs?.lidColor || item?.lidColor || '#FFBF00';
   const layers: DesignLayer[] = useMemo(() => specs?.layers || item?.layers || [], [specs, item]);
 
   // Render texture using canvas engine
@@ -169,13 +169,13 @@ export default function CustomCupViewerModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/65 backdrop-blur-sm animate-in fade-in duration-200">
       <div 
-        className="bg-white rounded-[28px] border border-[#DDD8D2] shadow-2xl w-full max-w-6xl max-h-[94vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+        className="bg-white rounded-[28px] border border-[#E8DFD8] shadow-2xl w-full max-w-6xl max-h-[94vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header */}
-        <div className="px-5 py-3.5 border-b border-[#DDD8D2] flex items-center justify-between bg-[#F7F6F2] shrink-0">
+        <div className="px-5 py-3.5 border-b border-[#E8DFD8] flex items-center justify-between bg-[#FFF9E8] shrink-0">
           <div className="flex items-center gap-3">
-            <span className="p-2 rounded-xl bg-white border border-[#DDD8D2] text-[#3A211E] shadow-xs">
+            <span className="p-2 rounded-xl bg-white border border-[#E8DFD8] text-[#3A211E] shadow-xs">
               <Sparkles className="w-5 h-5 text-amber-600" />
             </span>
             <div>
@@ -194,15 +194,15 @@ export default function CustomCupViewerModal({
                    itemStatus === 'completed' ? 'Đã Hoàn Thành' : 'Chờ Phê Duyệt'}
                 </span>
               </div>
-              <p className="text-xs text-[#6F625E]">
-                Khách: <strong>{customerName}</strong> {customerEmail ? `(${customerEmail})` : ''} • Đơn: <code className="font-mono text-[#4A2A25]">#{orderId ? orderId.slice(0, 8).toUpperCase() : 'N/A'}</code>
+              <p className="text-xs text-[#765B52]">
+                Khách: <strong>{customerName}</strong> {customerEmail ? `(${customerEmail})` : ''} • Đơn: <code className="font-mono text-[#3A211E]">#{orderId ? orderId.slice(0, 8).toUpperCase() : 'N/A'}</code>
               </p>
             </div>
           </div>
 
           <button 
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-[#EDECEA] text-[#6F625E] hover:text-[#3A211E] transition-colors"
+            className="p-2 rounded-full hover:bg-[#EDECEA] text-[#765B52] hover:text-[#3A211E] transition-colors"
             title="Đóng cửa sổ"
           >
             <X className="w-5 h-5" />
@@ -210,20 +210,20 @@ export default function CustomCupViewerModal({
         </div>
 
         {/* Modal Main Content: 2-column layout */}
-        <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#DDD8D2]">
+        <div className="flex-1 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-[#E8DFD8]">
           
           {/* Left Column: Interactive 3D / Viewport (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col bg-[#FAF9F6] p-4 sm:p-5">
+          <div className="lg:col-span-7 flex flex-col bg-[#FFF9E8] p-4 sm:p-5">
             
             {/* View Mode Switcher */}
             <div className="flex flex-wrap items-center justify-between gap-2 mb-3 shrink-0">
-              <div className="flex items-center gap-1.5 p-1 bg-white rounded-full border border-[#DDD8D2] shadow-xs">
+              <div className="flex items-center gap-1.5 p-1 bg-white rounded-full border border-[#E8DFD8] shadow-xs">
                 <button
                   onClick={() => setActiveTab('3d')}
                   className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                     activeTab === '3d'
                       ? 'bg-[#3A211E] text-white shadow-xs'
-                      : 'text-[#6F625E] hover:text-[#3A211E]'
+                      : 'text-[#765B52] hover:text-[#3A211E]'
                   }`}
                 >
                   <RotateCw className="w-3.5 h-3.5" />
@@ -234,7 +234,7 @@ export default function CustomCupViewerModal({
                   className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                     activeTab === 'printsheet'
                       ? 'bg-[#3A211E] text-white shadow-xs'
-                      : 'text-[#6F625E] hover:text-[#3A211E]'
+                      : 'text-[#765B52] hover:text-[#3A211E]'
                   }`}
                 >
                   <Printer className="w-3.5 h-3.5" />
@@ -246,7 +246,7 @@ export default function CustomCupViewerModal({
                     className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                       activeTab === 'preview'
                         ? 'bg-[#3A211E] text-white shadow-xs'
-                        : 'text-[#6F625E] hover:text-[#3A211E]'
+                        : 'text-[#765B52] hover:text-[#3A211E]'
                     }`}
                   >
                     <Eye className="w-3.5 h-3.5" />
@@ -262,7 +262,7 @@ export default function CustomCupViewerModal({
                     className={`px-2.5 py-1.5 rounded-full border text-[11px] font-bold flex items-center gap-1 transition-colors ${
                       isAutoRotating
                         ? 'bg-amber-100 border-amber-300 text-amber-800'
-                        : 'bg-white border-[#DDD8D2] text-[#6F625E] hover:text-[#3A211E]'
+                        : 'bg-white border-[#E8DFD8] text-[#765B52] hover:text-[#3A211E]'
                     }`}
                     title="Bật/Tắt tự động xoay"
                   >
@@ -273,12 +273,12 @@ export default function CustomCupViewerModal({
               )}
 
               {activeTab === 'printsheet' && (
-                <div className="flex items-center gap-1 bg-white p-1 rounded-full border border-[#DDD8D2] text-[11px]">
-                  <span className="text-[10px] text-[#6F625E] font-medium px-2">Nền:</span>
+                <div className="flex items-center gap-1 bg-white p-1 rounded-full border border-[#E8DFD8] text-[11px]">
+                  <span className="text-[10px] text-[#765B52] font-medium px-2">Nền:</span>
                   <button
                     onClick={() => setContrastMode('checkerboard')}
                     className={`px-2 py-0.5 rounded-full font-bold transition-colors ${
-                      contrastMode === 'checkerboard' ? 'bg-[#3A211E] text-white' : 'text-[#6F625E] hover:text-[#3A211E]'
+                      contrastMode === 'checkerboard' ? 'bg-[#3A211E] text-white' : 'text-[#765B52] hover:text-[#3A211E]'
                     }`}
                     title="Nền caro mờ tương phản - Chuẩn đồ họa"
                   >
@@ -287,7 +287,7 @@ export default function CustomCupViewerModal({
                   <button
                     onClick={() => setContrastMode('dark')}
                     className={`px-2 py-0.5 rounded-full font-bold transition-colors ${
-                      contrastMode === 'dark' ? 'bg-[#3A211E] text-white' : 'text-[#6F625E] hover:text-[#3A211E]'
+                      contrastMode === 'dark' ? 'bg-[#3A211E] text-white' : 'text-[#765B52] hover:text-[#3A211E]'
                     }`}
                     title="Nền tối - Nổi bật chữ trắng"
                   >
@@ -296,19 +296,19 @@ export default function CustomCupViewerModal({
                   <button
                     onClick={() => setContrastMode('cup_color')}
                     className={`px-2 py-0.5 rounded-full font-bold transition-colors ${
-                      contrastMode === 'cup_color' ? 'bg-[#3A211E] text-white' : 'text-[#6F625E] hover:text-[#3A211E]'
+                      contrastMode === 'cup_color' ? 'bg-[#3A211E] text-white' : 'text-[#765B52] hover:text-[#3A211E]'
                     }`}
                     title="Nền mô phỏng màu ly thực tế"
                   >
                     Màu ly
                   </button>
 
-                  <div className="h-3 w-[1px] bg-[#DDD8D2] mx-1" />
+                  <div className="h-3 w-[1px] bg-[#E8DFD8] mx-1" />
 
                   <button
                     onClick={() => setShowDieLineGuides(!showDieLineGuides)}
                     className={`px-2 py-0.5 rounded-full font-bold transition-colors ${
-                      showDieLineGuides ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'text-[#6F625E]'
+                      showDieLineGuides ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'text-[#765B52]'
                     }`}
                     title="Bật/Tắt đường gióng định vị miệng ly, đáy ly và vùng in"
                   >
@@ -319,7 +319,7 @@ export default function CustomCupViewerModal({
             </div>
 
             {/* Viewport Display Area */}
-            <div className="relative flex-1 min-h-[380px] sm:min-h-[460px] rounded-2xl border border-[#DDD8D2] overflow-hidden shadow-inner flex items-center justify-center bg-white">
+            <div className="relative flex-1 min-h-[380px] sm:min-h-[460px] rounded-2xl border border-[#E8DFD8] overflow-hidden shadow-inner flex items-center justify-center bg-white">
               
               {/* TAB 1: 3D MODEL VIEW */}
               {activeTab === '3d' && (
@@ -338,7 +338,7 @@ export default function CustomCupViewerModal({
                     <Sparkles className="w-3 h-3 text-amber-300" />
                     Kéo chuột để xoay 360° toàn bộ ly • Cuộn chuột để phóng to/thu nhỏ
                   </div>
-                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-[#DDD8D2] text-[10px] font-bold text-[#3A211E] shadow-sm">
+                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-[#E8DFD8] text-[10px] font-bold text-[#3A211E] shadow-sm">
                     {modelDef.category === 'glass' ? 'Thủy tinh trong suốt' : 'Nhựa PP 2 lớp'}
                   </div>
                 </div>
@@ -378,7 +378,7 @@ export default function CustomCupViewerModal({
                         }}
                       />
                     ) : (
-                      <div className="text-center p-6 text-xs text-[#6F625E]">
+                      <div className="text-center p-6 text-xs text-[#765B52]">
                         Chưa có file trải phẳng tự động. Vui lòng kiểm tra các lớp chữ và ảnh ở cột bên phải.
                       </div>
                     )}
@@ -427,16 +427,16 @@ export default function CustomCupViewerModal({
                   </div>
 
                   {/* Die-line Info & Zoom toolbar */}
-                  <div className="flex items-center justify-between w-full max-w-[680px] mt-3 pt-2 text-xs text-[#6F625E]">
+                  <div className="flex items-center justify-between w-full max-w-[680px] mt-3 pt-2 text-xs text-[#765B52]">
                     <div className="flex items-center gap-1.5 font-medium text-[11px]">
                       <span className="w-2 h-2 rounded-full bg-emerald-500" />
                       <span>Bản in trải phẳng 360° toàn thân ly • Khổ chuẩn máy in UV phẳng</span>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-[#DDD8D2]">
+                    <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm p-1 rounded-lg border border-[#E8DFD8]">
                       <button
                         onClick={() => setZoomLevel((z) => Math.max(0.7, z - 0.15))}
-                        className="p-1 hover:bg-[#F7F6F2] rounded text-[#3A211E]"
+                        className="p-1 hover:bg-[#FFF9E8] rounded text-[#3A211E]"
                         title="Thu nhỏ"
                       >
                         <ZoomOut className="w-3.5 h-3.5" />
@@ -444,14 +444,14 @@ export default function CustomCupViewerModal({
                       <span className="text-[11px] font-mono font-bold px-1.5 text-[#3A211E]">{Math.round(zoomLevel * 100)}%</span>
                       <button
                         onClick={() => setZoomLevel((z) => Math.min(1.6, z + 0.15))}
-                        className="p-1 hover:bg-[#F7F6F2] rounded text-[#3A211E]"
+                        className="p-1 hover:bg-[#FFF9E8] rounded text-[#3A211E]"
                         title="Phóng to"
                       >
                         <ZoomIn className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setZoomLevel(1)}
-                        className="p-1 hover:bg-[#F7F6F2] rounded text-[#6F625E] hover:text-[#3A211E]"
+                        className="p-1 hover:bg-[#FFF9E8] rounded text-[#765B52] hover:text-[#3A211E]"
                         title="Đặt lại 100%"
                       >
                         <RefreshCw className="w-3 h-3" />
@@ -463,15 +463,15 @@ export default function CustomCupViewerModal({
 
               {/* TAB 3: REAL SNAPSHOT PREVIEW */}
               {activeTab === 'preview' && (
-                <div className="relative w-full h-full p-4 flex items-center justify-center bg-[#F7F6F2]">
+                <div className="relative w-full h-full p-4 flex items-center justify-center bg-[#FFF9E8]">
                   {previewImage ? (
                     <img
                       src={previewImage}
                       alt="Ảnh thực tế chiếc ly"
-                      className="max-h-[420px] w-auto object-contain rounded-xl shadow-md border border-[#DDD8D2]"
+                      className="max-h-[420px] w-auto object-contain rounded-xl shadow-md border border-[#E8DFD8]"
                     />
                   ) : (
-                    <div className="text-center text-[#6F625E] text-xs">
+                    <div className="text-center text-[#765B52] text-xs">
                       Không có ảnh xem trước
                     </div>
                   )}
@@ -481,7 +481,7 @@ export default function CustomCupViewerModal({
             </div>
 
             {/* Bottom Production Quick Tip */}
-            <div className="flex items-center justify-between text-[11px] text-[#6F625E] mt-3 px-1">
+            <div className="flex items-center justify-between text-[11px] text-[#765B52] mt-3 px-1">
               <span>Đường kính ly: <strong>{specs?.diameterMm || modelDef.diameterMm || 90}mm</strong> • Chiều cao: <strong>{specs?.heightMm || modelDef.heightMm || 155}mm</strong></span>
               {printSheetUrl && (
                 <a
@@ -502,20 +502,20 @@ export default function CustomCupViewerModal({
             
             {/* 1. Customer & Order Info (When Admin Mode) */}
             {mode === 'admin' && (
-              <div className="bg-[#FAF9F6] p-4 rounded-2xl border border-[#DDD8D2] space-y-2 text-xs">
+              <div className="bg-[#FFF9E8] p-4 rounded-2xl border border-[#E8DFD8] space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-sm text-[#201817]">{customerName}</span>
-                  <span className="font-mono text-[11px] font-bold text-[#4A2A25]">
+                  <span className="font-bold text-sm text-[#3A211E]">{customerName}</span>
+                  <span className="font-mono text-[11px] font-bold text-[#3A211E]">
                     Đơn: #{orderId ? orderId.slice(0, 8).toUpperCase() : 'N/A'}
                   </span>
                 </div>
                 {customerEmail && (
-                  <div className="text-[11px] text-[#6F625E]">Email: {customerEmail}</div>
+                  <div className="text-[11px] text-[#765B52]">Email: {customerEmail}</div>
                 )}
                 {item.price && (
-                  <div className="flex justify-between items-center pt-1 border-t border-[#DDD8D2]/60 text-[11px]">
-                    <span className="text-[#6F625E]">Đơn giá custom:</span>
-                    <span className="font-bold text-[#4A2A25]">
+                  <div className="flex justify-between items-center pt-1 border-t border-[#E8DFD8]/60 text-[11px]">
+                    <span className="text-[#765B52]">Đơn giá custom:</span>
+                    <span className="font-bold text-[#3A211E]">
                       {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * (item.quantity || 1))}
                       {item.quantity > 1 ? ` (${item.quantity} ly)` : ''}
                     </span>
@@ -529,46 +529,46 @@ export default function CustomCupViewerModal({
               <h4 className="font-bold text-xs uppercase tracking-wider text-[#3A211E] flex items-center gap-1.5">
                 <Palette className="w-4 h-4 text-amber-700" /> Thông số phôi ly & Màu sắc
               </h4>
-              <div className="bg-[#FAF9F6] p-3.5 rounded-2xl border border-[#DDD8D2] text-xs space-y-2 leading-relaxed">
+              <div className="bg-[#FFF9E8] p-3.5 rounded-2xl border border-[#E8DFD8] text-xs space-y-2 leading-relaxed">
                 <div className="flex items-center justify-between">
-                  <span className="text-[#6F625E]">Phôi ly cơ sở:</span>
+                  <span className="text-[#765B52]">Phôi ly cơ sở:</span>
                   <span className="font-bold text-[#3A211E]">{specs?.modelName || modelDef.name}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#6F625E]">Chất liệu phôi:</span>
+                  <span className="text-[#765B52]">Chất liệu phôi:</span>
                   <span className="font-bold text-[#3A211E]">
                     {modelDef.category === 'glass' ? 'Thủy tinh pha lê cao cấp' : 'Nhựa PP 2 lớp an toàn'}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[#6F625E]">Màu thân ly:</span>
+                  <span className="text-[#765B52]">Màu thân ly:</span>
                   <div className="flex items-center gap-2">
                     <span 
                       className="w-4 h-4 rounded-full border border-black/20 shrink-0 shadow-xs" 
                       style={{ backgroundColor: selectedColor.color }} 
                     />
                     <span className="font-bold text-[#3A211E]">{selectedColor.name}</span>
-                    <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#DDD8D2] font-mono text-[#6F625E]">
+                    <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#E8DFD8] font-mono text-[#765B52]">
                       {selectedColor.color}
                     </code>
                   </div>
                 </div>
                 {modelDef.hasLid && (
                   <div className="flex items-center justify-between">
-                    <span className="text-[#6F625E]">Màu nắp & Ống hút:</span>
+                    <span className="text-[#765B52]">Màu nắp & Ống hút:</span>
                     <div className="flex items-center gap-2">
                       <span 
                         className="w-4 h-4 rounded-full border border-black/20 shrink-0 shadow-xs" 
                         style={{ backgroundColor: lidColor }} 
                       />
-                      <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#DDD8D2] font-mono text-[#3A211E]">
+                      <code className="text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#E8DFD8] font-mono text-[#3A211E]">
                         {lidColor}
                       </code>
                     </div>
                   </div>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="text-[#6F625E]">Dung tích & Kích thước:</span>
+                  <span className="text-[#765B52]">Dung tích & Kích thước:</span>
                   <span className="font-bold text-[#3A211E]">
                     {specs?.capacity || modelDef.capacity || 'Tiêu chuẩn'} ({modelDef.diameterMm}×{modelDef.heightMm}mm)
                   </span>
@@ -584,7 +584,7 @@ export default function CustomCupViewerModal({
                 </h4>
                 <div className="space-y-2">
                   {textLayers.map((tl, i) => (
-                    <div key={tl.id || i} className="bg-[#FAF9F6] p-3 rounded-2xl border border-[#DDD8D2] text-xs space-y-2">
+                    <div key={tl.id || i} className="bg-[#FFF9E8] p-3 rounded-2xl border border-[#E8DFD8] text-xs space-y-2">
                       
                       {/* High-Contrast Visual Box so White Text is vividly legible */}
                       <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 shadow-inner flex items-center justify-between overflow-hidden">
@@ -606,7 +606,7 @@ export default function CustomCupViewerModal({
                         </span>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#6F625E] px-1">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-[#765B52] px-1">
                         <span>Font: <strong>{tl.font}</strong></span>
                         <span>•</span>
                         <span>Cỡ chữ: <strong>{tl.fontSize}px</strong></span>
@@ -629,13 +629,13 @@ export default function CustomCupViewerModal({
                 </h4>
                 <div className="space-y-2">
                   {imageLayers.map((il, i) => (
-                    <div key={il.id || i} className="bg-[#FAF9F6] p-3 rounded-2xl border border-[#DDD8D2] flex items-center gap-3 text-xs">
-                      <div className="w-14 h-14 bg-white rounded-xl border border-[#DDD8D2] p-1 shrink-0 flex items-center justify-center overflow-hidden">
+                    <div key={il.id || i} className="bg-[#FFF9E8] p-3 rounded-2xl border border-[#E8DFD8] flex items-center gap-3 text-xs">
+                      <div className="w-14 h-14 bg-white rounded-xl border border-[#E8DFD8] p-1 shrink-0 flex items-center justify-center overflow-hidden">
                         <img src={il.url} alt={il.name} className="max-w-full max-h-full object-contain" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-[#3A211E] truncate">{il.name || `Hình ảnh ${i + 1}`}</p>
-                        <p className="text-[11px] text-[#6F625E] mt-0.5">
+                        <p className="text-[11px] text-[#765B52] mt-0.5">
                           Tỷ lệ: {il.naturalWidth}×{il.naturalHeight}px • Thu phóng: {Math.round(il.scale * 100)}%
                         </p>
                         {(il.originalFile || il.url) && (
@@ -727,15 +727,15 @@ export default function CustomCupViewerModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-5 py-3 border-t border-[#DDD8D2] flex items-center justify-between bg-[#F7F6F2] shrink-0">
+        <div className="px-5 py-3 border-t border-[#E8DFD8] flex items-center justify-between bg-[#FFF9E8] shrink-0">
           <div className="flex items-center gap-2">
             {mode === 'customer' && (
               <button
                 onClick={handleRedesign}
-                className="px-4 py-2 bg-[#FFF3A6] hover:bg-[#FFE978] text-[#201817] rounded-full text-xs font-bold transition-colors border border-[#DDD8D2] flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-2 bg-[#FFBF00] hover:bg-[#E5AC00] text-[#3A211E] rounded-full text-xs font-bold transition-colors border border-[#E8DFD8] flex items-center gap-1.5 shadow-xs"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-                Thiết kế lại từ mẫu này ✨
+                <Sparkles className="w-3.5 h-3.5 text-[#3A211E]" />
+                Thiết kế lại từ mẫu này
               </button>
             )}
 
@@ -755,7 +755,7 @@ export default function CustomCupViewerModal({
 
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-[#3A211E] hover:bg-[#4A2A25] text-white rounded-full text-xs font-bold transition-colors shadow-sm"
+            className="px-6 py-2 bg-[#3A211E] hover:bg-[#3A211E] text-white rounded-full text-xs font-bold transition-colors shadow-sm"
           >
             Đóng Cửa Sổ
           </button>

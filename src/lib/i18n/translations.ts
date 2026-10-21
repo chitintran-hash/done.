@@ -2,7 +2,8 @@ export const translations = {
   vi: {
     // Header
     "Shop": "Cửa hàng",
-    "Design Your Cup ✨": "Thiết Kế Ly ✨",
+    "Design Your Cup": "Thiết Kế Ly",
+    "Design Your Cup ✨": "Thiết Kế Ly",
     "Templates": "Mẫu Ly",
     "Community": "Cộng Đồng",
     "Gifts": "Quà Tặng",
@@ -34,7 +35,8 @@ export const translations = {
     "Upload Image": "Tải ảnh lên",
     "Remove": "Xoá",
     "Drag to rotate 360°": "Kéo chuột để xoay 360°",
-    "My Design ✨": "Thiết kế của tôi ✨",
+    "My Design ✨": "Thiết kế của tôi",
+    "My Design": "Thiết kế của tôi",
     "ADD TO CART": "THÊM VÀO GIỎ",
     "ADDED": "ĐÃ THÊM",
     "Basic": "Cơ bản",
@@ -105,7 +107,8 @@ export const translations = {
   en: {
     // Header
     "Shop": "Shop",
-    "Design Your Cup ✨": "Design Your Cup ✨",
+    "Design Your Cup": "Design Your Cup",
+    "Design Your Cup ✨": "Design Your Cup",
     "Templates": "Templates",
     "Community": "Community",
     "Gifts": "Gifts",
@@ -137,7 +140,8 @@ export const translations = {
     "Upload Image": "Upload Image",
     "Remove": "Remove",
     "Drag to rotate 360°": "Drag to rotate 360°",
-    "My Design ✨": "My Design ✨",
+    "My Design ✨": "My Design",
+    "My Design": "My Design",
     "ADD TO CART": "ADD TO CART",
     "ADDED": "ADDED",
     "Basic": "Basic",

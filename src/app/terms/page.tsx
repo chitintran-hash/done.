@@ -18,7 +18,7 @@ export default function TermsOfUsePage() {
       {/* 2.1 */}
       <section className="space-y-3">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.1</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.1</span>
           Phạm vi áp dụng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -36,9 +36,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.2 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.2</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.2</span>
           Đăng ký và quản lý tài khoản
         </h2>
         <p className="text-[#4A3E3D]">
@@ -56,9 +56,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.3 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.3</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.3</span>
           Thông tin sản phẩm
         </h2>
         <p className="text-[#4A3E3D]">
@@ -76,9 +76,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.4 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.4</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.4</span>
           Quy định về thiết kế cá nhân hóa
         </h2>
         <p className="text-[#4A3E3D]">
@@ -96,9 +96,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.5 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.5</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.5</span>
           Đặt hàng và xác nhận đơn hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -116,9 +116,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.6 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.6</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.6</span>
           Giá bán và thanh toán
         </h2>
         <p className="text-[#4A3E3D]">
@@ -136,9 +136,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.7 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.7</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.7</span>
           Hủy đơn hàng
         </h2>
         <p className="text-[#4A3E3D]">
@@ -156,9 +156,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.8 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.8</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.8</span>
           Quyền sở hữu trí tuệ
         </h2>
         <p className="text-[#4A3E3D]">
@@ -176,9 +176,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.9 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.9</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.9</span>
           Giải quyết khiếu nại và tranh chấp
         </h2>
         <p className="text-[#4A3E3D]">
@@ -193,9 +193,9 @@ export default function TermsOfUsePage() {
       </section>
 
       {/* 2.10 */}
-      <section className="space-y-3 pt-4 border-t border-[#DDD8D2]">
+      <section className="space-y-3 pt-4 border-t border-[#E8DFD8]">
         <h2 className="text-lg md:text-xl font-bold text-[#3A211E] flex items-center gap-2">
-          <span className="w-7 h-7 rounded-lg bg-[#FFF3A6] text-[#4A2A25] inline-flex items-center justify-center text-xs font-black shrink-0">2.10</span>
+          <span className="w-7 h-7 rounded-lg bg-[#FFF3C4] text-[#3A211E] inline-flex items-center justify-center text-xs font-black shrink-0">2.10</span>
           Thay đổi điều khoản
         </h2>
         <p className="text-[#4A3E3D]">

@@ -68,16 +68,15 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-10 h-full">
-          {/* Logo */}
-          <Link href="/" className="flex items-center hover:opacity-85 transition-opacity">
-            <div className="relative w-12 h-12 md:w-[56px] md:h-[56px] rounded-xl overflow-hidden shadow-sm border border-[#E8DFD8] bg-white">
+          {/* Logo Wordmark dạng chữ cupfy màu đen kèm chấm cam */}
+          <Link href="/" className="flex items-center hover:opacity-85 transition-opacity py-1.5 group">
+            <div className="relative h-8 w-[105px] sm:h-9 sm:w-[120px]">
               <Image 
-                src="/images/logo.jpg" 
+                src="/images/cupfy-wordmark@2x.png" 
                 alt="Cupfy Logo" 
                 fill
-                className="object-cover"
-                quality={100}
-                unoptimized
+                className="object-contain object-left"
+                priority
               />
             </div>
           </Link>

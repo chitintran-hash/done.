@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag } from "lucide-react";
+import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag, Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getTranslation } from "@/lib/i18n/server";
 
@@ -17,91 +17,64 @@ export default async function Home() {
   return (
     <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#F7F6F2]">
       
-      {/* PHẦN 1: Hero Section chính */}
-      <section className="max-w-[1400px] mx-auto px-6 mb-20 md:mb-28 w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-14 xl:gap-20">
+      {/* PHẦN 1: Hero Section phong cách Banner HIPPEAS */}
+      <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
+        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FDB813] shadow-[0_20px_60px_rgba(253,184,19,0.22)] border border-[#FDB813]/40 min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex items-center">
           
-          {/* Cột trái: Nội dung chữ (~48%) */}
-          <div className="w-full lg:w-[48%] flex flex-col items-start z-10">
-            {/* Tiêu đề chính */}
-            <h1 className="font-heading text-4xl sm:text-5xl lg:text-[3.25rem] xl:text-[3.6rem] font-bold text-[#3A211E] leading-[1.16] mb-5 tracking-tight">
-              <span className="block">{t("hero_title_line1" as any)}</span>
-              <span className="block mt-1 sm:mt-1.5">
-                {t("hero_title_line2_prefix" as any)}
-                <span className="relative inline-block text-[#4A2A25]">
-                  {t("hero_title_line2_highlight" as any)}
-                  <svg 
-                    aria-hidden="true" 
-                    viewBox="0 0 240 18" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    className="absolute -bottom-2 left-0 w-full h-[8px] text-[#BFDCEF] stroke-current pointer-events-none"
-                  >
-                    <path 
-                      d="M3 13C60 4 180 4 237 13" 
-                      stroke="currentColor" 
-                      strokeWidth="3.5" 
-                      strokeLinecap="round" 
-                    />
-                  </svg>
-                </span>
-                {t("hero_title_line2_suffix" as any)}
+          {/* Nền hoạt hoạ ly thuỷ tinh Cupfy xếp nghiêng 25 độ ở bên phải */}
+          <div className="absolute inset-0 z-0 pointer-events-none select-none">
+            <Image
+              src="/images/cupfy-hippeas-bg.jpg"
+              alt="Bộ sưu tập ly thuỷ tinh Cupfy cá nhân hoá"
+              fill
+              priority
+              quality={92}
+              className="object-cover object-right md:object-center"
+            />
+            {/* Lớp phủ chuyển màu giúp chữ luôn nổi bật trên mọi thiết bị */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FDB813] via-[#FDB813]/90 md:via-[#FDB813]/40 to-transparent z-[1]" />
+          </div>
+
+          {/* Nội dung bên trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}
+          <div className="relative z-10 w-full lg:w-[52%] p-8 sm:p-12 md:p-16 flex flex-col items-start">
+            
+            {/* Tag nhỏ thương hiệu */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/35 backdrop-blur-md border border-white/50 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-sm">
+              <Sparkles className="w-4 h-4 text-[#3A211E]" />
+              <span>Cá nhân hóa mọi chiếc ly</span>
+            </div>
+
+            {/* Tiêu đề khổng lồ đặc trưng Hippeas */}
+            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none">
+              <span className="block text-white drop-shadow-sm">
+                CUSTOMIZE
+              </span>
+              <span className="block text-[#3A211E] mt-1.5">
+                YOUR CUP
               </span>
             </h1>
 
-            {/* Mô tả */}
-            <p className="text-base sm:text-lg text-[#6F625E] leading-[1.7] mb-6 max-w-[500px]">
-              {t("hero_desc" as any)}
+            {/* Mô tả phụ */}
+            <p className="text-base sm:text-lg md:text-xl text-[#3A211E] font-medium leading-relaxed mb-8 max-w-[480px]">
+              Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!
             </p>
 
-            {/* Thông điệp ngắn */}
-            <div className="inline-flex items-center px-4 py-2.5 rounded-xl bg-[#BFDCEF]/25 border-l-[3px] border-[#89BBD9] mb-8">
-              <span className="text-[14px] md:text-[15px] font-medium text-[#4A2A25]">
-                {t("hero_short_msg" as any)}
-              </span>
-            </div>
-
-            {/* Hai nút CTA */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
-              <Link 
-                href="/custom-cup" 
-                className="inline-flex items-center justify-center px-8 py-3.5 bg-[#3A211E] text-white rounded-full font-semibold text-base transition-colors duration-200 hover:bg-[#4A2A25] shadow-[0_4px_16px_rgba(58,33,30,0.12)] text-center"
+            {/* Nút bấm hình con nhộng (Pill button) màu nâu cà phê đậm */}
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/custom-cup"
+                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-[#FDB813] hover:text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_10px_25px_rgba(58,33,30,0.25)] group"
               >
-                {t("hero_btn_design" as any)}
+                <span>{t("hero_btn_design" as any)} ✨</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link 
-                href="/products" 
-                className="inline-flex items-center justify-center px-8 py-3.5 bg-white text-[#3A211E] border border-[#DDD8D2] rounded-full font-semibold text-base transition-colors duration-200 hover:bg-[#EDECEA] text-center"
+
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white/90 hover:bg-white text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-white/60 shadow-sm hover:shadow"
               >
                 {t("hero_btn_shop" as any)}
               </Link>
-            </div>
-          </div>
-
-          {/* Cột phải: Hình ảnh phong cách lifestyle (~52%) */}
-          <div className="w-full lg:w-[52%] relative flex items-center justify-center z-10">
-            {/* Vầng sáng pastel trang nhã phía sau hình ảnh */}
-            <div 
-              aria-hidden="true" 
-              className="absolute -inset-2 sm:-inset-4 bg-[#BFDCEF]/35 rounded-[36px] blur-2xl -z-10 transform scale-95 pointer-events-none" 
-            />
-
-            <div className="relative w-full aspect-[4/3] rounded-[28px] overflow-hidden border border-[#DDD8D2]/70 shadow-[0_20px_50px_rgba(58,33,30,0.08)] bg-white">
-              <Image 
-                src="/images/hero-slider-1.jpg" 
-                alt="Khách hàng tự thiết kế ly cá nhân hoá cùng Cupfy" 
-                fill 
-                priority 
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 52vw, 700px"
-                className="object-cover object-center"
-                quality={92}
-              />
-              {/* Nhãn nhỏ thương hiệu trang nhã */}
-              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 inline-flex items-center px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md shadow-sm border border-[#DDD8D2]/60 select-none">
-                <span className="text-xs sm:text-sm font-semibold text-[#3A211E] tracking-wide">
-                  Your cup, your story
-                </span>
-              </div>
             </div>
           </div>
 

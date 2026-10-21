@@ -170,6 +170,7 @@ function CustomCupStudioInner() {
           .from('products')
           .select('*')
           .neq('category', 'user_custom')
+          .not('category', 'in', '("gift_box","gift","admin_community_post","admin_about_post")')
           .eq('approval_status', 'active');
         if (data && data.length > 0) {
           setDbProducts(data);

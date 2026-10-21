@@ -37,12 +37,13 @@ function ProductCatalogContent() {
     let ignore = false;
     const fetchProducts = async () => {
       setLoading(true);
-      // Lấy toàn bộ sản phẩm ly, giả định các sản phẩm cũ đã bị xoá
+      // Lấy toàn bộ sản phẩm công khai
       const { data, error } = await supabase
         .from('products')
         .select('*')
         .eq('is_available', true)
-        .neq('category', 'user_custom');
+        .neq('category', 'user_custom')
+        .not('category', 'like', 'admin_%');
 
       if (!ignore && data) {
         setProducts(data);
@@ -63,7 +64,14 @@ function ProductCatalogContent() {
     );
   }
 
-  if (selectedCategory !== 'all') {
+  // Bán riêng ly và để mục túi quà riêng
+  if (selectedCategory === 'all') {
+    // "Tất cả ly" -> BÁN RIÊNG LY, LOẠI BỎ HỘP QUÀ VÀ TÚI QUÀ
+    displayed = displayed.filter(p => p.category !== 'gift_box' && p.category !== 'gift');
+  } else if (selectedCategory === 'gift_box') {
+    // "Mục túi quà riêng" -> CHUYÊN BÁN HỘP & TÚI QUÀ TẶNG
+    displayed = displayed.filter(p => p.category === 'gift_box' || p.category === 'gift');
+  } else {
     displayed = displayed.filter(p => p.category === selectedCategory);
   }
 
@@ -88,16 +96,21 @@ function ProductCatalogContent() {
     { id: 'all', name: 'Tất cả ly' },
     { id: 'glass', name: 'Ly thủy tinh' },
     { id: 'plastic', name: 'Ly nhựa' },
-    { id: 'custom', name: 'Ly custom' }
+    { id: 'custom', name: 'Ly custom phôi' },
+    { id: 'gift_box', name: '🎁 Túi & Hộp quà riêng' }
   ];
 
   return (
     <div className="container mx-auto px-6 pt-32 pb-12">
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
         <div>
-          <h1 className="text-4xl font-serif font-bold text-foreground mb-4">Shop Cups</h1>
+          <h1 className="text-4xl font-serif font-bold text-foreground mb-4">
+            {selectedCategory === 'gift_box' ? 'Túi & Hộp Quà Tặng' : 'Shop Cups'}
+          </h1>
           <p className="text-muted-foreground text-lg max-w-xl">
-            Khám phá bộ sưu tập những chiếc ly xinh xắn, giúp mỗi ngụm nước bạn uống đều ngập tràn niềm vui.
+            {selectedCategory === 'gift_box'
+              ? 'Bộ sưu tập túi quà và hộp quà cao cấp, lót rơm chống sốc kèm nơ và thiệp nhắn gửi yêu thương.'
+              : 'Khám phá bộ sưu tập những chiếc ly xinh xắn, giúp mỗi ngụm nước bạn uống đều ngập tràn niềm vui.'}
           </p>
         </div>
       </div>
@@ -179,11 +192,15 @@ function ProductCatalogContent() {
                       fill 
                       className="object-cover group-hover:scale-105 transition-transform duration-700" 
                     />
-                    {product.technical_specs?.is_customizable && (
+                    {product.category === 'gift_box' || product.category === 'gift' ? (
+                      <span className="absolute top-3 left-3 px-3 py-1 text-xs font-bold uppercase tracking-wider bg-rose-500 text-white rounded-full shadow-sm">
+                        🎁 Hộp quà
+                      </span>
+                    ) : product.technical_specs?.is_customizable ? (
                       <span className="absolute top-3 left-3 px-3 py-1 text-xs font-bold uppercase tracking-wider bg-white/90 backdrop-blur-sm text-foreground rounded-full">
                         Custom
                       </span>
-                    )}
+                    ) : null}
                   </Link>
                   <div className="flex flex-col flex-1">
                     <Link href={`/products/${product.id}`} className="font-medium text-lg text-foreground hover:text-primary transition-colors mb-1 line-clamp-1">

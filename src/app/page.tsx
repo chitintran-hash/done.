@@ -7,7 +7,12 @@ import { getTranslation } from "@/lib/i18n/server";
 export default async function Home() {
   const { t } = await getTranslation();
   const supabase = await createClient();
-  const { data: latestProducts } = await supabase.from("products").select("*").neq("category", "user_custom").limit(4);
+  const { data: latestProducts } = await supabase
+    .from("products")
+    .select("*")
+    .neq("category", "user_custom")
+    .not("category", "in", '("gift_box","gift","admin_community_post","admin_about_post")')
+    .limit(4);
 
   return (
     <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#F7F6F2]">

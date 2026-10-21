@@ -18,22 +18,22 @@ export default async function Home() {
   return (
     <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-white">
       
-      {/* PHẦN 1: Hero Section phong cách Banner HIPPEAS (Nền vàng Cupfy #FFBF00 + Chữ bên trái) */}
+      {/* PHẦN 1: Hero Section phong cách Banner (Nền vàng nhạt #FFF3C4 + Chữ bên trái) */}
       <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
-        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FFBF00] shadow-[0_20px_60px_rgba(255,191,0,0.25)] border border-[#FFBF00]/40 min-h-[480px] md:min-h-[540px] lg:min-h-[580px] flex flex-col lg:flex-row items-center justify-between">
+        <div className="relative w-full rounded-[32px] md:rounded-[44px] overflow-hidden bg-[#FFF3C4] shadow-[0_20px_50px_rgba(58,33,30,0.08)] border border-[#E8DFD8] min-h-[480px] md:min-h-[540px] lg:min-h-[580px] flex flex-col lg:flex-row items-center justify-between">
           
           {/* Cột trái: Chữ to ấn tượng + Nút CTA hình con nhộng */}
           <div className="relative z-10 w-full lg:w-[48%] xl:w-[46%] p-6 sm:p-10 lg:p-12 xl:p-14 flex flex-col items-start">
             
             {/* Tag nhỏ thương hiệu */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/35 backdrop-blur-md border border-white/50 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-sm">
-              <Sparkles className="w-4 h-4 text-[#3A211E]" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-[#E8DFD8] text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-xs">
+              <Sparkles className="w-4 h-4 text-[#FFBF00]" />
               <span>Cá nhân hóa mọi chiếc ly</span>
             </div>
 
-            {/* Tiêu đề khổng lồ đặc trưng Hippeas: Trắng + Nâu chocolate */}
-            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[72px] xl:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none">
-              <span className="block text-white drop-shadow-sm">
+            {/* Tiêu đề khổng lồ: Nâu chocolate #3A211E sang trọng, độ tương phản cao */}
+            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[72px] xl:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none text-[#3A211E]">
+              <span className="block text-[#3A211E]">
                 CUSTOMIZE
               </span>
               <span className="block text-[#3A211E] mt-1.5">
@@ -42,7 +42,7 @@ export default async function Home() {
             </h1>
 
             {/* Mô tả phụ: Nâu chocolate */}
-            <p className="text-base sm:text-lg md:text-xl text-[#3A211E] font-medium leading-relaxed mb-8 max-w-[460px]">
+            <p className="text-base sm:text-lg md:text-xl text-[#3A211E]/85 font-medium leading-relaxed mb-8 max-w-[460px]">
               Tự tay thiết kế chiếc ly mang đậm dấu ấn riêng của bạn. Xem 3D trực quan 360°, in ấn theo yêu cầu từ 1 chiếc!
             </p>
 
@@ -50,7 +50,7 @@ export default async function Home() {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href="/custom-cup"
-                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_10px_25px_rgba(58,33,30,0.25)] group"
+                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_10px_25px_rgba(58,33,30,0.18)] group"
               >
                 <span>{t("hero_btn_design" as any)}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -58,7 +58,7 @@ export default async function Home() {
 
               <Link
                 href="/products"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-[#FFF9E8] text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-white/60 shadow-sm hover:shadow"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-[#FFF9E8] text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-[#E8DFD8] shadow-xs hover:shadow-sm"
               >
                 {t("hero_btn_shop" as any)}
               </Link>

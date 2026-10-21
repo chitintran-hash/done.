@@ -104,7 +104,7 @@ export default function HeroSlider() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Khung ảnh to tràn viền, bo góc tròn lớn, không viền trắng, không chữ */}
-      <div className="relative w-full aspect-[4/3.2] sm:aspect-[4/3] md:aspect-[16/11] lg:aspect-[4/3] xl:aspect-[16/11] rounded-[28px] md:rounded-[36px] overflow-hidden shadow-[0_25px_60px_rgba(58,33,30,0.25)] bg-[#FFF9E8]">
+      <div className="relative w-full aspect-[4/3.2] sm:aspect-[4/3] md:aspect-[16/11] lg:aspect-[4/3] xl:aspect-[16/11] rounded-[28px] md:rounded-[36px] overflow-hidden shadow-[0_20px_50px_rgba(58,33,30,0.16)] border border-[#E8DFD8]/70 bg-[#FFF9E8]">
         
         {/* Horizontal Sliding Track */}
         <div

@@ -212,7 +212,7 @@ export default async function Home() {
                     </h4>
                   </Link>
                   <p className="text-xs sm:text-sm text-[#765B52] mb-4 sm:mb-5">
-                    {product.capacity || '500ml'}
+                    {product.technical_specs?.capacity || product.capacity || '500ml'}
                   </p>
                   
                   {/* Hàng giá tiền & Nút Thêm vào giỏ hàng */}

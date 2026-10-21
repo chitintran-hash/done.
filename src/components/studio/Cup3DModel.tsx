@@ -37,18 +37,19 @@ export function Cup3DModel({
       points.push(new THREE.Vector2(0.98, 0.70));
       points.push(new THREE.Vector2(0, 0.65)); // Lòng đáy trong
     } else if (modelDef.id === 'glass_rocks') {
-      // Rocks / Whiskey Glass: Thấp rộng, đáy pha lê đặc cực dày
+      // Ly Thuỷ Tinh Thấp (Nhỏ): Dáng Tumbler tròn thấp, đáy đúc nguyên khối dày dặn (khớp 100% ảnh thật sản phẩm)
       points.push(new THREE.Vector2(0, 0));
-      points.push(new THREE.Vector2(1.30, 0));
-      points.push(new THREE.Vector2(1.48, 0.16));
-      points.push(new THREE.Vector2(1.50, 0.72)); // Đáy đặc dày 0.72 unit
-      points.push(new THREE.Vector2(1.56, 1.70));
-      points.push(new THREE.Vector2(1.62, 2.55));
-      points.push(new THREE.Vector2(1.59, 2.60)); // Viền bo tròn
-      points.push(new THREE.Vector2(1.52, 2.55));
-      points.push(new THREE.Vector2(1.44, 1.70));
-      points.push(new THREE.Vector2(1.36, 0.80));
-      points.push(new THREE.Vector2(0, 0.72));
+      points.push(new THREE.Vector2(1.06, 0));
+      points.push(new THREE.Vector2(1.18, 0.12)); // Bo tròn chân đáy
+      points.push(new THREE.Vector2(1.22, 0.55)); // Đáy kính đúc đặc dày dặn
+      points.push(new THREE.Vector2(1.28, 1.80)); // Thân ly hơi thon nhẹ
+      points.push(new THREE.Vector2(1.36, 3.25)); // Vành miệng ly
+      points.push(new THREE.Vector2(1.34, 3.28)); // Bo tròn mép miệng
+      points.push(new THREE.Vector2(1.28, 3.28));
+      points.push(new THREE.Vector2(1.26, 3.25));
+      points.push(new THREE.Vector2(1.18, 1.80)); // Lòng ly bên trong
+      points.push(new THREE.Vector2(1.10, 0.62));
+      points.push(new THREE.Vector2(0, 0.55)); // Lòng đáy ly trong
     } else if (modelDef.id === 'glass_can') {
       // Ly Thuỷ Tinh Cỡ Trung: Dáng Tumbler vừa tay, đáy đúc nguyên khối dày dặn (khớp 100% ảnh thật)
       points.push(new THREE.Vector2(0, 0));
@@ -162,9 +163,9 @@ export function Cup3DModel({
       ];
     } else if (modelDef.id === 'glass_rocks') {
       points = [
-        new THREE.Vector2(1.50 + offset, 0.75),
-        new THREE.Vector2(1.56 + offset, 1.70),
-        new THREE.Vector2(1.62 + offset, 2.50)
+        new THREE.Vector2(1.22 + offset, 0.65),
+        new THREE.Vector2(1.28 + offset, 1.80),
+        new THREE.Vector2(1.36 + offset, 3.12)
       ];
     } else if (modelDef.id === 'glass_can') {
       points = [
@@ -191,7 +192,7 @@ export function Cup3DModel({
   }, [modelDef.id]);
 
   // Group centering offset
-  const groupY = modelDef.id === 'glass_rocks' ? -1.0 : modelDef.id === 'glass_tall' ? -1.8 : -1.5;
+  const groupY = modelDef.id === 'glass_tall' ? -2.1 : modelDef.id === 'glass_rocks' ? -1.64 : -1.75;
 
   return (
     <group position={[0, groupY, 0]}>

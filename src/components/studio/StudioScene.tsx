@@ -51,7 +51,7 @@ export function StudioScene({
     }
   };
 
-  const tableY = modelDef.id === 'glass_rocks' ? -1.0 : modelDef.id === 'glass_tall' ? -1.8 : -1.5;
+  const tableY = modelDef.id === 'glass_tall' ? -2.1 : modelDef.id === 'glass_rocks' ? -1.64 : -1.75;
 
   return (
     <div

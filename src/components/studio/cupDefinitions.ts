@@ -61,20 +61,20 @@ export const CUP_MODELS: CupModelDef[] = [
   {
     id: 'glass_rocks',
     name: 'Ly Thuỷ Tinh Thấp (Nhỏ)',
-    subtitle: 'Dáng Rocks / Old Fashioned đầm tay, đáy pha lê đặc dày',
+    subtitle: 'Dáng Tumbler tròn thấp, đáy đúc nguyên khối dày dặn',
     category: 'glass',
     defaultPrice: 29000,
     capacity: '250ml',
     heightMm: '95 mm',
-    diameterMm: '82 mm',
+    diameterMm: '76 mm',
     hasLid: false,
     hasHandle: false,
     isParametric: true,
     sleeve: {
-      radiusTop: 1.58,
-      radiusBottom: 1.48,
-      height: 1.6,
-      y: 1.6
+      radiusTop: 1.36,
+      radiusBottom: 1.22,
+      height: 2.45,
+      y: 1.88
     }
   },
   {

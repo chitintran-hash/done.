@@ -201,9 +201,12 @@ function ProductCatalogContent() {
                       ) : null}
                     </Link>
                     <div className="flex flex-col flex-1">
-                      <Link href={`/products/${product.id}`} className="font-bold text-base text-[#3A211E] hover:text-[#765B52] transition-colors mb-1 line-clamp-1">
+                      <Link href={`/products/${product.id}`} className="font-bold text-base text-[#3A211E] hover:text-[#765B52] transition-colors mb-0.5 line-clamp-1">
                         {product.name}
                       </Link>
+                      {product.technical_specs?.capacity && (
+                        <span className="text-xs text-[#765B52] mb-2">{product.technical_specs.capacity}</span>
+                      )}
                       <div className="mt-auto pt-2 flex items-center justify-between gap-2">
                         <span className="text-[#3A211E] font-black text-base">
                           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}

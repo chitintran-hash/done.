@@ -169,7 +169,17 @@ function RegisterContent() {
             
             {error && (
               <div className="p-3.5 bg-red-50 text-red-700 text-sm rounded-xl border border-red-200">
-                {error}
+                <p className="font-medium">{error}</p>
+                {error.includes('đã được đăng ký') && (
+                  <div className="mt-2.5 pt-2 border-t border-red-200/60 flex items-center justify-between text-xs font-bold">
+                    <Link href={loginLink} className="text-[#3A211E] underline hover:text-[#FFBF00]">
+                      Đến trang Đăng nhập →
+                    </Link>
+                    <Link href="/forgot-password" className="text-rose-800 underline hover:text-rose-950">
+                      Quên mật khẩu? Đặt lại ngay →
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 

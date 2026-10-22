@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { ensureUserProfile } from '@/app/actions/auth';
+import { ensureUserProfile, registerUserAction } from '@/app/actions/auth';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 
@@ -56,58 +56,42 @@ function RegisterContent() {
       return;
     }
 
-    const supabase = createClient();
-    
-    // Pass email redirect
-    const { data, error: authError } = await supabase.auth.signUp({
+    // 4. Tạo tài khoản thông qua Server Action (Tự động kích hoạt tài khoản ngay lập tức)
+    const res = await registerUserAction({
       email: email.trim().toLowerCase(),
       password,
-      options: {
-        data: {
-          full_name: fullName.trim(),
-          role: 'customer'
-        },
-        emailRedirectTo: `${window.location.origin}/auth/callback${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`,
-      },
+      fullName: fullName.trim(),
     });
 
-    if (authError) {
-      let friendlyMsg = authError.message;
-      if (authError.message.includes('already registered')) {
-        friendlyMsg = 'Email này đã được đăng ký. Vui lòng đăng nhập hoặc sử dụng email khác.';
-      } else if (authError.message.includes('Password should be at least')) {
-        friendlyMsg = 'Mật khẩu phải có tối thiểu 6 ký tự.';
-      } else if (authError.message.includes('valid email')) {
-        friendlyMsg = 'Vui lòng nhập địa chỉ email hợp lệ.';
-      }
-      setError(friendlyMsg);
+    if (!res.success) {
+      setError(res.error || 'Đăng ký thất bại. Vui lòng thử lại.');
       setLoading(false);
       return;
     }
 
-    // If user was created, immediately ensure their profile row exists in public.profiles!
-    if (data?.user) {
-      await ensureUserProfile({
-        userId: data.user.id,
-        fullName: fullName.trim(),
-        email: email.trim().toLowerCase(),
-      });
+    // 5. Tự động đăng nhập luôn trên Client
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    });
+
+    if (signInError) {
+      // Nếu có gián đoạn phiên client, điều hướng sang trang login đã kích hoạt
+      router.push(`/login?registered=1${redirectUrl ? `&redirect=${encodeURIComponent(redirectUrl)}` : ''}`);
+      return;
     }
 
-    // If session is immediately active (e.g. email confirmation disabled or auto-confirmed)
-    if (data?.session) {
+    // Đăng nhập thành công, điều hướng ngay
+    setSuccess(true);
+    setTimeout(() => {
       if (redirectUrl) {
         router.push(redirectUrl);
       } else {
         router.push('/');
       }
       router.refresh();
-      return;
-    }
-
-    // Otherwise show verification message
-    setSuccess(true);
-    setLoading(false);
+    }, 800);
   };
 
   const loginLink = `/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`;
@@ -125,14 +109,11 @@ function RegisterContent() {
             </div>
             <h3 className="font-bold text-lg text-[#3A211E]">Đăng ký thành công!</h3>
             <p className="text-sm text-[#765B52] leading-relaxed">
-              Vui lòng kiểm tra hộp thư email ({email}) để kích hoạt tài khoản của bạn, sau đó đăng nhập để tiếp tục.
+              Tài khoản của bạn đã được kích hoạt thành công. Đang tự động đăng nhập vào Cupfy...
             </p>
-            <Link 
-              href={loginLink}
-              className="mt-4 inline-flex w-full py-3.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-bold justify-center hover:bg-[#FFBF00]/90 transition-colors shadow-xs"
-            >
-              Chuyển đến Đăng nhập
-            </Link>
+            <div className="flex justify-center pt-2">
+              <Loader2 className="w-6 h-6 animate-spin text-[#FFBF00]" />
+            </div>
           </div>
         ) : (
           <form onSubmit={handleRegister} className="space-y-4">

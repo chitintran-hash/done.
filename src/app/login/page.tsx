@@ -3,7 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { ensureUserProfile } from '@/app/actions/auth';
+import { ensureUserProfile, autoConfirmUserAction } from '@/app/actions/auth';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 
@@ -23,6 +23,7 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || searchParams.get('next') || '';
+  const isRegisteredSuccess = searchParams.get('registered') === '1';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,17 +31,30 @@ function LoginContent() {
     setError('');
 
     const supabase = createClient();
-    const { data, error: authError } = await supabase.auth.signInWithPassword({
+    let { data, error: authError } = await supabase.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
       password,
     });
 
+    // Nếu tài khoản chưa confirm email từ trước, tự động kích hoạt luôn cho khách
+    if (authError && authError.message.includes('Email not confirmed')) {
+      const confirmRes = await autoConfirmUserAction(email.trim().toLowerCase());
+      if (confirmRes.success) {
+        const retryResult = await supabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password,
+        });
+        data = retryResult.data;
+        authError = retryResult.error;
+      }
+    }
+
     if (authError) {
       let friendlyMsg = authError.message;
       if (authError.message.includes('Invalid login credentials')) {
-        friendlyMsg = 'Email hoặc mật khẩu không chính xác. Vui lòng thử lại.';
+        friendlyMsg = 'Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại.';
       } else if (authError.message.includes('Email not confirmed')) {
-        friendlyMsg = 'Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email để xác thực tài khoản.';
+        friendlyMsg = 'Tài khoản chưa được kích hoạt. Hệ thống đã tự động kích hoạt, vui lòng bấm Đăng nhập lại.';
       }
       setError(friendlyMsg);
       setLoading(false);
@@ -72,6 +86,13 @@ function LoginContent() {
       <div className="w-full max-w-md bg-white border border-[#E8DFD8] rounded-[24px] p-8 shadow-xs">
         <h1 className="font-heading text-3xl font-bold text-[#3A211E] mb-2">Đăng nhập</h1>
         <p className="text-[#765B52] text-sm mb-6">Chào mừng bạn trở lại với Cupfy</p>
+
+        {isRegisteredSuccess && (
+          <div className="p-3.5 mb-4 bg-[#FFF9E8] border border-amber-300 text-[#3A211E] text-sm rounded-xl font-medium flex items-center gap-2">
+            <span className="text-base">🎉</span>
+            <span>Đăng ký thành công! Bạn có thể đăng nhập ngay bằng mật khẩu vừa tạo.</span>
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

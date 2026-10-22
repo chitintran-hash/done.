@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Gift, Package, Star, Sparkles, Heart, Phone, Mail } from 'lucide-react';
 import GiftBoxList from './GiftBoxList';
+import GiftBoxVisual from '@/components/gift/GiftBoxVisual';
 import { createClient } from '@/lib/supabase/server';
 
 export const metadata: Metadata = {
@@ -94,6 +95,38 @@ export default async function GiftsPage() {
 
         {/* Gift Boxes Showcase */}
         <GiftBoxList initialGiftBoxes={giftBoxes || []} />
+
+        {/* Banner Trải nghiệm Tặng Quà Tương Tác Ảo (Demo) */}
+        <div className="bg-gradient-to-r from-amber-50 via-[#FFF9E8] to-amber-100/70 rounded-[2.5rem] border-2 border-dashed border-[#FFBF00] p-8 sm:p-12 my-20 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="max-w-xl text-left">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFBF00] text-[#3A211E] text-[11px] font-black uppercase tracking-wider mb-3 shadow-xs">
+              <Sparkles className="w-3.5 h-3.5" />
+              Tính Năng Mới • Trải Nghiệm Demo
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-heading font-black text-[#3A211E] mb-3 leading-tight">
+              Tặng Quà Ảo Tương Tác 3D Cho Bạn Bè
+            </h2>
+            <p className="text-sm text-[#765B52] leading-relaxed mb-6 font-medium">
+              Tự tay thiết kế chiếc ly độc bản, đóng gói vào chiếc hộp quà bí mật và gửi tặng liên kết mở quà 3D bất ngờ cho người thương. Người nhận có thể tự tay mở hộp quà và xoay ngắm chiếc ly 360°!
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/custom-cup"
+                className="px-7 py-3.5 bg-[#FFBF00] hover:bg-[#FFD147] text-[#3A211E] rounded-full font-black text-sm transition-all shadow-md flex items-center gap-2 active:scale-95 cursor-pointer"
+              >
+                <Gift className="w-4 h-4 text-[#3A211E]" />
+                <span>Thử tạo quà tặng ngay</span>
+              </Link>
+              <span className="text-xs text-[#765B52] italic font-semibold">
+                *Demo đồ án môn học, không phát sinh đơn hàng hay phí vận chuyển.
+              </span>
+            </div>
+          </div>
+
+          <div className="w-32 h-32 sm:w-40 sm:h-40 shrink-0">
+            <GiftBoxVisual boxStyle="classic" size="md" />
+          </div>
+        </div>
 
         {/* Corporate CTA */}
         <div className="bg-white rounded-3xl border border-[#E8DFD8] p-8 sm:p-12 text-center max-w-3xl mx-auto shadow-xs">

@@ -38,6 +38,7 @@ import { useCanvasTexture, CANVAS_WIDTH, CANVAS_HEIGHT } from '@/components/stud
 import { StudioScene } from '@/components/studio/StudioScene';
 import { StudioToolbar } from '@/components/studio/StudioToolbar';
 import { StudioPricingSidebar } from '@/components/studio/StudioPricingSidebar';
+import GiftCreationModal from '@/components/gift/GiftCreationModal';
 
 const DRAFT_STORAGE_KEY = 'cupfy-studio-draft-v2';
 
@@ -85,6 +86,19 @@ function CustomCupStudioInner() {
   ]);
 
   const [isMobilePricingOpen, setIsMobilePricingOpen] = useState(false);
+  const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+
+  const get3DSnapshot = () => {
+    const canvasEl = canvasElementRef.current || document.querySelector('canvas');
+    if (canvasEl) {
+      try {
+        return canvasEl.toDataURL('image/jpeg', 0.85);
+      } catch (e) {
+        console.error('Error capturing 3D canvas:', e);
+      }
+    }
+    return '';
+  };
 
   const handleToggleAddon = (id: string) => {
     setAddons((prev) =>
@@ -758,6 +772,20 @@ function CustomCupStudioInner() {
             </div>
           </button>
 
+          {/* Nút Gửi tặng bạn bè (Demo) */}
+          <button
+            type="button"
+            onClick={() => setIsGiftModalOpen(true)}
+            className="px-3 sm:px-4 py-2 bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] border border-amber-300 rounded-full font-extrabold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+            title="Tạo liên kết mở hộp quà 3D gửi tặng bạn bè (Demo)"
+          >
+            <Gift className="w-3.5 h-3.5 text-[#FFBF00]" />
+            <span className="hidden sm:inline">Gửi tặng bạn bè</span>
+            <span className="px-1.5 py-0.2 rounded-full bg-amber-200 text-[#3A211E] text-[9px] font-black uppercase">
+              Demo
+            </span>
+          </button>
+
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
@@ -874,6 +902,7 @@ function CustomCupStudioInner() {
             onAddToCart={handleAddToCart}
             isAddingToCart={isAddingToCart}
             formatVND={formatVND}
+            onOpenGiftModal={() => setIsGiftModalOpen(true)}
           />
         </div>
 
@@ -896,11 +925,26 @@ function CustomCupStudioInner() {
                 isAddingToCart={isAddingToCart}
                 formatVND={formatVND}
                 onCloseMobile={() => setIsMobilePricingOpen(false)}
+                onOpenGiftModal={() => {
+                  setIsMobilePricingOpen(false);
+                  setIsGiftModalOpen(true);
+                }}
               />
             </div>
           </div>
         )}
       </div>
+
+      {/* Gift Creation Modal (Tặng quà tương tác Demo) */}
+      <GiftCreationModal
+        isOpen={isGiftModalOpen}
+        onClose={() => setIsGiftModalOpen(false)}
+        modelId={selectedModel.id}
+        cupColor={selectedColor}
+        lidColor={lidColor}
+        layers={layers}
+        previewImage={get3DSnapshot()}
+      />
     </div>
   );
 }

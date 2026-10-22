@@ -30,6 +30,7 @@ interface StudioPricingSidebarProps {
   isAddingToCart: boolean;
   formatVND: (num: number) => string;
   onCloseMobile?: () => void;
+  onOpenGiftModal?: () => void;
 }
 
 export function StudioPricingSidebar({
@@ -47,6 +48,7 @@ export function StudioPricingSidebar({
   isAddingToCart,
   formatVND,
   onCloseMobile,
+  onOpenGiftModal,
 }: StudioPricingSidebarProps) {
   const selectedLayer = layers.find((l) => l.id === selectedLayerId) || null;
 
@@ -414,7 +416,7 @@ export function StudioPricingSidebar({
       </div>
 
       {/* Bottom CTA Button */}
-      <div className="p-4 border-t border-[#E8DFD8] bg-white shrink-0">
+      <div className="p-4 border-t border-[#E8DFD8] bg-white shrink-0 space-y-2.5">
         <button
           onClick={onAddToCart}
           disabled={isAddingToCart}
@@ -432,6 +434,18 @@ export function StudioPricingSidebar({
             </>
           )}
         </button>
+
+        {/* Nút Gửi tặng bạn bè (Demo) */}
+        {onOpenGiftModal && (
+          <button
+            type="button"
+            onClick={onOpenGiftModal}
+            className="w-full py-2.5 px-3 bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] border border-amber-300 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98"
+          >
+            <Gift className="w-4 h-4 text-[#FFBF00]" />
+            <span>Gửi tặng bạn bè (Demo)</span>
+          </button>
+        )}
       </div>
     </div>
   );

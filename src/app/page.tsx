@@ -234,14 +234,14 @@ export default async function Home() {
                 {/* Khu vực ảnh sản phẩm: Bấm vào xem chi tiết */}
                 <Link 
                   href={`/products/${product.id}`} 
-                  className="relative aspect-square bg-[#FAF7F2] overflow-hidden p-6 sm:p-8 flex items-center justify-center border-b border-[#E8DFD8]/70 block"
+                  className="relative aspect-square bg-[#FAF7F2] overflow-hidden p-2 sm:p-3 flex items-center justify-center border-b border-[#E8DFD8]/70 block"
                 >
                   {product.image_url ? (
                     <Image
                       src={product.image_url}
                       alt={`${product.name} - Ly đẹp chính hãng Cupfy`}
                       fill
-                      className="object-contain p-6 sm:p-8 group-hover:scale-105 transition-transform duration-500"
+                      className="object-contain p-2 mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   ) : (

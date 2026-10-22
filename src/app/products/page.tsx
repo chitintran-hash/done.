@@ -52,6 +52,7 @@ function ProductCatalogContent() {
         .select('*')
         .eq('is_available', true)
         .neq('category', 'user_custom')
+        .neq('category', 'template')
         .not('category', 'like', 'admin_%');
 
       if (!ignore && data) {
@@ -194,12 +195,12 @@ function ProductCatalogContent() {
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {displayed.map(product => (
                   <div key={product.id} className="group relative flex flex-col bg-white rounded-2xl p-4 border border-[#E8DFD8] hover:border-[#FFBF00] hover:shadow-md transition-all">
-                    <Link href={`/products/${product.id}`} className="relative w-full aspect-square rounded-xl overflow-hidden bg-[#FFF9E8] mb-3.5 block border border-[#E8DFD8]/40">
+                    <Link href={`/products/${product.id}`} className="relative w-full aspect-square rounded-xl overflow-hidden bg-white mb-3.5 block border border-[#E8DFD8]/50 flex items-center justify-center">
                       <Image 
                         src={product.image_url || 'https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80'} 
                         alt={product.name} 
                         fill 
-                        className="object-contain p-4 group-hover:scale-105 transition-transform duration-500" 
+                        className="object-contain p-1.5 mix-blend-multiply group-hover:scale-105 transition-transform duration-500" 
                       />
                       {product.category === 'gift_box' || product.category === 'gift' ? (
                         <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider bg-[#FFBF00] text-[#3A211E] rounded-full shadow-sm">

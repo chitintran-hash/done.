@@ -86,13 +86,13 @@ export default function ProductDetailClient({ initialProduct }: ProductDetailCli
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           {/* Gallery / Product Image */}
-          <div className="relative aspect-square rounded-[2.5rem] overflow-hidden bg-[#FFF9E8]/60 border border-[#E8DFD8] shadow-sm flex items-center justify-center p-8">
+          <div className="relative aspect-square rounded-[2.5rem] overflow-hidden bg-[#FAF7F2] border border-[#E8DFD8] shadow-sm flex items-center justify-center p-4 sm:p-6">
             <Image 
               src={product.image_url || 'https://images.unsplash.com/photo-1544885896-01584c6c0b39?w=600&q=80'} 
               alt={`${product.name} - Ly đẹp chính hãng Cupfy`} 
               fill 
               priority
-              className="object-contain p-6"
+              className="object-contain p-2 sm:p-3 mix-blend-multiply"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             {isOutOfStock && (

@@ -186,7 +186,7 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
         let finalImageUrl = item.image || '';
         let finalPrintUrl = item.customSpecs?.printableTexture || '';
 
-        // Tải ảnh 3D snapshot xem trước lên Supabase Storage nếu là base64
+        // Tải ảnh 3D snapshot xem trước lên Supabase Storage nếu là base64 (kèm timeout 3.5s)
         if (finalImageUrl && finalImageUrl.startsWith('data:image/')) {
           try {
             const matches = finalImageUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
@@ -195,11 +195,17 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
               const ext = mimeType.includes('png') ? 'png' : 'jpg';
               const buffer = Buffer.from(matches[2], 'base64');
               const storagePath = `custom-previews/${order.id}-${idx}-${Date.now()}.${ext}`;
-              const { error: uploadErr } = await supabaseAdmin.storage
+              
+              const uploadPromise = supabaseAdmin.storage
                 .from('done-products')
                 .upload(storagePath, buffer, { contentType: mimeType, upsert: true });
 
-              if (!uploadErr) {
+              const timeoutPromise = new Promise<{ error: any }>((resolve) =>
+                setTimeout(() => resolve({ error: new Error('Storage preview upload timeout') }), 3500)
+              );
+
+              const uploadRes = await Promise.race([uploadPromise, timeoutPromise]);
+              if (!uploadRes.error) {
                 const { data: { publicUrl } } = supabaseAdmin.storage
                   .from('done-products')
                   .getPublicUrl(storagePath);
@@ -211,7 +217,7 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
           }
         }
 
-        // Tải bản in phẳng (Print Sheet) lên Supabase Storage nếu là base64
+        // Tải bản in phẳng (Print Sheet) lên Supabase Storage nếu là base64 (kèm timeout 3.5s)
         if (finalPrintUrl && finalPrintUrl.startsWith('data:image/')) {
           try {
             const matches = finalPrintUrl.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
@@ -220,11 +226,17 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
               const ext = mimeType.includes('png') ? 'png' : 'jpg';
               const buffer = Buffer.from(matches[2], 'base64');
               const storagePath = `custom-prints/${order.id}-${idx}-${Date.now()}.${ext}`;
-              const { error: uploadErr } = await supabaseAdmin.storage
+
+              const uploadPromise = supabaseAdmin.storage
                 .from('done-products')
                 .upload(storagePath, buffer, { contentType: mimeType, upsert: true });
 
-              if (!uploadErr) {
+              const timeoutPromise = new Promise<{ error: any }>((resolve) =>
+                setTimeout(() => resolve({ error: new Error('Storage print upload timeout') }), 3500)
+              );
+
+              const uploadRes = await Promise.race([uploadPromise, timeoutPromise]);
+              if (!uploadRes.error) {
                 const { data: { publicUrl } } = supabaseAdmin.storage
                   .from('done-products')
                   .getPublicUrl(storagePath);
@@ -236,10 +248,14 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
           }
         }
 
+        const safeProductImageUrl = finalImageUrl.startsWith('data:')
+          ? '/images/cupfy-hero.png'
+          : finalImageUrl;
+
         const snapshotSpecs = {
           ...(item.customSpecs || {}),
-          previewImage: finalImageUrl,
-          printableTexture: finalPrintUrl,
+          previewImage: finalImageUrl.startsWith('data:') ? '' : finalImageUrl,
+          printableTexture: finalPrintUrl.startsWith('data:') ? '' : finalPrintUrl,
         };
 
         // Tạo sản phẩm snapshot lưu trữ thông số thiết kế cho xưởng in
@@ -251,7 +267,7 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
             price: item.price,
             description: JSON.stringify(snapshotSpecs),
             technical_specs: snapshotSpecs,
-            image_url: finalImageUrl,
+            image_url: safeProductImageUrl,
             stock: 1,
             is_available: false, // Ẩn khỏi trang mua sắm công khai
           })

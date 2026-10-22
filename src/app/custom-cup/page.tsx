@@ -539,12 +539,21 @@ function CustomCupStudioInner() {
 
     setIsAddingToCart(true);
 
-    // 1. Capture 3D Snapshot
+    // 1. Capture 3D Snapshot (Optimized lightweight 400x400 thumbnail)
     let snapshotImage = '/images/cupfy-hero.png';
     const canvasEl = canvasElementRef.current || document.querySelector('canvas');
     if (canvasEl) {
       try {
-        snapshotImage = canvasEl.toDataURL('image/jpeg', 0.85);
+        const thumbCanvas = document.createElement('canvas');
+        thumbCanvas.width = 400;
+        thumbCanvas.height = 400;
+        const thumbCtx = thumbCanvas.getContext('2d');
+        if (thumbCtx) {
+          thumbCtx.drawImage(canvasEl, 0, 0, 400, 400);
+          snapshotImage = thumbCanvas.toDataURL('image/jpeg', 0.8);
+        } else {
+          snapshotImage = canvasEl.toDataURL('image/jpeg', 0.6);
+        }
       } catch (e) {
         console.error('Error capturing 3D canvas:', e);
       }

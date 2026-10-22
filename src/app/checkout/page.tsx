@@ -99,6 +99,98 @@ export default function CheckoutPage() {
     }
   };
 
+// Helper to compress large base64 image strings before sending to server action
+async function compressImageString(dataUrl: string, maxDim = 500, quality = 0.75): Promise<string> {
+  if (!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
+    return dataUrl;
+  }
+  if (dataUrl.length < 120000) {
+    return dataUrl;
+  }
+  return new Promise((resolve) => {
+    try {
+      const img = new window.Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        try {
+          let w = img.width || maxDim;
+          let h = img.height || maxDim;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const c = document.createElement('canvas');
+          c.width = w;
+          c.height = h;
+          const ctx = c.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, w, h);
+            const isPng = dataUrl.startsWith('data:image/png');
+            if (isPng) {
+              const pngRes = c.toDataURL('image/png');
+              if (pngRes.length < 250000) {
+                resolve(pngRes);
+                return;
+              }
+            }
+            resolve(c.toDataURL('image/jpeg', quality));
+          } else {
+            resolve(dataUrl);
+          }
+        } catch {
+          resolve(dataUrl);
+        }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    } catch {
+      resolve(dataUrl);
+    }
+  });
+}
+
+async function sanitizeCartItemsForCheckout(items: any[]) {
+  if (!Array.isArray(items)) return [];
+  return Promise.all(
+    items.map(async (item) => {
+      const clean = { ...item };
+      if (clean.image && typeof clean.image === 'string' && clean.image.startsWith('data:image/')) {
+        clean.image = await compressImageString(clean.image, 400, 0.75);
+      }
+      if (clean.customSpecs) {
+        const specs = { ...clean.customSpecs };
+        if (specs.previewImage && typeof specs.previewImage === 'string' && specs.previewImage.startsWith('data:image/')) {
+          specs.previewImage = await compressImageString(specs.previewImage, 400, 0.75);
+        }
+        if (specs.printableTexture && typeof specs.printableTexture === 'string' && specs.printableTexture.startsWith('data:image/')) {
+          specs.printableTexture = await compressImageString(specs.printableTexture, 1024, 0.8);
+        }
+        if (Array.isArray(specs.layers)) {
+          specs.layers = await Promise.all(
+            specs.layers.map(async (layer: any) => {
+              if (layer && layer.url && typeof layer.url === 'string' && layer.url.startsWith('data:image/')) {
+                return {
+                  ...layer,
+                  url: await compressImageString(layer.url, 400, 0.75),
+                  originalFile: undefined,
+                };
+              }
+              return layer;
+            })
+          );
+        }
+        clean.customSpecs = specs;
+      }
+      return clean;
+    })
+  );
+}
+
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
@@ -131,7 +223,21 @@ export default function CheckoutPage() {
         note: formData.note.trim(),
       };
 
-      const result = await processCheckout(orderPayload, cart.items);
+      // Tối ưu và nén dữ liệu hình ảnh giỏ hàng trước khi gửi Server Action
+      const sanitizedCartItems = await sanitizeCartItemsForCheckout(cart.items);
+
+      // Thiết lập timeout 25 giây phòng ngừa nghẽn mạng
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new Error('Hệ thống đang quá tải hoặc kết nối mạng gián đoạn. Vui lòng bấm đặt hàng lại.')),
+          25000
+        )
+      );
+
+      const result: any = await Promise.race([
+        processCheckout(orderPayload, sanitizedCartItems),
+        timeoutPromise,
+      ]);
 
       if (!result.success) {
         throw new Error(result.error || 'Không thể hoàn tất đơn hàng. Vui lòng thử lại sau.');

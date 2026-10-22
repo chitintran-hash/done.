@@ -180,15 +180,21 @@ export function useCanvasTexture(layers: DesignLayer[], showSafeZone: boolean) {
   const exportFlatPrintSheet = useCallback((): string => {
     if (typeof window === 'undefined') return '';
     const offscreen = document.createElement('canvas');
-    offscreen.width = CANVAS_WIDTH;
-    offscreen.height = CANVAS_HEIGHT;
+    // Scale down to 1024x512 for lightweight export while retaining print clarity
+    const targetWidth = 1024;
+    const targetHeight = 512;
+    offscreen.width = targetWidth;
+    offscreen.height = targetHeight;
     const ctx = offscreen.getContext('2d');
     if (!ctx) return '';
+
+    const scaleFactor = targetWidth / CANVAS_WIDTH; // 0.5
 
     layers.forEach((layer) => {
       if (!layer.visible) return;
 
       ctx.save();
+      ctx.scale(scaleFactor, scaleFactor);
       ctx.translate(layer.x, layer.y);
       ctx.rotate((layer.rotation * Math.PI) / 180);
       ctx.scale(layer.scale, layer.scale);

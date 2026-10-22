@@ -58,6 +58,7 @@ function CustomCupStudioInner() {
   const [showSafeZone, setShowSafeZone] = useState<boolean>(true);
   const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('models');
+  const isDemoCup = selectedModel.isDemo || selectedModel.id === 'plastic_boba';
 
   // Addons State (Hộp quà, Charm, Thiệp)
   const [addons, setAddons] = useState<StudioAddon[]>([
@@ -531,6 +532,11 @@ function CustomCupStudioInner() {
 
   // Add to Cart
   const handleAddToCart = () => {
+    if (selectedModel.isDemo || selectedModel.id === 'plastic_boba') {
+      alert('Mẫu ly nhựa hiện đang là phiên bản Demo trải nghiệm thiết kế 3D. Cửa hàng chưa mở bán chính thức nên quý khách chưa thể đặt mua.');
+      return;
+    }
+
     setIsAddingToCart(true);
 
     // 1. Capture 3D Snapshot
@@ -612,8 +618,9 @@ function CustomCupStudioInner() {
 
   // Pricing calculation (Real-time dynamic breakdown)
   const pricingBreakdown: StudioPricingBreakdown = React.useMemo(() => {
-    const matchedDbProd = findMatchedDbProduct(selectedModel, dbProducts);
-    const baseCupPrice = matchedDbProd ? matchedDbProd.price : selectedModel.defaultPrice;
+    const isDemo = selectedModel.isDemo || selectedModel.id === 'plastic_boba';
+    const matchedDbProd = isDemo ? null : findMatchedDbProduct(selectedModel, dbProducts);
+    const baseCupPrice = isDemo ? 0 : (matchedDbProd ? matchedDbProd.price : selectedModel.defaultPrice);
 
     const textLayers = layers.filter((l) => l.type === 'text');
     const imageLayers = layers.filter((l) => l.type === 'image');
@@ -783,9 +790,15 @@ function CustomCupStudioInner() {
               <span>GIÁ THIẾT KẾ</span>
               <Gift className="w-3 h-3 text-[#FFBF00]" />
             </div>
-            <div className="text-sm md:text-base font-black text-[#3A211E] group-hover:text-[#FFBF00] transition-colors">
-              {formatVND(pricingBreakdown.totalPrice)}
-            </div>
+            {isDemoCup ? (
+              <span className="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">
+                Bản Demo
+              </span>
+            ) : (
+              <div className="text-sm md:text-base font-black text-[#3A211E] group-hover:text-[#FFBF00] transition-colors">
+                {formatVND(pricingBreakdown.totalPrice)}
+              </div>
+            )}
           </button>
 
           {/* Nút Gửi tặng bạn bè (Demo) */}
@@ -802,23 +815,36 @@ function CustomCupStudioInner() {
             </span>
           </button>
 
-          <button
-            onClick={handleAddToCart}
-            disabled={isAddingToCart}
-            className="px-3.5 sm:px-4 md:px-5 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-1.5 sm:gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer whitespace-nowrap shrink-0"
-          >
-            {isAddingToCart ? (
-              <>
-                <Check className="w-4 h-4 text-[#3A211E]" />
-                <span>ĐANG LƯU...</span>
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="w-4 h-4 shrink-0" />
-                <span>THÊM VÀO GIỎ</span>
-              </>
-            )}
-          </button>
+          {isDemoCup ? (
+            <button
+              type="button"
+              onClick={() => {
+                alert('Mẫu ly nhựa hiện đang là phiên bản Demo trải nghiệm thiết kế 3D. Cửa hàng chưa mở bán chính thức nên quý khách chưa thể thêm vào giỏ hàng. Bạn vẫn có thể trải nghiệm thiết kế và gửi tặng quà ảo 3D!');
+              }}
+              className="px-3 sm:px-3.5 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-full font-black text-xs flex items-center gap-1.5 transition-all cursor-not-allowed whitespace-nowrap shrink-0 shadow-xs"
+              title="Mẫu demo trải nghiệm, chưa mở bán"
+            >
+              <span>MẪU DEMO (CHƯA BÁN)</span>
+            </button>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              disabled={isAddingToCart}
+              className="px-3.5 sm:px-4 md:px-5 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-1.5 sm:gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer whitespace-nowrap shrink-0"
+            >
+              {isAddingToCart ? (
+                <>
+                  <Check className="w-4 h-4 text-[#3A211E]" />
+                  <span>ĐANG LƯU...</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="w-4 h-4 shrink-0" />
+                  <span>THÊM VÀO GIỎ</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </header>
 

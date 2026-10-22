@@ -53,6 +53,7 @@ export interface CupModelDef {
   hasLid: boolean;
   hasHandle: boolean;
   isParametric: boolean;
+  isDemo?: boolean;
   // Dimensions for printable overlay sleeve matching physical profile
   sleeve: {
     radiusTop: number;

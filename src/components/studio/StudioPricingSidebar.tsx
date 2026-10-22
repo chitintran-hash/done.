@@ -51,6 +51,7 @@ export function StudioPricingSidebar({
   onOpenGiftModal,
 }: StudioPricingSidebarProps) {
   const selectedLayer = layers.find((l) => l.id === selectedLayerId) || null;
+  const isDemoCup = selectedModel.isDemo || selectedModel.id === 'plastic_boba';
 
   return (
     <div className="flex flex-col h-full bg-white select-none">
@@ -368,7 +369,13 @@ export function StudioPricingSidebar({
           {/* Phôi ly gốc */}
           <div className="flex justify-between text-[#765B52]">
             <span>Ly phôi ({pricing.modelName}):</span>
-            <span className="font-bold text-[#3A211E]">{formatVND(pricing.baseCupPrice)}</span>
+            {isDemoCup ? (
+              <span className="font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md text-[11px] border border-amber-200">
+                Bản Demo (Chưa mở bán)
+              </span>
+            ) : (
+              <span className="font-bold text-[#3A211E]">{formatVND(pricing.baseCupPrice)}</span>
+            )}
           </div>
 
           {/* Phí in chữ */}
@@ -408,32 +415,55 @@ export function StudioPricingSidebar({
           {/* Divider */}
           <div className="pt-2 border-t border-[#E8DFD8] flex items-center justify-between">
             <span className="font-extrabold text-sm text-[#3A211E]">TỔNG GIÁ THIẾT KẾ:</span>
-            <span className="font-black text-lg text-[#3A211E]">
-              {formatVND(pricing.totalPrice)}
-            </span>
+            {isDemoCup ? (
+              <span className="font-black text-xs md:text-sm text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300">
+                MẪU DEMO TRẢI NGHIỆM
+              </span>
+            ) : (
+              <span className="font-black text-lg text-[#3A211E]">
+                {formatVND(pricing.totalPrice)}
+              </span>
+            )}
           </div>
         </div>
       </div>
 
       {/* Bottom CTA Button */}
       <div className="p-4 border-t border-[#E8DFD8] bg-white shrink-0 space-y-2.5">
-        <button
-          onClick={onAddToCart}
-          disabled={isAddingToCart}
-          className="w-full py-3.5 px-4 bg-[#FFBF00] hover:bg-[#FFD147] text-[#3A211E] rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 disabled:opacity-70 cursor-pointer"
-        >
-          {isAddingToCart ? (
-            <>
-              <Check className="w-4 h-4" />
-              <span>ĐANG LƯU VÀO GIỎ...</span>
-            </>
-          ) : (
-            <>
-              <ShoppingCart className="w-4 h-4" />
-              <span>THÊM VÀO GIỎ • {formatVND(pricing.totalPrice)}</span>
-            </>
-          )}
-        </button>
+        {isDemoCup ? (
+          <div className="space-y-2">
+            <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 leading-snug">
+              ⚠️ <strong>Mẫu Demo:</strong> Nhóm chưa mở bán chính thức mẫu ly nhựa này nên chưa thể thêm vào giỏ hàng. Bạn vẫn có thể thoải mái sáng tạo thiết kế và dùng tính năng <em>Gửi tặng bạn bè (Demo)</em>!
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                alert('Mẫu ly nhựa hiện đang là phiên bản Demo trải nghiệm thiết kế 3D. Cửa hàng chưa mở bán chính thức nên quý khách chưa thể đặt mua. Bạn vẫn có thể trải nghiệm thiết kế và gửi tặng quà ảo 3D cho bạn bè nhé!');
+              }}
+              className="w-full py-3.5 px-4 bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 rounded-2xl font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-not-allowed shadow-xs"
+            >
+              <span>MẪU DEMO • CHƯA MỞ BÁN</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={onAddToCart}
+            disabled={isAddingToCart}
+            className="w-full py-3.5 px-4 bg-[#FFBF00] hover:bg-[#FFD147] text-[#3A211E] rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 disabled:opacity-70 cursor-pointer"
+          >
+            {isAddingToCart ? (
+              <>
+                <Check className="w-4 h-4" />
+                <span>ĐANG LƯU VÀO GIỎ...</span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4" />
+                <span>THÊM VÀO GIỎ • {formatVND(pricing.totalPrice)}</span>
+              </>
+            )}
+          </button>
+        )}
 
         {/* Nút Gửi tặng bạn bè (Demo) */}
         {onOpenGiftModal && (

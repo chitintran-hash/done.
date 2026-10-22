@@ -227,10 +227,12 @@ export function StudioToolbar({
                 const matchedDb = findMatchedDbProduct(m, dbProducts);
                 const currentPrice = matchedDb?.price || m.defaultPrice;
 
+                const isDemoCup = m.isDemo || m.id === 'plastic_boba';
+
                 return (
                   <button
                     key={m.id}
-                    onClick={() => setSelectedModel({ ...m, defaultPrice: currentPrice })}
+                    onClick={() => setSelectedModel({ ...m, defaultPrice: isDemoCup ? 0 : currentPrice })}
                     className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex flex-col gap-2 ${
                       isSelected
                         ? 'border-[#3A211E] bg-[#FFF9E8] shadow-sm'
@@ -242,9 +244,15 @@ export function StudioToolbar({
                         {m.name}
                         {isSelected && <Check className="w-4 h-4 text-[#059669]" />}
                       </span>
-                      <span className="font-black text-sm text-[#3A211E]">
-                        {formatVND(currentPrice)}
-                      </span>
+                      {isDemoCup ? (
+                        <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#B45309] font-black text-xs border border-amber-300 uppercase tracking-wide">
+                          Bản Demo
+                        </span>
+                      ) : (
+                        <span className="font-black text-sm text-[#3A211E]">
+                          {formatVND(currentPrice)}
+                        </span>
+                      )}
                     </div>
 
                     <p className="text-xs text-[#765B52]">{m.subtitle}</p>
@@ -256,6 +264,12 @@ export function StudioToolbar({
                       <span>Cao: {m.heightMm}</span>
                       <span>•</span>
                       <span>Miệng: {m.diameterMm}</span>
+                      {isDemoCup && (
+                        <>
+                          <span>•</span>
+                          <span className="text-amber-800 font-bold italic">Chưa mở bán</span>
+                        </>
+                      )}
                     </div>
                   </button>
                 );

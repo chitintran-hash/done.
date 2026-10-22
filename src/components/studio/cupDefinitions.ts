@@ -80,9 +80,10 @@ export const CUP_MODELS: CupModelDef[] = [
   {
     id: 'plastic_boba',
     name: 'Ly Nhựa Có Nắp & Ống Hút',
-    subtitle: 'Nhựa cao cấp tái sử dụng (BPA-Free), kèm nắp vòm & ống hút',
+    subtitle: 'Nhựa cao cấp tái sử dụng (BPA-Free), kèm nắp vòm & ống hút (Mẫu Demo)',
     category: 'plastic',
-    defaultPrice: 35000,
+    defaultPrice: 0,
+    isDemo: true,
     capacity: '500ml',
     heightMm: '165 mm',
     diameterMm: '90 mm',

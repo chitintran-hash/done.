@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Sparkles, Heart } from "lucide-react";
+import { Sparkles, ShoppingBag, PlusCircle } from "lucide-react";
 import { useLanguageStore } from "@/store/useLanguageStore";
 import TemplateCardActions from "@/components/TemplateCardActions";
 
@@ -29,23 +29,19 @@ interface TemplatesClientProps {
 }
 
 function getCupTag(name: string, specs?: any): string {
+  if (specs?.vibe) return specs.vibe;
   const n = name.toLowerCase();
-  if (specs?.vibe && specs.vibe !== "Cute" && specs.vibe !== "Cozy" && specs.vibe !== "Retro") {
-    return specs.vibe;
-  }
   if (n.includes("quai")) return "Có quai cầm";
   if (n.includes("brainrot")) return "Brainrot Edition";
   if (n.includes("classic") || n.includes("facet")) return "Classic Facet";
   if (n.includes("cao")) return "Dáng cao";
   if (n.includes("nhỏ") || n.includes("thấp")) return "Dáng lùn";
   if (n.includes("trung")) return "Cỡ vừa";
-  return "Thuỷ tinh cao cấp";
+  return "Mẫu có sẵn";
 }
 
 function getCupBg(name: string, specs?: any): string {
-  if (specs?.card_bg && specs.card_bg !== "#FCE7F3") {
-    return specs.card_bg;
-  }
+  if (specs?.card_bg) return specs.card_bg;
   const n = name.toLowerCase();
   if (n.includes("quai")) return "#FFEAEA"; // Soft coral
   if (n.includes("brainrot")) return "#DCFCE7"; // Soft mint
@@ -72,70 +68,101 @@ export default function TemplatesClient({ initialTemplates }: TemplatesClientPro
   const language = useLanguageStore((state) => state.language);
   const isEn = language === "en";
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedVibe, setSelectedVibe] = useState<string>("all");
 
-  // Filter Categories: Tất cả mẫu, Ly dáng cao, Ly có quai, Ly vừa & nhỏ
-  const filterTabs = useMemo(() => {
-    return [
-      { id: "all", label: isEn ? "All Cups" : "Tất cả mẫu" },
-      { id: "tall", label: isEn ? "Tall Glasses" : "Ly dáng cao" },
-      { id: "handle", label: isEn ? "With Handle" : "Ly có quai" },
-      { id: "short", label: isEn ? "Medium & Short" : "Ly vừa & nhỏ" },
-    ];
-  }, [isEn]);
+  // Extract unique vibes from the templates (based on technical_specs.vibe or tag)
+  const availableVibes = useMemo(() => {
+    const vibes = new Set<string>();
+    initialTemplates.forEach((t) => {
+      const v = t.technical_specs?.vibe || getCupTag(t.name, t.technical_specs);
+      if (v) vibes.add(v);
+    });
+    return Array.from(vibes);
+  }, [initialTemplates]);
 
   // Filter templates
   const filteredTemplates = useMemo(() => {
-    if (selectedCategory === "all") return initialTemplates;
+    if (selectedVibe === "all") return initialTemplates;
     return initialTemplates.filter((t) => {
-      const n = t.name.toLowerCase();
-      if (selectedCategory === "tall") {
-        return n.includes("cao") && !n.includes("quai");
-      }
-      if (selectedCategory === "handle") {
-        return n.includes("quai");
-      }
-      if (selectedCategory === "short") {
-        return n.includes("trung") || n.includes("nhỏ") || n.includes("thấp") || n.includes("classic") || n.includes("facet");
-      }
-      return true;
+      const v = t.technical_specs?.vibe || getCupTag(t.name, t.technical_specs);
+      return v.toLowerCase() === selectedVibe.toLowerCase();
     });
-  }, [initialTemplates, selectedCategory]);
+  }, [initialTemplates, selectedVibe]);
+
+  if (initialTemplates.length === 0) {
+    return (
+      <div className="w-full text-center py-20 px-6 bg-white rounded-[32px] border border-[#E8DFD8] shadow-sm max-w-2xl mx-auto">
+        <div className="w-20 h-20 rounded-full bg-[#FFF9E8] flex items-center justify-center mx-auto mb-5 text-4xl shadow-inner border border-[#FFBF00]/30">
+          ✨
+        </div>
+        <h3 className="text-2xl font-black text-[#171717] mb-3">
+          {isEn ? "No templates available yet" : "Chưa có sản phẩm nào trong Mẫu có sẵn"}
+        </h3>
+        <p className="text-[#765B52] text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
+          {isEn
+            ? "When admin adds a product and selects category 'Mẫu có sẵn', it will appear here."
+            : "Khi admin đăng sản phẩm mới và chọn mục 'Mẫu có sẵn', sản phẩm đó sẽ tự động hiển thị tại đây."}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#3A211E] hover:bg-[#201817] text-white rounded-full font-bold text-sm transition-all shadow-sm"
+          >
+            <ShoppingBag className="w-4 h-4" />
+            <span>{isEn ? "Browse all products" : "Xem tất cả tại Cửa hàng"}</span>
+          </Link>
+          <Link
+            href="/admin/products"
+            className="inline-flex items-center gap-2 px-6 py-3.5 bg-white hover:bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8] rounded-full font-bold text-sm transition-all shadow-xs"
+          >
+            <PlusCircle className="w-4 h-4 text-[#F06806]" />
+            <span>{isEn ? "Go to Admin Products" : "Đăng mẫu trong Quản trị"}</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
-      {/* Category Filter Tabs */}
-      <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-3 mb-10 sm:mb-12">
-        {filterTabs.map((tab) => {
-          let count = initialTemplates.length;
-          if (tab.id === "tall") {
-            count = initialTemplates.filter((t) => t.name.toLowerCase().includes("cao") && !t.name.toLowerCase().includes("quai")).length;
-          } else if (tab.id === "handle") {
-            count = initialTemplates.filter((t) => t.name.toLowerCase().includes("quai")).length;
-          } else if (tab.id === "short") {
-            count = initialTemplates.filter((t) => {
-              const n = t.name.toLowerCase();
-              return n.includes("trung") || n.includes("nhỏ") || n.includes("thấp") || n.includes("classic") || n.includes("facet");
+      {/* Vibe / Category Filter Tabs */}
+      {availableVibes.length > 1 && (
+        <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-3 mb-10 sm:mb-12">
+          <button
+            onClick={() => setSelectedVibe("all")}
+            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+              selectedVibe === "all"
+                ? "bg-[#3A211E] text-white shadow-md scale-105"
+                : "bg-white text-[#765B52] hover:bg-[#FAF7F2] border border-[#E8DFD8]"
+            }`}
+          >
+            {isEn ? "All Templates" : "Tất cả mẫu"} ({initialTemplates.length})
+          </button>
+
+          {availableVibes.map((vibe) => {
+            const count = initialTemplates.filter((t) => {
+              const v = t.technical_specs?.vibe || getCupTag(t.name, t.technical_specs);
+              return v.toLowerCase() === vibe.toLowerCase();
             }).length;
-          }
 
-          const isActive = selectedCategory === tab.id;
+            const isActive = selectedVibe.toLowerCase() === vibe.toLowerCase();
 
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setSelectedCategory(tab.id)}
-              className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
-                isActive
-                  ? "bg-[#3A211E] text-white shadow-md scale-105"
-                  : "bg-white text-[#765B52] hover:bg-[#FAF7F2] border border-[#E8DFD8]"
-              }`}
-            >
-              {tab.label} ({count})
-            </button>
-          );
-        })}
-      </div>
+            return (
+              <button
+                key={vibe}
+                onClick={() => setSelectedVibe(vibe)}
+                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? "bg-[#FFBF00] text-[#3A211E] shadow-md scale-105 font-black"
+                    : "bg-white text-[#765B52] hover:bg-[#FAF7F2] border border-[#E8DFD8]"
+                }`}
+              >
+                {vibe} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Templates Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -143,6 +170,7 @@ export default function TemplatesClient({ initialTemplates }: TemplatesClientPro
           const cardBg = getCupBg(tmpl.name, tmpl.technical_specs);
           const tag = getCupTag(tmpl.name, tmpl.technical_specs);
           const capacity = getCupCapacity(tmpl.name, tmpl.technical_specs);
+          const icon = tmpl.technical_specs?.icon || "✨";
 
           return (
             <div
@@ -177,7 +205,7 @@ export default function TemplatesClient({ initialTemplates }: TemplatesClientPro
                     />
                   ) : (
                     <span className="text-5xl sm:text-6xl drop-shadow-xs select-none">
-                      🥛
+                      {icon}
                     </span>
                   )}
                 </Link>
@@ -222,20 +250,6 @@ export default function TemplatesClient({ initialTemplates }: TemplatesClientPro
           );
         })}
       </div>
-
-      {filteredTemplates.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-3xl border border-[#E8DFD8]">
-          <p className="text-[#765B52] font-bold text-lg mb-2">
-            {isEn ? "No cup models found in this category." : "Chưa có mẫu ly nào thuộc phân loại này."}
-          </p>
-          <button
-            onClick={() => setSelectedCategory("all")}
-            className="text-[#FFBF00] font-black underline hover:text-[#3A211E] cursor-pointer"
-          >
-            {isEn ? "View all cup models" : "Xem tất cả mẫu ly"}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

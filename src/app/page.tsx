@@ -22,8 +22,8 @@ export default async function Home() {
     .from("products")
     .select("*")
     .eq("is_available", true)
-    .in("category", ["glass", "plastic", "template"])
-    .order("price", { ascending: false })
+    .eq("category", "template")
+    .order("created_at", { ascending: false })
     .limit(3);
 
   const fallbackTemplates = [

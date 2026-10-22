@@ -52,7 +52,6 @@ function ProductCatalogContent() {
         .select('*')
         .eq('is_available', true)
         .neq('category', 'user_custom')
-        .neq('category', 'template')
         .not('category', 'like', 'admin_%');
 
       if (!ignore && data) {
@@ -101,6 +100,7 @@ function ProductCatalogContent() {
   const categories = [
     { id: 'all', name: 'Tất cả ly' },
     { id: 'glass', name: 'Ly thủy tinh' },
+    { id: 'template', name: 'Mẫu có sẵn' },
     { id: 'plastic', name: 'Ly nhựa' },
     { id: 'custom', name: 'Ly custom phôi' },
     { id: 'gift_box', name: 'Túi & Hộp quà riêng' }

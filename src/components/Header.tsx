@@ -138,14 +138,14 @@ export default function Header() {
 
         {/* Left Side: Logo + Nav Items (strictly no wrapping) */}
         <div className="flex items-center gap-3 xl:gap-6 2xl:gap-8 h-full shrink min-w-0">
-          {/* Logo Wordmark dạng chữ cupfy màu đen kèm chấm cam */}
-          <Link href="/" className="flex items-center hover:opacity-85 transition-opacity py-1.5 shrink-0 group">
-            <div className="relative h-8 w-[100px] sm:h-9 sm:w-[115px]">
+          {/* Logo Cupfy mới: Ly cười vàng tươi đặc trưng */}
+          <Link href="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity py-1 shrink-0 group">
+            <div className="relative h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 rounded-2xl overflow-hidden shadow-xs border border-amber-300/70 shrink-0 bg-[#FFBF00]">
               <Image 
-                src="/images/cupfy-wordmark@2x.png" 
+                src="/images/cupfy-logo.png" 
                 alt="Cupfy Logo" 
                 fill
-                className="object-contain object-left"
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
                 priority
               />
             </div>

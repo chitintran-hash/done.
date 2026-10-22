@@ -332,8 +332,18 @@ function CustomCupStudioInner() {
     });
   };
 
+  const isPlaceholderTextLayer = (l: DesignLayer) => {
+    return (
+      l.id === 'default-text-1' ||
+      (l.type === 'text' && (l as TextLayer).text?.trim().toUpperCase() === 'YOUR LOGO')
+    );
+  };
+
   // Add Text Layer
   const handleAddTextLayer = () => {
+    // If the only layer is default placeholder "YOUR LOGO", replace it
+    const cleanLayers = layers.filter((l) => !isPlaceholderTextLayer(l));
+
     const newTextLayer: TextLayer = {
       id: 'text-' + Date.now(),
       type: 'text',
@@ -345,7 +355,7 @@ function CustomCupStudioInner() {
       isBold: true,
       align: 'center',
       x: CANVAS_WIDTH / 2,
-      y: CANVAS_HEIGHT / 2 + (layers.length * 20),
+      y: CANVAS_HEIGHT / 2 + (cleanLayers.length * 20),
       rotation: 0,
       scale: 1,
       locked: false,
@@ -353,7 +363,7 @@ function CustomCupStudioInner() {
       opacity: 1,
       lineHeight: 1.25,
     };
-    const next = [...layers, newTextLayer];
+    const next = [...cleanLayers, newTextLayer];
     setLayers(next);
     setSelectedLayerId(newTextLayer.id);
     setActiveTab('text');
@@ -400,7 +410,9 @@ function CustomCupStudioInner() {
           opacity: 1,
         };
 
-        const next = [...layers, newImgLayer];
+        // Remove placeholder "YOUR LOGO" if present
+        const cleanLayers = layers.filter((l) => !isPlaceholderTextLayer(l));
+        const next = [...cleanLayers, newImgLayer];
         setLayers(next);
         setSelectedLayerId(newImgLayer.id);
         setActiveTab('upload');
@@ -431,7 +443,9 @@ function CustomCupStudioInner() {
       visible: true,
       opacity: 1,
     };
-    const next = [...layers, newStickerLayer];
+    // Remove placeholder "YOUR LOGO" text layer if present so customer isn't charged text fee
+    const cleanLayers = layers.filter((l) => !isPlaceholderTextLayer(l));
+    const next = [...cleanLayers, newStickerLayer];
     setLayers(next);
     setSelectedLayerId(newStickerLayer.id);
     setActiveTab('stickers');
@@ -710,7 +724,7 @@ function CustomCupStudioInner() {
           </div>
 
           {/* View Modes (Studio / White / Transparent) */}
-          <div className="hidden lg:flex items-center bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl p-1 text-xs font-bold text-[#765B52]">
+          <div className="hidden xl:flex items-center bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl p-1 text-xs font-bold text-[#765B52]">
             <button
               onClick={() => setViewMode('studio')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
@@ -747,7 +761,7 @@ function CustomCupStudioInner() {
           <button
             onClick={() => setShowSafeZone(!showSafeZone)}
             title="Bật/Tắt đường hướng dẫn vùng in an toàn"
-            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
+            className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors ${
               showSafeZone
                 ? 'bg-[#FFF3C4] border-[#FFBF00] text-[#3A211E]'
                 : 'bg-white border-[#E8DFD8] text-[#765B52] hover:text-[#3A211E]'
@@ -759,7 +773,7 @@ function CustomCupStudioInner() {
         </div>
 
         {/* Right: Price & Add To Cart Button */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
           <button
             onClick={() => setIsMobilePricingOpen(true)}
             className="text-right flex flex-col items-end cursor-pointer group whitespace-nowrap"
@@ -778,11 +792,11 @@ function CustomCupStudioInner() {
           <button
             type="button"
             onClick={() => setIsGiftModalOpen(true)}
-            className="px-2.5 sm:px-4 py-2 bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] border border-amber-300 rounded-full font-extrabold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer whitespace-nowrap"
+            className="px-2.5 sm:px-3 md:px-3.5 py-2 bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] border border-amber-300 rounded-full font-extrabold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
             title="Tạo liên kết mở hộp quà 3D gửi tặng bạn bè (Demo)"
           >
             <Gift className="w-3.5 h-3.5 text-[#FFBF00]" />
-            <span className="hidden sm:inline">Gửi tặng bạn bè</span>
+            <span className="hidden md:inline">Gửi tặng bạn bè</span>
             <span className="px-1.5 py-0.2 rounded-full bg-amber-200 text-[#3A211E] text-[9px] font-black uppercase">
               Demo
             </span>
@@ -791,7 +805,7 @@ function CustomCupStudioInner() {
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="px-3.5 sm:px-5 md:px-6 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-1.5 sm:gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer whitespace-nowrap"
+            className="px-3.5 sm:px-4 md:px-5 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-1.5 sm:gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer whitespace-nowrap shrink-0"
           >
             {isAddingToCart ? (
               <>
@@ -800,7 +814,7 @@ function CustomCupStudioInner() {
               </>
             ) : (
               <>
-                <ShoppingCart className="w-4 h-4" />
+                <ShoppingCart className="w-4 h-4 shrink-0" />
                 <span>THÊM VÀO GIỎ</span>
               </>
             )}

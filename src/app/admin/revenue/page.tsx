@@ -29,7 +29,7 @@ export default async function AdminRevenuePage({
         </div>
       </div>
 
-      <RevenueClient initialData={data} />
+      <RevenueClient initialData={data} initialRange={range} />
     </div>
   );
 }

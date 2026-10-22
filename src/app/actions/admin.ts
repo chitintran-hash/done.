@@ -718,6 +718,46 @@ export async function fetchRevenueAndProfit(dateRange: string = '30d') {
     }
   });
 
+  // Custom Cup Design Options Breakdown
+  let customBaseCupRevenue = 0;
+  let customTextRevenue = 0;
+  let customImageRevenue = 0;
+  let customStickerRevenue = 0;
+  let customAddonsRevenue = 0;
+  let totalCustomItemsCount = 0;
+
+  filteredOrders.forEach(o => {
+    if (o.status !== 'cancelled') {
+      o.order_items?.forEach((item: any) => {
+        const prod = item.products;
+        const qty = Number(item.quantity) || 1;
+        const itemPrice = Number(item.price) || 0;
+        const specs = prod?.technical_specs || {};
+        const isCustom = prod?.category === 'user_custom' || specs.version === '2.0' || !!specs.modelType;
+
+        if (isCustom) {
+          totalCustomItemsCount += qty;
+          const textFee = (Number(specs.textFee) || 0) * qty;
+          const imageFee = (Number(specs.imageFee) || 0) * qty;
+          const stickerFee = (Number(specs.stickerFee) || 0) * qty;
+
+          let addonsSum = 0;
+          if (Array.isArray(specs.addons)) {
+            addonsSum = specs.addons.reduce((sum: number, a: any) => sum + (Number(a.price) || 0), 0) * qty;
+          }
+
+          const basePrice = (Number(specs.basePrice) || Math.max(0, itemPrice - textFee - imageFee - stickerFee - addonsSum)) * qty;
+
+          customTextRevenue += textFee;
+          customImageRevenue += imageFee;
+          customStickerRevenue += stickerFee;
+          customAddonsRevenue += addonsSum;
+          customBaseCupRevenue += Math.max(0, basePrice);
+        }
+      });
+    }
+  });
+
   return {
     grossSales,
     refunds,
@@ -734,7 +774,16 @@ export async function fetchRevenueAndProfit(dateRange: string = '30d') {
     hasMissingCosts: missingCostCount > 0,
     expensesList: filteredExpenses,
     timelineData,
-    categoryBreakdown: categoryMap
+    categoryBreakdown: categoryMap,
+    customDesignOptions: {
+      totalCustomItemsCount,
+      customBaseCupRevenue,
+      customTextRevenue,
+      customImageRevenue,
+      customStickerRevenue,
+      customAddonsRevenue,
+      totalCustomRevenue: customBaseCupRevenue + customTextRevenue + customImageRevenue + customStickerRevenue + customAddonsRevenue,
+    }
   };
 }
 

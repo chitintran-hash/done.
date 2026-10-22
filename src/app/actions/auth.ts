@@ -196,44 +196,4 @@ export async function autoConfirmUserAction(email: string) {
   }
 }
 
-export async function resetPasswordDirectAction(data: {
-  email: string;
-  newPassword: string;
-}) {
-  try {
-    const cleanEmail = (data.email || '').trim().toLowerCase();
-    const newPass = data.newPassword || '';
-
-    if (!cleanEmail) {
-      return { success: false, error: 'Vui lòng nhập địa chỉ email.' };
-    }
-    if (newPass.length < 6) {
-      return { success: false, error: 'Mật khẩu mới phải có tối thiểu 6 ký tự.' };
-    }
-
-    const { data: usersList, error: listErr } = await supabaseAdmin.auth.admin.listUsers();
-    if (listErr || !usersList?.users) {
-      return { success: false, error: 'Không thể kết nối danh sách tài khoản.' };
-    }
-
-    const target = usersList.users.find(u => u.email?.toLowerCase() === cleanEmail);
-    if (!target) {
-      return { success: false, error: 'Không tìm thấy tài khoản tương ứng với email này trên hệ thống.' };
-    }
-
-    const { error: updateErr } = await supabaseAdmin.auth.admin.updateUserById(target.id, {
-      password: newPass,
-      email_confirm: true,
-    });
-
-    if (updateErr) {
-      return { success: false, error: updateErr.message };
-    }
-
-    return { success: true };
-  } catch (err: any) {
-    return { success: false, error: err.message || 'Lỗi khi đặt lại mật khẩu.' };
-  }
-}
-
 

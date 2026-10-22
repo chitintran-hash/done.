@@ -21,40 +21,43 @@ export default async function Home() {
   const { data: dbTemplates } = await supabase
     .from("products")
     .select("*")
-    .eq("category", "template")
     .eq("is_available", true)
-    .order("created_at", { ascending: false })
+    .in("category", ["glass", "plastic", "template"])
+    .order("price", { ascending: false })
     .limit(3);
 
   const fallbackTemplates = [
     {
-      id: "4f8cc6e6-16d0-4437-8188-81a867f96286",
-      name: "Mochi Cat",
-      image_url: "",
+      id: "3bd416e6-6e46-4b4f-8530-0ed6f25bfc45",
+      name: "Ly Thuỷ Tinh Có Quai",
+      price: 145000,
+      image_url: "/images/products/quai.jpg",
       technical_specs: {
-        vibe: "Cute",
-        card_bg: "#FCE7F3",
-        icon: "🐱",
+        vibe: "Có quai cầm",
+        card_bg: "#FFEAEA",
+        capacity: "400ml",
       },
     },
     {
       id: "29440931-5abe-4663-aafc-7823cedaa392",
-      name: "Matcha Morning",
-      image_url: "",
+      name: "Ly Thuỷ Tinh Cao Brainrot",
+      price: 130000,
+      image_url: "/images/products/brainrot.jpg",
       technical_specs: {
-        vibe: "Cozy",
+        vibe: "Brainrot Edition",
         card_bg: "#DCFCE7",
-        icon: "🍵",
+        capacity: "350ml",
       },
     },
     {
-      id: "21e4cf22-5bd9-43e8-aaf5-609e59732a58",
-      name: "Retro Orange",
-      image_url: "",
+      id: "49c8dfa4-25e7-45c5-9a52-a4d67e170983",
+      name: "Ly Thuỷ Tinh Cao",
+      price: 115000,
+      image_url: "/images/products/cao.jpg",
       technical_specs: {
-        vibe: "Retro",
-        card_bg: "#FBBF24",
-        icon: "✦",
+        vibe: "Dáng cao",
+        card_bg: "#FFF2D6",
+        capacity: "350ml",
       },
     },
   ];
@@ -304,55 +307,77 @@ export default async function Home() {
         {/* 3 Template Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {templates.map((tmpl) => {
-            const cardBg = tmpl.technical_specs?.card_bg || "#FCE7F3";
-            const vibe = tmpl.technical_specs?.vibe || "Cute";
-            const icon = tmpl.technical_specs?.icon || "🐱";
+            const cardBg = tmpl.technical_specs?.card_bg || 
+              (tmpl.name.toLowerCase().includes("quai") ? "#FFEAEA" : 
+               tmpl.name.toLowerCase().includes("brainrot") ? "#DCFCE7" : "#FFF2D6");
+            const tag = tmpl.technical_specs?.vibe || 
+              (tmpl.name.toLowerCase().includes("quai") ? "Có quai cầm" :
+               tmpl.name.toLowerCase().includes("brainrot") ? "Brainrot Edition" : "Dáng cao");
+            const capacity = tmpl.technical_specs?.capacity || "350ml";
 
             return (
               <div
                 key={tmpl.id}
                 className="bg-white rounded-[28px] p-3.5 sm:p-4 border border-[#EBE3DC] shadow-[0_4px_25px_rgba(58,33,30,0.04)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
               >
-                {/* Colored Top Area */}
+                {/* Colored Top Area with Cup Showcase */}
                 <div
-                  className="w-full h-[220px] sm:h-[240px] rounded-[22px] flex items-center justify-center relative overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]"
+                  className="w-full h-[230px] sm:h-[250px] rounded-[22px] flex items-center justify-center relative overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]"
                   style={{ backgroundColor: cardBg }}
                 >
-                  {/* Floating White Card */}
-                  <div className="w-[120px] h-[160px] sm:w-[130px] sm:h-[170px] rounded-[22px] bg-white/95 shadow-[0_12px_28px_rgba(0,0,0,0.07)] border border-white/60 flex items-center justify-center p-3 select-none transition-transform duration-300 group-hover:scale-105">
-                    {tmpl.image_url && !tmpl.technical_specs?.icon ? (
-                      <div className="relative w-full h-full">
-                        <Image
-                          src={tmpl.image_url}
-                          alt={tmpl.name}
-                          fill
-                          className="object-contain"
-                          sizes="130px"
-                        />
-                      </div>
+                  <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#3A211E] text-[11px] font-black shadow-xs">
+                    {capacity}
+                  </div>
+                  <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/10 backdrop-blur-md text-[#3A211E] text-[10px] font-bold uppercase tracking-wider">
+                    Cupfy Choice
+                  </div>
+
+                  <Link
+                    href={`/products/${tmpl.id}`}
+                    className="w-[140px] h-[190px] sm:w-[160px] sm:h-[210px] rounded-[22px] bg-white/95 shadow-[0_12px_28px_rgba(0,0,0,0.07)] border border-white/70 flex items-center justify-center p-3 select-none transition-transform duration-300 group-hover:scale-105 relative block cursor-pointer"
+                  >
+                    {tmpl.image_url ? (
+                      <Image
+                        src={tmpl.image_url}
+                        alt={tmpl.name}
+                        fill
+                        className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 250px"
+                      />
                     ) : (
                       <span className="text-5xl sm:text-6xl drop-shadow-xs select-none">
-                        {icon}
+                        🥛
                       </span>
                     )}
-                  </div>
+                  </Link>
                 </div>
 
                 {/* Bottom Info Area */}
                 <div className="px-1.5 pt-3.5 pb-1 flex flex-col flex-grow">
-                  {/* Vibe Tag */}
-                  <div className="mb-2">
+                  <div className="flex items-center justify-between gap-2 mb-2">
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#F4EFEA] text-[#171717] font-extrabold text-xs select-none">
-                      {vibe}
+                      {tag}
+                    </span>
+                    <span className="text-xs font-semibold text-[#765B52]">
+                      Chính hãng
                     </span>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-lg sm:text-xl font-heading font-black text-[#171717] mb-3.5 line-clamp-1">
-                    {tmpl.name}
-                  </h3>
+                  <Link href={`/products/${tmpl.id}`} className="group-hover:text-[#F06806] transition-colors">
+                    <h3 className="text-lg sm:text-xl font-heading font-black text-[#171717] mb-1 line-clamp-1">
+                      {tmpl.name}
+                    </h3>
+                  </Link>
 
-                  {/* Action Buttons: Dùng mẫu này & Lưu */}
+                  <div className="mb-3.5">
+                    <span className="text-lg sm:text-xl font-black text-[#3A211E]">
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(tmpl.price || 0)}
+                    </span>
+                  </div>
+
                   <TemplateCardActions
                     templateId={tmpl.id}
                     templateName={tmpl.name}

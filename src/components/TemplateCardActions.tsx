@@ -26,10 +26,10 @@ export default function TemplateCardActions({
   return (
     <div className="flex items-center gap-2 mt-auto w-full pt-1">
       <Link
-        href={`/custom-cup?template=${encodeURIComponent(templateId)}`}
+        href={`/custom-cup?productId=${encodeURIComponent(templateId)}`}
         className="flex-1 py-3 px-4 bg-[#171717] hover:bg-[#2A201C] text-white rounded-2xl font-extrabold text-xs sm:text-sm text-center transition-all duration-200 active:scale-98 shadow-sm hover:shadow-md"
       >
-        {isEn ? "Use this template" : "Dùng mẫu này"}
+        {isEn ? "Use this model" : "Dùng mẫu này"}
       </Link>
       <button
         type="button"

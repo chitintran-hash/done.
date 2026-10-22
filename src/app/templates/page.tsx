@@ -11,70 +11,88 @@ export default async function TemplatesPage() {
 
   const { data: dbTemplates } = await supabase
     .from("products")
-    .select("id, name, description, price, image_url, technical_specs")
-    .eq("category", "template")
+    .select("id, name, description, price, image_url, technical_specs, category")
     .eq("is_available", true)
-    .order("created_at", { ascending: false });
+    .in("category", ["glass", "plastic", "template"])
+    .order("price", { ascending: false });
 
   const fallbackTemplates: TemplateItem[] = [
     {
-      id: "4f8cc6e6-16d0-4437-8188-81a867f96286",
-      name: "Mochi Cat",
-      image_url: "",
+      id: "3bd416e6-6e46-4b4f-8530-0ed6f25bfc45",
+      name: "Ly Thuỷ Tinh Có Quai",
+      price: 145000,
+      image_url: "/images/products/quai.jpg",
+      category: "glass",
       technical_specs: {
-        vibe: "Cute",
-        card_bg: "#FCE7F3",
-        icon: "🐱",
+        vibe: "Có quai cầm",
+        card_bg: "#FFEAEA",
+        capacity: "400ml",
+        material: "Thủy tinh cao cấp",
       },
     },
     {
       id: "29440931-5abe-4663-aafc-7823cedaa392",
-      name: "Matcha Morning",
-      image_url: "",
+      name: "Ly Thuỷ Tinh Cao Brainrot",
+      price: 130000,
+      image_url: "/images/products/brainrot.jpg",
+      category: "glass",
       technical_specs: {
-        vibe: "Cozy",
+        vibe: "Brainrot Edition",
         card_bg: "#DCFCE7",
-        icon: "🍵",
+        capacity: "350ml",
+        material: "Thủy tinh cao cấp",
       },
     },
     {
-      id: "21e4cf22-5bd9-43e8-aaf5-609e59732a58",
-      name: "Retro Orange",
-      image_url: "",
+      id: "49c8dfa4-25e7-45c5-9a52-a4d67e170983",
+      name: "Ly Thuỷ Tinh Cao",
+      price: 115000,
+      image_url: "/images/products/cao.jpg",
+      category: "glass",
       technical_specs: {
-        vibe: "Retro",
-        card_bg: "#FBBF24",
-        icon: "✦",
+        vibe: "Dáng cao",
+        card_bg: "#FFF2D6",
+        capacity: "350ml",
+        material: "Thủy tinh cao cấp",
       },
     },
     {
-      id: "template-strawberry",
-      name: "Sweet Berry",
-      image_url: "",
+      id: "885b3b47-d1b8-4681-8e4b-31e14502491a",
+      name: "Ly Thuỷ Tinh Cỡ Trung",
+      price: 115000,
+      image_url: "/images/products/trung.jpg",
+      category: "glass",
       technical_specs: {
-        vibe: "Cute",
-        card_bg: "#FFE4E6",
-        icon: "🍓",
+        vibe: "Cỡ vừa",
+        card_bg: "#EBF5FF",
+        capacity: "380ml",
+        material: "Thủy tinh cao cấp",
       },
     },
     {
-      id: "template-latte",
-      name: "Warm Latte",
-      image_url: "",
+      id: "0c3dffa3-98cd-488b-b403-d2aaa12932fb",
+      name: "Ly thủy tinh Classic Facet",
+      price: 109000,
+      image_url: "/images/products/classic.jpg",
+      category: "glass",
       technical_specs: {
-        vibe: "Cozy",
-        card_bg: "#E8DFD8",
-        icon: "☕",
+        vibe: "Classic Facet",
+        card_bg: "#F3E8FF",
+        capacity: "300ml",
+        material: "Thủy tinh cao cấp",
       },
     },
     {
-      id: "template-midnight",
-      name: "Cosmic Vibe",
-      image_url: "",
+      id: "c9146584-8451-4d18-b0f8-92d5fdde494c",
+      name: "Ly Thuỷ Tinh Nhỏ",
+      price: 105000,
+      image_url: "/images/products/nho.jpg",
+      category: "glass",
       technical_specs: {
-        vibe: "Retro",
-        card_bg: "#E9D5FF",
-        icon: "🌙",
+        vibe: "Dáng lùn",
+        card_bg: "#E8F8F0",
+        capacity: "250ml",
+        material: "Thủy tinh cao cấp",
       },
     },
   ];
@@ -94,11 +112,11 @@ export default async function TemplatesPage() {
             {t("templates_section_title" as any)}
           </h1>
           <p className="text-[#765B52] text-base sm:text-lg leading-relaxed">
-            Khởi đầu nhanh chóng với hàng loạt mẫu thiết kế đẹp mắt theo từng Vibe (Cute, Cozy, Retro...). Chọn mẫu bạn thích và bắt đầu tuỳ chỉnh theo ý muốn!
+            Khám phá bộ sưu tập mẫu ly bán sẵn chính hãng Cupfy. Chọn mẫu ly bạn thích để bắt đầu tự tay tuỳ biến thiết kế riêng hoặc đặt mua nhanh chóng!
           </p>
         </div>
 
-        {/* Templates Grid with Vibe Filters */}
+        {/* Templates Grid with Filters */}
         <TemplatesClient initialTemplates={templates} />
       </div>
     </div>

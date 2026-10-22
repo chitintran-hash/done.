@@ -644,8 +644,8 @@ function CustomCupStudioInner() {
       <link rel="stylesheet" href={GOOGLE_FONTS_URL} />
 
       {/* TOP NAVIGATION BAR */}
-      <header className="h-16 bg-white border-b border-[#E8DFD8] flex items-center justify-between px-4 md:px-6 z-20 shrink-0 shadow-sm">
-        <div className="flex items-center gap-3">
+      <header className="h-16 bg-white border-b border-[#E8DFD8] flex items-center justify-between px-3 sm:px-4 md:px-6 z-20 shrink-0 shadow-xs gap-2">
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           <Link
             href="/"
             className="p-2 hover:bg-[#FFF9E8] rounded-full transition-colors text-[#3A211E]"
@@ -654,23 +654,18 @@ function CustomCupStudioInner() {
             <ChevronLeft className="w-5 h-5" />
           </Link>
           <div className="h-6 w-px bg-[#E8DFD8]"></div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-sm md:text-base text-[#3A211E] tracking-tight">
-                CUPFY 3D STUDIO
-              </span>
-              <span className="bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8] px-2.5 py-0.5 rounded-full text-[10px] font-bold">
-                {selectedModel.name}
-              </span>
-            </div>
-            <div className="text-[11px] text-[#765B52] hidden sm:block">
-              Thiết kế bám cong bề mặt thực tế • 22 Font Tiếng Việt • Khóa tỷ lệ ảnh
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="font-black text-sm md:text-base text-[#3A211E] tracking-tight whitespace-nowrap">
+              CUPFY 3D STUDIO
+            </span>
+            <span className="bg-[#FFF9E8] text-[#3A211E] border border-[#E8DFD8] px-2.5 py-0.5 rounded-full text-[11px] font-bold whitespace-nowrap">
+              {selectedModel.name}
+            </span>
           </div>
         </div>
 
         {/* Center: Undo / Redo & View Mode Switches */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Undo / Redo buttons */}
           <div className="flex items-center bg-[#FFF9E8] border border-[#E8DFD8] rounded-xl p-1 gap-1">
             <button
@@ -757,10 +752,10 @@ function CustomCupStudioInner() {
         </div>
 
         {/* Right: Price & Add To Cart Button */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => setIsMobilePricingOpen(true)}
-            className="text-right flex flex-col items-end cursor-pointer group"
+            className="text-right flex flex-col items-end cursor-pointer group whitespace-nowrap"
             title="Nhấn để xem chi tiết chi phí và phụ kiện"
           >
             <div className="text-[10px] text-[#765B52] font-bold group-hover:text-[#FFBF00] transition-colors flex items-center gap-1">
@@ -776,7 +771,7 @@ function CustomCupStudioInner() {
           <button
             type="button"
             onClick={() => setIsGiftModalOpen(true)}
-            className="px-3 sm:px-4 py-2 bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] border border-amber-300 rounded-full font-extrabold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+            className="px-2.5 sm:px-4 py-2 bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] border border-amber-300 rounded-full font-extrabold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer whitespace-nowrap"
             title="Tạo liên kết mở hộp quà 3D gửi tặng bạn bè (Demo)"
           >
             <Gift className="w-3.5 h-3.5 text-[#FFBF00]" />
@@ -789,7 +784,7 @@ function CustomCupStudioInner() {
           <button
             onClick={handleAddToCart}
             disabled={isAddingToCart}
-            className="px-4 sm:px-6 md:px-7 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer"
+            className="px-3.5 sm:px-5 md:px-6 py-2.5 bg-[#FFBF00] text-[#3A211E] rounded-full font-black text-xs md:text-sm flex items-center gap-1.5 sm:gap-2 hover:bg-[#FFD147] shadow-md transition-all disabled:opacity-70 active:scale-95 border border-[#FFBF00] cursor-pointer whitespace-nowrap"
           >
             {isAddingToCart ? (
               <>

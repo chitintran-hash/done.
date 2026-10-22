@@ -894,9 +894,9 @@ export function StudioToolbar({
         {activeTab === 'stickers' && (
           <div className="space-y-4">
             <div>
-              <h3 className="font-bold text-[#3A211E] text-base">Họa Tiết & Sticker Độc Quyền</h3>
-              <p className="text-xs text-[#765B52] mt-1">
-                Các mẫu sticker dễ thương và nghệ thuật chuẩn chất lượng cao.
+              <h3 className="font-bold text-[#3A211E] text-base">Họa Tiết & Sticker</h3>
+              <p className="text-xs text-[#765B52] mt-0.5">
+                Sticker dễ thương chuẩn in UV sắc nét.
               </p>
             </div>
 

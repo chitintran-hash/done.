@@ -132,12 +132,12 @@ export const LID_COLOR_OPTIONS = [
 ];
 
 export const PRESET_STICKERS = [
-  { id: 'coffee-cup', name: 'Ly Cà Phê', url: 'https://cdn-icons-png.flaticon.com/512/1047/1047503.png' },
-  { id: 'cat-smile', name: 'Mèo Dễ Thương', url: 'https://cdn-icons-png.flaticon.com/512/616/616430.png' },
-  { id: 'daisy', name: 'Hoa Cúc Nhỏ', url: 'https://cdn-icons-png.flaticon.com/512/1087/1087420.png' },
-  { id: 'heart', name: 'Trái Tim Yêu Thương', url: 'https://cdn-icons-png.flaticon.com/512/833/833472.png' },
-  { id: 'star', name: 'Ngôi Sao Lấp Lánh', url: 'https://cdn-icons-png.flaticon.com/512/118/118669.png' },
-  { id: 'smile', name: 'Mặt Cười Tích Cực', url: 'https://cdn-icons-png.flaticon.com/512/742/742751.png' },
-  { id: 'tea-leaf', name: 'Mầm Lá Trà', url: 'https://cdn-icons-png.flaticon.com/512/628/628283.png' },
-  { id: 'croissant', name: 'Bánh Sừng Bò', url: 'https://cdn-icons-png.flaticon.com/512/3014/3014521.png' }
+  { id: 'coffee-cup', name: 'Ly Cà Phê', url: '/stickers/coffee-cup.png' },
+  { id: 'cat-smile', name: 'Mèo Dễ Thương', url: '/stickers/cat-smile.png' },
+  { id: 'daisy', name: 'Hoa Cúc Nhỏ', url: '/stickers/daisy.png' },
+  { id: 'heart', name: 'Trái Tim Yêu Thương', url: '/stickers/heart.png' },
+  { id: 'star', name: 'Ngôi Sao Lấp Lánh', url: '/stickers/star.png' },
+  { id: 'smile', name: 'Mặt Cười Tích Cực', url: '/stickers/smile.png' },
+  { id: 'tea-leaf', name: 'Mầm Lá Trà', url: '/stickers/tea-leaf.png' },
+  { id: 'croissant', name: 'Bánh Sừng Bò', url: '/stickers/croissant.png' }
 ];

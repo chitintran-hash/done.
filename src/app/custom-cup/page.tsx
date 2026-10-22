@@ -32,7 +32,7 @@ import {
   StudioAddon,
   StudioPricingBreakdown
 } from '@/components/studio/types';
-import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR } from '@/components/studio/cupDefinitions';
+import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR, findMatchedDbProduct } from '@/components/studio/cupDefinitions';
 import { GOOGLE_FONTS_URL } from '@/components/studio/fontLibrary';
 import { useCanvasTexture, CANVAS_WIDTH, CANVAS_HEIGHT } from '@/components/studio/useCanvasTexture';
 import { StudioScene } from '@/components/studio/StudioScene';
@@ -248,7 +248,11 @@ function CustomCupStudioInner() {
               const matchedModel = CUP_MODELS.find(
                 (m) =>
                   m.name.toLowerCase().includes(matched.name.toLowerCase()) ||
-                  matched.name.toLowerCase().includes(m.name.toLowerCase())
+                  matched.name.toLowerCase().includes(m.name.toLowerCase()) ||
+                  (m.id === 'glass_tall' && matched.name.toLowerCase().includes('cao')) ||
+                  (m.id === 'glass_mug' && matched.name.toLowerCase().includes('quai')) ||
+                  (m.id === 'glass_can' && matched.name.toLowerCase().includes('trung')) ||
+                  (m.id === 'glass_rocks' && (matched.name.toLowerCase().includes('thấp') || matched.name.toLowerCase().includes('nhỏ')))
               );
               if (matchedModel) {
                 setSelectedModel({
@@ -257,6 +261,12 @@ function CustomCupStudioInner() {
                 });
               }
             }
+          } else {
+            // Synchronize active model price with real DB store price
+            setSelectedModel((prev) => {
+              const matched = findMatchedDbProduct(prev, data);
+              return matched?.price ? { ...prev, defaultPrice: matched.price } : prev;
+            });
           }
         }
       } catch (err) {
@@ -302,7 +312,12 @@ function CustomCupStudioInner() {
   }, []);
 
   const handleSelectModel = (model: CupModelDef) => {
-    setSelectedModel(model);
+    const matched = findMatchedDbProduct(model, dbProducts);
+    const finalPrice = matched?.price || model.defaultPrice;
+    setSelectedModel({
+      ...model,
+      defaultPrice: finalPrice,
+    });
     if (model.category === 'glass') {
       setSelectedColor(CLEAR_GLASS_COLOR);
     }
@@ -526,11 +541,7 @@ function CustomCupStudioInner() {
     const mainColor = textLayers[0]?.color || '#3A211E';
 
     // Match with real DB product if available
-    const matchedDbProd = dbProducts.find(
-      (p) =>
-        p.name.toLowerCase().includes(selectedModel.name.toLowerCase()) ||
-        selectedModel.name.toLowerCase().includes(p.name.toLowerCase())
-    );
+    const matchedDbProd = findMatchedDbProduct(selectedModel, dbProducts);
 
     const price = pricingBreakdown.totalPrice;
     const productName = matchedDbProd
@@ -587,11 +598,7 @@ function CustomCupStudioInner() {
 
   // Pricing calculation (Real-time dynamic breakdown)
   const pricingBreakdown: StudioPricingBreakdown = React.useMemo(() => {
-    const matchedDbProd = dbProducts.find(
-      (p) =>
-        p.name.toLowerCase().includes(selectedModel.name.toLowerCase()) ||
-        selectedModel.name.toLowerCase().includes(p.name.toLowerCase())
-    );
+    const matchedDbProd = findMatchedDbProduct(selectedModel, dbProducts);
     const baseCupPrice = matchedDbProd ? matchedDbProd.price : selectedModel.defaultPrice;
 
     const textLayers = layers.filter((l) => l.type === 'text');
@@ -833,6 +840,7 @@ function CustomCupStudioInner() {
             onToggleAddon={handleToggleAddon}
             onUpdateAddonNote={handleUpdateAddonNote}
             pricing={pricingBreakdown}
+            dbProducts={dbProducts}
           />
         </div>
 

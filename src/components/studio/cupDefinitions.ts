@@ -6,7 +6,7 @@ export const CUP_MODELS: CupModelDef[] = [
     name: 'Ly Thuỷ Tinh Cao',
     subtitle: 'Dáng Highball thon cao, đáy kính đúc nguyên khối dày dặn',
     category: 'glass',
-    defaultPrice: 40000,
+    defaultPrice: 115000,
     capacity: '350ml',
     heightMm: '155 mm',
     diameterMm: '68 mm',
@@ -25,7 +25,7 @@ export const CUP_MODELS: CupModelDef[] = [
     name: 'Ly Thuỷ Tinh Có Quai',
     subtitle: 'Quai cầm thủy tinh đúc liền khối, thành ly chịu lực tốt',
     category: 'glass',
-    defaultPrice: 60000,
+    defaultPrice: 145000,
     capacity: '400ml',
     heightMm: '130 mm',
     diameterMm: '78 mm',
@@ -44,7 +44,7 @@ export const CUP_MODELS: CupModelDef[] = [
     name: 'Ly Thuỷ Tinh Cỡ Trung',
     subtitle: 'Dáng Tumbler thon vừa tay, đáy kính đúc nguyên khối dày dặn',
     category: 'glass',
-    defaultPrice: 45000,
+    defaultPrice: 115000,
     capacity: '380ml',
     heightMm: '135 mm',
     diameterMm: '75 mm',
@@ -63,7 +63,7 @@ export const CUP_MODELS: CupModelDef[] = [
     name: 'Ly Thuỷ Tinh Thấp (Nhỏ)',
     subtitle: 'Dáng Tumbler tròn thấp, đáy đúc nguyên khối dày dặn',
     category: 'glass',
-    defaultPrice: 29000,
+    defaultPrice: 105000,
     capacity: '250ml',
     heightMm: '95 mm',
     diameterMm: '76 mm',
@@ -97,6 +97,21 @@ export const CUP_MODELS: CupModelDef[] = [
     }
   }
 ];
+
+export function findMatchedDbProduct(model: CupModelDef, dbProducts: any[]) {
+  if (!dbProducts || dbProducts.length === 0) return null;
+  return dbProducts.find((p) => {
+    const pName = (p.name || '').toLowerCase();
+    const mName = (model.name || '').toLowerCase();
+    if (pName === mName || pName.includes(mName) || mName.includes(pName)) return true;
+    if (model.id === 'glass_tall' && (pName.includes('cao') && !pName.includes('brainrot'))) return true;
+    if (model.id === 'glass_mug' && pName.includes('quai')) return true;
+    if (model.id === 'glass_can' && (pName.includes('trung') || pName.includes('vừa'))) return true;
+    if (model.id === 'glass_rocks' && (pName.includes('thấp') || pName.includes('nhỏ'))) return true;
+    if (model.id === 'plastic_boba' && pName.includes('nhựa')) return true;
+    return false;
+  });
+}
 
 export const CLEAR_GLASS_COLOR: CupColorOption = {
   id: 'clear',

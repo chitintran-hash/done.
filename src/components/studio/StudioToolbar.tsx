@@ -38,7 +38,7 @@ import {
   StudioAddon,
   StudioPricingBreakdown
 } from './types';
-import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR, PLASTIC_COLOR_OPTIONS, LID_COLOR_OPTIONS, PRESET_STICKERS } from './cupDefinitions';
+import { CUP_MODELS, CUP_COLOR_OPTIONS, CLEAR_GLASS_COLOR, PLASTIC_COLOR_OPTIONS, LID_COLOR_OPTIONS, PRESET_STICKERS, findMatchedDbProduct } from './cupDefinitions';
 import { FONT_LIBRARY, FONT_CATEGORIES } from './fontLibrary';
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from './useCanvasTexture';
 
@@ -66,6 +66,7 @@ interface StudioToolbarProps {
   onToggleAddon?: (id: string) => void;
   onUpdateAddonNote?: (id: string, note: string) => void;
   pricing?: StudioPricingBreakdown;
+  dbProducts?: any[];
 }
 
 export function StudioToolbar({
@@ -92,6 +93,7 @@ export function StudioToolbar({
   onToggleAddon,
   onUpdateAddonNote,
   pricing,
+  dbProducts = [],
 }: StudioToolbarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fontSearch, setFontSearch] = useState('');
@@ -222,10 +224,13 @@ export function StudioToolbar({
             <div className="space-y-3">
               {CUP_MODELS.map((m) => {
                 const isSelected = selectedModel.id === m.id;
+                const matchedDb = findMatchedDbProduct(m, dbProducts);
+                const currentPrice = matchedDb?.price || m.defaultPrice;
+
                 return (
                   <button
                     key={m.id}
-                    onClick={() => setSelectedModel(m)}
+                    onClick={() => setSelectedModel({ ...m, defaultPrice: currentPrice })}
                     className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex flex-col gap-2 ${
                       isSelected
                         ? 'border-[#3A211E] bg-[#FFF9E8] shadow-sm'
@@ -238,7 +243,7 @@ export function StudioToolbar({
                         {isSelected && <Check className="w-4 h-4 text-[#059669]" />}
                       </span>
                       <span className="font-black text-sm text-[#3A211E]">
-                        {formatVND(m.defaultPrice)}
+                        {formatVND(currentPrice)}
                       </span>
                     </div>
 

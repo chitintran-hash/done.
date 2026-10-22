@@ -390,28 +390,119 @@ export default async function Home() {
       </section>
 
       {/* PHẦN 5: Section custom banner */}
-      <section className="w-full px-4 md:px-6 mb-24">
-        <div className="max-w-[1400px] mx-auto bg-[#FFF9E8] rounded-[32px] overflow-hidden flex flex-col md:flex-row items-center relative border border-[#E8DFD8] shadow-sm">
-          <div className="w-full md:w-1/2 p-8 sm:p-12 md:p-14 lg:p-20 z-10 flex flex-col items-start bg-[#FFF9E8]">
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#3A211E] mb-6 leading-[1.15] tracking-tight">
-              {t("banner_title" as any)}
-            </h3>
-            <p className="text-base sm:text-lg text-[#765B52] mb-8 md:mb-10 max-w-[440px] leading-relaxed">
-              {t("banner_desc" as any)}
-            </p>
-            <Link href="/custom-cup" className="px-8 py-4 bg-[#3A211E] text-white rounded-full font-bold text-base sm:text-lg hover:bg-[#201817] transition-all shadow-md inline-block">
-              {t("banner_btn" as any)}
-            </Link>
-          </div>
-          <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 flex items-center justify-center relative z-0">
-            <div className="relative w-full max-w-[480px] aspect-square rounded-[28px] overflow-hidden">
-              <Image 
-                src="/images/cupfy-custom-cups.jpg" 
-                alt="Bộ sưu tập 4 mẫu ly thủy tinh đính họa tiết cá nhân hóa Cupfy" 
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, 480px"
-              />
+      <section className="w-full px-4 md:px-8 mb-24 relative">
+        <div className="max-w-[1400px] mx-auto rounded-[36px] md:rounded-[44px] overflow-hidden relative border border-[#EADBCC] bg-gradient-to-br from-[#FFFDF9] via-[#FFF9EE] to-[#FEF3E2] shadow-[0_20px_50px_-20px_rgba(58,33,30,0.08)]">
+          {/* Ambient decorative background glows */}
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="flex flex-col lg:flex-row items-center relative z-10">
+            {/* Left Column: Text & Features & Actions */}
+            <div className="w-full lg:w-1/2 p-8 sm:p-12 md:p-14 lg:p-16 xl:p-20 flex flex-col items-start">
+              {/* Top Tag */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#E8D7C8] shadow-xs mb-5 text-[#8C4A2F] text-xs sm:text-sm font-bold tracking-wide">
+                <Sparkles className="w-4 h-4 text-amber-500 animate-pulse shrink-0" />
+                <span>{t("banner_tag" as any)}</span>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#2D1810] mb-5 leading-[1.18] tracking-tight">
+                {t("banner_title" as any)}
+              </h3>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg text-[#6E554B] mb-8 max-w-[500px] leading-relaxed">
+                {t("banner_desc" as any)}
+              </p>
+
+              {/* Feature Highlights Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-9 w-full max-w-[520px]">
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100/90 flex items-center justify-center text-amber-800 shrink-0 text-base shadow-xs">
+                    🎨
+                  </div>
+                  <span>{t("banner_feature_1" as any)}</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-orange-100/90 flex items-center justify-center text-orange-800 shrink-0 text-base shadow-xs">
+                    🔄
+                  </div>
+                  <span>{t("banner_feature_2" as any)}</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-rose-100/90 flex items-center justify-center text-rose-800 shrink-0 text-base shadow-xs">
+                    🎁
+                  </div>
+                  <span>{t("banner_feature_3" as any)}</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-100/90 flex items-center justify-center text-emerald-800 shrink-0 text-base shadow-xs">
+                    ✨
+                  </div>
+                  <span>{t("banner_feature_4" as any)}</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5">
+                <Link 
+                  href="/custom-cup" 
+                  className="group inline-flex items-center gap-3 px-8 py-4 bg-[#2D1810] hover:bg-[#432317] text-white rounded-full font-bold text-base sm:text-lg transition-all duration-300 shadow-lg shadow-[#2D1810]/20 hover:shadow-xl hover:shadow-[#2D1810]/30 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <span>{t("banner_btn" as any)}</span>
+                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+                <Link 
+                  href="/products?category=template" 
+                  className="inline-flex items-center gap-2 px-6 py-4 bg-white/90 hover:bg-white text-[#5A4036] hover:text-[#2D1810] rounded-full font-semibold text-base transition-all duration-300 border border-[#E8DFD8] shadow-xs hover:shadow-md hover:-translate-y-0.5"
+                >
+                  <span>{t("banner_explore_btn" as any)}</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Showcase Card with Product Preview */}
+            <div className="w-full lg:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 flex items-center justify-center">
+              <div className="relative w-full max-w-[540px] bg-white rounded-[32px] p-5 sm:p-7 shadow-[0_20px_50px_-15px_rgba(58,33,30,0.1)] border border-[#ECE0D6] group transition-all duration-300 hover:shadow-[0_25px_60px_-15px_rgba(58,33,30,0.15)]">
+                {/* Top showcase header */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-bold shadow-2xs">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping inline-block" />
+                    <span>{t("banner_badge_hot" as any)}</span>
+                  </div>
+                  <span className="text-[11px] font-semibold text-[#8C7A72] bg-[#FAF5F0] px-3 py-1 rounded-full border border-[#EFE5DB]">
+                    4 Dáng Ly Thuỷ Tinh
+                  </span>
+                </div>
+
+                {/* Cups Showcase Image */}
+                <div className="relative w-full aspect-[5/4] rounded-2xl overflow-hidden bg-gradient-to-b from-white via-[#FCFAF8] to-[#F9F4EE] flex items-center justify-center p-2">
+                  <Image 
+                    src="/images/cupfy-custom-cups.jpg" 
+                    alt="Bộ sưu tập 4 mẫu ly thủy tinh sticker Capybara và bạn bè Cupfy" 
+                    fill
+                    className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    sizes="(max-width: 1024px) 100vw, 540px"
+                    priority
+                  />
+                </div>
+
+                {/* Bottom showcase footer */}
+                <div className="mt-4 pt-3.5 border-t border-[#F0E6DE] flex items-center justify-between text-xs text-[#7A6258]">
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <span className="text-amber-600 font-bold">★ 4.9/5</span>
+                    <span className="text-gray-300">•</span>
+                    <span>In UV sắc nét bền đẹp</span>
+                  </div>
+                  <Link 
+                    href="/custom-cup" 
+                    className="font-bold text-[#2D1810] hover:text-amber-800 flex items-center gap-1 transition-colors group-hover:translate-x-0.5 duration-200"
+                  >
+                    <span>Tự tạo ngay</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

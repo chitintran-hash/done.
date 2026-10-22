@@ -257,6 +257,17 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
           previewImage: finalImageUrl.startsWith('data:') ? '' : finalImageUrl,
           printableTexture: finalPrintUrl.startsWith('data:') ? '' : finalPrintUrl,
         };
+        delete snapshotSpecs.originalImage;
+        if (snapshotSpecs.uploadedImage && snapshotSpecs.uploadedImage.startsWith('data:')) {
+          snapshotSpecs.uploadedImage = finalImageUrl;
+        }
+        if (Array.isArray(snapshotSpecs.layers)) {
+          snapshotSpecs.layers = snapshotSpecs.layers.map((l: any) => {
+            const cleanLayer = { ...l };
+            delete cleanLayer.originalFile;
+            return cleanLayer;
+          });
+        }
 
         // Tạo sản phẩm snapshot lưu trữ thông số thiết kế cho xưởng in
         const { data: customProduct, error: customProdErr } = await supabaseAdmin
@@ -304,9 +315,13 @@ export async function processCheckout(orderData: CheckoutOrderInput, cartItems: 
       };
     }
 
-    // 9. Revalidate cache
-    revalidatePath('/orders');
-    revalidatePath('/admin/orders');
+    // 9. Revalidate cache safely
+    try {
+      revalidatePath('/orders');
+      revalidatePath('/admin/orders');
+    } catch (e) {
+      console.warn('revalidatePath warning:', e);
+    }
 
     return { 
       success: true, 

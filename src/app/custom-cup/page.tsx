@@ -371,16 +371,44 @@ function CustomCupStudioInner() {
     pushHistory(next);
   };
 
-  // Add Image Layer (Strict Aspect Ratio Preservation)
+  // Add Image Layer (Strict Aspect Ratio Preservation & Automatic Lightweight Compression)
   const handleAddImageLayer = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
-      const base64Data = reader.result as string;
+      const rawData = reader.result as string;
       const img = new Image();
       img.onload = () => {
-        const naturalWidth = img.naturalWidth || 600;
-        const naturalHeight = img.naturalHeight || 600;
-        const aspectRatio = naturalWidth / naturalHeight;
+        const origW = img.naturalWidth || 600;
+        const origH = img.naturalHeight || 600;
+        const aspectRatio = origW / origH;
+
+        // Downscale image to max 800px to ensure fast rendering, no memory exhaustion, and instant checkout
+        const maxDim = 800;
+        let exportW = origW;
+        let exportH = origH;
+        if (exportW > maxDim || exportH > maxDim) {
+          if (exportW > exportH) {
+            exportH = Math.round((exportH * maxDim) / exportW);
+            exportW = maxDim;
+          } else {
+            exportW = Math.round((exportW * maxDim) / exportH);
+            exportH = maxDim;
+          }
+        }
+
+        let compressedUrl = rawData;
+        try {
+          const offCanvas = document.createElement('canvas');
+          offCanvas.width = exportW;
+          offCanvas.height = exportH;
+          const offCtx = offCanvas.getContext('2d');
+          if (offCtx) {
+            offCtx.drawImage(img, 0, 0, exportW, exportH);
+            compressedUrl = offCanvas.toDataURL(file.type === 'image/png' ? 'image/png' : 'image/jpeg', 0.85);
+          }
+        } catch (e) {
+          console.warn('Image resize warning, using raw data:', e);
+        }
 
         // Base display size on 2048 canvas maintaining strict natural aspect ratio
         let baseW = 380;
@@ -395,10 +423,9 @@ function CustomCupStudioInner() {
           id: 'img-' + Date.now(),
           type: 'image',
           name: file.name.slice(0, 20),
-          url: base64Data,
-          originalFile: base64Data, // Kept pristine for production manufacturing
-          naturalWidth,
-          naturalHeight,
+          url: compressedUrl,
+          naturalWidth: exportW,
+          naturalHeight: exportH,
           aspectRatio,
           width: Math.round(baseW),
           height: Math.round(baseH),
@@ -419,7 +446,7 @@ function CustomCupStudioInner() {
         setActiveTab('upload');
         pushHistory(next);
       };
-      img.src = base64Data;
+      img.src = rawData;
     };
     reader.readAsDataURL(file);
   };
@@ -613,7 +640,7 @@ function CustomCupStudioInner() {
           textColor: mainColor,
           font: mainFont,
           uploadedImage: imgLayers[0]?.url || '',
-          originalImage: imgLayers[0]?.originalFile || imgLayers[0]?.url || '',
+          originalImage: '',
           printableTexture: flatPrintSheet,
           previewImage: snapshotImage,
           layers: JSON.parse(JSON.stringify(layers)),

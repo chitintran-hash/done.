@@ -104,14 +104,15 @@ async function compressImageString(dataUrl: string, maxDim = 500, quality = 0.75
   if (!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image/')) {
     return dataUrl;
   }
-  if (dataUrl.length < 120000) {
+  if (dataUrl.length < 60000) {
     return dataUrl;
   }
   return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(dataUrl), 2000);
     try {
       const img = new window.Image();
-      img.crossOrigin = 'anonymous';
       img.onload = () => {
+        clearTimeout(timer);
         try {
           let w = img.width || maxDim;
           let h = img.height || maxDim;
@@ -130,14 +131,6 @@ async function compressImageString(dataUrl: string, maxDim = 500, quality = 0.75
           const ctx = c.getContext('2d');
           if (ctx) {
             ctx.drawImage(img, 0, 0, w, h);
-            const isPng = dataUrl.startsWith('data:image/png');
-            if (isPng) {
-              const pngRes = c.toDataURL('image/png');
-              if (pngRes.length < 250000) {
-                resolve(pngRes);
-                return;
-              }
-            }
             resolve(c.toDataURL('image/jpeg', quality));
           } else {
             resolve(dataUrl);
@@ -146,9 +139,13 @@ async function compressImageString(dataUrl: string, maxDim = 500, quality = 0.75
           resolve(dataUrl);
         }
       };
-      img.onerror = () => resolve(dataUrl);
+      img.onerror = () => {
+        clearTimeout(timer);
+        resolve(dataUrl);
+      };
       img.src = dataUrl;
     } catch {
+      clearTimeout(timer);
       resolve(dataUrl);
     }
   });
@@ -164,23 +161,27 @@ async function sanitizeCartItemsForCheckout(items: any[]) {
       }
       if (clean.customSpecs) {
         const specs = { ...clean.customSpecs };
+        // Delete redundant heavy fields
+        delete specs.originalImage;
+
+        if (specs.uploadedImage && typeof specs.uploadedImage === 'string' && specs.uploadedImage.startsWith('data:image/')) {
+          specs.uploadedImage = await compressImageString(specs.uploadedImage, 400, 0.75);
+        }
         if (specs.previewImage && typeof specs.previewImage === 'string' && specs.previewImage.startsWith('data:image/')) {
           specs.previewImage = await compressImageString(specs.previewImage, 400, 0.75);
         }
         if (specs.printableTexture && typeof specs.printableTexture === 'string' && specs.printableTexture.startsWith('data:image/')) {
-          specs.printableTexture = await compressImageString(specs.printableTexture, 1024, 0.8);
+          specs.printableTexture = await compressImageString(specs.printableTexture, 800, 0.75);
         }
         if (Array.isArray(specs.layers)) {
           specs.layers = await Promise.all(
             specs.layers.map(async (layer: any) => {
-              if (layer && layer.url && typeof layer.url === 'string' && layer.url.startsWith('data:image/')) {
-                return {
-                  ...layer,
-                  url: await compressImageString(layer.url, 400, 0.75),
-                  originalFile: undefined,
-                };
+              const l = { ...layer };
+              delete l.originalFile;
+              if (l.url && typeof l.url === 'string' && l.url.startsWith('data:image/')) {
+                l.url = await compressImageString(l.url, 400, 0.75);
               }
-              return layer;
+              return l;
             })
           );
         }
@@ -251,7 +252,16 @@ async function sanitizeCartItemsForCheckout(items: any[]) {
       
     } catch (error: any) {
       console.error('Checkout error:', error);
-      setErrorMessage(error.message || 'Không thể hoàn tất đơn hàng. Vui lòng thử lại sau.');
+      let userMsg = error?.message || 'Không thể hoàn tất đơn hàng. Vui lòng thử lại sau.';
+      if (
+        userMsg.includes('Minified React error') || 
+        userMsg.includes('Server Components') || 
+        userMsg.includes('#441') ||
+        userMsg.includes('441')
+      ) {
+        userMsg = 'Hệ thống vừa cập nhật phiên bản mới. Quý khách vui lòng bấm phím F5 (hoặc tải lại trang) rồi bấm "XÁC NHẬN ĐẶT HÀNG" để hoàn tất nhé!';
+      }
+      setErrorMessage(userMsg);
       setLoading(false);
     }
   };

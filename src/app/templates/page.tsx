@@ -25,13 +25,13 @@ export default async function TemplatesPage() {
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
           <span className="text-xs font-black uppercase tracking-[0.2em] text-[#F06806] inline-block mb-3">
-            {t("templates_vibe_tag" as any)}
+            MẪU CÓ SẴN
           </span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-black text-[#171717] mb-4">
-            {t("templates_section_title" as any)}
+            Mẫu Ly Có Sẵn Đặt Mua Ngay
           </h1>
           <p className="text-[#765B52] text-base sm:text-lg leading-relaxed">
-            Khám phá các mẫu ly thiết kế sẵn được đăng bán tại Cupfy. Chọn mẫu bạn thích để tự tay sáng tạo theo phong cách riêng hoặc đặt mua nhanh chóng!
+            Khám phá các mẫu ly thiết kế sẵn độc đáo chính hãng tại Cupfy. Mẫu in sắc nét, hoàn thiện tinh xảo, sẵn sàng đóng gói và giao tận tay bạn!
           </p>
         </div>
 

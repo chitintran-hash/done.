@@ -197,14 +197,16 @@ export default function ProductDetailClient({ initialProduct }: ProductDetailCli
                 Mua ngay (COD toàn quốc)
               </button>
 
-              {/* Tự thiết kế ly này */}
-              <button 
-                onClick={handleCustomize}
-                className="w-full h-13 rounded-full bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] font-bold transition-all border border-[#E8DFD8] flex items-center justify-center gap-2 text-xs sm:text-sm"
-              >
-                <Sparkles className="w-4 h-4 text-[#3A211E]" />
-                Tự thiết kế ly này
-              </button>
+              {/* Tự thiết kế ly này (chỉ hiển thị cho phôi ly tùy biến, không hiển thị cho mẫu có sẵn hoặc hộp quà) */}
+              {product.category !== 'template' && product.category !== 'gift_box' && product.category !== 'gift' && (
+                <button 
+                  onClick={handleCustomize}
+                  className="w-full h-13 rounded-full bg-[#FFF9E8] hover:bg-[#FFF3C4] text-[#3A211E] font-bold transition-all border border-[#E8DFD8] flex items-center justify-center gap-2 text-xs sm:text-sm"
+                >
+                  <Sparkles className="w-4 h-4 text-[#3A211E]" />
+                  Tự thiết kế ly này
+                </button>
+              )}
             </div>
 
             <AuthRequiredModal 

@@ -290,10 +290,10 @@ export default async function Home() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
           <div>
             <span className="text-xs font-black uppercase tracking-[0.2em] text-[#F06806] block mb-2">
-              {t("templates_vibe_tag" as any)}
+              MẪU CÓ SẴN
             </span>
             <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-[#171717] tracking-tight leading-tight">
-              {t("templates_section_title" as any)}
+              Bộ Sưu Tập Ly Mẫu Có Sẵn
             </h2>
           </div>
           <Link
@@ -304,63 +304,49 @@ export default async function Home() {
           </Link>
         </div>
 
-        {/* 3 Template Cards Grid */}
+        {/* 3 Template Cards Grid - Clean direct presentation without background tinting or cozy/cute tags */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {templates.map((tmpl) => {
-            const cardBg = tmpl.technical_specs?.card_bg || 
-              (tmpl.name.toLowerCase().includes("quai") ? "#FFEAEA" : 
-               tmpl.name.toLowerCase().includes("brainrot") ? "#DCFCE7" : "#FFF2D6");
-            const tag = tmpl.technical_specs?.vibe || 
-              (tmpl.name.toLowerCase().includes("quai") ? "Có quai cầm" :
-               tmpl.name.toLowerCase().includes("brainrot") ? "Brainrot Edition" : "Dáng cao");
             const capacity = tmpl.technical_specs?.capacity || "350ml";
+            const material = tmpl.technical_specs?.material || "Thuỷ tinh cao cấp";
 
             return (
               <div
                 key={tmpl.id}
-                className="bg-white rounded-[28px] p-3.5 sm:p-4 border border-[#EBE3DC] shadow-[0_4px_25px_rgba(58,33,30,0.04)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+                className="bg-white rounded-[26px] p-4 border border-[#E8DFD8] shadow-[0_4px_20px_rgba(58,33,30,0.03)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
               >
-                {/* Colored Top Area with Cup Showcase */}
-                <div
-                  className="w-full h-[230px] sm:h-[250px] rounded-[22px] flex items-center justify-center relative overflow-hidden transition-transform duration-300 group-hover:scale-[1.01]"
-                  style={{ backgroundColor: cardBg }}
+                {/* Cup Image Area - Clean neutral presentation directly displaying the ready-made cup */}
+                <Link
+                  href={`/products/${tmpl.id}`}
+                  className="relative w-full aspect-square rounded-[20px] bg-[#FAF7F2] border border-[#E8DFD8]/60 overflow-hidden flex items-center justify-center p-3 mb-3.5 block cursor-pointer group-hover:border-[#FFBF00] transition-colors"
                 >
-                  <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#3A211E] text-[11px] font-black shadow-xs">
+                  <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/95 text-[#3A211E] text-[11px] font-bold shadow-xs border border-[#E8DFD8]/60">
                     {capacity}
                   </div>
-                  <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-black/10 backdrop-blur-md text-[#3A211E] text-[10px] font-bold uppercase tracking-wider">
-                    Cupfy Choice
+                  <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-[#3A211E] text-white text-[10px] font-bold uppercase tracking-wider shadow-xs">
+                    Mẫu có sẵn
                   </div>
 
-                  <Link
-                    href={`/products/${tmpl.id}`}
-                    className="w-[140px] h-[190px] sm:w-[160px] sm:h-[210px] rounded-[22px] bg-white/95 shadow-[0_12px_28px_rgba(0,0,0,0.07)] border border-white/70 flex items-center justify-center p-3 select-none transition-transform duration-300 group-hover:scale-105 relative block cursor-pointer"
-                  >
-                    {tmpl.image_url ? (
-                      <Image
-                        src={tmpl.image_url}
-                        alt={tmpl.name}
-                        fill
-                        className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 100vw, 250px"
-                      />
-                    ) : (
-                      <span className="text-5xl sm:text-6xl drop-shadow-xs select-none">
-                        🥛
-                      </span>
-                    )}
-                  </Link>
-                </div>
+                  {tmpl.image_url ? (
+                    <Image
+                      src={tmpl.image_url}
+                      alt={tmpl.name}
+                      fill
+                      className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, 350px"
+                    />
+                  ) : (
+                    <span className="text-5xl sm:text-6xl drop-shadow-xs select-none">
+                      🥛
+                    </span>
+                  )}
+                </Link>
 
                 {/* Bottom Info Area */}
-                <div className="px-1.5 pt-3.5 pb-1 flex flex-col flex-grow">
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#F4EFEA] text-[#171717] font-extrabold text-xs select-none">
-                      {tag}
-                    </span>
-                    <span className="text-xs font-semibold text-[#765B52]">
-                      Chính hãng
-                    </span>
+                <div className="flex flex-col flex-grow">
+                  <div className="flex items-center justify-between text-xs text-[#765B52] mb-1.5">
+                    <span className="font-medium">{material}</span>
+                    <span className="font-semibold text-emerald-700">Chính hãng</span>
                   </div>
 
                   <Link href={`/products/${tmpl.id}`} className="group-hover:text-[#F06806] transition-colors">
@@ -381,6 +367,8 @@ export default async function Home() {
                   <TemplateCardActions
                     templateId={tmpl.id}
                     templateName={tmpl.name}
+                    price={tmpl.price || 0}
+                    imageUrl={tmpl.image_url || ''}
                   />
                 </div>
               </div>

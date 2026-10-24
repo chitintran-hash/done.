@@ -27,8 +27,10 @@ import {
   ArrowDown,
   Sparkles,
   Info,
-  Gift
+  Gift,
+  Loader2
 } from 'lucide-react';
+import AIGreetingModal from '@/components/ai/AIGreetingModal';
 import {
   DesignLayer,
   TextLayer,
@@ -98,6 +100,37 @@ export function StudioToolbar({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fontSearch, setFontSearch] = useState('');
   const [fontCategory, setFontCategory] = useState<string>('all');
+
+  // AI Features State
+  const [isAISloganOpen, setIsAISloganOpen] = useState(false);
+  const [aiStickerPrompt, setAiStickerPrompt] = useState('');
+  const [aiStickerStyle, setAiStickerStyle] = useState('chibi');
+  const [aiStickerLoading, setAiStickerLoading] = useState(false);
+  const [generatedSticker, setGeneratedSticker] = useState<{ url: string; name: string } | null>(null);
+
+  const handleGenerateAISticker = async () => {
+    if (!aiStickerPrompt.trim() || aiStickerLoading) return;
+    setAiStickerLoading(true);
+    setGeneratedSticker(null);
+    try {
+      const res = await fetch('/api/ai/sticker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: aiStickerPrompt.trim(),
+          style: aiStickerStyle,
+        }),
+      });
+      const data = await res.json();
+      if (data.sticker) {
+        setGeneratedSticker(data.sticker);
+      }
+    } catch (err) {
+      console.error('Failed to generate sticker:', err);
+    } finally {
+      setAiStickerLoading(false);
+    }
+  };
 
   const selectedLayer = layers.find((l) => l.id === selectedLayerId) || null;
 
@@ -408,13 +441,44 @@ export function StudioToolbar({
                 <h3 className="font-bold text-[#3A211E] text-base">Dán Chữ Cong Lên Thân Ly</h3>
                 <p className="text-xs text-[#765B52]">Chữ uốn cong tự nhiên theo độ cong của ly.</p>
               </div>
-              <button
-                onClick={onAddTextLayer}
-                className="px-3.5 py-2 bg-[#3A211E] text-white rounded-xl text-xs font-bold hover:bg-[#3A211E] shadow-sm flex items-center gap-1.5 transition-all"
-              >
-                + Thêm Chữ
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAISloganOpen(true)}
+                  className="px-3 py-2 bg-[#FFBF00] hover:bg-[#FFBF00]/85 text-[#3A211E] rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+                  title="Nhờ Gemini AI sáng tạo câu quote in ly"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#3A211E]" />
+                  <span>AI Slogan ✨</span>
+                </button>
+                <button
+                  onClick={onAddTextLayer}
+                  className="px-3.5 py-2 bg-[#3A211E] text-white rounded-xl text-xs font-bold hover:bg-[#2A1815] shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+                >
+                  + Thêm Chữ
+                </button>
+              </div>
             </div>
+
+            {/* AI Slogan Generator Modal */}
+            <AIGreetingModal
+              isOpen={isAISloganOpen}
+              onClose={() => setIsAISloganOpen(false)}
+              initialType="slogan"
+              onSelect={(sloganText) => {
+                if (selectedLayer && selectedLayer.type === 'text') {
+                  onUpdateLayer(selectedLayer.id, { text: sloganText });
+                } else {
+                  onAddTextLayer();
+                  setTimeout(() => {
+                    const latest = layers[layers.length - 1];
+                    if (latest) {
+                      onUpdateLayer(latest.id, { text: sloganText });
+                    }
+                  }, 150);
+                }
+              }}
+            />
 
             {selectedLayer && selectedLayer.type === 'text' ? (
               <div className="space-y-5 bg-[#FFF9E8] p-4 rounded-2xl border border-[#E8DFD8]">
@@ -919,23 +983,127 @@ export function StudioToolbar({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              {PRESET_STICKERS.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => onAddStickerLayer(s.url, s.name)}
-                  className="aspect-square p-4 rounded-2xl border border-[#E8DFD8] bg-[#FFF9E8] hover:bg-white hover:border-[#3A211E] transition-all flex flex-col items-center justify-center gap-2 group"
-                >
-                  <img
-                    src={s.url}
-                    alt={s.name}
-                    className="w-12 h-12 object-contain group-hover:scale-110 transition-transform"
-                  />
-                  <span className="text-[11px] font-bold text-[#765B52] group-hover:text-[#3A211E]">
-                    {s.name}
-                  </span>
-                </button>
-              ))}
+            {/* AI Sticker Generator Card */}
+            <div className="bg-[#FFF9E8] p-4 rounded-2xl border-2 border-[#FFBF00]/50 shadow-xs space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-[#FFBF00] text-[#3A211E] flex items-center justify-center font-bold">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-xs sm:text-sm text-[#3A211E]">
+                    AI Vẽ Sticker Theo Yêu Cầu
+                  </h4>
+                  <p className="text-[10px] text-[#765B52]">
+                    Tự động vẽ sticker độc quyền dán lên ly 3D
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  value={aiStickerPrompt}
+                  onChange={(e) => setAiStickerPrompt(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleGenerateAISticker()}
+                  placeholder="VD: mèo lười uống trà sữa, hoa tulip, phi hành gia..."
+                  className="w-full px-3 py-2 bg-white rounded-xl border border-[#E8DFD8] text-xs focus:border-[#FFBF00] focus:ring-1 focus:ring-[#FFBF00] focus:outline-none text-[#3A211E]"
+                />
+              </div>
+
+              {/* Style selector */}
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { id: 'chibi', label: 'Chibi' },
+                  { id: 'watercolor', label: 'Màu nước' },
+                  { id: 'vintage', label: 'Retro 90s' },
+                  { id: 'pixel', label: 'Pixel art' },
+                  { id: 'minimalist', label: 'Line art' },
+                ].map((st) => (
+                  <button
+                    key={st.id}
+                    type="button"
+                    onClick={() => setAiStickerStyle(st.id)}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-colors cursor-pointer ${
+                      aiStickerStyle === st.id
+                        ? 'bg-[#3A211E] text-white border-[#3A211E]'
+                        : 'bg-white text-[#765B52] border-[#E8DFD8] hover:border-[#FFBF00]'
+                    }`}
+                  >
+                    {st.label}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleGenerateAISticker}
+                disabled={!aiStickerPrompt.trim() || aiStickerLoading}
+                className="w-full py-2 bg-[#3A211E] hover:bg-[#2A1815] disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
+              >
+                {aiStickerLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#FFBF00]" />
+                    <span>AI đang vẽ sticker...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5 text-[#FFBF00]" />
+                    <span>Tạo Sticker Bằng AI ✨</span>
+                  </>
+                )}
+              </button>
+
+              {/* Preview newly generated sticker */}
+              {generatedSticker && (
+                <div className="p-3 bg-white rounded-xl border border-[#E8DFD8] flex items-center justify-between gap-3 animate-in fade-in">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <img
+                      src={generatedSticker.url}
+                      alt={generatedSticker.name}
+                      className="w-12 h-12 object-contain rounded-lg border border-[#E8DFD8] bg-[#FAF7F2] p-1 shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <span className="text-[11px] font-bold text-[#3A211E] block truncate">
+                        {generatedSticker.name}
+                      </span>
+                      <span className="text-[10px] text-emerald-600 font-semibold">
+                        ✓ Đã tạo thành công
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onAddStickerLayer(generatedSticker.url, generatedSticker.name)}
+                    className="px-3 py-1.5 bg-[#FFBF00] hover:bg-[#FFBF00]/80 text-[#3A211E] font-bold text-xs rounded-lg shadow-2xs transition-colors shrink-0 cursor-pointer"
+                  >
+                    + Dán Lên Ly
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-2">
+              <span className="text-xs font-bold text-[#765B52] block mb-2.5">
+                Hoặc chọn sticker có sẵn:
+              </span>
+              <div className="grid grid-cols-2 gap-3">
+                {PRESET_STICKERS.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => onAddStickerLayer(s.url, s.name)}
+                    className="aspect-square p-4 rounded-2xl border border-[#E8DFD8] bg-[#FFF9E8] hover:bg-white hover:border-[#3A211E] transition-all flex flex-col items-center justify-center gap-2 group"
+                  >
+                    <img
+                      src={s.url}
+                      alt={s.name}
+                      className="w-12 h-12 object-contain group-hover:scale-110 transition-transform"
+                    />
+                    <span className="text-[11px] font-bold text-[#765B52] group-hover:text-[#3A211E]">
+                      {s.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}

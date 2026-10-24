@@ -22,6 +22,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import AuthRequiredModal from '@/components/AuthRequiredModal';
+import AIGreetingModal from '@/components/ai/AIGreetingModal';
 import {
   VIETNAM_PROVINCES,
   POPULAR_PROVINCES,
@@ -44,6 +45,7 @@ export default function CheckoutPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [isAIGreetingOpen, setIsAIGreetingOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -519,6 +521,19 @@ async function sanitizeCartItemsForCheckout(items: any[]) {
         redirectUrl="/checkout" 
       />
 
+      {/* Modal sáng tạo lời chúc thiệp quà tặng AI */}
+      <AIGreetingModal 
+        isOpen={isAIGreetingOpen}
+        onClose={() => setIsAIGreetingOpen(false)}
+        initialType="greeting"
+        onSelect={(greetingText) => {
+          setFormData(prev => ({
+            ...prev,
+            note: prev.note ? `${prev.note}\n[Lời chúc thiệp]: ${greetingText}` : `[Lời chúc thiệp]: ${greetingText}`
+          }));
+        }}
+      />
+
       <div className="max-w-[1320px] mx-auto px-6">
         <Link 
           href="/cart" 
@@ -860,9 +875,19 @@ async function sanitizeCartItemsForCheckout(items: any[]) {
               <div className="bg-white rounded-[24px] p-6 sm:p-8 border border-[#E8DFD8] shadow-sm">
                 <div className="flex items-start justify-between gap-3 mb-4">
                   <div>
-                    <h2 className="font-heading text-xl sm:text-2xl font-bold text-[#3A211E] flex items-center gap-2">
-                      <span>🎁</span> {isEn ? 'Add Gift Box & Packaging' : 'Mua Kèm Hộp Quà Tặng'}
-                    </h2>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h2 className="font-heading text-xl sm:text-2xl font-bold text-[#3A211E] flex items-center gap-2">
+                        <span>🎁</span> {isEn ? 'Add Gift Box & Packaging' : 'Mua Kèm Hộp Quà Tặng'}
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={() => setIsAIGreetingOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FFBF00]/30 hover:bg-[#FFBF00]/50 text-[#3A211E] border border-[#FFBF00]/60 transition-colors shadow-2xs cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-[#3A211E]" />
+                        <span>{isEn ? 'AI Greeting Writer ✨' : 'AI Viết Thiệp Lời Chúc ✨'}</span>
+                      </button>
+                    </div>
                     <p className="text-xs sm:text-sm text-[#765B52] mt-1">
                       {isEn 
                         ? 'Luxury packaging with handwritten message card upon request, perfect for gifts.' 

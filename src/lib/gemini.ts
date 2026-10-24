@@ -1,6 +1,6 @@
 /**
  * Google AI Studio Gemini API Client Helper
- * Supports Gemini 1.5 Flash with fallback resilience
+ * Supports Gemini 3.8 Flash & Gemini 2.5 Flash with fast timeout & fallback resilience
  */
 
 export interface GeminiRequestOptions {
@@ -15,54 +15,60 @@ export async function callGemini(options: GeminiRequestOptions): Promise<string>
 
   // If API key is present, invoke Google AI Studio REST API
   if (apiKey) {
-    try {
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    // Model candidates: gemini-3.8-flash (primary in 2026), gemini-2.5-flash, gemini-flash-latest
+    const models = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
 
-      const requestBody: any = {
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: options.prompt }],
+    for (const model of models) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+        const requestBody: any = {
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: options.prompt }],
+            },
+          ],
+          generationConfig: {
+            temperature: options.temperature ?? 0.7,
+            maxOutputTokens: options.maxTokens ?? 1024,
           },
-        ],
-        generationConfig: {
-          temperature: options.temperature ?? 0.7,
-          maxOutputTokens: options.maxTokens ?? 1024,
-        },
-      };
-
-      if (options.systemInstruction) {
-        requestBody.systemInstruction = {
-          parts: [{ text: options.systemInstruction }],
         };
-      }
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-        // Cache setting: no-store for fresh AI responses
-        cache: 'no-store',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.warn('Gemini API call returned non-200:', response.status, errorData);
-        // Fall back to intelligent generator if quota exceeded or invalid key
-      } else {
-        const data = await response.json();
-        const textCandidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (textCandidate && typeof textCandidate === 'string' && textCandidate.trim()) {
-          return textCandidate.trim();
+        if (options.systemInstruction) {
+          requestBody.systemInstruction = {
+            parts: [{ text: options.systemInstruction }],
+          };
         }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000); // 6s fast timeout
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+          cache: 'no-store',
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.json();
+          const textCandidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (textCandidate && typeof textCandidate === 'string' && textCandidate.trim()) {
+            return textCandidate.trim();
+          }
+        }
+      } catch (err: any) {
+        // Continue to next model or fallback
       }
-    } catch (err) {
-      console.error('Error contacting Gemini API:', err);
     }
   }
 
-  // Graceful smart fallback when no GEMINI_API_KEY or offline
+  // Graceful smart fallback when no GEMINI_API_KEY or network offline
   return '';
 }

@@ -83,20 +83,38 @@ export async function POST(req: NextRequest) {
 
     const isEn = language === 'en';
 
+    const isTramNghi = message.toLowerCase().includes('trạm') || 
+                        message.toLowerCase().includes('workshop') || 
+                        message.toLowerCase().includes('gốm') || 
+                        message.toLowerCase().includes('vẽ') || 
+                        message.toLowerCase().includes('nến') || 
+                        message.toLowerCase().includes('lịch trình') || 
+                        message.toLowerCase().includes('hẹn hò') || 
+                        message.toLowerCase().includes('chữa lành') ||
+                        message.toLowerCase().includes('khoảng nghỉ');
+
+    const tramNghiSystemInstruction = `Bạn là Trạm AI - Trợ lý điều phối lịch trình và gợi ý khoảng nghỉ của nền tảng "Trạm nghỉ" (lifestyle workshop, ẩm thực F&B và spa thư giãn tại TP.HCM).
+Nhiệm vụ của bạn là tư vấn workshop phù hợp (gốm, vẽ tranh acrylic, nến thơm thủ công), kết hợp các tiện ích lân cận (quán trà bánh, cà phê, ngâm chân thảo mộc spa) và ước tính chi phí.
+Hãy trả lời với giọng điệu nhẹ nhàng, dịu dàng, ấm áp, đậm chất chữa lành ("Một khoảng thở, một chút vui"). Trình bày rõ ràng theo từng mốc thời gian.`;
+
+    const effectiveSystemInstruction = isTramNghi ? tramNghiSystemInstruction : SYSTEM_INSTRUCTION;
+
     // Format conversation history for Gemini
     const conversationPrompt = history
-      .map((h: any) => `${h.role === 'user' ? 'Khách hàng' : 'Cupfy AI'}: ${h.content}`)
+      .map((h: any) => `${h.role === 'user' ? 'Khách hàng' : 'Trợ lý AI'}: ${h.content}`)
       .concat(`Khách hàng: ${message}`)
       .join('\n');
 
-    const prompt = `Lịch sử hội thoại gần đây:\n${conversationPrompt}\n\nHãy trả lời tin nhắn mới nhất của khách hàng một cách tự nhiên, hữu ích và ngắn gọn:`;
+    const prompt = isTramNghi 
+      ? message 
+      : `Lịch sử hội thoại gần đây:\n${conversationPrompt}\n\nHãy trả lời tin nhắn mới nhất của khách hàng một cách tự nhiên, hữu ích và ngắn gọn:`;
 
-    // 1. Call Gemini 1.5 Flash
+    // 1. Call Gemini Flash
     const geminiReply = await callGemini({
       prompt,
-      systemInstruction: SYSTEM_INSTRUCTION,
+      systemInstruction: effectiveSystemInstruction,
       temperature: 0.7,
-      maxTokens: 600,
+      maxTokens: 800,
     });
 
     if (geminiReply) {
@@ -108,6 +126,22 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Fallback
+    if (isTramNghi) {
+      const area = message.toLowerCase().includes('bình thạnh') ? 'Bình Thạnh' : message.toLowerCase().includes('phú nhuận') ? 'Phú Nhuận' : 'Thảo Điền';
+      const workshopName = message.toLowerCase().includes('nến') ? 'Làm nến thơm thủ công' : message.toLowerCase().includes('vẽ') ? 'Vẽ tranh canvas thư giãn' : 'Nặn gốm thủ công';
+      const fallbackTramNghi = `🌿 Trạm AI đã gợi ý cho bạn một lịch trình thật êm ả tại ${area}:\n\n` +
+        `1. 14:30 – 16:30: Workshop "${workshopName}" — để đôi tay được tự do sáng tạo và tâm trí tạm gác lại những bộn bề.\n` +
+        `2. 16:45 – 18:00: Thưởng thức Trà hoa cúc mật ong & bánh thủ công tại tiệm trà đối tác lân cận (cách 100m, kèm ưu đãi dành riêng cho khách Trạm nghỉ).\n` +
+        `3. 18:15 – 19:00: Gói ngâm chân thảo mộc xoa tan mỏi mệt tại spa đối tác cùng khu vực.\n\n` +
+        `✨ Chi phí trọn gói ước tính: ~380.000đ – 450.000đ/người. Bạn có thể chọn dịch vụ này trong mục Tự tạo combo để đặt chỗ ngay nhé!`;
+
+      return NextResponse.json({
+        success: true,
+        reply: fallbackTramNghi,
+        source: 'tram-nghi-fallback',
+      });
+    }
+
     const fallback = getFallbackAnswer(message, isEn);
     return NextResponse.json({
       success: true,

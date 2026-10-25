@@ -15,8 +15,8 @@ export async function callGemini(options: GeminiRequestOptions): Promise<string>
 
   // If API key is present, invoke Google AI Studio REST API
   if (apiKey) {
-    // Model candidates: gemini-3.8-flash (primary in 2026), gemini-2.5-flash, gemini-flash-latest
-    const models = ['gemini-3.8-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
+    // Model candidates available on Google AI Studio
+    const models = ['gemini-flash-lite-latest', 'gemini-2.5-flash-lite', 'gemini-flash-latest'];
 
     for (const model of models) {
       try {

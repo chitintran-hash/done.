@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Sparkles, Loader2, Bot, User, HelpCircle, ArrowUpRight } from 'lucide-react';
 import { useLanguageStore } from '@/store/useLanguageStore';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface ChatMessage {
   id: string;
@@ -13,9 +14,12 @@ interface ChatMessage {
 }
 
 export default function AIChatBot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const { language } = useLanguageStore();
   const isEn = language === 'en';
+
+  if (pathname === '/' || pathname.startsWith('/partner') || pathname.startsWith('/admin')) return null;
 
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);

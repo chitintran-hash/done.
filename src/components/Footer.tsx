@@ -10,7 +10,7 @@ export default function Footer() {
   const { language } = useLanguageStore();
   const t = (key: TranslationKey) => translations[language]?.[key] || key;
 
-  if (pathname === "/custom-cup") return null;
+  if (pathname === "/" || pathname === "/custom-cup" || pathname.startsWith("/admin") || pathname.startsWith("/partner")) return null;
 
   return (
     <footer className="bg-[#3A211E] border-t border-[#3A211E] pt-16 pb-10 text-white">

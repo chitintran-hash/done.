@@ -119,7 +119,7 @@ export default function Header() {
     await supabase.auth.signOut();
   };
 
-  if (pathname === '/custom-cup' || pathname.startsWith('/admin')) return null;
+  if (pathname === '/' || pathname === '/custom-cup' || pathname.startsWith('/admin') || pathname.startsWith('/partner')) return null;
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#E8DFD8] ${isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white"}`}>

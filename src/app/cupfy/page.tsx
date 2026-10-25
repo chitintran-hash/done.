@@ -1,0 +1,501 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, MousePointer2, Paintbrush, Eye, ShoppingBag, Sparkles } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { getTranslation } from "@/lib/i18n/server";
+import HeroSlider from "@/components/HeroSlider";
+import AddToCartButton from "@/components/AddToCartButton";
+import TemplateCardActions from "@/components/TemplateCardActions";
+
+export default async function Home() {
+  const { t } = await getTranslation();
+  const supabase = await createClient();
+  
+  const { data: latestProducts } = await supabase
+    .from("products")
+    .select("*")
+    .neq("category", "user_custom")
+    .not("category", "in", '("gift_box","gift","admin_community_post","admin_about_post","template")')
+    .limit(4);
+
+  const { data: dbTemplates } = await supabase
+    .from("products")
+    .select("*")
+    .eq("is_available", true)
+    .eq("category", "template")
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  const fallbackTemplates = [
+    {
+      id: "3bd416e6-6e46-4b4f-8530-0ed6f25bfc45",
+      name: "Ly Thuỷ Tinh Có Quai",
+      price: 145000,
+      image_url: "/images/products/quai.jpg",
+      technical_specs: {
+        vibe: "Có quai cầm",
+        card_bg: "#FFEAEA",
+        capacity: "400ml",
+      },
+    },
+    {
+      id: "29440931-5abe-4663-aafc-7823cedaa392",
+      name: "Ly Thuỷ Tinh Cao Brainrot",
+      price: 130000,
+      image_url: "/images/products/brainrot.jpg",
+      technical_specs: {
+        vibe: "Brainrot Edition",
+        card_bg: "#DCFCE7",
+        capacity: "350ml",
+      },
+    },
+    {
+      id: "49c8dfa4-25e7-45c5-9a52-a4d67e170983",
+      name: "Ly Thuỷ Tinh Cao",
+      price: 115000,
+      image_url: "/images/products/cao.jpg",
+      technical_specs: {
+        vibe: "Dáng cao",
+        card_bg: "#FFF2D6",
+        capacity: "350ml",
+      },
+    },
+  ];
+
+  const templates = dbTemplates && dbTemplates.length > 0 ? dbTemplates : fallbackTemplates;
+
+  return (
+    <main className="flex flex-col min-h-screen pt-28 md:pt-36 lg:pt-[150px] bg-[#FFF9E8]">
+      
+      {/* PHẦN 1: Hero Section phong cách Banner Gradient Vàng Ấm + Khung Ly & 4 Badges */}
+      <section className="max-w-[1400px] mx-auto px-4 sm:px-6 mb-16 md:mb-24 w-full">
+        <div className="relative w-full rounded-[36px] md:rounded-[48px] overflow-hidden bg-gradient-to-br from-[#FCB827] via-[#FDC640] via-60% to-[#FFD868] shadow-[0_25px_60px_rgba(252,188,47,0.28)] border border-amber-300/60 min-h-[540px] md:min-h-[580px] lg:min-h-[600px] flex flex-col lg:flex-row items-center justify-between p-6 sm:p-10 lg:p-12 xl:p-16 gap-10">
+          
+          {/* Lớp ánh sáng tỏa (Ambient Glows) */}
+          <div className="absolute -right-24 -top-24 w-[420px] h-[420px] bg-white/25 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute -left-20 -bottom-20 w-[360px] h-[360px] bg-amber-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+          {/* Cột trái: Nội dung chữ gốc CUSTOMIZE YOUR CUP + Nút CTA */}
+          <div className="relative z-10 w-full lg:w-[48%] xl:w-[46%] flex flex-col items-start text-left">
+            
+            {/* Tag nhỏ thương hiệu */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-white/70 text-[#3A211E] text-xs sm:text-sm font-extrabold uppercase tracking-wider mb-4 sm:mb-5 shadow-xs">
+              <Sparkles className="w-4 h-4 text-[#FFBF00]" />
+              <span>{t("hero_tag" as any)}</span>
+            </div>
+
+            {/* Tiêu đề khổng lồ: Nâu chocolate #3A211E sang trọng, độ tương phản cao */}
+            <h1 className="font-heading font-black text-5xl sm:text-6xl md:text-7xl lg:text-[72px] xl:text-[76px] leading-[0.94] tracking-tight uppercase mb-5 select-none text-[#3A211E]">
+              <span className="block text-[#3A211E]">
+                CUSTOMIZE
+              </span>
+              <span className="block text-[#3A211E] mt-1.5">
+                YOUR CUP
+              </span>
+            </h1>
+
+            {/* Đoạn mô tả phụ gốc */}
+            <p className="text-base sm:text-lg md:text-xl text-[#3A211E]/85 font-medium leading-relaxed mb-8 max-w-[460px]">
+              {t("hero_subtitle_banner" as any)}
+            </p>
+
+            {/* Cặp nút bấm CTA: Nút chính nâu chocolate chữ trắng, nút phụ nền trắng chữ nâu */}
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/custom-cup"
+                className="inline-flex items-center justify-center gap-2 px-9 py-4 bg-[#3A211E] text-white rounded-full font-black text-base sm:text-lg transition-all duration-200 hover:bg-[#201817] hover:scale-105 shadow-[0_12px_28px_rgba(58,33,30,0.22)] group"
+              >
+                <span>{t("hero_btn_design" as any)}</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white hover:bg-[#FFF9E8] text-[#3A211E] rounded-full font-bold text-base transition-all duration-200 border border-white/80 shadow-xs hover:shadow-sm"
+              >
+                {t("hero_btn_shop" as any)}
+              </Link>
+            </div>
+
+          </div>
+
+          {/* Cột phải: Slider hình ảnh với khung viền bo cong trắng 3D + 4 Badges */}
+          <div className="relative z-10 w-full lg:w-[52%] xl:w-[54%] flex items-center justify-center p-2 sm:p-4 lg:p-6">
+            <div className="relative w-full max-w-[620px]">
+
+              {/* BADGE 1: DRAG & DROP (Góc trên bên trái) */}
+              <div className="absolute -top-4 -left-3 sm:-top-5 sm:-left-5 z-30 bg-white text-[#171717] font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(0,0,0,0.18)] border border-white/80 -rotate-6 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>DRAG & DROP</span>
+              </div>
+
+              {/* BADGE 2: 360° PREVIEW (Góc trên bên phải) */}
+              <div className="absolute top-4 -right-3 sm:top-5 sm:-right-5 z-30 bg-[#A0091F] text-white font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(160,9,31,0.35)] rotate-8 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>360° PREVIEW</span>
+              </div>
+
+              {/* BADGE 3: PRINT READY ✓ (Góc dưới bên trái) */}
+              <div className="absolute bottom-10 -left-3 sm:bottom-12 sm:-left-5 z-30 bg-[#EF6807] text-white font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(239,104,7,0.35)] -rotate-6 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>PRINT READY ✓</span>
+              </div>
+
+              {/* BADGE 4: SAVE DESIGN (Góc dưới bên phải) */}
+              <div className="absolute -bottom-3 -right-2 sm:-bottom-4 sm:-right-4 z-30 bg-[#2C9EC6] text-white font-black text-xs sm:text-[13px] px-4 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_28px_rgba(44,158,198,0.35)] rotate-6 select-none hover:rotate-0 hover:scale-105 transition-all duration-200 cursor-default flex items-center gap-1.5">
+                <span>SAVE DESIGN</span>
+              </div>
+
+              {/* KHUNG BO VIỀN TRẮNG NỔI 3D CHỨA SLIDER */}
+              <div className="p-2 sm:p-3 bg-white/75 backdrop-blur-md rounded-[34px] md:rounded-[42px] border-[3px] border-white/95 shadow-[0_22px_55px_rgba(58,33,30,0.18)]">
+                <HeroSlider />
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* PHẦN 2: Cách thức hoạt động (Kiểu thẻ hiện đại với Badge số đa sắc màu từ ảnh mẫu) */}
+      <section className="py-20 md:py-24 bg-[#FFF9E8]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+          <div className="text-center mb-14 md:mb-16">
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-[#3A211E] mb-3">{t("how_title" as any)}</h3>
+            <p className="text-[#765B52] text-base sm:text-lg">{t("how_subtitle" as any)}</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
+            {[
+              {
+                step: "01",
+                badgeBg: "bg-[#F5B738]", // Vàng ấm rực rỡ
+                title: t("how_step1_title" as any),
+                desc: t("how_step1_desc" as any),
+              },
+              {
+                step: "02",
+                badgeBg: "bg-[#F6CFC0]", // Cam đào pastel ấm áp
+                title: t("how_step2_title" as any),
+                desc: t("how_step2_desc" as any),
+              },
+              {
+                step: "03",
+                badgeBg: "bg-[#CDE5EE]", // Xanh đá tuyết pastel mát mẻ
+                title: t("how_step3_title" as any),
+                desc: t("how_step3_desc" as any),
+              },
+              {
+                step: "04",
+                badgeBg: "bg-[#DFD7F5]", // Tím oải hương pastel mộng mơ
+                title: t("how_step4_title" as any),
+                desc: t("how_step4_desc" as any),
+              },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-[28px] sm:rounded-[32px] p-7 sm:p-8 flex flex-col items-start text-left border border-[#E8DFD8] shadow-[0_8px_30px_rgba(58,33,30,0.04)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300"
+              >
+                {/* Badge số thứ tự có màu sắc bắt mắt */}
+                <div
+                  className={`w-11 h-9 sm:w-12 sm:h-10 rounded-xl ${item.badgeBg} text-[#171717] font-black text-xs sm:text-sm flex items-center justify-center mb-6 shadow-xs select-none`}
+                >
+                  {item.step}
+                </div>
+
+                {/* Tiêu đề bước */}
+                <h4 className="text-xl sm:text-2xl font-bold text-[#171717] mb-3 leading-snug">
+                  {item.title}
+                </h4>
+
+                {/* Mô tả chi tiết */}
+                <p className="text-sm sm:text-base text-[#765B52] font-medium leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PHẦN 3: Khám phá mẫu ly yêu thích (Nền trắng toàn phần + Nút Thêm vào giỏ hàng) */}
+      <section className="w-full bg-white py-20 sm:py-24 border-y border-[#E8DFD8]">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <h3 className="text-3xl font-extrabold text-[#3A211E] mb-3">{t("products_title" as any)}</h3>
+              <p className="text-[#765B52] text-lg">{t("products_subtitle" as any)}</p>
+            </div>
+            <Link href="/products" className="hidden sm:flex items-center gap-2 font-bold text-[#3A211E] hover:text-[#765B52] transition-colors">
+              {t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {latestProducts?.map((product) => (
+              <div 
+                key={product.id} 
+                className="group bg-white rounded-[24px] sm:rounded-[28px] overflow-hidden border border-[#E8DFD8] hover:border-[#FFBF00] transition-all flex flex-col h-full shadow-[0_4px_20px_rgba(58,33,30,0.04)] hover:shadow-xl"
+              >
+                {/* Khu vực ảnh sản phẩm: Bấm vào xem chi tiết */}
+                <Link 
+                  href={`/products/${product.id}`} 
+                  className="relative aspect-square bg-[#FAF7F2] overflow-hidden p-2 sm:p-3 flex items-center justify-center border-b border-[#E8DFD8]/70 block"
+                >
+                  {product.image_url ? (
+                    <Image
+                      src={product.image_url}
+                      alt={`${product.name} - Ly đẹp chính hãng Cupfy`}
+                      fill
+                      className="object-contain p-2 mix-blend-multiply group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div className="text-[#765B52] text-sm">No image</div>
+                  )}
+                </Link>
+
+                {/* Thông tin sản phẩm & Nút Thêm vào giỏ hàng */}
+                <div className="p-5 sm:p-6 flex flex-col flex-grow bg-white">
+                  <Link href={`/products/${product.id}`}>
+                    <h4 className="font-bold text-base sm:text-lg text-[#3A211E] mb-1 line-clamp-1 hover:text-[#FFBF00] transition-colors">
+                      {product.name}
+                    </h4>
+                  </Link>
+                  <p className="text-xs sm:text-sm text-[#765B52] mb-4 sm:mb-5">
+                    {product.technical_specs?.capacity || product.capacity || '500ml'}
+                  </p>
+                  
+                  {/* Hàng giá tiền & Nút Thêm vào giỏ hàng */}
+                  <div className="mt-auto pt-3 flex items-center justify-between gap-2 border-t border-[#E8DFD8]/50">
+                    <span className="font-black text-[#3A211E] text-lg sm:text-xl">
+                      {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+                    </span>
+                    
+                    <AddToCartButton product={product} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-10 flex justify-center sm:hidden">
+            <Link href="/products" className="px-8 py-4 bg-white text-[#3A211E] border border-[#E8DFD8] rounded-full font-bold flex items-center gap-2">
+              {t("products_view_all" as any)}<ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* PHẦN 4: Section Mẫu có sẵn (THEO VIBE: Không biết thiết kế? Bắt đầu từ mẫu có sẵn.) */}
+      <section className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 my-16 sm:my-20">
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+          <div>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#F06806] block mb-2">
+              MẪU CÓ SẴN
+            </span>
+            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl text-[#171717] tracking-tight leading-tight">
+              Bộ Sưu Tập Ly Mẫu Có Sẵn
+            </h2>
+          </div>
+          <Link
+            href="/templates"
+            className="self-start sm:self-auto inline-flex items-center justify-center px-6 py-3.5 bg-[#F5A623] hover:bg-[#E59716] text-[#171717] rounded-2xl font-black text-sm sm:text-base transition-all duration-200 active:scale-95 shadow-sm hover:shadow-md shrink-0"
+          >
+            {t("templates_section_btn" as any)}
+          </Link>
+        </div>
+
+        {/* 3 Template Cards Grid - Clean direct presentation without background tinting or cozy/cute tags */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          {templates.map((tmpl) => {
+            const capacity = tmpl.technical_specs?.capacity || "350ml";
+            const material = tmpl.technical_specs?.material || "Thuỷ tinh cao cấp";
+
+            return (
+              <div
+                key={tmpl.id}
+                className="bg-white rounded-[26px] p-4 border border-[#E8DFD8] shadow-[0_4px_20px_rgba(58,33,30,0.03)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+              >
+                {/* Cup Image Area - Clean neutral presentation directly displaying the ready-made cup */}
+                <Link
+                  href={`/products/${tmpl.id}`}
+                  className="relative w-full aspect-square rounded-[20px] bg-[#FAF7F2] border border-[#E8DFD8]/60 overflow-hidden flex items-center justify-center p-3 mb-3.5 block cursor-pointer group-hover:border-[#FFBF00] transition-colors"
+                >
+                  <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/95 text-[#3A211E] text-[11px] font-bold shadow-xs border border-[#E8DFD8]/60">
+                    {capacity}
+                  </div>
+                  <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-[#3A211E] text-white text-[10px] font-bold uppercase tracking-wider shadow-xs">
+                    Mẫu có sẵn
+                  </div>
+
+                  {tmpl.image_url ? (
+                    <Image
+                      src={tmpl.image_url}
+                      alt={tmpl.name}
+                      fill
+                      className="object-contain p-2 mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, 350px"
+                    />
+                  ) : (
+                    <span className="text-5xl sm:text-6xl drop-shadow-xs select-none">
+                      🥛
+                    </span>
+                  )}
+                </Link>
+
+                {/* Bottom Info Area */}
+                <div className="flex flex-col flex-grow">
+                  <div className="flex items-center justify-between text-xs text-[#765B52] mb-1.5">
+                    <span className="font-medium">{material}</span>
+                    <span className="font-semibold text-emerald-700">Chính hãng</span>
+                  </div>
+
+                  <Link href={`/products/${tmpl.id}`} className="group-hover:text-[#F06806] transition-colors">
+                    <h3 className="text-lg sm:text-xl font-heading font-black text-[#171717] mb-1 line-clamp-1">
+                      {tmpl.name}
+                    </h3>
+                  </Link>
+
+                  <div className="mb-3.5">
+                    <span className="text-lg sm:text-xl font-black text-[#3A211E]">
+                      {new Intl.NumberFormat("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      }).format(tmpl.price || 0)}
+                    </span>
+                  </div>
+
+                  <TemplateCardActions
+                    templateId={tmpl.id}
+                    templateName={tmpl.name}
+                    price={tmpl.price || 0}
+                    imageUrl={tmpl.image_url || ''}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* PHẦN 5: Section custom banner */}
+      <section className="w-full px-4 md:px-8 mb-24 relative">
+        <div className="max-w-[1400px] mx-auto rounded-[36px] md:rounded-[44px] overflow-hidden relative border border-[#EADBCC] bg-gradient-to-br from-[#FFFDF9] via-[#FFF9EE] to-[#FEF3E2] shadow-[0_20px_50px_-20px_rgba(58,33,30,0.08)]">
+          {/* Ambient decorative background glows */}
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-amber-200/40 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-orange-200/30 rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="flex flex-col lg:flex-row items-center relative z-10">
+            {/* Left Column: Text & Features & Actions */}
+            <div className="w-full lg:w-1/2 p-8 sm:p-12 md:p-14 lg:p-16 xl:p-20 flex flex-col items-start">
+              {/* Top Tag */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-[#E8D7C8] shadow-xs mb-5 text-[#8C4A2F] text-xs sm:text-sm font-bold tracking-wide">
+                <Sparkles className="w-4 h-4 text-amber-500 animate-pulse shrink-0" />
+                <span>{t("banner_tag" as any)}</span>
+              </div>
+
+              {/* Title */}
+              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#2D1810] mb-5 leading-[1.18] tracking-tight">
+                {t("banner_title" as any)}
+              </h3>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg text-[#6E554B] mb-8 max-w-[500px] leading-relaxed">
+                {t("banner_desc" as any)}
+              </p>
+
+              {/* Feature Highlights Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-9 w-full max-w-[520px]">
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100/90 flex items-center justify-center text-amber-800 shrink-0 text-base shadow-xs">
+                    🎨
+                  </div>
+                  <span>{t("banner_feature_1" as any)}</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-orange-100/90 flex items-center justify-center text-orange-800 shrink-0 text-base shadow-xs">
+                    🔄
+                  </div>
+                  <span>{t("banner_feature_2" as any)}</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-rose-100/90 flex items-center justify-center text-rose-800 shrink-0 text-base shadow-xs">
+                    🎁
+                  </div>
+                  <span>{t("banner_feature_3" as any)}</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-2xl border border-[#EFE2D6] text-xs sm:text-sm font-semibold text-[#5A4036] shadow-xs hover:bg-white transition-all">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-100/90 flex items-center justify-center text-emerald-800 shrink-0 text-base shadow-xs">
+                    ✨
+                  </div>
+                  <span>{t("banner_feature_4" as any)}</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5">
+                <Link 
+                  href="/custom-cup" 
+                  className="group inline-flex items-center gap-3 px-8 py-4 bg-[#2D1810] hover:bg-[#432317] text-white rounded-full font-bold text-base sm:text-lg transition-all duration-300 shadow-lg shadow-[#2D1810]/20 hover:shadow-xl hover:shadow-[#2D1810]/30 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <span>{t("banner_btn" as any)}</span>
+                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+                <Link 
+                  href="/products?category=template" 
+                  className="inline-flex items-center gap-2 px-6 py-4 bg-white/90 hover:bg-white text-[#5A4036] hover:text-[#2D1810] rounded-full font-semibold text-base transition-all duration-300 border border-[#E8DFD8] shadow-xs hover:shadow-md hover:-translate-y-0.5"
+                >
+                  <span>{t("banner_explore_btn" as any)}</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Showcase Card with Product Preview */}
+            <div className="w-full lg:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 flex items-center justify-center">
+              <div className="relative w-full max-w-[540px] bg-white rounded-[32px] p-5 sm:p-7 shadow-[0_20px_50px_-15px_rgba(58,33,30,0.1)] border border-[#ECE0D6] group transition-all duration-300 hover:shadow-[0_25px_60px_-15px_rgba(58,33,30,0.15)]">
+                {/* Top showcase header */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-bold shadow-2xs">
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping inline-block" />
+                    <span>{t("banner_badge_hot" as any)}</span>
+                  </div>
+                  <span className="text-[11px] font-semibold text-[#8C7A72] bg-[#FAF5F0] px-3 py-1 rounded-full border border-[#EFE5DB]">
+                    4 Dáng Ly Thuỷ Tinh
+                  </span>
+                </div>
+
+                {/* Cups Showcase Image */}
+                <div className="relative w-full aspect-[5/4] rounded-2xl overflow-hidden bg-gradient-to-b from-white via-[#FCFAF8] to-[#F9F4EE] flex items-center justify-center p-2">
+                  <Image 
+                    src="/images/cupfy-custom-cups.jpg" 
+                    alt="Bộ sưu tập 4 mẫu ly thủy tinh sticker Capybara và bạn bè Cupfy" 
+                    fill
+                    className="object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                    sizes="(max-width: 1024px) 100vw, 540px"
+                    priority
+                  />
+                </div>
+
+                {/* Bottom showcase footer */}
+                <div className="mt-4 pt-3.5 border-t border-[#F0E6DE] flex items-center justify-between text-xs text-[#7A6258]">
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <span className="text-amber-600 font-bold">★ 4.9/5</span>
+                    <span className="text-gray-300">•</span>
+                    <span>In UV sắc nét bền đẹp</span>
+                  </div>
+                  <Link 
+                    href="/custom-cup" 
+                    className="font-bold text-[#2D1810] hover:text-amber-800 flex items-center gap-1 transition-colors group-hover:translate-x-0.5 duration-200"
+                  >
+                    <span>Tự tạo ngay</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  );
+}

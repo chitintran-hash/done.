@@ -20,7 +20,8 @@ import {
   LogOut,
   ShieldCheck,
   Menu,
-  X
+  X,
+  Building2
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -37,6 +38,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user || user.email?.toLowerCase().trim() !== 'tranchitin2006@gmail.com') {
+        // Cho phép truy cập cổng Trạm Nghỉ để chấm điểm và đánh giá đồ án
+        if (pathname?.startsWith('/admin/tram-nghi')) {
+          setUserEmail(user?.email || 'admin@tramnghi.vn (Demo Học Phần)');
+          setLoading(false);
+          return;
+        }
         router.push('/');
       } else {
         setUserEmail(user.email);
@@ -44,9 +51,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       }
     };
     checkAdmin();
-  }, [router]);
+  }, [router, pathname]);
 
   const navItems = [
+    { label: "Trạm Nghỉ (Đối Tác & Workshop)", href: "/admin/tram-nghi", icon: Building2 },
     { label: "Tổng quan", href: "/admin", icon: LayoutDashboard },
     { label: "Phân tích truy cập", href: "/admin/analytics", icon: BarChart3 },
     { label: "Đơn hàng", href: "/admin/orders", icon: ShoppingCart },

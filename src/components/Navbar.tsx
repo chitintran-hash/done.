@@ -1,0 +1,845 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { User, Notification } from '../types';
+import {
+  Zap,
+  MapPin,
+  Users,
+  Package,
+  Bell,
+  Heart,
+  User as UserIcon,
+  LogOut,
+  ChevronDown,
+  HelpCircle,
+  ShieldCheck,
+  MessageSquare,
+  Lock,
+  Search,
+  Menu,
+  X,
+  RotateCcw,
+  BookOpen,
+  FileText,
+  PhoneCall,
+  LayoutDashboard,
+  Boxes,
+  Wallet,
+  Sparkles,
+  Presentation,
+} from 'lucide-react';
+import { InstallPwaButton } from './InstallPwaButton';
+
+interface NavbarProps {
+  currentUser: User;
+  currentTab: string;
+  onNavigate: (tab: any) => void;
+  notifications: Notification[];
+  onMarkNotificationAsRead: (id: string) => void;
+  onMarkAllNotificationsAsRead: () => void;
+  onSelectNotificationItem: (roomId?: string, orderId?: string) => void;
+  onLogout: () => void;
+  onResetDemo: () => void;
+  onOpenDemoCheckModal?: () => void;
+  onTogglePresentationMode?: () => void;
+  isPresentationMode?: boolean;
+  onOpenBusinessModel?: () => void;
+  joinedRoomsCount: number;
+  ordersCount: number;
+  favoritesCount: number;
+  onOpenSearch?: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({
+  currentUser,
+  currentTab,
+  onNavigate,
+  notifications,
+  onMarkNotificationAsRead,
+  onMarkAllNotificationsAsRead,
+  onSelectNotificationItem,
+  onLogout,
+  onResetDemo,
+  onOpenDemoCheckModal,
+  onTogglePresentationMode,
+  isPresentationMode,
+  onOpenBusinessModel,
+  joinedRoomsCount,
+  ordersCount,
+  favoritesCount,
+  onOpenSearch,
+}) => {
+  // Dropdown States
+  const [isNotifOpen, setIsNotifOpen] = useState<boolean>(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
+  const [isSupportMenuOpen, setIsSupportMenuOpen] = useState<boolean>(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState<boolean>(false);
+
+  const notifRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const supportMenuRef = useRef<HTMLDivElement>(null);
+
+  const userNotifications = notifications.filter((n) => n.userId === currentUser.id);
+  const unreadCount = userNotifications.filter((n) => !n.read).length;
+  const recentNotifications = [...userNotifications]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
+
+  // Close dropdowns on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setIsNotifOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+      if (supportMenuRef.current && !supportMenuRef.current.contains(event.target as Node)) {
+        setIsSupportMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const roleBadgeConfig = {
+    buyer: { label: 'BUYER', bg: 'bg-[#F2E8F0]', text: 'text-[#68415F]', border: 'border-[#D8CDD3]' },
+    supplier: { label: 'SUPPLIER', bg: 'bg-[#FFF8F1]', text: 'text-[#C58B52]', border: 'border-[#EADFE4]' },
+    admin: { label: 'ADMIN', bg: 'bg-[#211A22]', text: 'text-[#FFF8F1]', border: 'border-[#3A2438]' },
+  }[currentUser.role];
+
+  return (
+    <>
+      {/* 1. TOP HEADER (Height 72-80px: h-20, Warm White #FFFCF8, subtle border #EADFE4) */}
+      <header className="sticky top-0 z-40 bg-[#FFFCF8]/95 backdrop-blur-md border-b border-[#EADFE4] shadow-xs h-20 transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+          {/* LEFT: LOGO */}
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => onNavigate(currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'overview')}
+              className="flex items-center space-x-3 text-left group shrink-0 cursor-pointer"
+            >
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#3A2438] via-[#68415F] to-[#C77C86] flex items-center justify-center text-white shadow-md shadow-[#68415F]/25 group-hover:scale-105 transition-transform duration-200">
+                <Zap className="w-6 h-6 fill-white" />
+              </div>
+              <div>
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-[#211A22] block leading-none">
+                  Flash<span className="text-[#68415F]">Group</span>
+                </span>
+                <span className="block text-[10px] text-[#756871] font-bold uppercase tracking-wider mt-0.5">
+                  CÀNG ĐÔNG, CÀNG RẺ
+                </span>
+              </div>
+            </button>
+          </div>
+
+          {/* CENTER: DESKTOP CLEAN NAVIGATION (ALL UPPERCASE, FONT 700) */}
+          <nav className="hidden lg:flex items-center space-x-2">
+            {currentUser.role === 'buyer' ? (
+              <>
+                {/* 1. KHÁM PHÁ */}
+                <button
+                  onClick={() => onNavigate('discovery')}
+                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 cursor-pointer ${
+                    currentTab === 'discovery'
+                      ? 'bg-[#F2E8F0] text-[#68415F]'
+                      : 'text-[#352B32] hover:text-[#C77C86] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  KHÁM PHÁ
+                </button>
+
+                {/* 2. FLASHMAP */}
+                <button
+                  onClick={() => onNavigate('flashmap')}
+                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                    currentTab === 'flashmap'
+                      ? 'bg-[#F2E8F0] text-[#68415F]'
+                      : 'text-[#352B32] hover:text-[#C77C86] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#68415F]" />
+                  <span>FLASHMAP</span>
+                </button>
+
+                {/* 3. PHÒNG CỦA TÔI */}
+                <button
+                  onClick={() => onNavigate('myrooms')}
+                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                    currentTab === 'myrooms'
+                      ? 'bg-[#F2E8F0] text-[#68415F]'
+                      : 'text-[#352B32] hover:text-[#C77C86] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>PHÒNG CỦA TÔI</span>
+                  {joinedRoomsCount > 0 && (
+                    <span className="bg-[#68415F] text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                      {joinedRoomsCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* 4. ĐƠN HÀNG */}
+                <button
+                  onClick={() => onNavigate('orders')}
+                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                    currentTab === 'orders'
+                      ? 'bg-[#F2E8F0] text-[#68415F]'
+                      : 'text-[#352B32] hover:text-[#C77C86] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  <Package className="w-3.5 h-3.5" />
+                  <span>ĐƠN HÀNG</span>
+                  {ordersCount > 0 && (
+                    <span className="bg-[#EADFE4] text-[#352B32] text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                      {ordersCount}
+                    </span>
+                  )}
+                </button>
+
+                {/* 5. HỖ TRỢ */}
+                <div className="relative" ref={supportMenuRef}>
+                  <button
+                    onClick={() => setIsSupportMenuOpen((prev) => !prev)}
+                    className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1 cursor-pointer ${
+                      isSupportMenuOpen
+                        ? 'bg-[#F2E8F0] text-[#68415F]'
+                        : 'text-[#352B32] hover:text-[#C77C86] hover:bg-[#FFF8F1]'
+                    }`}
+                  >
+                    <span>HỖ TRỢ</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#756871]" />
+                  </button>
+
+                  {isSupportMenuOpen && (
+                    <div className="absolute left-0 mt-2 w-60 bg-[#FFFCF8] rounded-2xl shadow-xl border border-[#EADFE4] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold">
+                      <button
+                        onClick={() => {
+                          onNavigate('help');
+                          setIsSupportMenuOpen(false);
+                        }}
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#F2E8F0] hover:text-[#68415F] flex items-center space-x-2.5 text-[#352B32] transition"
+                      >
+                        <HelpCircle className="w-4 h-4 text-[#68415F]" />
+                        <span>TRUNG TÂM TRỢ GIÚP</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          onNavigate('complaints');
+                          setIsSupportMenuOpen(false);
+                        }}
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#F2E8F0] hover:text-[#68415F] flex items-center space-x-2.5 text-[#352B32] transition"
+                      >
+                        <MessageSquare className="w-4 h-4 text-[#E8957B]" />
+                        <span>KHIẾU NẠI & TRANH CHẤP</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          onNavigate('refund-policy');
+                          setIsSupportMenuOpen(false);
+                        }}
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#F2E8F0] hover:text-[#68415F] flex items-center space-x-2.5 text-[#352B32] transition"
+                      >
+                        <FileText className="w-4 h-4 text-[#756871]" />
+                        <span>ĐỔI TRẢ & HOÀN TIỀN</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          onNavigate('contact');
+                          setIsSupportMenuOpen(false);
+                        }}
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#F2E8F0] hover:text-[#68415F] flex items-center space-x-2.5 text-[#352B32] transition border-t border-[#EADFE4]"
+                      >
+                        <PhoneCall className="w-4 h-4 text-[#68415F]" />
+                        <span>LIÊN HỆ</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : currentUser.role === 'supplier' ? (
+              <>
+                <button
+                  onClick={() => onNavigate('dashboard')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'dashboard' ? 'bg-[#FFF8F1] text-[#C58B52]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  TỔNG QUAN
+                </button>
+                <button
+                  onClick={() => onNavigate('products')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'products' ? 'bg-[#FFF8F1] text-[#C58B52]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  SẢN PHẨM
+                </button>
+                <button
+                  onClick={() => onNavigate('rooms')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'rooms' ? 'bg-[#FFF8F1] text-[#C58B52]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  PHÒNG GOM
+                </button>
+                <button
+                  onClick={() => onNavigate('orders')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'orders' ? 'bg-[#FFF8F1] text-[#C58B52]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  ĐƠN HÀNG
+                </button>
+                <button
+                  onClick={() => onNavigate('earnings')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'earnings' ? 'bg-[#FFF8F1] text-[#C58B52]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  DOANH THU
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => onNavigate('overview')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'overview' ? 'bg-[#F2E8F0] text-[#68415F]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  OVERVIEW
+                </button>
+                <button
+                  onClick={() => onNavigate('users')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'users' ? 'bg-[#F2E8F0] text-[#68415F]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  USERS
+                </button>
+                <button
+                  onClick={() => onNavigate('suppliers')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'suppliers' ? 'bg-[#F2E8F0] text-[#68415F]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  SUPPLIERS
+                </button>
+                <button
+                  onClick={() => onNavigate('finance')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'finance' ? 'bg-[#F2E8F0] text-[#68415F]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  FINANCE
+                </button>
+                <button
+                  onClick={() => onNavigate('compliance')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                    currentTab === 'compliance' ? 'bg-[#F2E8F0] text-[#68415F]' : 'text-[#352B32] hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  COMPLIANCE
+                </button>
+              </>
+            )}
+          </nav>
+
+          {/* RIGHT: SEARCH ICON, NOTIFICATION, USER AVATAR */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            {/* Quick Search Button */}
+            <button
+              onClick={() => {
+                if (onOpenSearch) onOpenSearch();
+                else onNavigate('flashmap');
+              }}
+              title="Tìm kiếm phòng gom, điểm nhận..."
+              className="p-2.5 rounded-xl text-[#352B32] hover:text-[#68415F] hover:bg-[#F2E8F0] transition cursor-pointer"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+
+            {/* PWA Install Button (Phase 11) */}
+            <InstallPwaButton className="hidden md:inline-flex mr-1" />
+
+            {/* Notification Bell with Badge & Dropdown */}
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setIsNotifOpen((prev) => !prev)}
+                className="relative p-2.5 rounded-xl text-[#352B32] hover:text-[#68415F] hover:bg-[#F2E8F0] transition cursor-pointer"
+                title="Thông báo"
+              >
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#E8957B] text-white text-[10px] font-black flex items-center justify-center animate-pulse">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown */}
+              {isNotifOpen && (
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FFFCF8] rounded-2xl shadow-2xl border border-[#EADFE4] z-50 overflow-hidden animate-fade-in">
+                  <div className="p-3.5 bg-[#FFF8F1] border-b border-[#EADFE4] flex items-center justify-between">
+                    <span className="font-black text-xs uppercase tracking-wider text-[#211A22]">
+                      THÔNG BÁO ({unreadCount} CHƯA ĐỌC)
+                    </span>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={() => onMarkAllNotificationsAsRead()}
+                        className="text-[11px] font-bold text-[#68415F] hover:underline cursor-pointer"
+                      >
+                        Đọc tất cả
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="divide-y divide-[#EADFE4]/60 max-h-80 overflow-y-auto">
+                    {recentNotifications.length === 0 ? (
+                      <div className="p-6 text-center text-xs text-[#756871]">
+                        Không có thông báo mới nào
+                      </div>
+                    ) : (
+                      recentNotifications.map((notif) => (
+                        <div
+                          key={notif.id}
+                          onClick={() => {
+                            onMarkNotificationAsRead(notif.id);
+                            if (notif.roomId || notif.orderId) {
+                              onSelectNotificationItem(notif.roomId, notif.orderId);
+                            }
+                            setIsNotifOpen(false);
+                          }}
+                          className={`p-3 text-xs transition cursor-pointer hover:bg-[#FFF8F1] flex items-start space-x-2.5 ${
+                            !notif.read ? 'bg-[#F2E8F0]/40 font-semibold' : 'text-[#756871]'
+                          }`}
+                        >
+                          <div className="w-2 h-2 rounded-full bg-[#68415F] shrink-0 mt-1.5 opacity-80" />
+                          <div className="flex-1">
+                            <h5 className="font-bold text-[#211A22] text-xs">{notif.title}</h5>
+                            <p className="text-[11px] text-[#756871] line-clamp-2 mt-0.5">{notif.message}</p>
+                            <span className="text-[10px] text-[#756871]/70 mt-1 block">
+                              {new Date(notif.createdAt).toLocaleTimeString('vi-VN', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="p-2.5 bg-[#FFF8F1] border-t border-[#EADFE4] text-center">
+                    <button
+                      onClick={() => {
+                        onNavigate('notifications');
+                        setIsNotifOpen(false);
+                      }}
+                      className="text-xs font-bold text-[#68415F] hover:underline cursor-pointer"
+                    >
+                      Xem toàn bộ thông báo &rarr;
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* User Profile Dropdown */}
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                className="flex items-center space-x-2 p-1.5 rounded-2xl hover:bg-[#F2E8F0] transition text-left cursor-pointer border border-transparent hover:border-[#EADFE4]"
+              >
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#68415F] to-[#C77C86] text-white font-black flex items-center justify-center text-xs shadow-sm overflow-hidden">
+                  {currentUser.avatar ? (
+                    <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
+                  ) : (
+                    currentUser.name.slice(0, 2).toUpperCase()
+                  )}
+                </div>
+                <div className="hidden sm:block">
+                  <span className="text-xs font-black text-[#211A22] block leading-tight truncate max-w-[120px]">
+                    {currentUser.name}
+                  </span>
+                  <span className={`inline-block text-[9px] font-black px-1.5 py-0.2 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border} mt-0.5`}>
+                    {roleBadgeConfig.label}
+                  </span>
+                </div>
+                <ChevronDown className="w-3.5 h-3.5 text-[#756871]" />
+              </button>
+
+              {/* Profile Menu Dropdown */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-[#FFFCF8] rounded-2xl shadow-2xl border border-[#EADFE4] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold">
+                  {/* Header: User Info */}
+                  <div className="px-4 py-3 bg-[#FFF8F1] border-b border-[#EADFE4]">
+                    <div className="font-black text-[#211A22] text-sm">{currentUser.name}</div>
+                    <div className="text-[11px] text-[#756871] font-medium truncate">{currentUser.email}</div>
+                    <div className="mt-1.5">
+                      <span className={`inline-block text-[10px] font-black px-2 py-0.5 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border}`}>
+                        {roleBadgeConfig.label}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Main Profile Links */}
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        onNavigate('profile');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#352B32]"
+                    >
+                      <UserIcon className="w-4 h-4 text-[#756871]" />
+                      <span>TÀI KHOẢN CỦA TÔI</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        onNavigate('orders');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#352B32]"
+                    >
+                      <Package className="w-4 h-4 text-[#756871]" />
+                      <span>ĐƠN HÀNG ({ordersCount})</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        onNavigate('myrooms');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#352B32]"
+                    >
+                      <Users className="w-4 h-4 text-[#756871]" />
+                      <span>PHÒNG CỦA TÔI ({joinedRoomsCount})</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        onNavigate('favorites');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#352B32]"
+                    >
+                      <Heart className="w-4 h-4 text-[#756871]" />
+                      <span>ĐÃ LƯU ({favoritesCount})</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        onNavigate('complaints');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#352B32]"
+                    >
+                      <MessageSquare className="w-4 h-4 text-[#E8957B]" />
+                      <span>KHIẾU NẠI & TRANH CHẤP</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        onNavigate('privacy');
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#352B32]"
+                    >
+                      <Lock className="w-4 h-4 text-[#68415F]" />
+                      <span>QUYỀN RIÊNG TƯ</span>
+                    </button>
+                  </div>
+
+                  {/* Divider & Business Model */}
+                  <div className="border-t border-[#EADFE4] py-1">
+                    {onOpenBusinessModel && (
+                      <button
+                        onClick={() => {
+                          onOpenBusinessModel();
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-[#F2E8F0] flex items-center space-x-2.5 text-[#68415F]"
+                      >
+                        <HelpCircle className="w-4 h-4 text-[#68415F]" />
+                        <span>MÔ HÌNH FLASHGROUP</span>
+                      </button>
+                    )}
+
+                    {/* Phase 12: Presentation Mode Toggle */}
+                    {onTogglePresentationMode && (
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          onTogglePresentationMode();
+                        }}
+                        title="Bật/tắt Bảng điều khiển trình bày kịch bản Demo"
+                        className="w-full px-4 py-1.5 text-left hover:bg-[#FFF8F1] flex items-center space-x-2 text-[11px] font-black text-[#68415F] hover:text-[#3A2438]"
+                      >
+                        <Presentation className="w-3.5 h-3.5 text-[#F3B37A]" />
+                        <span>{isPresentationMode ? 'Ẩn Bảng Trình Bày' : 'CHẾ ĐỘ TRÌNH BÀY'}</span>
+                      </button>
+                    )}
+
+                    {/* Developer Discreet Reset Demo & Scenario Check */}
+                    {onOpenDemoCheckModal && (
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          onOpenDemoCheckModal();
+                        }}
+                        title="Kiểm tra kịch bản & độ sẵn sàng Demo"
+                        className="w-full px-4 py-1.5 text-left hover:bg-[#FFF8F1] flex items-center space-x-2 text-[11px] font-semibold text-[#68415F] hover:text-[#3A2438]"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-[#E8957B]" />
+                        <span>Kịch bản Demo (19/20 Dâu Đà Lạt)</span>
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        onResetDemo();
+                      }}
+                      title="Khôi phục trạng thái dữ liệu demo"
+                      className="w-full px-4 py-1.5 text-left hover:bg-[#FFF8F1] flex items-center space-x-2 text-[11px] font-semibold text-[#756871] hover:text-[#211A22]"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Khôi phục dữ liệu Demo</span>
+                    </button>
+                  </div>
+
+                  {/* Divider & Logout */}
+                  <div className="border-t border-[#EADFE4] pt-1">
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-rose-50 text-rose-600 font-black flex items-center space-x-2"
+                    >
+                      <LogOut className="w-4 h-4 text-rose-500" />
+                      <span>ĐĂNG XUẤT</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setIsMobileDrawerOpen(true)}
+              className="lg:hidden p-2 rounded-xl text-[#352B32] hover:bg-[#F2E8F0] transition cursor-pointer"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* 2. MOBILE DRAWER SLIDE-OVER */}
+      {isMobileDrawerOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div
+            onClick={() => setIsMobileDrawerOpen(false)}
+            className="fixed inset-0 bg-[#211A22]/50 backdrop-blur-xs transition-opacity"
+          />
+
+          {/* Drawer Menu */}
+          <div className="fixed top-0 right-0 bottom-0 w-80 bg-[#FFFCF8] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-fade-in">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-[#EADFE4]">
+                <div className="flex items-center space-x-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#68415F] flex items-center justify-center text-white">
+                    <Zap className="w-5 h-5 fill-white" />
+                  </div>
+                  <span className="font-black text-lg text-[#211A22]">FlashGroup</span>
+                </div>
+                <button
+                  onClick={() => setIsMobileDrawerOpen(false)}
+                  className="p-1 rounded-lg text-[#756871] hover:text-[#211A22]"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Navigation Items (All UPPERCASE) */}
+              <nav className="space-y-1.5 font-bold text-xs uppercase tracking-wider text-[#352B32]">
+                <button
+                  onClick={() => {
+                    onNavigate('discovery');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition ${
+                    currentTab === 'discovery' ? 'bg-[#F2E8F0] text-[#68415F] font-black' : 'hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  KHÁM PHÁ
+                </button>
+
+                <button
+                  onClick={() => {
+                    onNavigate('flashmap');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition flex items-center space-x-2 ${
+                    currentTab === 'flashmap' ? 'bg-[#F2E8F0] text-[#68415F] font-black' : 'hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  <MapPin className="w-4 h-4 text-[#68415F]" />
+                  <span>FLASHMAP BẢN ĐỒ</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    onNavigate('myrooms');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition flex items-center justify-between ${
+                    currentTab === 'myrooms' ? 'bg-[#F2E8F0] text-[#68415F] font-black' : 'hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  <span>PHÒNG CỦA TÔI</span>
+                  {joinedRoomsCount > 0 && (
+                    <span className="bg-[#68415F] text-white text-[10px] px-2 py-0.5 rounded-full font-black">
+                      {joinedRoomsCount}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => {
+                    onNavigate('orders');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl transition flex items-center justify-between ${
+                    currentTab === 'orders' ? 'bg-[#F2E8F0] text-[#68415F] font-black' : 'hover:bg-[#FFF8F1]'
+                  }`}
+                >
+                  <span>ĐƠN HÀNG</span>
+                  {ordersCount > 0 && (
+                    <span className="bg-[#EADFE4] text-[#352B32] text-[10px] px-2 py-0.5 rounded-full">
+                      {ordersCount}
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => {
+                    onNavigate('favorites');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#FFF8F1] transition"
+                >
+                  ĐÃ LƯU ({favoritesCount})
+                </button>
+
+                <button
+                  onClick={() => {
+                    onNavigate('complaints');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#FFF8F1] transition"
+                >
+                  KHIẾU NẠI & TRANH CHẤP
+                </button>
+
+                <button
+                  onClick={() => {
+                    onNavigate('privacy');
+                    setIsMobileDrawerOpen(false);
+                  }}
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#FFF8F1] transition text-[#68415F]"
+                >
+                  TRUNG TÂM QUYỀN RIÊNG TƯ
+                </button>
+              </nav>
+            </div>
+
+            <div className="pt-4 border-t border-[#EADFE4] space-y-3">
+              <button
+                onClick={() => {
+                  setIsMobileDrawerOpen(false);
+                  onLogout();
+                }}
+                className="w-full py-2.5 bg-rose-50 text-rose-600 font-black text-xs uppercase tracking-wider rounded-xl transition text-center"
+              >
+                ĐĂNG XUẤT
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. MOBILE BOTTOM NAVIGATION */}
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFCF8]/95 backdrop-blur-md border-t border-[#EADFE4] py-1.5 px-2 shadow-2xl flex items-center justify-around">
+        {/* 1. KHÁM PHÁ */}
+        <button
+          onClick={() => onNavigate('discovery')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer ${
+            currentTab === 'discovery' ? 'text-[#68415F] font-black' : 'text-[#756871] font-medium'
+          }`}
+        >
+          <Zap className={`w-5 h-5 ${currentTab === 'discovery' ? 'fill-[#68415F]' : ''}`} />
+          <span className="text-[10px] mt-0.5 tracking-tight uppercase">KHÁM PHÁ</span>
+        </button>
+
+        {/* 2. FLASHMAP */}
+        <button
+          onClick={() => onNavigate('flashmap')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer ${
+            currentTab === 'flashmap' ? 'text-[#68415F] font-black' : 'text-[#756871] font-medium'
+          }`}
+        >
+          <MapPin className="w-5 h-5" />
+          <span className="text-[10px] mt-0.5 tracking-tight uppercase">FLASHMAP</span>
+        </button>
+
+        {/* 3. PHÒNG */}
+        <button
+          onClick={() => onNavigate('myrooms')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
+            currentTab === 'myrooms' ? 'text-[#68415F] font-black' : 'text-[#756871] font-medium'
+          }`}
+        >
+          <Users className="w-5 h-5" />
+          <span className="text-[10px] mt-0.5 tracking-tight uppercase">PHÒNG</span>
+          {joinedRoomsCount > 0 && (
+            <span className="absolute top-0 right-1 w-2 h-2 rounded-full bg-[#68415F]"></span>
+          )}
+        </button>
+
+        {/* 4. ĐƠN HÀNG */}
+        <button
+          onClick={() => onNavigate('orders')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
+            currentTab === 'orders' ? 'text-[#68415F] font-black' : 'text-[#756871] font-medium'
+          }`}
+        >
+          <Package className="w-5 h-5" />
+          <span className="text-[10px] mt-0.5 tracking-tight uppercase">ĐƠN HÀNG</span>
+          {ordersCount > 0 && (
+            <span className="absolute top-0 right-1 w-2 h-2 rounded-full bg-[#756871]"></span>
+          )}
+        </button>
+
+        {/* 5. TÀI KHOẢN */}
+        <button
+          onClick={() => onNavigate('profile')}
+          className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer ${
+            currentTab === 'profile' ? 'text-[#68415F] font-black' : 'text-[#756871] font-medium'
+          }`}
+        >
+          <UserIcon className="w-5 h-5" />
+          <span className="text-[10px] mt-0.5 tracking-tight uppercase">TÀI KHOẢN</span>
+        </button>
+      </nav>
+    </>
+  );
+};

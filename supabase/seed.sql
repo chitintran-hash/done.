@@ -1,0 +1,2 @@
+-- This seed file is intentionally left minimal.
+-- Run supabase/post_auth_seed.sql after creating demo Auth users manually.

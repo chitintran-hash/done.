@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#68415F" />
+    <meta name="description" content="FlashGroup — Càng đông, càng rẻ. Nền tảng mua chung theo nhóm và giao nhận thông minh qua Smart Locker." />
+    <meta property="og:title" content="FlashGroup — Càng đông, càng rẻ" />
+    <meta property="og:description" content="Mua chung theo nhóm, mở khóa các nấc giá sỉ ưu đãi và nhận hàng thuận tiện tại điểm nhận gần bạn." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/icon.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <title>FlashGroup — Càng đông, càng rẻ</title>
+  </head>
+  <body class="bg-[#FAF8F5] text-[#211A22] antialiased selection:bg-[#68415F] selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.log('[SW] ServiceWorker registration skipped:', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

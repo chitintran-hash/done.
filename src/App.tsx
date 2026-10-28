@@ -248,7 +248,7 @@ export default function FlashGroupApp() {
   // ==========================================
   const [loading, setLoading] = useState<boolean>(true);
   // Dual-mode state (Supabase online vs Local prototype fallback)
-  const [useLocalDemoMode, setUseLocalDemoMode] = useState<boolean>(false);
+  const [useLocalDemoMode, setUseLocalDemoMode] = useState<boolean>(true);
 
   useEffect(() => {
     // Initialise Supabase auth session (if configured and not in local demo mode)
@@ -285,7 +285,8 @@ export default function FlashGroupApp() {
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    return safeParseStorage<User | null>('flashgroup_v3_current_user', null);
+    const initial = createInitialUsers();
+    return safeParseStorage<User | null>('flashgroup_v3_current_user', initial[0] || null);
   });
 
   // Suppliers & Products

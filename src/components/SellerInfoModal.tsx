@@ -116,7 +116,7 @@ export const SellerInfoModal: React.FC<SellerInfoModalProps> = ({
 
           <div className="bg-slate-50 rounded-2xl p-3.5 border border-slate-100 space-y-1 sm:col-span-2">
             <span className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-1">
-              <MapPin className="w-3 h-3 text-emerald-600" /> Địa chỉ trụ sở / kho xuất hàng
+              <MapPin className="w-3 h-3 text-[#000181]" /> Địa chỉ trụ sở / kho xuất hàng
             </span>
             <div className="font-semibold text-slate-800">
               {supplier.businessAddress || supplier.location || 'Chưa cung cấp'}
@@ -151,7 +151,7 @@ export const SellerInfoModal: React.FC<SellerInfoModalProps> = ({
               <span className="text-slate-500">({supplier.totalReviews} lượt đánh giá)</span>
             </div>
             {supplier.verifiedAt && (
-              <div className="text-[10px] text-emerald-700 font-semibold">
+              <div className="text-[10px] text-[#000181] font-semibold">
                 Duyệt hồ sơ nội bộ: {new Date(supplier.verifiedAt).toLocaleDateString('vi-VN')}
               </div>
             )}
@@ -171,9 +171,9 @@ export const SellerInfoModal: React.FC<SellerInfoModalProps> = ({
             </p>
           </div>
 
-          <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 space-y-1">
+          <div className="bg-[#F4FFE8]/70 border border-[#D0FFA4] rounded-2xl p-4 space-y-1">
             <div className="font-black text-emerald-900 flex items-center gap-1.5">
-              <RotateCcw className="w-4 h-4 text-emerald-600" />
+              <RotateCcw className="w-4 h-4 text-[#000181]" />
               <span>Chính sách đổi trả & hoàn tiền của Nhà cung cấp (Return Policy)</span>
             </div>
             <p className="text-emerald-900">

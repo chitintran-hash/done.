@@ -222,7 +222,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-5 text-center sm:text-left">
-            <div className="w-20 h-20 rounded-2xl bg-emerald-100 text-emerald-800 font-black text-2xl flex items-center justify-center ring-4 ring-emerald-500/10 overflow-hidden shrink-0">
+            <div className="w-20 h-20 rounded-2xl bg-[#D0FFA4]/40 text-emerald-800 font-black text-2xl flex items-center justify-center ring-4 ring-emerald-500/10 overflow-hidden shrink-0">
               {currentUser.avatar ? (
                 <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
               ) : (
@@ -232,7 +232,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
             <div>
               <div className="flex items-center justify-center sm:justify-start space-x-2">
                 <h2 className="text-xl font-black text-slate-900">{currentUser.name}</h2>
-                <span className="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded uppercase border border-emerald-300">
+                <span className="bg-[#D0FFA4]/40 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded uppercase border border-[#D0FFA4]">
                   {currentUser.role}
                 </span>
               </div>
@@ -241,7 +241,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                 <span>{currentUser.email}</span>
               </p>
               <p className="text-xs text-slate-500 mt-1 flex items-center justify-center sm:justify-start space-x-1.5">
-                <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                <MapPin className="w-3.5 h-3.5 text-[#000181]" />
                 <span>Điểm nhận quen thuộc: <strong>{currentUser.preferredPickupPoint || 'Chưa thiết lập'}</strong></span>
               </p>
             </div>
@@ -277,7 +277,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500"
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#D0FFA4]"
                 />
               </div>
               <div>
@@ -286,7 +286,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500"
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#D0FFA4]"
                 />
               </div>
               <div>
@@ -294,7 +294,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                 <select
                   value={pickupPoint}
                   onChange={(e) => setPickupPoint(e.target.value)}
-                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-emerald-500 bg-white"
+                  className="w-full text-xs p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:border-[#D0FFA4] bg-white"
                 >
                   <option value="KTX A – Locker 03">KTX A – Locker 03</option>
                   <option value="KTX B – Tạp hóa sinh viên số 2">KTX B – Tạp hóa sinh viên số 2</option>
@@ -306,7 +306,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
             <div className="flex justify-end space-x-2 pt-2">
               <button
                 type="submit"
-                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center space-x-1.5"
+                className="px-5 py-2 bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs rounded-xl shadow-md transition flex items-center space-x-1.5"
               >
                 <Check className="w-4 h-4" />
                 <span>Lưu thay đổi</span>
@@ -320,7 +320,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center sm:text-left">
           <div className="flex items-center justify-center sm:justify-start space-x-1.5 text-xs text-slate-400 font-semibold mb-1">
-            <Users className="w-4 h-4 text-emerald-600" />
+            <Users className="w-4 h-4 text-[#000181]" />
             <span>Phòng đã gom</span>
           </div>
           <div className="text-2xl font-black text-slate-900">{myParticipations.length}</div>
@@ -343,11 +343,11 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start space-x-1.5 text-xs text-emerald-600 font-bold mb-1">
-            <TrendingDown className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center justify-center sm:justify-start space-x-1.5 text-xs text-[#000181] font-bold mb-1">
+            <TrendingDown className="w-4 h-4 text-[#000181]" />
             <span>Đã tiết kiệm</span>
           </div>
-          <div className="text-lg sm:text-xl font-black text-emerald-600">{formatVND(estimatedSavings)}</div>
+          <div className="text-lg sm:text-xl font-black text-[#000181]">{formatVND(estimatedSavings)}</div>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-center sm:text-left col-span-2 lg:col-span-1">
@@ -390,15 +390,15 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
           <div className="grid grid-cols-3 gap-2 text-center bg-slate-50 p-3 rounded-2xl border border-slate-100 text-[11px]">
             <div>
               <span className="text-slate-500 block">Đơn hoàn tất</span>
-              <strong className="text-emerald-700 font-black">+10 điểm</strong>
+              <strong className="text-[#000181] font-black">+10 điểm</strong>
             </div>
             <div className="border-x border-slate-200">
               <span className="text-slate-500 block">Referral thành công</span>
-              <strong className="text-emerald-700 font-black">+20 điểm</strong>
+              <strong className="text-[#000181] font-black">+20 điểm</strong>
             </div>
             <div>
               <span className="text-slate-500 block">Đánh giá SP</span>
-              <strong className="text-emerald-700 font-black">+5 điểm</strong>
+              <strong className="text-[#000181] font-black">+5 điểm</strong>
             </div>
           </div>
 
@@ -425,7 +425,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                     </div>
                     <span
                       className={`font-black text-sm ${
-                        tx.points >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                        tx.points >= 0 ? 'text-[#000181]' : 'text-rose-600'
                       }`}
                     >
                       {tx.points > 0 ? `+${tx.points}` : tx.points} điểm
@@ -443,7 +443,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
         <div className="lg:col-span-6 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-5 shadow-sm flex flex-col justify-between">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+              <div className="w-11 h-11 rounded-2xl bg-[#D0FFA4]/40 text-[#000181] flex items-center justify-center">
                 <Gift className="w-6 h-6" />
               </div>
               <div>
@@ -456,11 +456,11 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
 
             {/* Referral Metrics Grid */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 text-center">
+              <div className="bg-[#F4FFE8] border border-[#D0FFA4] rounded-2xl p-3 text-center">
                 <span className="text-[10px] font-bold text-emerald-800 uppercase block">
                   Successful referrals
                 </span>
-                <span className="text-xl font-black text-emerald-700 mt-0.5 block">
+                <span className="text-xl font-black text-[#000181] mt-0.5 block">
                   {successfulReferrals.length}
                 </span>
               </div>
@@ -498,7 +498,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                 <button
                   type="button"
                   onClick={handleCopyPersonalReferral}
-                  className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center space-x-1.5 shrink-0 transition"
+                  className="px-3.5 py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs flex items-center space-x-1.5 shrink-0 transition"
                 >
                   {copiedRef ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedRef ? 'Đã chép' : 'Sao chép'}</span>
@@ -543,7 +543,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
                             ref.status === 'completed'
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                              ? 'bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]'
                               : ref.status === 'joined'
                               ? 'bg-blue-100 text-blue-800 border border-blue-200'
                               : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -578,11 +578,11 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-[10px] font-black uppercase text-emerald-600 tracking-wider">
+              <span className="text-[10px] font-black uppercase text-[#000181] tracking-wider">
                 SỔ ĐỊA CHỈ GIAO HÀNG
               </span>
-              <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span className="bg-[#F4FFE8] text-emerald-800 border border-[#D0FFA4] text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3 text-[#000181]" />
                 BẢO MẬT TUYỆT ĐỐI
               </span>
             </div>
@@ -614,7 +614,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                 key={item.id}
                 className={`p-5 rounded-2xl border transition relative flex flex-col justify-between ${
                   item.isDefault
-                    ? 'bg-emerald-50/40 border-emerald-300 ring-2 ring-emerald-500/10'
+                    ? 'bg-[#F4FFE8]/40 border-[#D0FFA4] ring-2 ring-emerald-500/10'
                     : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
                 }`}
               >
@@ -622,13 +622,13 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 font-black text-[11px] flex items-center gap-1">
-                        {item.label === 'NHÀ' && <Home className="w-3 h-3 text-emerald-600" />}
+                        {item.label === 'NHÀ' && <Home className="w-3 h-3 text-[#000181]" />}
                         {item.label === 'CÔNG TY' && <Briefcase className="w-3 h-3 text-blue-600" />}
                         {item.label === 'KHÁC' && <MapPin className="w-3 h-3 text-slate-600" />}
                         {item.label}
                       </span>
                       {item.isDefault && (
-                        <span className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-black text-[10px] uppercase">
+                        <span className="px-2.5 py-1 rounded-lg bg-[#006EE9] text-white font-black text-[10px] uppercase">
                           MẶC ĐỊNH
                         </span>
                       )}
@@ -678,12 +678,12 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                     <button
                       type="button"
                       onClick={() => handleSetDefaultAddress(item.id)}
-                      className="text-xs font-bold text-emerald-700 hover:text-emerald-800 cursor-pointer hover:underline"
+                      className="text-xs font-bold text-[#000181] hover:text-emerald-800 cursor-pointer hover:underline"
                     >
                       Thiết lập làm mặc định
                     </button>
                   ) : (
-                    <span className="text-[11px] font-bold text-emerald-700 flex items-center gap-1">
+                    <span className="text-[11px] font-bold text-[#000181] flex items-center gap-1">
                       <Check className="w-3.5 h-3.5" />
                       Địa chỉ nhận hàng chính
                     </span>
@@ -704,7 +704,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
           <div className="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 text-xs space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-600 tracking-wider block">
+                <span className="text-[10px] font-black uppercase text-[#000181] tracking-wider block">
                   {editingAddress ? 'CHỈNH SỬA ĐỊA CHỈ' : 'THÊM ĐỊA CHỈ MỚI'}
                 </span>
                 <h3 className="text-base font-black text-slate-900 mt-0.5">
@@ -732,7 +732,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                       onClick={() => setModalLabel(lbl)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition ${
                         modalLabel === lbl
-                          ? 'bg-emerald-600 text-white'
+                          ? 'bg-[#006EE9] text-white'
                           : 'bg-white text-slate-600 border border-slate-200'
                       }`}
                     >
@@ -790,7 +790,7 @@ export const BuyerProfileView: React.FC<BuyerProfileProps> = ({
                   id="modalIsDefaultCheck"
                   checked={modalIsDefault}
                   onChange={(e) => setModalIsDefault(e.target.checked)}
-                  className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300"
+                  className="w-4 h-4 rounded text-[#000181] focus:ring-emerald-500 border-slate-300"
                 />
                 <label
                   htmlFor="modalIsDefaultCheck"

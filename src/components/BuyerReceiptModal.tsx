@@ -27,11 +27,11 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center space-x-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-[#D0FFA4]/40 text-[#000181] flex items-center justify-center">
               <FileText className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 block">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#000181] block">
                 BIÊN LAI GIAO DỊCH MÔ PHỎNG
               </span>
               <h3 className="text-base font-black text-slate-900">Chi tiết thanh toán</h3>
@@ -53,7 +53,7 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Trạng thái thanh toán:</span>
-            <span className="inline-flex items-center gap-1 font-bold text-emerald-700 uppercase">
+            <span className="inline-flex items-center gap-1 font-bold text-[#000181] uppercase">
               <CheckCircle2 className="w-3.5 h-3.5" />
               {order.status}
             </span>
@@ -78,7 +78,7 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
         <div className="space-y-3 border-t border-b border-slate-100 py-4">
           <div className="flex items-start justify-between">
             <div className="flex items-start space-x-2">
-              <Package className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <Package className="w-4 h-4 text-[#000181] shrink-0 mt-0.5" />
               <div>
                 <div className="font-bold text-slate-900 text-sm">{order.productName}</div>
                 <div className="text-slate-500 mt-0.5">
@@ -99,7 +99,7 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
               <span className="font-bold text-slate-900">{formatVND(order.productSubtotal)}</span>
             </div>
             {order.voucherDiscount !== undefined && order.voucherDiscount > 0 && (
-              <div className="flex justify-between text-emerald-700 font-bold">
+              <div className="flex justify-between text-[#000181] font-bold">
                 <span>Mã ưu đãi ({order.voucherCode || 'VOUCHER'}):</span>
                 <span>-{formatVND(order.voucherDiscount)}</span>
               </div>
@@ -112,13 +112,13 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
 
           <div className="pt-3 border-t border-slate-200 flex items-baseline justify-between">
             <span className="text-sm font-black text-slate-900">Tổng đã thanh toán (Total paid):</span>
-            <span className="text-xl font-black text-emerald-600">{formatVND(order.totalAmount)}</span>
+            <span className="text-xl font-black text-[#000181]">{formatVND(order.totalAmount)}</span>
           </div>
         </div>
 
         {/* Pickup Info (Phase 7 Snapshot Req 31, 45) */}
-        <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 flex items-start space-x-2.5">
-          <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+        <div className="bg-[#F4FFE8]/70 border border-[#D0FFA4] rounded-2xl p-3.5 flex items-start space-x-2.5">
+          <MapPin className="w-4 h-4 text-[#000181] shrink-0 mt-0.5" />
           <div className="space-y-0.5">
             <div className="font-bold text-slate-900">
               Điểm nhận: {order.pickupPointName || order.pickupPoint}
@@ -126,7 +126,7 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
             {order.pickupAddress && (
               <div className="text-[11px] text-slate-500">{order.pickupAddress}</div>
             )}
-            <div className="text-[11px] font-semibold text-indigo-700">
+            <div className="text-[11px] font-semibold text-[#000181]">
               Khung giờ nhận hàng (Pickup Window): {order.pickupWindow || '26 Oct • 18:00 – 21:00'}
             </div>
             <div className="text-[11px] font-mono font-bold text-emerald-800 pt-0.5">

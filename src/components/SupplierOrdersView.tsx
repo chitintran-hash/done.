@@ -100,7 +100,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                           ord.status === 'picked_up'
                             ? 'bg-teal-50 text-teal-700 border-teal-200'
                             : ord.status === 'ready_for_pickup'
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            ? 'bg-[#F4FFE8] text-[#000181] border-[#D0FFA4]'
                             : ord.status === 'in_transit'
                             ? 'bg-blue-50 text-blue-700 border-blue-200'
                             : ord.status === 'preparing'
@@ -112,7 +112,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                       >
                         {ord.status}
                       </span>
-                      <div className="text-sm font-black text-emerald-700 mt-1">
+                      <div className="text-sm font-black text-[#000181] mt-1">
                         Thực nhận: {formatVND(snap.effectiveNet)}
                       </div>
                       <div className="text-[10px] text-slate-400">
@@ -178,14 +178,14 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                     <span className="font-bold text-slate-900">{formatVND(activeOrder.productSubtotal)}</span>
                   </div>
 
-                  <div className="flex justify-between text-indigo-700">
+                  <div className="flex justify-between text-[#000181]">
                     <span>Platform fee ({Math.round(activeSnap.commissionRate * 100)}%):</span>
                     <span className="font-bold">-{formatVND(activeSnap.rawCommission)}</span>
                   </div>
 
                   <div className="flex justify-between text-slate-900 font-bold border-t border-slate-200 pt-2">
                     <span>Supplier net proceeds (Supplier earnings):</span>
-                    <span className="text-emerald-700 font-black text-sm">
+                    <span className="text-[#000181] font-black text-sm">
                       {activeSnap.isReversed ? '0đ (Đã hoàn/hủy)' : formatVND(activeSnap.effectiveNet)}
                     </span>
                   </div>
@@ -204,7 +204,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                     <div
                       className={`absolute -left-6 top-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                         activeOrder.paidAt || activeOrder.status !== 'awaiting_payment'
-                          ? 'border-emerald-600 bg-emerald-600 text-white'
+                          ? 'border-emerald-600 bg-[#006EE9] text-white'
                           : 'border-slate-300 bg-white'
                       }`}
                     >
@@ -225,7 +225,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                         activeOrder.status === 'in_transit' ||
                         activeOrder.status === 'ready_for_pickup' ||
                         activeOrder.status === 'picked_up'
-                          ? 'border-emerald-600 bg-emerald-600 text-white'
+                          ? 'border-emerald-600 bg-[#006EE9] text-white'
                           : 'border-slate-300 bg-white'
                       }`}
                     >
@@ -241,7 +241,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                         activeOrder.status === 'in_transit' ||
                         activeOrder.status === 'ready_for_pickup' ||
                         activeOrder.status === 'picked_up'
-                          ? 'border-emerald-600 bg-emerald-600 text-white'
+                          ? 'border-emerald-600 bg-[#006EE9] text-white'
                           : 'border-slate-300 bg-white'
                       }`}
                     >
@@ -255,7 +255,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                     <div
                       className={`absolute -left-6 top-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                         activeOrder.status === 'ready_for_pickup' || activeOrder.status === 'picked_up'
-                          ? 'border-emerald-600 bg-emerald-600 text-white'
+                          ? 'border-emerald-600 bg-[#006EE9] text-white'
                           : 'border-slate-300 bg-white'
                       }`}
                     >
@@ -269,7 +269,7 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                     <div
                       className={`absolute -left-6 top-0.5 w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                         activeOrder.status === 'picked_up'
-                          ? 'border-emerald-600 bg-emerald-600 text-white'
+                          ? 'border-emerald-600 bg-[#006EE9] text-white'
                           : 'border-slate-300 bg-white'
                       }`}
                     >

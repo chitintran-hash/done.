@@ -17,7 +17,7 @@ export const SupabaseSetupScreen: React.FC<Props> = ({ onEnableLocalDemoMode }) 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-slate-100 p-4 md:p-8 flex items-center justify-center">
-      <div className="max-w-3xl w-full bg-slate-900/90 border border-emerald-500/30 rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-md">
+      <div className="max-w-3xl w-full bg-slate-900/90 border border-[#D0FFA4]/30 rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-md">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 text-2xl font-black shadow-lg shadow-emerald-500/20">
@@ -25,7 +25,7 @@ export const SupabaseSetupScreen: React.FC<Props> = ({ onEnableLocalDemoMode }) 
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white flex items-center gap-2">
-              FlashGroup <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono border border-emerald-500/30">Phase V4</span>
+              FlashGroup <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono border border-[#D0FFA4]/30">Phase V4</span>
             </h1>
             <p className="text-sm text-slate-400">Kiến trúc Supabase Database + Authentication + Realtime Concurrency</p>
           </div>

@@ -339,7 +339,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-[#F4FFE8] text-[#000181] flex items-center justify-center">
             <Building2 className="w-4 h-4" />
           </div>
           <div>
@@ -353,7 +353,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
         </div>
 
         {isConfirmed && (
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#000181] bg-[#F4FFE8] px-2.5 py-1 rounded-full border border-[#D0FFA4]">
             <CheckCircle2 className="w-3.5 h-3.5" />
             Đã xác nhận
           </span>
@@ -383,7 +383,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 animate-fade-in">
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#000181]" />
               ĐỊA CHỈ CỦA BẠN (PREVIEW)
             </span>
             <div className="flex items-center gap-2">
@@ -392,7 +392,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
                 onClick={() => setIsPreviewMode(false)}
                 className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-xs cursor-pointer"
               >
-                <Edit3 className="w-3 h-3 text-emerald-600" />
+                <Edit3 className="w-3 h-3 text-[#000181]" />
                 <span>CHỈNH SỬA</span>
               </button>
             </div>
@@ -404,7 +404,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
 
           {geocodedResult && (
             <div className="flex items-center justify-between pt-2 border-t border-slate-200/80 text-[11px]">
-              <div className="flex items-center gap-1.5 text-emerald-700 font-bold">
+              <div className="flex items-center gap-1.5 text-[#000181] font-bold">
                 <Compass className="w-3.5 h-3.5" />
                 <span>{geocodedResult.confidenceLabel}:</span>
                 <span className="font-mono text-slate-600">
@@ -435,7 +435,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
                   onClick={() => setLabel(lbl)}
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 border transition cursor-pointer ${
                     label === lbl
-                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                      ? 'bg-[#006EE9] text-white border-emerald-600 shadow-xs'
                       : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
@@ -486,7 +486,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
             <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
               <span>TỈNH / THÀNH PHỐ *</span>
               {isLoadingProvinces && (
-                <span className="text-[10px] text-emerald-600 font-semibold animate-pulse">
+                <span className="text-[10px] text-[#000181] font-semibold animate-pulse">
                   ĐANG TẢI TỈNH / THÀNH PHỐ...
                 </span>
               )}
@@ -511,7 +511,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
             <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
               <span>QUẬN / HUYỆN / THÀNH PHỐ THUỘC TỈNH *</span>
               {isLoadingDistricts && (
-                <span className="text-[10px] text-emerald-600 font-semibold animate-pulse">
+                <span className="text-[10px] text-[#000181] font-semibold animate-pulse">
                   ĐANG TẢI QUẬN / HUYỆN...
                 </span>
               )}
@@ -541,7 +541,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
             <label className="text-xs font-bold text-slate-700 flex items-center justify-between">
               <span>PHƯỜNG / XÃ / THỊ TRẤN *</span>
               {isLoadingWards && (
-                <span className="text-[10px] text-emerald-600 font-semibold animate-pulse">
+                <span className="text-[10px] text-[#000181] font-semibold animate-pulse">
                   ĐANG TẢI PHƯỜNG / XÃ...
                 </span>
               )}
@@ -635,7 +635,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
           disabled={!provinceCode || isGeocoding}
           className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
         >
-          <Compass className={`w-4 h-4 text-emerald-600 ${isGeocoding ? 'animate-spin' : ''}`} />
+          <Compass className={`w-4 h-4 text-[#000181] ${isGeocoding ? 'animate-spin' : ''}`} />
           <span>{isGeocoding ? 'ĐANG TÌM TỌA ĐỘ...' : 'XEM TRÊN BẢN ĐỒ'}</span>
         </button>
 
@@ -656,7 +656,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
             disabled={!isAddressComplete}
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-black text-xs transition shadow-md ${
               isAddressComplete
-                ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20 cursor-pointer active:scale-95'
+                ? 'bg-[#006EE9] hover:bg-[#000181] text-white shadow-emerald-600/20 cursor-pointer active:scale-95'
                 : 'bg-slate-300 cursor-not-allowed'
             }`}
           >
@@ -673,7 +673,7 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
             {/* Sheet Header */}
             <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-600 tracking-wider block">
+                <span className="text-[10px] font-black uppercase text-[#000181] tracking-wider block">
                   CHỌN ĐƠN VỊ HÀNH CHÍNH
                 </span>
                 <h4 className="text-sm font-black text-slate-900 mt-0.5">
@@ -736,12 +736,12 @@ export const VietnamAddressSelector: React.FC<VietnamAddressSelectorProps> = ({
                       }}
                       className={`w-full p-3 rounded-xl text-left text-xs font-bold flex items-center justify-between transition cursor-pointer ${
                         isSelected
-                          ? 'bg-emerald-50 text-emerald-800'
+                          ? 'bg-[#F4FFE8] text-emerald-800'
                           : 'hover:bg-slate-50 text-slate-700'
                       }`}
                     >
                       <span>{opt.name}</span>
-                      {isSelected && <Check className="w-4 h-4 text-emerald-600 shrink-0" />}
+                      {isSelected && <Check className="w-4 h-4 text-[#000181] shrink-0" />}
                     </button>
                   );
                 })

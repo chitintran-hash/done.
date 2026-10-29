@@ -181,7 +181,7 @@ export const LegalCenterModal: React.FC<LegalCenterModalProps> = ({
                 {/* Header Banner */}
                 <div className="bg-white rounded-3xl p-6 border border-light-border shadow-xs space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-[#000181] bg-[#F4FFE8] border border-[#D0FFA4] px-2.5 py-1 rounded-full">
                       HỒ SƠ PHÁP LÝ CHÍNH THỨC
                     </span>
                     <div className="flex flex-wrap items-center gap-2 text-[11px]">
@@ -215,7 +215,7 @@ export const LegalCenterModal: React.FC<LegalCenterModalProps> = ({
                     >
                       {sec.title && (
                         <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100">
-                          <span className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-700 font-black text-xs flex items-center justify-center shrink-0">
+                          <span className="w-6 h-6 rounded-lg bg-[#F4FFE8] text-[#000181] font-black text-xs flex items-center justify-center shrink-0">
                             {idx + 1}
                           </span>
                           <h4 className="font-extrabold text-brand-dark text-xs sm:text-sm uppercase tracking-wide">
@@ -234,7 +234,7 @@ export const LegalCenterModal: React.FC<LegalCenterModalProps> = ({
                 {activeDoc.slug === 'promotion_voucher_terms' && (
                   <div className="space-y-3 pt-2">
                     <div className="flex items-center space-x-2">
-                      <Ticket className="w-4 h-4 text-emerald-600" />
+                      <Ticket className="w-4 h-4 text-[#000181]" />
                       <h4 className="text-sm font-black text-brand-dark uppercase tracking-tight">
                         DANH MỤC KHUYẾN MẠI & VOUCHER ĐANG ÁP DỤNG (NGHỊ ĐỊNH 81/2018/NĐ-CP)
                       </h4>
@@ -246,7 +246,7 @@ export const LegalCenterModal: React.FC<LegalCenterModalProps> = ({
                           className="rounded-2xl border border-light-border p-4 bg-white space-y-2.5 text-xs shadow-2xs"
                         >
                           <div className="flex items-center justify-between">
-                            <span className="font-mono font-black text-sm px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300">
+                            <span className="font-mono font-black text-sm px-2.5 py-0.5 rounded-lg bg-[#F4FFE8] text-emerald-800 border border-[#D0FFA4]">
                               {v.code}
                             </span>
                             <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
@@ -309,8 +309,8 @@ export const LegalCenterModal: React.FC<LegalCenterModalProps> = ({
                 )}
 
                 {/* Highlight Legal Note Box */}
-                <div className="bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200/80 flex items-start gap-3 text-xs text-emerald-900">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="bg-[#F4FFE8]/80 rounded-2xl p-4 border border-[#D0FFA4]/80 flex items-start gap-3 text-xs text-emerald-900">
+                  <ShieldCheck className="w-5 h-5 text-[#000181] shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
                     <strong>Lưu ý bảo vệ quyền lợi người tiêu dùng:</strong> Mọi quy chế và điều khoản của FlashGroup được biên soạn tuân thủ theo Luật Bảo vệ quyền lợi người tiêu dùng 2023, Nghị định 85/2021/NĐ-CP và Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân.
                   </p>

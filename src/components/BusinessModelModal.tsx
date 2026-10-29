@@ -35,11 +35,11 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between pb-4 border-b border-slate-100">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md">
+            <div className="w-10 h-10 rounded-2xl bg-[#006EE9] text-white flex items-center justify-center shadow-md">
               <Zap className="w-5 h-5 fill-white" />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 block">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#000181] block">
                 MÔ HÌNH KINH DOANH & DÒNG TIỀN TRUNG GIAN
               </span>
               <h3 className="text-lg sm:text-xl font-black text-slate-900">
@@ -56,16 +56,16 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
         </div>
 
         {/* Academic Intermediary Tooltip Box (Req 27) */}
-        <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 flex items-start space-x-3">
-          <HelpCircle className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+        <div className="bg-[#EFFBFF] border border-indigo-200 rounded-2xl p-4 flex items-start space-x-3">
+          <HelpCircle className="w-5 h-5 text-[#006EE9] shrink-0 mt-0.5" />
           <div className="space-y-1 text-indigo-950">
-            <div className="font-black text-xs uppercase tracking-wide text-indigo-700">
+            <div className="font-black text-xs uppercase tracking-wide text-[#000181]">
               Vai trò Sàn trung gian (Marketplace Intermediary)
             </div>
             <p className="font-semibold leading-relaxed">
               FlashGroup không mua lại hàng từ Supplier. Supplier vẫn sở hữu và fulfil sản phẩm. FlashGroup thu phí nền tảng trên giao dịch thành công.
             </p>
-            <span className="inline-block bg-indigo-100 text-indigo-800 font-bold text-[11px] px-2.5 py-0.5 rounded-full border border-indigo-300 mt-1">
+            <span className="inline-block bg-[#FAF0FF] text-indigo-800 font-bold text-[11px] px-2.5 py-0.5 rounded-full border border-indigo-300 mt-1">
               Phí nền tảng demo: {pct}%
             </span>
           </div>
@@ -84,7 +84,7 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
               step: '2. Buyer mua chung',
               desc: 'Người mua tại cùng cụm KTX / chung cư tham gia phòng gom trước hạn chót để cộng dồn sản lượng.',
               icon: Users,
-              color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+              color: 'bg-[#F4FFE8] text-[#000181] border-[#D0FFA4]',
             },
             {
               step: '3. Giá giảm khi lượng mua đạt mốc',
@@ -102,13 +102,13 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
               step: '5. Buyer chia sẻ chi phí giao hàng',
               desc: 'Tổng cước xe gom về điểm nhận (Locker / Hub) được chia đều cho số người tham gia.',
               icon: Truck,
-              color: 'bg-purple-50 text-purple-700 border-purple-200',
+              color: 'bg-[#FAF0FF] text-[#000181] border-[#E8A0FF]',
             },
             {
               step: '6. FlashGroup thu phí nền tảng',
               desc: `FlashGroup thu phí nền tảng demo (${pct}%) tính trên tiền hàng (không tính trên phí vận chuyển).`,
               icon: Percent,
-              color: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+              color: 'bg-[#EFFBFF] text-[#000181] border-indigo-200',
             },
           ].map((item, idx) => {
             const Icon = item.icon;
@@ -133,7 +133,7 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
         <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5 space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-black text-slate-900 text-xs flex items-center gap-2 uppercase tracking-wider">
-              <Calculator className="w-4 h-4 text-emerald-600" />
+              <Calculator className="w-4 h-4 text-[#000181]" />
               <span>Ví dụ Minh họa Dòng tiền: Phòng gom Dâu tây Đà Lạt (20 người mua)</span>
             </h4>
             <span className="text-[10px] font-bold text-slate-500">Phí nền tảng demo: 7%</span>
@@ -157,11 +157,11 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
                 <span>Phí giao chia sẻ (60,000đ / 20 người):</span>
                 <span className="font-bold text-slate-900">{formatVND(3000)}</span>
               </div>
-              <div className="flex justify-between text-emerald-700 font-bold border-t border-slate-100 pt-1.5">
+              <div className="flex justify-between text-[#000181] font-bold border-t border-slate-100 pt-1.5">
                 <span>Tổng Buyer thanh toán:</span>
                 <span>{formatVND(92000)}</span>
               </div>
-              <div className="flex justify-between text-indigo-700 pt-1">
+              <div className="flex justify-between text-[#000181] pt-1">
                 <span>Phí nền tảng demo (7% × 89,000đ):</span>
                 <span className="font-bold">-{formatVND(6230)}</span>
               </div>
@@ -184,11 +184,11 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
                 <span>Tổng phí vận chuyển gom (20 × 3,000đ):</span>
                 <span className="font-bold text-slate-900">{formatVND(60000)}</span>
               </div>
-              <div className="flex justify-between text-indigo-700">
+              <div className="flex justify-between text-[#000181]">
                 <span>Doanh thu phí nền tảng (7% GMV):</span>
                 <span className="font-bold">{formatVND(124600)}</span>
               </div>
-              <div className="flex justify-between text-emerald-700 font-black border-t border-slate-100 pt-1.5">
+              <div className="flex justify-between text-[#000181] font-black border-t border-slate-100 pt-1.5">
                 <span>Doanh thu ròng Supplier (Net proceeds):</span>
                 <span>{formatVND(1655400)}</span>
               </div>

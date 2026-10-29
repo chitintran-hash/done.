@@ -288,7 +288,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                     </div>
                     <div className="flex justify-between text-slate-600">
                       <span>{room.finalPrice !== undefined ? 'Giá chốt:' : 'Giá hiện tại:'}</span>
-                      <span className="font-black text-emerald-700 text-sm">{formatVND(currentPrice)}</span>
+                      <span className="font-black text-[#000181] text-sm">{formatVND(currentPrice)}</span>
                     </div>
                     {room.status === 'active' && (
                       <div className="flex justify-between text-slate-500 text-[11px] pt-1 border-t border-slate-200">
@@ -303,7 +303,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                   <button
                     onClick={() => onSelectRoom(room.id)}
-                    className="text-xs font-bold text-emerald-700 hover:underline flex items-center space-x-1"
+                    className="text-xs font-bold text-[#000181] hover:underline flex items-center space-x-1"
                   >
                     <span>Xem trang Buyer</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -377,7 +377,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                   <div className="mt-1.5 text-[11px] text-slate-500 flex flex-wrap items-center gap-2">
                     <span>Quy cách: <strong>{selectedProduct.unit}</strong></span>
                     <span>•</span>
-                    <span>Tồn kho: <strong className="text-emerald-700">{selectedProduct.stockQuantity}</strong></span>
+                    <span>Tồn kho: <strong className="text-[#000181]">{selectedProduct.stockQuantity}</strong></span>
                     <span>•</span>
                     <span>
                       Chi phí ước tính / đơn vị (nội bộ):{' '}
@@ -426,7 +426,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                   <span className="font-black text-slate-900 block uppercase tracking-wider text-[11px]">
                     Cấu hình bậc thang giá theo số lượng gom
                   </span>
-                  <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                  <span className="text-[10px] font-bold text-[#000181] bg-[#EFFBFF] px-2 py-0.5 rounded-full border border-indigo-200">
                     Phí nền tảng demo: {Math.round(commissionRate * 100)}%
                   </span>
                 </div>
@@ -447,7 +447,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                       type="number"
                       value={t2Price}
                       onChange={(e) => setT2Price(Number(e.target.value))}
-                      className="w-full p-1.5 border rounded text-xs text-emerald-700 font-bold"
+                      className="w-full p-1.5 border rounded text-xs text-[#000181] font-bold"
                     />
                   </div>
                   <div className="p-2.5 bg-white rounded-xl border border-slate-200">
@@ -456,7 +456,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                       type="number"
                       value={t3Price}
                       onChange={(e) => setT3Price(Number(e.target.value))}
-                      className="w-full p-1.5 border rounded text-xs text-emerald-700 font-bold"
+                      className="w-full p-1.5 border rounded text-xs text-[#000181] font-bold"
                     />
                   </div>
                   <div className="p-2.5 bg-white rounded-xl border border-slate-200">
@@ -465,7 +465,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                       type="number"
                       value={t4Price}
                       onChange={(e) => setT4Price(Number(e.target.value))}
-                      className="w-full p-1.5 border rounded text-xs text-emerald-700 font-bold"
+                      className="w-full p-1.5 border rounded text-xs text-[#000181] font-bold"
                     />
                   </div>
                 </div>
@@ -550,15 +550,15 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                                 <span className="text-slate-400">—</span>
                               )}
                             </td>
-                            <td className="py-2.5 px-3 font-semibold text-indigo-600">
+                            <td className="py-2.5 px-3 font-semibold text-[#006EE9]">
                               -{formatVND(feeTier)}
                             </td>
-                            <td className="py-2.5 px-3 font-bold text-emerald-700">
+                            <td className="py-2.5 px-3 font-bold text-[#000181]">
                               {formatVND(supplierNetTier)}
                             </td>
                             <td className="py-2.5 px-3 text-right font-black">
                               {netContribution !== null ? (
-                                <span className={netContribution < 0 ? 'text-rose-600' : 'text-emerald-700'}>
+                                <span className={netContribution < 0 ? 'text-rose-600' : 'text-[#000181]'}>
                                   {formatVND(netContribution)}
                                 </span>
                               ) : (
@@ -690,7 +690,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                                 {isBest && (
                                   <span
                                     title="Gợi ý dựa trên khoảng cách, sức chứa và lượng phòng đang hoạt động"
-                                    className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                    className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-black bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]"
                                   >
                                     <Sparkles className="w-2.5 h-2.5" />
                                     Phù hợp nhất
@@ -730,7 +730,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                 <div className="pt-2 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="font-bold text-slate-700 block mb-1 flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+                      <Calendar className="w-3.5 h-3.5 text-[#006EE9]" />
                       <span>Bước 2: Chọn Khung Giờ Nhận Hàng (Choose Pickup Slot)</span>
                     </label>
                     <select
@@ -823,8 +823,8 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                   </span>
                 </div>
               ) : (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <div className="p-3 bg-[#F4FFE8] border border-[#D0FFA4] rounded-xl text-emerald-800 flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#000181] shrink-0" />
                   <span>Phòng chưa có người tham gia, bạn có thể tự do điều chỉnh thông số.</span>
                 </div>
               )}

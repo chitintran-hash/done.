@@ -24,8 +24,8 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onDismis
     >
       {toasts.map((toast) => {
         let Icon = CheckCircle2;
-        let colorClasses = 'bg-white border-emerald-500 text-slate-800';
-        let iconColor = 'text-emerald-600';
+        let colorClasses = 'bg-white border-[#D0FFA4] text-slate-800';
+        let iconColor = 'text-[#000181]';
 
         if (toast.type === 'ERROR') {
           Icon = AlertCircle;

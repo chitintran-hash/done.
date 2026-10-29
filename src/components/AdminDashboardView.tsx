@@ -657,7 +657,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
               <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-emerald-600" /> Total Buyers
+                <Users className="w-3.5 h-3.5 text-[#000181]" /> Total Buyers
               </span>
               <div className="text-2xl font-black text-slate-900 mt-1">{totalBuyers}</div>
               <span className="text-[11px] text-slate-400 mt-0.5 block">Tài khoản người mua</span>
@@ -670,12 +670,12 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               <div className="text-2xl font-black text-slate-900 mt-1">
                 {verifiedSuppliers} <span className="text-xs text-slate-400 font-normal">/ {totalSuppliers}</span>
               </div>
-              <span className="text-[11px] text-emerald-600 font-bold mt-0.5 block">Đã xét duyệt</span>
+              <span className="text-[11px] text-[#000181] font-bold mt-0.5 block">Đã xét duyệt</span>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
               <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-indigo-600" /> Active / Success Rooms
+                <Layers className="w-3.5 h-3.5 text-[#006EE9]" /> Active / Success Rooms
               </span>
               <div className="text-2xl font-black text-slate-900 mt-1">
                 {activeRooms} <span className="text-xs text-slate-400 font-normal">/ {successfulRooms}</span>
@@ -696,10 +696,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
-                <DollarSign className="w-4 h-4 text-emerald-600" />
+                <DollarSign className="w-4 h-4 text-[#000181]" />
                 <span>Tổng quan Doanh thu Sàn & Dòng tiền (Admin Platform Revenue)</span>
               </h3>
-              <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
+              <span className="text-[11px] font-bold text-[#000181] bg-[#EFFBFF] px-2.5 py-1 rounded-full border border-indigo-200">
                 Phí nền tảng demo: {Math.round(commissionRate * 100)}% (Chỉ tính trên đơn hợp lệ, không tính phí ship)
               </span>
             </div>
@@ -711,20 +711,20 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                 <span className="text-[10px] text-slate-400 mt-0.5 block">Tổng tiền hàng hợp lệ</span>
               </div>
 
-              <div className="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-200">
-                <span className="text-[11px] font-bold text-indigo-700 uppercase">Platform Revenue</span>
-                <div className="text-lg sm:text-xl font-black text-indigo-700 mt-1">{formatVND(platformRevenue)}</div>
-                <span className="text-[10px] text-indigo-600 font-semibold mt-0.5 block">
+              <div className="bg-[#EFFBFF]/70 p-4 rounded-2xl border border-indigo-200">
+                <span className="text-[11px] font-bold text-[#000181] uppercase">Platform Revenue</span>
+                <div className="text-lg sm:text-xl font-black text-[#000181] mt-1">{formatVND(platformRevenue)}</div>
+                <span className="text-[10px] text-[#006EE9] font-semibold mt-0.5 block">
                   Doanh thu hoa hồng sàn
                 </span>
               </div>
 
-              <div className="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
+              <div className="bg-[#F4FFE8]/70 p-4 rounded-2xl border border-[#D0FFA4]">
                 <span className="text-[11px] font-bold text-emerald-800 uppercase">Supplier Net Proceeds</span>
-                <div className="text-lg sm:text-xl font-black text-emerald-700 mt-1">
+                <div className="text-lg sm:text-xl font-black text-[#000181] mt-1">
                   {formatVND(supplierNetProceeds)}
                 </div>
-                <span className="text-[10px] text-emerald-700 mt-0.5 block">Doanh thu ròng về Supplier</span>
+                <span className="text-[10px] text-[#000181] mt-0.5 block">Doanh thu ròng về Supplier</span>
               </div>
 
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
@@ -744,7 +744,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
-                <ShoppingBag className="w-4 h-4 text-emerald-600" />
+                <ShoppingBag className="w-4 h-4 text-[#000181]" />
                 <span>Đơn hàng & Đối soát</span>
               </h3>
               <div className="grid grid-cols-2 gap-4">
@@ -761,7 +761,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
             <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
-                <BarChart3 className="w-4 h-4 text-indigo-600" />
+                <BarChart3 className="w-4 h-4 text-[#006EE9]" />
                 <span>Hiệu suất gom đơn Siêu cục bộ</span>
               </h3>
               <div className="grid grid-cols-2 gap-4">
@@ -790,18 +790,18 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               <span className="text-[10px] text-slate-400 mt-1 block">Tổng tiền hàng hợp lệ</span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-indigo-200 bg-indigo-50/30 shadow-sm">
-              <span className="text-[11px] font-bold text-indigo-700 uppercase">Platform Fees</span>
-              <div className="text-lg sm:text-xl font-black text-indigo-700 mt-1">{formatVND(platformRevenue)}</div>
-              <span className="text-[10px] text-indigo-600 mt-1 block">Doanh thu phí nền tảng</span>
+            <div className="bg-white p-5 rounded-2xl border border-indigo-200 bg-[#EFFBFF]/30 shadow-sm">
+              <span className="text-[11px] font-bold text-[#000181] uppercase">Platform Fees</span>
+              <div className="text-lg sm:text-xl font-black text-[#000181] mt-1">{formatVND(platformRevenue)}</div>
+              <span className="text-[10px] text-[#006EE9] mt-1 block">Doanh thu phí nền tảng</span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-emerald-200 bg-emerald-50/30 shadow-sm">
+            <div className="bg-white p-5 rounded-2xl border border-[#D0FFA4] bg-[#F4FFE8]/30 shadow-sm">
               <span className="text-[11px] font-bold text-emerald-800 uppercase">Supplier Earnings</span>
-              <div className="text-lg sm:text-xl font-black text-emerald-700 mt-1">
+              <div className="text-lg sm:text-xl font-black text-[#000181] mt-1">
                 {formatVND(supplierNetProceeds)}
               </div>
-              <span className="text-[10px] text-emerald-700 mt-1 block">Tổng phần chia Supplier</span>
+              <span className="text-[10px] text-[#000181] mt-1 block">Tổng phần chia Supplier</span>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm">
@@ -839,7 +839,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               <div className="bg-white rounded-3xl border border-indigo-200 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
                 <div className="space-y-1">
                   <div className="font-black text-slate-900 flex items-center gap-2">
-                    <Ticket className="w-4 h-4 text-indigo-600" />
+                    <Ticket className="w-4 h-4 text-[#006EE9]" />
                     <span>Hạch toán Voucher Tài trợ bởi Sàn (Platform-Funded Voucher Accounting)</span>
                   </div>
                   <p className="text-slate-500">
@@ -859,7 +859,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     </span>
                     <span
                       className={`text-base font-black ${
-                        netPlatformAfterVoucher < 0 ? 'text-rose-600' : 'text-indigo-700'
+                        netPlatformAfterVoucher < 0 ? 'text-rose-600' : 'text-[#000181]'
                       }`}
                     >
                       {formatVND(netPlatformAfterVoucher)}
@@ -875,10 +875,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <Percent className="w-4 h-4 text-indigo-600" />
+                  <Percent className="w-4 h-4 text-[#006EE9]" />
                   <span>Cấu hình Platform Commission Rate</span>
                 </h3>
-                <span className="bg-indigo-100 text-indigo-800 font-black text-[11px] px-2.5 py-0.5 rounded-full">
+                <span className="bg-[#FAF0FF] text-indigo-800 font-black text-[11px] px-2.5 py-0.5 rounded-full">
                   Phí nền tảng demo: {Math.round(commissionRate * 100)}%
                 </span>
               </div>
@@ -890,7 +890,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span>Mức phí chọn ({rateDraftPct}%):</span>
-                  <span className="text-lg font-black text-indigo-600">{rateDraftPct}%</span>
+                  <span className="text-lg font-black text-[#006EE9]">{rateDraftPct}%</span>
                 </div>
 
                 <input
@@ -913,7 +913,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
               <button
                 onClick={handleSaveCommissionRate}
-                className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition shadow-md"
+                className="w-full py-3 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs transition shadow-md"
               >
                 Lưu mức phí nền tảng ({rateDraftPct}%)
               </button>
@@ -943,10 +943,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           <span className="text-slate-600">
                             GMV: <strong className="text-slate-900">{formatVND(item.gmv)}</strong>
                           </span>
-                          <span className="text-indigo-700">
+                          <span className="text-[#000181]">
                             Phí sàn: <strong>{formatVND(item.fee)}</strong>
                           </span>
-                          <span className="text-emerald-700">
+                          <span className="text-[#000181]">
                             Supplier Net: <strong>{formatVND(item.net)}</strong>
                           </span>
                         </div>
@@ -958,7 +958,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           title="Supplier Net"
                         />
                         <div
-                          className="bg-indigo-600 h-full transition-all duration-500"
+                          className="bg-[#006EE9] h-full transition-all duration-500"
                           style={{ width: `${Math.max(2, Math.round(barWidth * 0.07))}%` }}
                           title="Platform Fee"
                         />
@@ -978,7 +978,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-indigo-600" />
+                <Wallet className="w-4 h-4 text-[#006EE9]" />
                 <span>Quản lý Đối soát & Giải ngân Nhà cung cấp (Supplier Payouts: {payouts.length})</span>
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -1018,7 +1018,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           <span className="font-bold text-slate-900 block">{supplierDisplay}</span>
                           <span className="font-mono text-[10px] text-slate-400">#{po.id.slice(0, 10)}</span>
                         </td>
-                        <td className="py-3.5 px-4 font-black text-emerald-700 text-sm">
+                        <td className="py-3.5 px-4 font-black text-[#000181] text-sm">
                           {formatVND(po.amount)}
                         </td>
                         <td className="py-3.5 px-4 font-semibold text-slate-800">
@@ -1034,7 +1034,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                               po.status === 'paid'
                                 ? 'bg-teal-100 text-teal-800 border-teal-300'
                                 : po.status === 'approved'
-                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                ? 'bg-[#D0FFA4]/40 text-emerald-800 border-[#D0FFA4]'
                                 : po.status === 'rejected'
                                 ? 'bg-rose-100 text-rose-800 border-rose-300'
                                 : 'bg-amber-100 text-amber-800 border-amber-300'
@@ -1052,7 +1052,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                               <>
                                 <button
                                   onClick={() => onUpdatePayoutStatus(po.id, 'approved')}
-                                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition"
+                                  className="px-3 py-1.5 rounded-lg bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs transition"
                                 >
                                   Approve
                                 </button>
@@ -1123,7 +1123,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                       <span
                         className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                           u.status === 'active'
-                            ? 'bg-emerald-100 text-emerald-800'
+                            ? 'bg-[#D0FFA4]/40 text-emerald-800'
                             : 'bg-rose-100 text-rose-800'
                         }`}
                       >
@@ -1137,7 +1137,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           className={`px-3 py-1 rounded-lg text-xs font-bold transition border ${
                             u.status === 'active'
                               ? 'border-rose-200 text-rose-600 hover:bg-rose-50'
-                              : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50'
+                              : 'border-[#D0FFA4] text-[#000181] hover:bg-[#F4FFE8]'
                           }`}
                         >
                           {u.status === 'active' ? 'Khóa tài khoản' : 'Mở khóa'}
@@ -1187,7 +1187,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                             s.verificationStatus === 'verified'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-[#D0FFA4]/40 text-emerald-800'
                               : s.verificationStatus === 'pending'
                               ? 'bg-amber-100 text-amber-800'
                               : 'bg-rose-100 text-rose-800'
@@ -1205,7 +1205,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                             <>
                               <button
                                 onClick={() => onUpdateSupplierVerification(s.id, 'verified')}
-                                className="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700"
+                                className="px-2.5 py-1 bg-[#006EE9] text-white rounded-lg text-xs font-bold hover:bg-[#000181]"
                               >
                                 Duyệt (Verify)
                               </button>
@@ -1228,7 +1228,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           {s.verificationStatus === 'suspended' && (
                             <button
                               onClick={() => onUpdateSupplierVerification(s.id, 'verified')}
-                              className="px-2.5 py-1 border border-emerald-300 text-emerald-700 rounded-lg text-xs font-bold hover:bg-emerald-50"
+                              className="px-2.5 py-1 border border-[#D0FFA4] text-[#000181] rounded-lg text-xs font-bold hover:bg-[#F4FFE8]"
                             >
                               Kích hoạt lại
                             </button>
@@ -1285,7 +1285,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                       <td className="py-3 px-4">
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                            p.status === 'active' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+                            p.status === 'active' ? 'bg-[#D0FFA4]/40 text-emerald-800' : 'bg-slate-100 text-slate-600'
                           }`}
                         >
                           {p.status}
@@ -1338,7 +1338,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     <td className="py-3.5 px-4">
                       <StatusBadge status={r.status} size="sm" />
                     </td>
-                    <td className="py-3.5 px-4 font-bold text-emerald-700">
+                    <td className="py-3.5 px-4 font-bold text-[#000181]">
                       {r.finalPrice !== undefined ? formatVND(r.finalPrice) : 'Chưa chốt'}
                     </td>
                     <td className="py-3.5 px-4 text-right">
@@ -1391,12 +1391,12 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                       <td className="py-3.5 px-4 font-bold text-slate-900">{formatVND(o.productSubtotal)}</td>
                       <td className="py-3.5 px-4 text-slate-500">{formatVND(o.shippingFee)}</td>
                       <td className="py-3.5 px-4 font-bold text-slate-800">{formatVND(o.totalAmount)}</td>
-                      <td className="py-3.5 px-4 font-bold text-indigo-600">
+                      <td className="py-3.5 px-4 font-bold text-[#006EE9]">
                         {snap.isReversed
                           ? '0đ'
                           : `${formatVND(snap.effectiveCommission)} (${Math.round(snap.commissionRate * 100)}%)`}
                       </td>
-                      <td className="py-3.5 px-4 font-black text-emerald-700">
+                      <td className="py-3.5 px-4 font-black text-[#000181]">
                         {snap.isReversed ? '0đ' : formatVND(snap.effectiveNet)}
                       </td>
                       <td className="py-3.5 px-4">
@@ -1463,7 +1463,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                               rf.status === 'refunded'
                                 ? 'bg-teal-100 text-teal-800'
                                 : rf.status === 'approved'
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'bg-[#D0FFA4]/40 text-emerald-800'
                                 : rf.status === 'rejected'
                                 ? 'bg-rose-100 text-rose-800'
                                 : 'bg-amber-100 text-amber-800'
@@ -1477,7 +1477,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                             {rf.status === 'requested' && (
                               <button
                                 onClick={() => onApproveRefund(rf.id)}
-                                className="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700"
+                                className="px-3 py-1 bg-[#006EE9] text-white rounded-lg text-xs font-bold hover:bg-[#000181]"
                               >
                                 Phê duyệt (Approve)
                               </button>
@@ -1508,7 +1508,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                <Ticket className="w-5 h-5 text-indigo-600" />
+                <Ticket className="w-5 h-5 text-[#006EE9]" />
                 <span>Quản lý Mã ưu đãi & Chiến dịch Voucher ({vouchers.length})</span>
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -1517,7 +1517,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             </div>
             <button
               onClick={openCreateVoucherModal}
-              className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center space-x-1.5 shadow-md transition shrink-0"
+              className="px-4 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs flex items-center space-x-1.5 shadow-md transition shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span>Tạo Voucher mới</span>
@@ -1549,7 +1549,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     return (
                       <tr key={v.id} className="hover:bg-slate-50/80 transition">
                         <td className="py-3.5 px-4">
-                          <span className="font-mono font-black text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-lg">
+                          <span className="font-mono font-black text-[#000181] bg-[#EFFBFF] border border-indigo-200 px-2.5 py-1 rounded-lg">
                             {v.code}
                           </span>
                         </td>
@@ -1560,7 +1560,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                             {new Date(v.endAt).toLocaleDateString('vi-VN')}
                           </div>
                         </td>
-                        <td className="py-3.5 px-4 font-bold text-emerald-700">
+                        <td className="py-3.5 px-4 font-bold text-[#000181]">
                           {v.type === 'fixed'
                             ? `Giảm ${formatVND(v.value)}`
                             : `Giảm ${Math.round((v.value <= 1 ? v.value * 100 : v.value))}%`}
@@ -1575,7 +1575,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                               (v.fundedBy || 'platform') === 'platform'
-                                ? 'bg-indigo-100 text-indigo-800'
+                                ? 'bg-[#FAF0FF] text-indigo-800'
                                 : 'bg-amber-100 text-amber-800'
                             }`}
                           >
@@ -1587,7 +1587,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                             {usedCount} / {v.usageLimit ?? '∞'} ({v.perUserLimit ?? 1}/user)
                           </div>
                           {totalDiscountGiven > 0 && (
-                            <div className="text-[10px] text-emerald-700 font-semibold">
+                            <div className="text-[10px] text-[#000181] font-semibold">
                               Đã trợ giá: {formatVND(totalDiscountGiven)}
                             </div>
                           )}
@@ -1596,7 +1596,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                               v.status === 'active'
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'bg-[#D0FFA4]/40 text-emerald-800'
                                 : 'bg-slate-200 text-slate-600'
                             }`}
                           >
@@ -1617,7 +1617,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                               className={`px-2.5 py-1 rounded-lg font-bold ${
                                 v.status === 'active'
                                   ? 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200'
-                                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                  : 'bg-[#006EE9] text-white hover:bg-[#000181]'
                               }`}
                             >
                               {v.status === 'active' ? 'Deactivate' : 'Activate'}
@@ -1656,12 +1656,12 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                       const v = vouchers.find((item) => item.id === u.voucherId);
                       return (
                         <tr key={u.id}>
-                          <td className="py-2.5 px-3 font-mono font-bold text-indigo-700">
+                          <td className="py-2.5 px-3 font-mono font-bold text-[#000181]">
                             {u.voucherCode || v?.code || u.voucherId}
                           </td>
                           <td className="py-2.5 px-3 text-slate-600">{u.userId}</td>
                           <td className="py-2.5 px-3 font-mono text-slate-800">{u.orderId || '—'}</td>
-                          <td className="py-2.5 px-3 font-bold text-emerald-700">
+                          <td className="py-2.5 px-3 font-bold text-[#000181]">
                             -{formatVND(u.discountAmount)}
                           </td>
                           <td className="py-2.5 px-3 text-slate-400">
@@ -1722,7 +1722,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
               <div>
                 <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-emerald-600" />
+                  <TrendingUp className="w-5 h-5 text-[#000181]" />
                   <span>Growth & Social Commerce Dashboard</span>
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
@@ -1750,11 +1750,11 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                   </span>
                   <div className="text-xl font-black text-blue-700 mt-1">{referralJoins}</div>
                 </div>
-                <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200">
+                <div className="p-4 rounded-2xl bg-[#F4FFE8]/80 border border-[#D0FFA4]">
                   <span className="text-[10px] font-bold text-emerald-800 uppercase block">
                     Completed referrals
                   </span>
-                  <div className="text-xl font-black text-emerald-700 mt-1">
+                  <div className="text-xl font-black text-[#000181] mt-1">
                     {completedReferralsCount}
                   </div>
                 </div>
@@ -1766,11 +1766,11 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     {referralConversionRate}%
                   </div>
                 </div>
-                <div className="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200">
+                <div className="p-4 rounded-2xl bg-[#EFFBFF]/80 border border-indigo-200">
                   <span className="text-[10px] font-bold text-indigo-800 uppercase block">
                     Voucher redemptions
                   </span>
-                  <div className="text-xl font-black text-indigo-700 mt-1">
+                  <div className="text-xl font-black text-[#000181] mt-1">
                     {voucherRedemptionsCount}
                   </div>
                 </div>
@@ -1795,22 +1795,22 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                 <div className="space-y-3 text-xs">
                   <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
                     <span>Hoàn tất nhận hàng (`purchase` • +10 điểm/đơn)</span>
-                    <strong className="text-emerald-700 font-black">{pointsByPurchase} điểm</strong>
+                    <strong className="text-[#000181] font-black">{pointsByPurchase} điểm</strong>
                   </div>
                   <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
                     <span>Giới thiệu bạn bè hoàn tất (`referral` • +20 điểm/lượt)</span>
-                    <strong className="text-emerald-700 font-black">{pointsByReferral} điểm</strong>
+                    <strong className="text-[#000181] font-black">{pointsByReferral} điểm</strong>
                   </div>
                   <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
                     <span>Đánh giá đơn hàng (`review` • +5 điểm/đơn)</span>
-                    <strong className="text-emerald-700 font-black">{pointsByReview} điểm</strong>
+                    <strong className="text-[#000181] font-black">{pointsByReview} điểm</strong>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
                 <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <Users className="w-4 h-4 text-indigo-600" />
+                  <Users className="w-4 h-4 text-[#006EE9]" />
                   <span>Top Thành viên Tích cực (Top Active Users)</span>
                 </h4>
                 {topActiveUsers.length === 0 ? (
@@ -1823,7 +1823,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                         className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-100"
                       >
                         <div className="flex items-center space-x-2.5">
-                          <span className="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-800 font-black flex items-center justify-center text-[11px]">
+                          <span className="w-6 h-6 rounded-lg bg-[#FAF0FF] text-indigo-800 font-black flex items-center justify-center text-[11px]">
                             #{idx + 1}
                           </span>
                           <div>
@@ -1998,7 +1998,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold shadow-md"
                 >
                   Lưu Voucher
                 </button>
@@ -2059,7 +2059,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     <span className="text-[10px] font-bold uppercase text-slate-400">
                       Active Batches
                     </span>
-                    <div className="text-xl font-black text-indigo-700 mt-1">
+                    <div className="text-xl font-black text-[#000181] mt-1">
                       {activeBatchesCount}
                     </div>
                     <span className="text-[10px] text-slate-400 block mt-0.5">
@@ -2071,7 +2071,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     <span className="text-[10px] font-bold uppercase text-slate-400">
                       Units In Transit
                     </span>
-                    <div className="text-xl font-black text-purple-700 mt-1">
+                    <div className="text-xl font-black text-[#000181] mt-1">
                       {unitsInTransit}
                     </div>
                     <span className="text-[10px] text-slate-400 block mt-0.5">
@@ -2087,7 +2087,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                       {pickupPoints.filter((p) => p.status !== 'inactive').length} /{' '}
                       {pickupPoints.length}
                     </div>
-                    <span className="text-[10px] text-emerald-600 font-bold block mt-0.5">
+                    <span className="text-[10px] text-[#000181] font-bold block mt-0.5">
                       Điểm nhận đang hoạt động
                     </span>
                   </div>
@@ -2108,7 +2108,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                     <span className="text-[10px] font-bold uppercase text-slate-400">
                       Average Shipping / Buyer
                     </span>
-                    <div className="text-xl font-black text-emerald-700 mt-1">
+                    <div className="text-xl font-black text-[#000181] mt-1">
                       {formatVND(avgShipPerBuyer)}
                     </div>
                     <span className="text-[10px] text-slate-400 block mt-0.5">
@@ -2134,10 +2134,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="font-black text-slate-900 text-sm flex items-center gap-1.5">
-                        <Truck className="w-4 h-4 text-indigo-600" />
+                        <Truck className="w-4 h-4 text-[#006EE9]" />
                         Hiệu suất Gom Đơn Vận Chuyển (Consolidated Last-Mile Analytics)
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-white text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-200">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-white text-[#000181] px-2.5 py-0.5 rounded-full border border-indigo-200">
                         <Sparkles className="w-3 h-3" />
                         Ước tính mô phỏng
                       </span>
@@ -2162,11 +2162,11 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                       <span className="text-[10px] text-slate-400 font-bold uppercase block">
                         Shared Shipping
                       </span>
-                      <span className="text-sm font-black text-indigo-700">
+                      <span className="text-sm font-black text-[#000181]">
                         {formatVND(actualSharedShipping)}
                       </span>
                     </div>
-                    <div className="bg-emerald-600 text-white px-4 py-2.5 rounded-2xl shadow-sm">
+                    <div className="bg-[#006EE9] text-white px-4 py-2.5 rounded-2xl shadow-sm">
                       <span className="text-[10px] text-emerald-100 font-bold uppercase block">
                         Estimated Logistics Saving
                       </span>
@@ -2183,7 +2183,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-indigo-600" />
+                  <Truck className="w-4 h-4 text-[#006EE9]" />
                   <span>
                     Điều phối Lô Giao Hàng Chung (Admin Batch Management: {deliveryBatches.length})
                   </span>
@@ -2239,12 +2239,12 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           <span className="font-bold text-slate-800 block">
                             {batch.pickupPointName || room?.pickupPoint}
                           </span>
-                          <span className="text-[10px] text-indigo-600 font-semibold">
+                          <span className="text-[10px] text-[#006EE9] font-semibold">
                             {batch.pickupWindow || room?.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
                           </span>
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className="font-black text-emerald-700 block">
+                          <span className="font-black text-[#000181] block">
                             {formatVND(batch.shippingPerBuyer)} / buyer
                           </span>
                           <span className="text-[10px] text-slate-400">
@@ -2257,9 +2257,9 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                               batch.status === 'completed'
                                 ? 'bg-teal-100 text-teal-800 border-teal-300'
                                 : batch.status === 'arrived_at_pickup'
-                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                ? 'bg-[#D0FFA4]/40 text-emerald-800 border-[#D0FFA4]'
                                 : batch.status === 'in_transit'
-                                ? 'bg-purple-100 text-purple-800 border-purple-300'
+                                ? 'bg-[#FAF0FF] text-purple-800 border-purple-300'
                                 : batch.status === 'delivery_issue'
                                 ? 'bg-rose-100 text-rose-800 border-rose-300'
                                 : 'bg-amber-100 text-amber-800 border-amber-300'
@@ -2295,7 +2295,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                                     description: `${batch.carrierName} đã nhận kiện hàng từ Nhà cung cấp`,
                                   })
                                 }
-                                className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] cursor-pointer"
+                                className="px-2.5 py-1.5 rounded-lg bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-[11px] cursor-pointer"
                               >
                                 Picked Up
                               </button>
@@ -2310,7 +2310,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                                     description: `Xe tải nhẹ đang di chuyển tới ${batch.pickupPointName}`,
                                   })
                                 }
-                                className="px-2.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-[11px] cursor-pointer"
+                                className="px-2.5 py-1.5 rounded-lg bg-[#E8A0FF] hover:bg-[#D0FFA4] text-[#000181] text-white font-bold text-[11px] cursor-pointer"
                               >
                                 In Transit
                               </button>
@@ -2326,7 +2326,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                                       'Tất cả đơn hàng trong lô được mở khóa trạng thái Sẵn sàng nhận hàng (Ready for pickup)',
                                   })
                                 }
-                                className="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] cursor-pointer"
+                                className="px-2.5 py-1.5 rounded-lg bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-[11px] cursor-pointer"
                               >
                                 Arrived
                               </button>
@@ -2377,7 +2377,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  <MapPin className="w-4 h-4 text-[#000181]" />
                   <span>
                     Mạng lưới Điểm Nhận Hàng & Locker (Pickup Point Network: {pickupPoints.length})
                   </span>
@@ -2388,7 +2388,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </div>
               <button
                 onClick={openCreatePointModal}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm self-start sm:self-auto cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs flex items-center gap-1.5 shadow-sm self-start sm:self-auto cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 Thêm Điểm Nhận (Create Pickup Point)
@@ -2449,7 +2449,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                           <span
                             className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase ${
                               pt.status === 'active'
-                                ? 'bg-emerald-100 text-emerald-700'
+                                ? 'bg-[#D0FFA4]/40 text-[#000181]'
                                 : pt.status === 'full'
                                 ? 'bg-rose-100 text-rose-700'
                                 : 'bg-slate-200 text-slate-600'
@@ -2471,7 +2471,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                               onClick={() => onTogglePickupPointStatus?.(pt.id)}
                               className={`px-2.5 py-1.5 rounded-lg font-bold text-[11px] cursor-pointer ${
                                 pt.status === 'inactive'
-                                  ? 'bg-emerald-600 text-white'
+                                  ? 'bg-[#006EE9] text-white'
                                   : 'bg-slate-100 text-slate-700 hover:bg-rose-50 hover:text-rose-700'
                               }`}
                             >
@@ -2510,7 +2510,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </div>
               <div>
                 Chuyển từ: <strong className="uppercase">{pendingBatchTransition.batch.status}</strong> →{' '}
-                <strong className="uppercase text-indigo-700">
+                <strong className="uppercase text-[#000181]">
                   {pendingBatchTransition.nextStatus}
                 </strong>
               </div>
@@ -2535,7 +2535,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                   );
                   setPendingBatchTransition(null);
                 }}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold cursor-pointer"
               >
                 Xác nhận cập nhật
               </button>
@@ -2550,7 +2550,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[88vh] overflow-y-auto p-6 shadow-2xl border border-slate-200 text-xs space-y-4">
             <div className="flex items-start justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase text-indigo-600">
+                <span className="text-[10px] font-black uppercase text-[#006EE9]">
                   BATCH ORDER LIST & TIMELINE
                 </span>
                 <h3 className="text-base font-black text-slate-900">
@@ -2592,7 +2592,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                             {getMaskedBuyerName(buyer?.name || 'Nguyễn Minh Anh')}
                           </td>
                           <td className="py-2.5 px-3 font-bold">{o.quantity}</td>
-                          <td className="py-2.5 px-3 uppercase font-bold text-[10px] text-emerald-700">
+                          <td className="py-2.5 px-3 uppercase font-bold text-[10px] text-[#000181]">
                             {o.status}
                           </td>
                         </tr>
@@ -2708,7 +2708,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase text-indigo-600 block">
+                <span className="text-[10px] font-black uppercase text-[#006EE9] block">
                   PICKUP POINT NETWORK MANAGEMENT
                 </span>
                 <h3 className="text-base font-black text-slate-900">
@@ -2766,7 +2766,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
             {/* Requirement 21: Admin Pickup Address Selection via VietnamAddressSelector */}
             <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-              <span className="text-[10px] font-black uppercase text-indigo-600 tracking-wider block">
+              <span className="text-[10px] font-black uppercase text-[#006EE9] tracking-wider block">
                 ĐỊA LÝ & TỌA ĐỘ BẢN ĐỒ (VIETNAM ADDRESS SELECTOR)
               </span>
               <VietnamAddressSelector
@@ -2903,7 +2903,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-md cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold shadow-md cursor-pointer"
               >
                 Lưu Điểm Nhận
               </button>
@@ -2960,21 +2960,21 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               <span className="text-slate-400">GMV (Tổng tiền hàng hợp lệ)</span>
               <div className="text-lg font-black text-slate-900">{formatVND(gmv)}</div>
             </div>
-            <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-1">
-              <span className="text-indigo-700 font-semibold">Platform Revenue (Phí sàn)</span>
-              <div className="text-lg font-black text-indigo-700">{formatVND(platformRevenue)}</div>
+            <div className="p-4 rounded-2xl bg-[#EFFBFF]/70 border border-indigo-100 space-y-1">
+              <span className="text-[#000181] font-semibold">Platform Revenue (Phí sàn)</span>
+              <div className="text-lg font-black text-[#000181]">{formatVND(platformRevenue)}</div>
             </div>
-            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 space-y-1">
+            <div className="p-4 rounded-2xl bg-[#F4FFE8]/70 border border-emerald-100 space-y-1">
               <span className="text-emerald-800 font-semibold">Supplier Payouts (Đã giải ngân)</span>
-              <div className="text-lg font-black text-emerald-700">{formatVND(completedPayoutsAmount)}</div>
+              <div className="text-lg font-black text-[#000181]">{formatVND(completedPayoutsAmount)}</div>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
               <span className="text-slate-400">Average Commission / Order</span>
-              <div className="text-lg font-black text-indigo-600">{formatVND(avgCommissionPerOrder)}</div>
+              <div className="text-lg font-black text-[#006EE9]">{formatVND(avgCommissionPerOrder)}</div>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
               <span className="text-slate-400">Average Buyer Savings</span>
-              <div className="text-lg font-black text-emerald-600">{formatVND(avgSavingPerOrder)} / đơn</div>
+              <div className="text-lg font-black text-[#000181]">{formatVND(avgSavingPerOrder)} / đơn</div>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
               <span className="text-slate-400">Successful Group Rate</span>

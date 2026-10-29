@@ -381,7 +381,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsDocModalOpen(true)}
-                  className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
+                  className="px-3.5 py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
                 >
                   <Upload className="w-3.5 h-3.5" />
                   <span>Nộp chứng từ tuân thủ ({myDocs.length})</span>
@@ -438,9 +438,9 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsAddressModalOpen(true)}
-                      className="text-[11px] font-bold text-emerald-700 hover:underline flex items-center gap-1 cursor-pointer"
+                      className="text-[11px] font-bold text-[#000181] hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      <MapPin className="w-3 h-3 text-emerald-600" />
+                      <MapPin className="w-3 h-3 text-[#000181]" />
                       Chọn từ danh mục hành chính VN
                     </button>
                   </div>
@@ -521,7 +521,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase text-slate-500 flex items-center gap-1.5">
-                <FileText className="w-3.5 h-3.5 text-emerald-600" />
+                <FileText className="w-3.5 h-3.5 text-[#000181]" />
                 <span>Chứng từ xác minh & Hồ sơ tuân thủ theo danh mục ({myDocs.length})</span>
               </span>
               <span className="text-[11px] text-slate-400">
@@ -540,7 +540,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                       Loại: <code>{d.documentType}</code> • Số hiệu: {d.documentNumber || 'N/A'}
                     </div>
                     {d.reviewNote && (
-                      <div className="text-[11px] text-emerald-700 font-medium mt-0.5">
+                      <div className="text-[11px] text-[#000181] font-medium mt-0.5">
                         Ghi chú Admin: {d.reviewNote}
                       </div>
                     )}
@@ -548,7 +548,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                   <span
                     className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase shrink-0 ${
                       d.status === 'approved'
-                        ? 'bg-emerald-100 text-emerald-800'
+                        ? 'bg-[#D0FFA4]/40 text-emerald-800'
                         : d.status === 'rejected'
                         ? 'bg-rose-100 text-rose-800'
                         : 'bg-amber-100 text-amber-800'
@@ -664,7 +664,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                         )}
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-[#F4FFE8] text-[#000181] border border-[#D0FFA4] text-[10px] font-bold px-2 py-0.5 rounded-full">
                           {activeRoomsCount} phòng active
                         </span>
                       </td>
@@ -672,7 +672,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                             prod.status === 'active'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-[#D0FFA4]/40 text-emerald-800'
                               : prod.status === 'temporarily_hidden' ||
                                 prod.status === 'permanently_deactivated'
                               ? 'bg-rose-100 text-rose-800'
@@ -711,7 +711,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                             className={`p-1.5 rounded-lg border transition ${
                               prod.status === 'active'
                                 ? 'border-amber-200 text-amber-700 hover:bg-amber-50'
-                                : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50'
+                                : 'border-[#D0FFA4] text-[#000181] hover:bg-[#F4FFE8]'
                             }`}
                             title={prod.status === 'active' ? 'Tạm ngưng' : 'Kích hoạt'}
                           >
@@ -734,7 +734,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-4 text-xs">
             <div className="flex items-start justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-600 block">
+                <span className="text-[10px] font-black uppercase text-[#000181] block">
                   HỒ SƠ TUÂN THỦ NGÀNH HÀNG (CATEGORY COMPLIANCE DOCUMENTS)
                 </span>
                 <h3 className="text-base font-black text-slate-900">
@@ -846,7 +846,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                  className="px-5 py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold"
                 >
                   Nộp hồ sơ chờ Admin duyệt
                 </button>
@@ -927,7 +927,7 @@ export const SupplierProductsView: React.FC<SupplierProductsProps> = ({
               {/* Decree 111/2021 Mandatory Labeling Fields (Req 3) */}
               <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-3">
                 <div className="font-black text-slate-900 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <ShieldCheck className="w-4 h-4 text-[#000181]" />
                   <span>Thông tin nhãn hàng hóa bắt buộc (Nghị định 111/2021/NĐ-CP & NĐ 15/2018/NĐ-CP)</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

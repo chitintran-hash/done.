@@ -33,7 +33,7 @@ export const FaqSection: React.FC = () => {
   };
 
   return (
-    <section className="py-8">
+    <section className="py-12 px-6 sm:px-8 rounded-3xl bg-[#F6F7FB] border border-[#E6E6EE] my-8 shadow-xs">
       <SectionHeader
         badge="GIẢI ĐÁP THẮC MẮC"
         title="CÂU HỎI THƯỜNG GẶP"
@@ -47,19 +47,19 @@ export const FaqSection: React.FC = () => {
           return (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-light-border shadow-xs overflow-hidden transition-all duration-200"
+              className="bg-white rounded-2xl border border-[#E6E6EE] shadow-xs overflow-hidden transition-all duration-200"
             >
               <button
                 type="button"
                 onClick={() => toggle(i)}
-                className="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50/70 transition-colors"
+                className="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#EFFBFF]/60 transition-colors"
               >
-                <span className="font-extrabold text-brand-dark text-xs sm:text-sm leading-snug">
+                <span className="font-extrabold text-[#000181] text-xs sm:text-sm leading-snug">
                   {f.q}
                 </span>
                 <div
-                  className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'
+                  className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                    isOpen ? 'rotate-180 bg-[#D0FFA4] text-[#000181]' : 'bg-[#FCFCF7] text-[#53536A]'
                   }`}
                 >
                   <ChevronDown className="w-4 h-4" />
@@ -67,7 +67,7 @@ export const FaqSection: React.FC = () => {
               </button>
 
               {isOpen && (
-                <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-neutral-text font-normal leading-relaxed border-t border-slate-100">
+                <div className="px-6 pb-5 pt-1 text-xs text-[#53536A] leading-relaxed border-t border-[#E6E6EE]/60 bg-[#FCFCF7]">
                   {f.a}
                 </div>
               )}

@@ -24,19 +24,19 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
 
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     return (
-      <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-        <div className="bg-[#FFFCF8] rounded-3xl border border-[#EADFE4] p-8 max-w-md w-full shadow-lg space-y-4">
+      <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in font-sans">
+        <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
           <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 mx-auto flex items-center justify-center">
             <ShieldAlert className="w-7 h-7" />
           </div>
-          <h3 className="text-base font-black text-slate-900">TRUY CẬP BỊ TỪ CHỐI</h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Tài khoản của bạn ({currentUser.name} - vai trò: <strong className="uppercase">{currentUser.role}</strong>) không có quyền truy cập vào phân hệ này.
+          <h3 className="text-base font-black text-[#000181]">TRUY CẬP BỊ TỪ CHỐI</h3>
+          <p className="text-xs text-[#53536A] leading-relaxed">
+            Tài khoản của bạn ({currentUser.name} - vai trò: <strong className="uppercase text-[#000181]">{currentUser.role}</strong>) không có quyền truy cập vào phân hệ này.
           </p>
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-xs"
+            className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
           >
             Quay lại trang trước
           </button>

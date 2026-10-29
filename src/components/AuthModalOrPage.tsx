@@ -14,31 +14,26 @@ import {
   EyeOff,
   HelpCircle,
   X,
-  CheckCircle2,
-  Sparkles,
+  Building2,
+  ShoppingCart,
+  Store,
+  FileCheck2,
 } from 'lucide-react';
+import { SignUpPayload } from '../services/authService';
 
 interface AuthProps {
   onLogin: (email: string, password: string, rememberMe?: boolean) => Promise<{ success: boolean; error?: string }>;
-  onRegister: (
-    email: string,
-    password: string,
-    name: string,
-    phone?: string,
-    preferredPickupPoint?: string,
-    marketingConsent?: boolean
-  ) => Promise<{ success: boolean; error?: string }>;
+  onRegister: (payload: SignUpPayload) => Promise<{ success: boolean; error?: string }>;
   isSupabaseMode: boolean;
-  onContinueAsGuestDemo?: () => void;
 }
 
 export const AuthModalOrPage: React.FC<AuthProps> = ({
   onLogin,
   onRegister,
   isSupabaseMode,
-  onContinueAsGuestDemo,
 }) => {
   const [isRegisterMode, setIsRegisterMode] = useState<boolean>(false);
+  const [registerRole, setRegisterRole] = useState<'buyer' | 'supplier'>('buyer'); // Strictly NO admin
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Show/Hide password toggles
@@ -49,55 +44,30 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
   // Forgot password modal state
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState<boolean>(false);
 
-  // Login form state
+  // Login form state (NO role picker)
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [rememberMe, setRememberMe] = useState<boolean>(true);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  // Register form state
+  // Common Register form state
   const [regName, setRegName] = useState<string>('');
   const [regEmail, setRegEmail] = useState<string>('');
   const [regPhone, setRegPhone] = useState<string>('');
   const [regPassword, setRegPassword] = useState<string>('');
   const [regConfirmPassword, setRegConfirmPassword] = useState<string>('');
-  const [regPickupPoint, setRegPickupPoint] = useState<string>('Điểm nhận KTX Khu A – ĐHQG TP.HCM');
   const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
   const [marketingConsent, setMarketingConsent] = useState<boolean>(false);
   const [regError, setRegError] = useState<string | null>(null);
 
-  const demoAccounts = [
-    {
-      role: 'Buyer',
-      roleVi: 'Người mua',
-      name: 'Nguyễn Minh Anh',
-      email: 'buyer@flashgroup.demo',
-      password: '123456',
-      badgeColor: 'bg-[#F4FFE8] text-[#000181] border-[#D0FFA4]',
-      dotColor: 'bg-[#D0FFA4]',
-      description: 'Tham gia phòng gom Dâu Tây 19/20, mở khóa giá sỉ 89.000đ & mã QR tủ Locker.',
-    },
-    {
-      role: 'Supplier',
-      roleVi: 'Nhà cung cấp',
-      name: 'Nông Trại Xanh Đà Lạt',
-      email: 'supplier@flashgroup.demo',
-      password: '123456',
-      badgeColor: 'bg-[#EFFBFF] text-[#000181] border-[#83E7FF]',
-      dotColor: 'bg-[#83E7FF]',
-      description: 'Quản lý kho hàng, tạo phòng gom theo bậc giá, chuẩn bị đơn & quét mã QR nhận hàng.',
-    },
-    {
-      role: 'Admin',
-      roleVi: 'Quản trị viên',
-      name: 'FlashGroup Admin',
-      email: 'admin@flashgroup.demo',
-      password: '123456',
-      badgeColor: 'bg-[#000181] text-white border-[#000181]',
-      dotColor: 'bg-[#E8A0FF]',
-      description: 'Kiểm duyệt pháp lý, đối soát tài chính 7% hoa hồng & giám sát Smart Locker.',
-    },
-  ];
+  // Buyer specific state
+  const [regPickupPoint, setRegPickupPoint] = useState<string>('Điểm nhận KTX Khu A – ĐHQG TP.HCM');
+
+  // Supplier specific state
+  const [supplierBusinessName, setSupplierBusinessName] = useState<string>('');
+  const [supplierBusinessType, setSupplierBusinessType] = useState<string>('local_retailer');
+  const [supplierOperatingRegion, setSupplierOperatingRegion] = useState<string>('TP.HCM & Đông Nam Bộ');
+  const [supplierAddress, setSupplierAddress] = useState<string>('');
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,9 +89,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
     try {
       const res = await onLogin(trimmedEmail, password, rememberMe);
       if (!res.success) {
-        // Friendly Vietnamese error mapping
         const rawErr = res.error || '';
-        if (rawErr.toLowerCase().includes('invalid') || rawErr.toLowerCase().includes('credentials') || rawErr.toLowerCase().includes('khong dung')) {
+        if (
+          rawErr.toLowerCase().includes('invalid') ||
+          rawErr.toLowerCase().includes('credentials') ||
+          rawErr.toLowerCase().includes('khong dung')
+        ) {
           setLoginError('Email hoặc mật khẩu chưa chính xác.');
         } else if (rawErr.toLowerCase().includes('network') || rawErr.toLowerCase().includes('fetch')) {
           setLoginError('Không thể kết nối. Vui lòng kiểm tra mạng và thử lại.');
@@ -136,31 +109,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
     }
   };
 
-  const handleAutofillAndLogin = async (demoEmail: string, demoPass: string) => {
-    if (isLoading) return;
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setLoginError(null);
-    setIsLoading(true);
-    try {
-      const res = await onLogin(demoEmail, demoPass, true);
-      if (!res.success) {
-        setLoginError(res.error || 'Email hoặc mật khẩu chưa chính xác.');
-      }
-    } catch (err: any) {
-      setLoginError('Không thể kết nối. Vui lòng kiểm tra mạng và thử lại.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isLoading) return;
     setRegError(null);
 
     if (!regName.trim()) {
-      setRegError('Vui lòng nhập Họ và tên.');
+      setRegError(registerRole === 'supplier' ? 'Vui lòng nhập họ và tên người đại diện.' : 'Vui lòng nhập Họ và tên.');
       return;
     }
 
@@ -180,22 +135,42 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
       return;
     }
 
+    if (registerRole === 'supplier') {
+      if (!supplierBusinessName.trim()) {
+        setRegError('Vui lòng nhập tên doanh nghiệp / cửa hàng.');
+        return;
+      }
+      if (!regPhone.trim()) {
+        setRegError('Vui lòng nhập số điện thoại liên hệ của nhà cung cấp.');
+        return;
+      }
+      if (!supplierAddress.trim()) {
+        setRegError('Vui lòng nhập địa chỉ kinh doanh / kho hàng.');
+        return;
+      }
+    }
+
     if (!termsAccepted) {
-      setRegError('Vui lòng đọc và đồng ý với Điều khoản sử dụng và Chính sách quyền riêng tư.');
+      setRegError('Vui lòng đọc và đồng ý với Điều khoản sử dụng và Chính sách của FlashGroup.');
       return;
     }
 
     setIsLoading(true);
     try {
-      const res = await onRegister(
-        regEmail.trim().toLowerCase(),
-        regPassword,
-        regName.trim(),
-        regPhone.trim() || '0901000000',
-        regPickupPoint,
-        marketingConsent
-      );
+      const payload: SignUpPayload = {
+        email: regEmail.trim().toLowerCase(),
+        password: regPassword,
+        name: regName.trim(),
+        role: registerRole, // strictly 'buyer' or 'supplier'
+        phone: regPhone.trim(),
+        preferredPickupPoint: registerRole === 'buyer' ? regPickupPoint : undefined,
+        businessName: registerRole === 'supplier' ? supplierBusinessName.trim() : undefined,
+        businessType: registerRole === 'supplier' ? supplierBusinessType : undefined,
+        operatingRegion: registerRole === 'supplier' ? supplierOperatingRegion : undefined,
+        businessAddress: registerRole === 'supplier' ? supplierAddress.trim() : undefined,
+      };
 
+      const res = await onRegister(payload);
       if (!res.success) {
         setRegError(res.error || 'Đăng ký không thành công. Vui lòng thử lại.');
       }
@@ -228,16 +203,16 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
           Nền tảng Mua chung Siêu Cục Bộ & Tủ Thông Minh Smart Locker
         </p>
 
-        {/* Status Badge */}
+        {/* Security / Engine Status Badge */}
         <div className="mt-3 inline-flex items-center space-x-1.5 bg-[#F4FFE8] border border-[#D0FFA4] text-[#000181] text-[11px] px-3.5 py-1 rounded-full font-bold shadow-xs">
           <ShieldCheck className="w-3.5 h-3.5 text-[#006EE9] shrink-0" />
-          <span>{isSupabaseMode ? 'Hệ thống Xác thực Supabase Cloud' : 'Chế độ Demo Prototype Trực tiếp'}</span>
+          <span>{isSupabaseMode ? 'Xác thực Supabase Cloud Bảo mật' : 'Hệ thống Xác thực Tiêu chuẩn FlashGroup'}</span>
         </div>
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-lg">
         <div className="bg-[#FFFFFF] py-7 px-5 shadow-xl shadow-[#000181]/5 sm:rounded-3xl sm:px-9 border border-[#E6E6EE]">
-          {/* Segmented Switcher */}
+          {/* Main Mode Switcher: Login vs Register */}
           <div className="flex p-1 bg-[#F6F7FB] rounded-2xl mb-6 border border-[#E6E6EE]">
             <button
               type="button"
@@ -267,19 +242,19 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               }`}
             >
               <UserPlus className="w-4 h-4" />
-              <span>Đăng ký Buyer</span>
+              <span>Đăng ký tài khoản</span>
             </button>
           </div>
 
           {!isRegisterMode ? (
-            /* ================= LOGIN FORM ================= */
+            /* ================= LOGIN FORM (NO ROLE PICKER) ================= */
             <div>
               <div className="mb-5">
                 <h3 className="text-lg font-black text-[#000181]">
-                  Chào mừng trở lại!
+                  Đăng nhập tài khoản
                 </h3>
                 <p className="text-xs text-[#53536A] mt-0.5">
-                  Đăng nhập tài khoản cá nhân hoặc dùng tài khoản Demo trình chiếu bên dưới.
+                  Nhập email và mật khẩu. Hệ thống sẽ tự động chuyển đến đúng phân hệ theo vai trò tài khoản của bạn.
                 </p>
               </div>
 
@@ -306,7 +281,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="buyer@flashgroup.demo"
+                      placeholder="tenban@gmail.com"
                       required
                       className="block w-full pl-10 pr-3.5 py-3 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
                     />
@@ -385,67 +360,82 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 </button>
               </form>
 
-              {/* Demo Mode / Presentation Section */}
-              <div className="mt-7 pt-5 border-t border-[#E6E6EE]">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-black text-[#000181] uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#006EE9]" />
-                    <span>3 Tài khoản Demo sẵn sàng</span>
-                  </span>
-                  <span className="text-[10px] text-[#53536A] font-bold">1-Click Đăng nhập</span>
-                </div>
-
-                <div className="space-y-2.5">
-                  {demoAccounts.map((acc) => (
-                    <div
-                      key={acc.email}
-                      className="p-3 rounded-2xl border border-[#E6E6EE] bg-[#F6F7FB] hover:border-[#006EE9]/40 hover:bg-[#EFFBFF] transition flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${acc.badgeColor}`}>
-                            {acc.role}
-                          </span>
-                          <span className="text-xs font-black text-[#000181]">{acc.name}</span>
-                        </div>
-                        <div className="text-[11px] font-mono text-[#53536A] mt-0.5">{acc.email}</div>
-                        <div className="text-[11px] text-[#53536A] line-clamp-1 mt-0.5">{acc.description}</div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleAutofillAndLogin(acc.email, acc.password)}
-                        disabled={isLoading}
-                        className="self-end sm:self-center shrink-0 text-xs font-black bg-white hover:bg-[#000181] hover:text-white text-[#000181] border border-[#000181]/20 px-3 py-1.5 rounded-xl shadow-xs transition active:scale-95 cursor-pointer disabled:opacity-50"
-                      >
-                        Dùng tài khoản này
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                {onContinueAsGuestDemo && (
-                  <button
-                    type="button"
-                    onClick={onContinueAsGuestDemo}
-                    className="w-full mt-3 py-2 text-xs font-bold text-[#53536A] hover:text-[#000181] hover:bg-[#F6F7FB] rounded-xl transition text-center cursor-pointer"
-                  >
-                    ⚡ Vào thẳng Chế độ Trình chiếu mà không cần mật khẩu
-                  </button>
-                )}
+              {/* Footer Switch to Register */}
+              <div className="mt-6 text-center text-xs text-[#53536A]">
+                Chưa có tài khoản?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegisterMode(true);
+                    setRegError(null);
+                  }}
+                  className="font-black text-[#006EE9] hover:text-[#000181] hover:underline cursor-pointer"
+                >
+                  Đăng ký ngay
+                </button>
               </div>
             </div>
           ) : (
-            /* ================= REGISTER BUYER FORM ================= */
+            /* ================= REGISTER FORM: BUYER OR SUPPLIER (NO ADMIN) ================= */
             <div>
+              {/* Role Selector Header */}
               <div className="mb-5">
-                <h3 className="text-lg font-black text-[#000181] flex items-center gap-2">
-                  <UserPlus className="w-5 h-5 text-[#006EE9]" />
-                  <span>Đăng ký tài khoản Buyer</span>
-                </h3>
-                <p className="text-xs text-[#53536A] mt-0.5">
-                  Tạo tài khoản người mua chung để tham gia gom đơn siêu cục bộ
-                </p>
+                <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-2">
+                  Bạn muốn sử dụng FlashGroup với vai trò nào?
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {/* Option 1: Buyer */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRegisterRole('buyer');
+                      setRegError(null);
+                    }}
+                    className={`p-3 rounded-2xl border text-left transition cursor-pointer flex items-start gap-3 ${
+                      registerRole === 'buyer'
+                        ? 'border-[#006EE9] bg-[#EFFBFF] ring-2 ring-[#006EE9]/30'
+                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                      registerRole === 'buyer' ? 'bg-[#006EE9] text-white' : 'bg-[#E6E6EE] text-[#53536A]'
+                    }`}>
+                      <ShoppingCart className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-black text-[#000181]">🛒 Người mua</div>
+                      <div className="text-[11px] text-[#53536A] mt-0.5 leading-tight">
+                        Mua chung và tiết kiệm cùng cộng đồng.
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Option 2: Supplier */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRegisterRole('supplier');
+                      setRegError(null);
+                    }}
+                    className={`p-3 rounded-2xl border text-left transition cursor-pointer flex items-start gap-3 ${
+                      registerRole === 'supplier'
+                        ? 'border-[#006EE9] bg-[#EFFBFF] ring-2 ring-[#006EE9]/30'
+                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                      registerRole === 'supplier' ? 'bg-[#000181] text-[#D0FFA4]' : 'bg-[#E6E6EE] text-[#53536A]'
+                    }`}>
+                      <Store className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-black text-[#000181]">🏪 Nhà cung cấp</div>
+                      <div className="text-[11px] text-[#53536A] mt-0.5 leading-tight">
+                        Bán sản phẩm theo mô hình mua chung.
+                      </div>
+                    </div>
+                  </button>
+                </div>
               </div>
 
               {regError && (
@@ -458,26 +448,25 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               )}
 
               <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
-                {/* Full name */}
+                {/* 1. Account info */}
                 <div>
                   <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
-                    Họ và tên <span className="text-rose-500">*</span>
+                    {registerRole === 'supplier' ? 'Họ và tên người đại diện *' : 'Họ và tên *'}
                   </label>
                   <input
                     type="text"
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
-                    placeholder="Ví dụ: Nguyễn Minh Anh"
+                    placeholder={registerRole === 'supplier' ? 'Ví dụ: Nguyễn Văn Doanh' : 'Ví dụ: Nguyễn Minh Anh'}
                     required
                     className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
                   />
                 </div>
 
-                {/* Email and Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
-                      Email <span className="text-rose-500">*</span>
+                      Email đăng ký <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#53536A]">
@@ -487,7 +476,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         type="email"
                         value={regEmail}
                         onChange={(e) => setRegEmail(e.target.value)}
-                        placeholder="buyer@gmail.com"
+                        placeholder="email@cuaban.com"
                         required
                         className="block w-full pl-8 pr-3 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
                       />
@@ -496,7 +485,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
 
                   <div>
                     <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
-                      Số điện thoại
+                      Số điện thoại {registerRole === 'supplier' && <span className="text-rose-500">*</span>}
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#53536A]">
@@ -507,6 +496,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         value={regPhone}
                         onChange={(e) => setRegPhone(e.target.value)}
                         placeholder="0901234567"
+                        required={registerRole === 'supplier'}
                         className="block w-full pl-8 pr-3 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
                       />
                     </div>
@@ -562,42 +552,115 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                   </div>
                 </div>
 
-                {/* Pickup point */}
-                <div>
-                  <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
-                    Điểm nhận hàng / Smart Locker mặc định
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#53536A]">
-                      <MapPin className="w-4 h-4" />
+                {/* 2. Specific fields for Buyer */}
+                {registerRole === 'buyer' ? (
+                  <div>
+                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                      Điểm nhận hàng / Smart Locker ưa thích
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#53536A]">
+                        <MapPin className="w-4 h-4" />
+                      </div>
+                      <select
+                        value={regPickupPoint}
+                        onChange={(e) => setRegPickupPoint(e.target.value)}
+                        className="block w-full pl-9 pr-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none text-[#000181] font-bold"
+                      >
+                        <option value="Điểm nhận KTX Khu A – ĐHQG TP.HCM">Điểm nhận KTX Khu A – ĐHQG TP.HCM</option>
+                        <option value="Smart Locker KTX Khu B – ĐHQG TP.HCM">Smart Locker KTX Khu B – ĐHQG TP.HCM</option>
+                        <option value="Smart Locker Quận 1 – Sảnh Bưu điện Trung tâm">Smart Locker Quận 1 – Sảnh Bưu điện Trung tâm</option>
+                        <option value="Smart Locker Quận 7 – Sảnh Crescent Mall">Smart Locker Quận 7 – Sảnh Crescent Mall</option>
+                        <option value="Smart Locker Cầu Giấy – Tòa Discovery Complex Hà Nội">Smart Locker Cầu Giấy – Tòa Discovery Complex Hà Nội</option>
+                        <option value="Chưa chọn điểm nhận cố định">Chưa chọn điểm nhận cố định</option>
+                      </select>
                     </div>
-                    <select
-                      value={regPickupPoint}
-                      onChange={(e) => setRegPickupPoint(e.target.value)}
-                      className="block w-full pl-9 pr-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none text-[#000181] font-bold"
-                    >
-                      <option value="Điểm nhận KTX Khu A – ĐHQG TP.HCM">Điểm nhận KTX Khu A – ĐHQG TP.HCM</option>
-                      <option value="Smart Locker KTX Khu B – ĐHQG TP.HCM">Smart Locker KTX Khu B – ĐHQG TP.HCM</option>
-                      <option value="Smart Locker Quận 1 – Sảnh Bưu điện Trung tâm">Smart Locker Quận 1 – Sảnh Bưu điện Trung tâm</option>
-                      <option value="Smart Locker Quận 7 – Sảnh Crescent Mall">Smart Locker Quận 7 – Sảnh Crescent Mall</option>
-                      <option value="Smart Locker Cầu Giấy – Tòa Discovery Complex Hà Nội">Smart Locker Cầu Giấy – Tòa Discovery Complex Hà Nội</option>
-                      <option value="Chưa chọn điểm nhận cố định">Chưa chọn điểm nhận cố định</option>
-                    </select>
                   </div>
-                </div>
+                ) : (
+                  /* 3. Specific fields for Supplier */
+                  <div className="space-y-3 pt-1 border-t border-[#E6E6EE]">
+                    <div className="text-xs font-black text-[#000181] uppercase tracking-wider flex items-center gap-1.5 pt-1">
+                      <Building2 className="w-4 h-4 text-[#006EE9]" />
+                      <span>Thông tin Doanh nghiệp / Cửa hàng</span>
+                    </div>
 
-                {/* Supplier Onboarding note */}
-                <div className="p-3 bg-[#EFFBFF] border border-[#83E7FF] rounded-2xl text-xs text-[#000181]">
-                  <p className="font-black flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#006EE9]" />
-                    <span>Lưu ý phân quyền tài khoản:</span>
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-[#53536A] leading-relaxed">
-                    Hệ thống tự động đăng ký với vai trò <strong>Buyer</strong>. Nếu bạn là Nhà phân phối/Nhà nông muốn bán hàng, hãy đăng nhập và chọn mục <strong>&ldquo;Đăng ký trở thành Nhà cung cấp&rdquo;</strong> trong phần cài đặt để gửi hồ sơ xác minh.
-                  </p>
-                </div>
+                    <div>
+                      <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                        Tên cửa hàng / doanh nghiệp <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={supplierBusinessName}
+                        onChange={(e) => setSupplierBusinessName(e.target.value)}
+                        placeholder="Ví dụ: Nông Trại Xanh Đà Lạt Co., Ltd"
+                        required
+                        className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      />
+                    </div>
 
-                {/* Mandatory Terms & Privacy Checkbox */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                          Loại hình kinh doanh <span className="text-rose-500">*</span>
+                        </label>
+                        <select
+                          value={supplierBusinessType}
+                          onChange={(e) => setSupplierBusinessType(e.target.value)}
+                          className="block w-full px-3 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none text-[#000181] font-bold"
+                        >
+                          <option value="manufacturer">Nhà sản xuất / Nhà vườn</option>
+                          <option value="official_distributor">Nhà phân phối chính hãng</option>
+                          <option value="wholesaler">Bán buôn / Đại lý cấp 1</option>
+                          <option value="local_retailer">Hộ kinh doanh / Bán lẻ</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                          Khu vực hoạt động chính <span className="text-rose-500">*</span>
+                        </label>
+                        <select
+                          value={supplierOperatingRegion}
+                          onChange={(e) => setSupplierOperatingRegion(e.target.value)}
+                          className="block w-full px-3 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none text-[#000181] font-bold"
+                        >
+                          <option value="TP.HCM & Đông Nam Bộ">TP.HCM & Đông Nam Bộ</option>
+                          <option value="Lâm Đồng & Tây Nguyên">Lâm Đồng & Tây Nguyên</option>
+                          <option value="Đồng bằng Sông Cửu Long">Đồng bằng Sông Cửu Long</option>
+                          <option value="Hà Nội & Miền Bắc">Hà Nội & Miền Bắc</option>
+                          <option value="Toàn quốc">Toàn quốc</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                        Địa chỉ kinh doanh / Kho hàng xuất phát <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={supplierAddress}
+                        onChange={(e) => setSupplierAddress(e.target.value)}
+                        placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                        required
+                        className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      />
+                    </div>
+
+                    {/* Supplier Onboarding note */}
+                    <div className="p-3 bg-[#EFFBFF] border border-[#83E7FF] rounded-2xl text-xs text-[#000181]">
+                      <div className="font-black flex items-center gap-1.5">
+                        <FileCheck2 className="w-4 h-4 text-[#006EE9]" />
+                        <span>Quy trình Thẩm định & Xác minh Nhà cung cấp:</span>
+                      </div>
+                      <p className="mt-1 text-[11px] text-[#53536A] leading-relaxed">
+                        Tài khoản Nhà cung cấp sẽ được tạo lập trực tiếp. Sau khi hoàn tất đăng ký, bạn sẽ được hướng dẫn bổ sung hồ sơ chứng từ để Ban Quản Trị thẩm định trước khi mở bán phòng gom đầu tiên.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Mandatory Checkbox */}
                 <div className="space-y-2 pt-1">
                   <label className="flex items-start space-x-2.5 cursor-pointer">
                     <input
@@ -613,13 +676,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       </span>{' '}
                       và{' '}
                       <span className="font-bold text-[#006EE9] hover:underline">
-                        Chính sách quyền riêng tư
+                        {registerRole === 'supplier' ? 'Quy chế đối tác Nhà cung cấp' : 'Chính sách quyền riêng tư'}
                       </span>{' '}
                       của FlashGroup. <span className="text-rose-500 font-bold">*</span>
                     </span>
                   </label>
 
-                  {/* Optional Marketing Checkbox - Unchecked by default */}
+                  {/* Optional Marketing Checkbox - Default OFF */}
                   <label className="flex items-start space-x-2.5 cursor-pointer">
                     <input
                       type="checkbox"
@@ -628,12 +691,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       className="w-4 h-4 mt-0.5 rounded text-[#006EE9] focus:ring-[#006EE9] border-[#E6E6EE]"
                     />
                     <span className="text-xs text-[#53536A] leading-tight select-none">
-                      Nhận thông báo về các phòng gom giá sốc và ưu đãi siêu cục bộ qua email/SMS. (Không bắt buộc)
+                      Nhận thông báo cập nhật về các phòng gom giá sốc và ưu đãi qua email/SMS. (Không bắt buộc)
                     </span>
                   </label>
                 </div>
 
-                {/* Submit Register */}
+                {/* Submit Register Button */}
                 <button
                   type="submit"
                   disabled={isLoading}
@@ -642,16 +705,33 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
-                      <span>Đang đăng ký tài khoản...</span>
+                      <span>Đang khởi tạo tài khoản...</span>
                     </>
                   ) : (
                     <>
-                      <span>HOÀN TẤT ĐĂNG KÝ BUYER</span>
+                      <span>
+                        {registerRole === 'supplier' ? 'ĐĂNG KÝ NHÀ CUNG CẤP' : 'TẠO TÀI KHOẢN NGƯỜI MUA'}
+                      </span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
               </form>
+
+              {/* Footer switch to login */}
+              <div className="mt-5 text-center text-xs text-[#53536A]">
+                Đã có tài khoản?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRegisterMode(false);
+                    setRegError(null);
+                  }}
+                  className="font-black text-[#006EE9] hover:text-[#000181] hover:underline cursor-pointer"
+                >
+                  Đăng nhập ngay
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -677,7 +757,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               Khôi phục Mật khẩu FlashGroup
             </h3>
             <p className="text-xs text-[#53536A] leading-relaxed mb-4">
-              Để bảo vệ tính toàn vẹn của các giao dịch mua chung và an toàn mã mở tủ Smart Locker, hệ thống hỗ trợ khôi phục mật khẩu trực tiếp qua xác thực bảo mật:
+              Để bảo vệ tính toàn vẹn của các giao dịch mua chung và mã mở tủ Smart Locker, hệ thống hỗ trợ khôi phục mật khẩu trực tiếp qua kênh xác thực an toàn:
             </p>
 
             <div className="p-3.5 rounded-2xl bg-[#F6F7FB] border border-[#E6E6EE] space-y-2 mb-5 text-xs text-[#000181]">
@@ -690,10 +770,6 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 <span>Hotline hỗ trợ: <strong className="font-bold">1900-FLASH (1900-3527)</strong></span>
               </div>
             </div>
-
-            <p className="text-[11px] text-[#53536A] mb-5">
-              * Nếu bạn đang tham gia thuyết trình hoặc đánh giá hệ thống, bạn có thể chọn ngay một trong 3 tài khoản Demo bên ngoài để vào hệ thống ngay lập tức mà không cần đặt lại mật khẩu.
-            </p>
 
             <button
               type="button"

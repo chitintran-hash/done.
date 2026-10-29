@@ -3102,51 +3102,77 @@ export default function FlashGroupApp() {
             return { success: true };
           }
         }}
-        onRegister={async (email, password, name, phone, preferredPickupPoint, marketingConsent) => {
+        onRegister={async (payload) => {
+          const targetRole = payload.role === 'supplier' ? 'supplier' : 'buyer'; // STRICTLY NO ADMIN
           if (isSupabaseConfigured && !useLocalDemoMode) {
             // Supabase register
-            const result = await authService.signUp(email, password, name, phone, preferredPickupPoint);
+            const result = await authService.signUp(payload);
             if (result.error || !result.user) {
               return { success: false, error: result.error || 'Đăng ký không thành công.' };
             }
             localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(result.user));
             setCurrentUser(result.user);
-            setBuyerTab('discovery');
-            navigate('/marketplace');
-            showToast('Đăng ký tài khoản Buyer thành công!');
+            if (result.user.role === 'supplier') {
+              setSupplierTab('dashboard');
+              navigate('/');
+              showToast('Đăng ký tài khoản Nhà cung cấp thành công! Chào mừng bạn đến với FlashGroup.');
+            } else {
+              setBuyerTab('discovery');
+              navigate('/marketplace');
+              showToast('Đăng ký tài khoản Người mua thành công! Hãy bắt đầu khám phá phòng gom.');
+            }
             return { success: true };
           } else {
             // Local demo fallback
-            const duplicate = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+            const duplicate = users.find((u) => u.email.toLowerCase() === payload.email.toLowerCase());
             if (duplicate) {
-              return { success: false, error: 'Email này đã được đăng ký.' };
+              return { success: false, error: 'Email này đã được sử dụng.' };
             }
-            const newUser = {
-              id: `buyer-${Date.now()}`,
-              name,
-              email,
-              password,
-              role: 'buyer' as const,
-              phone,
-              preferredPickupPoint,
+            const newUserId = `${targetRole}-${Date.now()}`;
+            const newUser: User = {
+              id: newUserId,
+              name: payload.name,
+              email: payload.email,
+              password: payload.password,
+              role: targetRole, // strictly buyer or supplier
+              phone: payload.phone,
+              preferredPickupPoint: payload.preferredPickupPoint,
               status: 'active' as const,
               createdAt: new Date().toISOString(),
             };
             setUsers((prev) => [...prev, newUser]);
-            localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
-            setCurrentUser(newUser);
-            setBuyerTab('discovery');
-            navigate('/marketplace');
-            showToast('Đăng ký tài khoản Buyer thành công!');
+
+            if (targetRole === 'supplier') {
+              const newSupplierRecord: Supplier = {
+                id: `sup-${Date.now()}`,
+                userId: newUserId,
+                businessName: payload.businessName || payload.name,
+                supplierType: (payload.businessType as any) || 'local_retailer',
+                verificationStatus: 'pending',
+                contactPhone: payload.phone,
+                email: payload.email,
+                businessAddress: payload.businessAddress,
+                sourceDescription: payload.operatingRegion || 'Hộ kinh doanh / Nhà phân phối địa phương',
+                rating: 5.0,
+                totalReviews: 0,
+                isDemo: false,
+                createdAt: new Date().toISOString(),
+              };
+              setSuppliers((prev) => [...prev, newSupplierRecord]);
+              localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
+              setCurrentUser(newUser);
+              setSupplierTab('dashboard');
+              navigate('/');
+              showToast('Đăng ký tài khoản Nhà cung cấp thành công! Vui lòng hoàn thiện hồ sơ xác minh để đăng bán.');
+            } else {
+              localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
+              setCurrentUser(newUser);
+              setBuyerTab('discovery');
+              navigate('/marketplace');
+              showToast('Đăng ký tài khoản Người mua thành công! Hãy bắt đầu khám phá phòng gom.');
+            }
             return { success: true };
           }
-        }}
-        onContinueAsGuestDemo={() => {
-          const defaultBuyer = createInitialUsers()[0];
-          setCurrentUser(defaultBuyer);
-          setBuyerTab('discovery');
-          navigate('/marketplace');
-          showToast('Đã vào chế độ Demo với tài khoản Nguyễn Minh Anh!');
         }}
       />
     );

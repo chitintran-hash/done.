@@ -1,11 +1,62 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import type { User, UserRole } from '../types';
 
+export interface SignUpPayload {
+  email: string;
+  password: string;
+  name: string;
+  role: 'buyer' | 'supplier'; // STRICTLY no admin allowed in registration
+  phone?: string;
+  preferredPickupPoint?: string;
+  businessName?: string;
+  businessType?: string;
+  operatingRegion?: string;
+  businessAddress?: string;
+}
+
 export const authService = {
-  // Sign up for new Buyer accounts only
-  async signUp(email: string, password: string, name: string, phone?: string, preferredPickupPoint?: string): Promise<{ user: User | null; error?: string }> {
+  // Sign up for Buyer or Supplier accounts (Admin is strictly forbidden in registration)
+  async signUp(
+    payloadOrEmail: SignUpPayload | string,
+    passwordArg?: string,
+    nameArg?: string,
+    phoneArg?: string,
+    preferredPickupPointArg?: string
+  ): Promise<{ user: User | null; error?: string }> {
     if (!isSupabaseConfigured) {
       return { user: null, error: 'Supabase chưa được cấu hình.' };
+    }
+
+    let email = '';
+    let password = '';
+    let name = '';
+    let role: 'buyer' | 'supplier' = 'buyer';
+    let phone = '';
+    let preferredPickupPoint = '';
+    let businessName = '';
+    let businessType = '';
+    let operatingRegion = '';
+    let businessAddress = '';
+
+    if (typeof payloadOrEmail === 'object') {
+      email = payloadOrEmail.email;
+      password = payloadOrEmail.password;
+      name = payloadOrEmail.name;
+      // Enforce: role is strictly buyer or supplier
+      role = payloadOrEmail.role === 'supplier' ? 'supplier' : 'buyer';
+      phone = payloadOrEmail.phone || '';
+      preferredPickupPoint = payloadOrEmail.preferredPickupPoint || '';
+      businessName = payloadOrEmail.businessName || '';
+      businessType = payloadOrEmail.businessType || '';
+      operatingRegion = payloadOrEmail.operatingRegion || '';
+      businessAddress = payloadOrEmail.businessAddress || '';
+    } else {
+      email = payloadOrEmail;
+      password = passwordArg || '';
+      name = nameArg || '';
+      role = 'buyer';
+      phone = phoneArg || '';
+      preferredPickupPoint = preferredPickupPointArg || '';
     }
 
     try {
@@ -15,14 +66,25 @@ export const authService = {
         options: {
           data: {
             name,
-            phone: phone || '',
-            preferred_pickup_point: preferredPickupPoint || '',
-            role: 'buyer', // Default role is strictly buyer
+            phone,
+            preferred_pickup_point: preferredPickupPoint,
+            role, // strictly buyer or supplier
+            business_name: businessName,
+            business_type: businessType,
+            operating_region: operatingRegion,
+            business_address: businessAddress,
           },
         },
       });
 
       if (error) {
+        const rawErr = error.message.toLowerCase();
+        if (rawErr.includes('already registered') || rawErr.includes('user already exists')) {
+          return { user: null, error: 'Email này đã được sử dụng.' };
+        }
+        if (rawErr.includes('password') || rawErr.includes('weak')) {
+          return { user: null, error: 'Mật khẩu chưa đáp ứng yêu cầu bảo mật.' };
+        }
         return { user: null, error: error.message };
       }
 
@@ -37,12 +99,28 @@ export const authService = {
         .eq('id', data.user.id)
         .single();
 
+      // If supplier registered, create or link supplier record if table exists
+      if (role === 'supplier' && businessName) {
+        try {
+          await supabase.from('suppliers').insert({
+            id: `sup-${data.user.id.slice(0, 8)}`,
+            user_id: data.user.id,
+            business_name: businessName,
+            supplier_type: businessType || 'local_retailer',
+            verification_status: 'pending',
+            phone: phone,
+          });
+        } catch (supErr) {
+          console.warn('Could not auto-insert supplier table row:', supErr);
+        }
+      }
+
       const appUser: User = {
         id: data.user.id,
         name: profile?.name || name,
         email: data.user.email || email,
         password: '***',
-        role: (profile?.role as UserRole) || 'buyer',
+        role: (profile?.role as UserRole) || role,
         phone: profile?.phone || phone,
         preferredPickupPoint: profile?.preferred_pickup_point || preferredPickupPoint,
         status: (profile?.status as any) || 'active',
@@ -56,7 +134,7 @@ export const authService = {
     }
   },
 
-  // Sign in with email and password
+  // Sign in with email and password (No role selection - role is retrieved from database)
   async signIn(email: string, password: string): Promise<{ user: User | null; error?: string }> {
     if (!isSupabaseConfigured) {
       return { user: null, error: 'Supabase chưa được cấu hình.' };
@@ -69,6 +147,10 @@ export const authService = {
       });
 
       if (error) {
+        const rawErr = error.message.toLowerCase();
+        if (rawErr.includes('invalid') || rawErr.includes('credentials') || rawErr.includes('grant')) {
+          return { user: null, error: 'Email hoặc mật khẩu chưa chính xác.' };
+        }
         return { user: null, error: error.message };
       }
 
@@ -76,7 +158,7 @@ export const authService = {
         return { user: null, error: 'Không tìm thấy người dùng.' };
       }
 
-      // Fetch user profile to get role and details
+      // Fetch user profile from database to get genuine verified role
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -102,7 +184,7 @@ export const authService = {
 
       if (profile.status === 'suspended') {
         await supabase.auth.signOut();
-        return { user: null, error: 'Tài khoản của bạn đã bị tạm khoá. Vui lòng liên hệ Admin.' };
+        return { user: null, error: 'Tài khoản của bạn đã bị tạm khoá. Vui lòng liên hệ Ban Quản Trị.' };
       }
 
       const appUser: User = {
@@ -110,7 +192,7 @@ export const authService = {
         name: profile.name,
         email: profile.email || data.user.email || email,
         password: '***',
-        role: profile.role as UserRole,
+        role: profile.role as UserRole, // Verified role from server profiles table
         phone: profile.phone,
         preferredPickupPoint: profile.preferred_pickup_point,
         status: profile.status,
@@ -127,7 +209,11 @@ export const authService = {
   // Sign out
   async signOut(): Promise<void> {
     if (isSupabaseConfigured) {
-      await supabase.auth.signOut();
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.error('Sign out error:', err);
+      }
     }
   },
 

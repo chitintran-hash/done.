@@ -1096,7 +1096,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                       className="p-2 rounded-xl hover:bg-[#FCFCF7] cursor-pointer font-bold text-[#000181] flex items-center justify-between"
                     >
                       <span>{sup}</span>
-                      <span className="text-[10px] text-[#C58B52] font-semibold">Lọc phòng gom &rarr;</span>
+                      <span className="text-[10px] text-[#006EE9] font-semibold">Lọc phòng gom &rarr;</span>
                     </div>
                   ))}
                 </div>

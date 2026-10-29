@@ -9,3 +9,4 @@ dist
 flashgroup_complete_bundle.json
 flashgroup_source_code.zip
 restore_flashgroup.cjs
+.vercel

@@ -64,7 +64,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   return (
     <nav
       aria-label="Mobile Navigation Bar"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFCF8]/95 backdrop-blur-md border-t border-[#EADFE4] px-2 py-1.5 shadow-lg safe-area-pb"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t border-[#E6E6EE] px-2 py-1.5 shadow-lg safe-area-pb"
     >
       <div className="grid grid-cols-5 items-center max-w-md mx-auto">
         {navItems.map((item) => {
@@ -74,30 +74,30 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               key={item.id}
               type="button"
               onClick={() => handleNavClick(item)}
-              className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition cursor-pointer ${
-                item.isActive
-                  ? 'text-[#68415F]'
-                  : 'text-[#756871] hover:text-[#211A22]'
-              }`}
+              className="flex flex-col items-center justify-center py-1 px-1 rounded-xl transition cursor-pointer relative"
             >
               <div
-                className={`p-1 rounded-xl transition ${
-                  item.isActive ? 'bg-[#F2E8F0]' : 'bg-transparent'
-                }`}
+                className={`p-1 rounded-xl transition relative flex items-center justify-center`}
               >
                 <Icon
-                  className={`w-5 h-5 ${
-                    item.isActive ? 'text-[#68415F] stroke-[2.5]' : 'stroke-2'
+                  className={`w-5 h-5 transition-colors ${
+                    item.isActive ? 'text-[#006EE9] stroke-[2.5]' : 'text-[#77778A] stroke-2'
                   }`}
                 />
+                {item.isActive && (
+                  <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9]" />
+                )}
               </div>
               <span
-                className={`text-[9px] font-black uppercase tracking-tight mt-0.5 ${
-                  item.isActive ? 'text-[#68415F]' : 'text-[#756871]'
+                className={`text-[9px] font-black uppercase tracking-tight mt-0.5 transition-colors ${
+                  item.isActive ? 'text-[#006EE9]' : 'text-[#77778A]'
                 }`}
               >
                 {item.label}
               </span>
+              {item.isActive && (
+                <span className="w-4 h-0.5 rounded-full bg-[#D0FFA4] mt-0.5" />
+              )}
             </button>
           );
         })}

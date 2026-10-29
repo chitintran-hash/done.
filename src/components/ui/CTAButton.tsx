@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CTAButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'hero';
   size?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode | React.ComponentType<{ className?: string }>;
   iconPosition?: 'left' | 'right';
@@ -25,14 +25,19 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
   };
 
   const variantStyles = {
+    // Primary CTA: Blue Raspberry #006EE9 -> Night Skies #000181
     primary:
-      'bg-gradient-to-r from-[#68415F] to-[#C77C86] hover:from-[#3A2438] hover:to-[#68415F] text-white shadow-md shadow-[#68415F]/25 active:scale-98 border border-[#68415F]/40',
+      'bg-[#006EE9] hover:bg-[#000181] text-white shadow-md shadow-[#006EE9]/25 active:scale-98 border border-transparent',
+    // Hero CTA: Powdered Lime #D0FFA4 -> Sunny Skies #83E7FF, text #000181
+    hero:
+      'bg-[#D0FFA4] hover:bg-[#83E7FF] text-[#000181] shadow-lg shadow-[#000181]/15 active:scale-98 border border-transparent font-black',
+    // Secondary: transparent, border 1.5px #000181, text #000181, hover #E8A0FF
     secondary:
-      'bg-[#FFFCF8] hover:bg-[#FFF8F1] text-[#211A22] shadow-sm hover:shadow active:scale-98 border-2 border-[#211A22]',
+      'bg-transparent hover:bg-[#E8A0FF] text-[#000181] shadow-xs active:scale-98 border-[1.5px] border-[#000181]',
     outline:
-      'bg-[#FFFCF8] hover:bg-[#F2E8F0] text-[#352B32] border border-[#EADFE4] hover:border-[#D8CDD3] shadow-xs active:scale-98',
+      'bg-white hover:bg-[#EFFBFF] text-[#000181] border border-[#E6E6EE] hover:border-[#83E7FF] shadow-xs active:scale-98',
     ghost:
-      'bg-transparent hover:bg-[#F2E8F0] text-[#68415F] hover:text-[#3A2438] border border-transparent',
+      'bg-transparent hover:bg-[#EFFBFF] text-[#006EE9] hover:text-[#000181] border border-transparent',
     danger:
       'bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-500/20 border border-rose-600',
   };

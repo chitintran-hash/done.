@@ -435,7 +435,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(124, 111, 230, 0.35);
+            background: rgba(0, 110, 233, 0.35);
             animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
           "></div>
           <div style="
@@ -443,16 +443,16 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: #7C6FE6;
-            border: 3px solid #FFFCF8;
-            box-shadow: 0 4px 10px rgba(124, 111, 230, 0.5);
+            background: #006EE9;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 4px 10px rgba(0, 110, 233, 0.5);
           "></div>
         </div>
       `;
       const popup = new MaplibrePopup({ offset: 15 }).setHTML(`
-        <div style="font-size: 12px; font-weight: bold; color: #211A22; padding: 4px;">
+        <div style="font-size: 12px; font-weight: bold; color: #000181; padding: 4px;">
           📍 Vị trí hiện tại của bạn (GPS)
-          ${locationAccuracy ? `<div style="font-size: 10px; color: #756871; font-weight: normal;">Độ chính xác: ±${locationAccuracy}m</div>` : ''}
+          ${locationAccuracy ? `<div style="font-size: 10px; color: #53536A; font-weight: normal;">Độ chính xác: ±${locationAccuracy}m</div>` : ''}
         </div>
       `);
       const marker = new MaplibreMarker({ element: el })
@@ -478,13 +478,13 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             width: 38px;
             height: 38px;
             border-radius: 12px;
-            background: #68415F;
-            border: 3px solid #FFFCF8;
+            background: #006EE9;
+            border: 3px solid #FFFFFF;
             box-shadow: 0 8px 20px rgba(58, 36, 56, 0.45);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #FFF8F1;
+            color: #FCFCF7;
             font-size: 16px;
           ">
             📍
@@ -494,15 +494,15 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 7px solid #68415F;
+            border-top: 7px solid #006EE9;
             margin-top: -1px;
           "></div>
         </div>
       `;
       const popup = new MaplibrePopup({ offset: 25 }).setHTML(`
-        <div style="font-size: 12px; font-weight: bold; color: #211A22; padding: 4px;">
+        <div style="font-size: 12px; font-weight: bold; color: #000181; padding: 4px;">
           <div>📍 Vị trí địa chỉ bạn chọn</div>
-          <div style="font-size: 10px; color: #756871; font-weight: normal; margin-top: 2px;">
+          <div style="font-size: 10px; color: #53536A; font-weight: normal; margin-top: 2px;">
             ${geocodedInfo?.precisionInfo || 'Kéo hoặc click trên bản đồ để di chuyển'}
           </div>
         </div>
@@ -549,9 +549,9 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               width: ${isSelected ? '46px' : '38px'};
               height: ${isSelected ? '46px' : '38px'};
               border-radius: 14px;
-              background: ${isSelected ? '#68415F' : '#A15C78'};
-              border: 3px solid #FFFCF8;
-              box-shadow: 0 8px 20px rgba(161, 92, 120, 0.45);
+              background: #E8A0FF; color: #000181; border: ${isSelected ? '3px solid #000181' : '3px solid #FFFFFF'};
+              border: 3px solid #FFFFFF;
+              box-shadow: ${isSelected ? '0 0 0 3px #000181, 0 8px 20px rgba(0, 1, 129, 0.35)' : '0 8px 20px rgba(232, 160, 255, 0.45)'};
               display: flex;
               align-items: center;
               justify-content: center;
@@ -564,7 +564,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               height: 0;
               border-left: 6px solid transparent;
               border-right: 6px solid transparent;
-              border-top: 7px solid ${isSelected ? '#68415F' : '#A15C78'};
+              border-top: 7px solid ${isSelected ? '#000181' : '#E8A0FF'};
               margin-top: -1px;
             "></div>
           </div>
@@ -572,52 +572,52 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
         // Marketplace Card Popup
         const popupContent = `
-          <div style="width: 250px; font-family: sans-serif; color: #352B32; padding: 4px;">
+          <div style="width: 250px; font-family: sans-serif; color: #000181; padding: 4px;">
             <div style="display: flex; gap: 10px; align-items: center;">
-              <img src="${room.productImage}" alt="${room.productName}" style="width: 52px; height: 52px; border-radius: 10px; object-fit: cover; border: 1px solid #EADFE4;" />
+              <img src="${room.productImage}" alt="${room.productName}" style="width: 52px; height: 52px; border-radius: 10px; object-fit: cover; border: 1px solid #E6E6EE;" />
               <div style="min-width: 0; flex: 1;">
-                <div style="font-size: 10px; font-weight: 700; color: #756871; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                <div style="font-size: 10px; font-weight: 700; color: #53536A; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                   ${room.supplierName} • DEMO
                 </div>
-                <h4 style="font-size: 13px; font-weight: 900; color: #211A22; margin: 2px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                <h4 style="font-size: 13px; font-weight: 900; color: #000181; margin: 2px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                   ${room.emoji} ${room.productName.toUpperCase()}
                 </h4>
                 <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 2px;">
-                  <span style="font-size: 14px; font-weight: 900; color: #3A2438;">
+                  <span style="font-size: 14px; font-weight: 900; color: #000181;">
                     ${formatVND(currentPrice)}
                   </span>
-                  <span style="font-size: 10px; text-decoration: line-through; color: #756871;">
+                  <span style="font-size: 10px; text-decoration: line-through; color: #53536A;">
                     ${formatVND(room.initialPrice)}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div style="background: #FFF8F1; border: 1px solid #EADFE4; border-radius: 10px; padding: 8px; margin: 8px 0; font-size: 11px;">
-              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #756871;">
+            <div style="background: #FCFCF7; border: 1px solid #E6E6EE; border-radius: 10px; padding: 8px; margin: 8px 0; font-size: 11px;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #53536A;">
                 <span>${room.totalQuantity} / ${room.maxQuantity} ${room.unit}</span>
-                <span style="color: #68415F; font-weight: 900;">${percent}%</span>
+                <span style="color: #006EE9; font-weight: 900;">${percent}%</span>
               </div>
-              <div style="width: 100%; height: 6px; background: #EADFE4; border-radius: 999px; overflow: hidden; margin-top: 4px;">
-                <div style="width: ${percent}%; height: 100%; background: #68415F; border-radius: 999px;"></div>
+              <div style="width: 100%; height: 6px; background: #E6E6EE; border-radius: 999px; overflow: hidden; margin-top: 4px;">
+                <div style="width: ${percent}%; height: 100%; background: #006EE9; border-radius: 999px;"></div>
               </div>
               ${
                 nextTier
-                  ? `<div style="font-size: 10px; color: #E8957B; font-weight: 800; margin-top: 4px;">
+                  ? `<div style="font-size: 10px; color: #006EE9; font-weight: 800; margin-top: 4px;">
                       CÒN ${nextTier.requiredQuantity} SẢN PHẨM ĐỂ GIẢM CÒN ${formatVND(nextTier.nextPrice)}
                     </div>`
                   : ''
               }
             </div>
 
-            <div style="font-size: 10px; color: #756871; display: flex; justify-content: space-between; border-top: 1px solid #EADFE4; padding-top: 6px;">
+            <div style="font-size: 10px; color: #53536A; display: flex; justify-content: space-between; border-top: 1px solid #E6E6EE; padding-top: 6px;">
               <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">ĐIỂM NHẬN: ${room.pickupPoint}</span>
-              <span style="font-weight: 800; color: #211A22; margin-left: 6px;">${room.formattedDistance}</span>
+              <span style="font-weight: 800; color: #000181; margin-left: 6px;">${room.formattedDistance}</span>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px;">
               <button id="popup-btn-room-${room.id}" style="
-                background: linear-gradient(135deg, #68415F, #C77C86);
+                background: #006EE9;
                 color: #ffffff;
                 border: none;
                 border-radius: 8px;
@@ -629,9 +629,9 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                 XEM PHÒNG
               </button>
               <a href="${getDirectionsUrl(lat, lng)}" target="_blank" rel="noreferrer" style="
-                background: #FFF8F1;
-                color: #68415F;
-                border: 1px solid #EADFE4;
+                background: #FCFCF7;
+                color: #006EE9;
+                border: 1px solid #E6E6EE;
                 border-radius: 8px;
                 padding: 6px;
                 font-size: 11px;
@@ -699,8 +699,8 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               width: ${isSelected ? '42px' : '34px'};
               height: ${isSelected ? '42px' : '34px'};
               border-radius: 12px;
-              background: #E58E72;
-              border: 2.5px solid #FFFCF8;
+              background: #83E7FF; color: #000181;
+              border: ${isSelected ? '3px solid #000181' : '2.5px solid #FFFFFF'};
               box-shadow: 0 6px 16px rgba(229, 142, 114, 0.45);
               display: flex;
               align-items: center;
@@ -715,41 +715,41 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               height: 0;
               border-left: 5px solid transparent;
               border-right: 5px solid transparent;
-              border-top: 6px solid #E58E72;
+              border-top: 6px solid ${isSelected ? '#000181' : '#83E7FF'};
               margin-top: -1px;
             "></div>
           </div>
         `;
 
         const popupContent = `
-          <div style="width: 250px; font-family: sans-serif; color: #352B32; padding: 4px;">
+          <div style="width: 250px; font-family: sans-serif; color: #000181; padding: 4px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 10px; font-weight: 800; background: #F2E8F0; color: #68415F; padding: 2px 6px; border-radius: 4px;">
+              <span style="font-size: 10px; font-weight: 800; background: #EFFBFF; color: #006EE9; padding: 2px 6px; border-radius: 4px;">
                 ${point.type.toUpperCase()}
               </span>
-              <span style="font-size: 10px; font-weight: 700; color: #756871;">
+              <span style="font-size: 10px; font-weight: 700; color: #53536A;">
                 ${point.formattedDistance}
               </span>
             </div>
 
-            <h4 style="font-size: 13px; font-weight: 900; color: #211A22; margin: 6px 0 2px;">
+            <h4 style="font-size: 13px; font-weight: 900; color: #000181; margin: 6px 0 2px;">
               ${point.name}
             </h4>
-            <div style="font-size: 11px; color: #756871; line-height: 1.3;">
+            <div style="font-size: 11px; color: #53536A; line-height: 1.3;">
               ${point.address}
             </div>
 
-            <div style="background: #FFF8F1; border: 1px solid #EADFE4; border-radius: 10px; padding: 8px; margin: 8px 0; font-size: 11px;">
-              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #756871;">
+            <div style="background: #FCFCF7; border: 1px solid #E6E6EE; border-radius: 10px; padding: 8px; margin: 8px 0; font-size: 11px;">
+              <div style="display: flex; justify-content: space-between; font-weight: 700; color: #53536A;">
                 <span>Sức chứa:</span>
                 <span>${point.currentLoad} / ${point.capacity} ngăn</span>
               </div>
-              <div style="width: 100%; height: 6px; background: #EADFE4; border-radius: 999px; overflow: hidden; margin-top: 4px;">
-                <div style="width: ${loadPercent}%; height: 100%; background: #E58E72; border-radius: 999px;"></div>
+              <div style="width: 100%; height: 6px; background: #E6E6EE; border-radius: 999px; overflow: hidden; margin-top: 4px;">
+                <div style="width: ${loadPercent}%; height: 100%; background: #83E7FF; color: #000181; border-radius: 999px;"></div>
               </div>
-              <div style="display: flex; justify-content: space-between; font-size: 10px; color: #756871; margin-top: 4px;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; color: #53536A; margin-top: 4px;">
                 <span>Mở cửa: ${point.operatingHours}</span>
-                <span style="color: #68415F; font-weight: 800;">
+                <span style="color: #006EE9; font-weight: 800;">
                   ${point.status === 'active' ? 'Đang nhận gom' : 'Đầy'}
                 </span>
               </div>
@@ -757,8 +757,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
               <button id="popup-btn-point-${point.id}" style="
-                background: #211A22;
-                color: #ffffff;
+                background: #006EE9; color: #ffffff;
                 border: none;
                 border-radius: 8px;
                 padding: 6px;
@@ -769,9 +768,9 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                 XEM ĐIỂM NHẬN
               </button>
               <a href="${getDirectionsUrl(lat, lng)}" target="_blank" rel="noreferrer" style="
-                background: #FFF8F1;
-                color: #68415F;
-                border: 1px solid #EADFE4;
+                background: #FCFCF7;
+                color: #006EE9;
+                border: 1px solid #E6E6EE;
                 border-radius: 8px;
                 padding: 6px;
                 font-size: 11px;
@@ -910,17 +909,17 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
   return (
     <div className="space-y-6">
       {/* 1. TOP HEADER & SEARCH BAR */}
-      <div className="bg-[#FFFCF8] rounded-3xl border border-[#EADFE4] p-5 sm:p-6 shadow-sm space-y-4">
+      <div className="bg-[#FFFFFF] rounded-3xl border border-[#E6E6EE] p-5 sm:p-6 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 bg-[#F2E8F0] text-[#68415F] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 border border-[#D8CDD3]">
-              <Compass className="w-3.5 h-3.5 text-[#68415F]" />
+            <div className="inline-flex items-center space-x-2 bg-[#EFFBFF] text-[#006EE9] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2 border border-[#E6E6EE]">
+              <Compass className="w-3.5 h-3.5 text-[#006EE9]" />
               <span>FLASHMAP • BẢN ĐỒ ĐƯỜNG PHỐ SIÊU CỤC BỘ</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-[#211A22] tracking-tight uppercase">
+            <h1 className="text-2xl sm:text-3xl font-black text-[#000181] tracking-tight uppercase">
               BẢN ĐỒ PHÒNG GOM & ĐIỂM NHẬN HÀNG
             </h1>
-            <p className="text-xs sm:text-sm text-[#756871] mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#53536A] mt-1 max-w-2xl leading-relaxed">
               Khám phá các phòng gom theo khu phố, chung cư, tòa nhà văn phòng và mạng lưới Smart Locker gần bạn trên nền bản đồ đường phố OpenStreetMap thời gian thực.
             </p>
           </div>
@@ -931,18 +930,18 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               onClick={() => setShowAddressSelector((prev) => !prev)}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition cursor-pointer border ${
                 showAddressSelector
-                  ? 'bg-[#F2E8F0] text-[#68415F] border-[#D8CDD3]'
-                  : 'bg-[#FFFCF8] text-[#352B32] hover:bg-[#FFF8F1] border-[#EADFE4] shadow-xs'
+                  ? 'bg-[#EFFBFF] text-[#006EE9] border-[#E6E6EE]'
+                  : 'bg-[#FFFFFF] text-[#000181] hover:bg-[#FCFCF7] border-[#E6E6EE] shadow-xs'
               }`}
             >
-              <Building2 className="w-4 h-4 text-[#68415F]" />
+              <Building2 className="w-4 h-4 text-[#006EE9]" />
               <span>{showAddressSelector ? 'ẨN CHỌN ĐỊA CHỈ' : 'CHỌN ĐỊA CHỈ'}</span>
             </button>
 
             <button
               onClick={handleRequestUserLocation}
               disabled={locationPermissionStatus === 'prompting'}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#68415F] to-[#C77C86] hover:from-[#3A2438] hover:to-[#68415F] text-white shadow-md shadow-[#68415F]/20 transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-[#006EE9] hover:bg-[#000181] text-white shadow-md shadow-[#006EE9]/20 transition-all active:scale-95 cursor-pointer"
             >
               <Navigation
                 className={`w-4 h-4 ${locationPermissionStatus === 'prompting' ? 'animate-spin' : ''}`}
@@ -959,7 +958,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         {/* Top Search Bar */}
         <div className="relative">
           <div className="relative flex items-center">
-            <Search className="w-5 h-5 text-[#756871] absolute left-4 pointer-events-none" />
+            <Search className="w-5 h-5 text-[#53536A] absolute left-4 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
@@ -971,7 +970,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                 if (searchQuery.trim()) setIsSearchDropdownOpen(true);
               }}
               placeholder="TÌM ĐỊA CHỈ, KHU VỰC, PHÒNG GOM HOẶC ĐIỂM NHẬN..."
-              className="w-full pl-12 pr-10 py-3.5 bg-[#FFF8F1] hover:bg-white focus:bg-white border border-[#EADFE4] focus:border-[#68415F] rounded-2xl text-xs sm:text-sm font-semibold text-[#211A22] placeholder:text-[#756871] focus:outline-none focus:ring-2 focus:ring-[#68415F]/20 transition shadow-inner"
+              className="w-full pl-12 pr-10 py-3.5 bg-[#FCFCF7] hover:bg-white focus:bg-white border border-[#E6E6EE] focus:border-[#006EE9] rounded-2xl text-xs sm:text-sm font-semibold text-[#000181] placeholder:text-[#53536A] focus:outline-none focus:ring-2 focus:ring-[#006EE9]/20 transition shadow-inner"
             />
             {searchQuery && (
               <button
@@ -979,7 +978,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                   setSearchQuery('');
                   setIsSearchDropdownOpen(false);
                 }}
-                className="absolute right-3.5 p-1 text-[#756871] hover:text-[#211A22] rounded-full cursor-pointer"
+                className="absolute right-3.5 p-1 text-[#53536A] hover:text-[#000181] rounded-full cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -988,12 +987,12 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
           {/* Grouped Search Results Dropdown */}
           {isSearchDropdownOpen && groupedSearchResults && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-[#FFFCF8] rounded-2xl shadow-2xl border border-[#EADFE4] z-50 overflow-hidden divide-y divide-[#EADFE4]/60 max-h-96 overflow-y-auto animate-fade-in text-xs">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E6E6EE] z-50 overflow-hidden divide-y divide-[#E6E6EE]/60 max-h-96 overflow-y-auto animate-fade-in text-xs">
               {/* Group: KHU VỰC */}
               {groupedSearchResults.areas.length > 0 && (
                 <div className="p-3">
-                  <div className="text-[10px] font-black uppercase text-[#756871] tracking-wider mb-1.5 flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#68415F]" />
+                  <div className="text-[10px] font-black uppercase text-[#53536A] tracking-wider mb-1.5 flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#006EE9]" />
                     <span>KHU VỰC</span>
                   </div>
                   {groupedSearchResults.areas.map((ar) => (
@@ -1003,10 +1002,10 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                         handleSelectArea(ar.id);
                         setIsSearchDropdownOpen(false);
                       }}
-                      className="p-2 rounded-xl hover:bg-[#F2E8F0] cursor-pointer font-bold text-[#211A22] flex items-center justify-between"
+                      className="p-2 rounded-xl hover:bg-[#EFFBFF] cursor-pointer font-bold text-[#000181] flex items-center justify-between"
                     >
                       <span>{ar.name}</span>
-                      <span className="text-[10px] text-[#68415F] font-semibold">Xem trên bản đồ &rarr;</span>
+                      <span className="text-[10px] text-[#006EE9] font-semibold">Xem trên bản đồ &rarr;</span>
                     </div>
                   ))}
                 </div>
@@ -1015,7 +1014,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               {/* Group: PHÒNG GOM */}
               {groupedSearchResults.rooms.length > 0 && (
                 <div className="p-3">
-                  <div className="text-[10px] font-black uppercase text-[#756871] tracking-wider mb-1.5 flex items-center gap-1">
+                  <div className="text-[10px] font-black uppercase text-[#53536A] tracking-wider mb-1.5 flex items-center gap-1">
                     <Package className="w-3.5 h-3.5 text-[#A15C78]" />
                     <span>PHÒNG GOM</span>
                   </div>
@@ -1033,13 +1032,13 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                         }
                         setIsSearchDropdownOpen(false);
                       }}
-                      className="p-2 rounded-xl hover:bg-[#F2E8F0] cursor-pointer flex items-center justify-between"
+                      className="p-2 rounded-xl hover:bg-[#EFFBFF] cursor-pointer flex items-center justify-between"
                     >
                       <div>
-                        <div className="font-bold text-[#211A22]">{rm.emoji} {rm.productName}</div>
-                        <div className="text-[11px] text-[#756871]">Điểm: {rm.pickupPoint} • {rm.formattedDistance}</div>
+                        <div className="font-bold text-[#000181]">{rm.emoji} {rm.productName}</div>
+                        <div className="text-[11px] text-[#53536A]">Điểm: {rm.pickupPoint} • {rm.formattedDistance}</div>
                       </div>
-                      <span className="font-black text-[#68415F]">{formatVND(rm.finalPrice || rm.initialPrice)}</span>
+                      <span className="font-black text-[#006EE9]">{formatVND(rm.finalPrice || rm.initialPrice)}</span>
                     </div>
                   ))}
                 </div>
@@ -1048,7 +1047,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               {/* Group: ĐIỂM NHẬN */}
               {groupedSearchResults.points.length > 0 && (
                 <div className="p-3">
-                  <div className="text-[10px] font-black uppercase text-[#756871] tracking-wider mb-1.5 flex items-center gap-1">
+                  <div className="text-[10px] font-black uppercase text-[#53536A] tracking-wider mb-1.5 flex items-center gap-1">
                     <Building2 className="w-3.5 h-3.5 text-[#E58E72]" />
                     <span>ĐIỂM NHẬN HÀNG</span>
                   </div>
@@ -1066,13 +1065,13 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                         }
                         setIsSearchDropdownOpen(false);
                       }}
-                      className="p-2 rounded-xl hover:bg-[#FFF8F1] cursor-pointer flex items-center justify-between"
+                      className="p-2 rounded-xl hover:bg-[#FCFCF7] cursor-pointer flex items-center justify-between"
                     >
                       <div>
-                        <div className="font-bold text-[#211A22]">{pt.name}</div>
-                        <div className="text-[11px] text-[#756871] line-clamp-1">{pt.address} • {pt.formattedDistance}</div>
+                        <div className="font-bold text-[#000181]">{pt.name}</div>
+                        <div className="text-[11px] text-[#53536A] line-clamp-1">{pt.address} • {pt.formattedDistance}</div>
                       </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#F2E8F0] text-[#68415F]">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#EFFBFF] text-[#006EE9]">
                         {pt.type.toUpperCase()}
                       </span>
                     </div>
@@ -1083,7 +1082,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               {/* Group: NHÀ CUNG CẤP */}
               {groupedSearchResults.suppliers.length > 0 && (
                 <div className="p-3">
-                  <div className="text-[10px] font-black uppercase text-[#756871] tracking-wider mb-1.5 flex items-center gap-1">
+                  <div className="text-[10px] font-black uppercase text-[#53536A] tracking-wider mb-1.5 flex items-center gap-1">
                     <Store className="w-3.5 h-3.5 text-[#C58B52]" />
                     <span>NHÀ CUNG CẤP</span>
                   </div>
@@ -1094,7 +1093,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                         setSearchQuery(sup);
                         setIsSearchDropdownOpen(false);
                       }}
-                      className="p-2 rounded-xl hover:bg-[#FFF8F1] cursor-pointer font-bold text-[#211A22] flex items-center justify-between"
+                      className="p-2 rounded-xl hover:bg-[#FCFCF7] cursor-pointer font-bold text-[#000181] flex items-center justify-between"
                     >
                       <span>{sup}</span>
                       <span className="text-[10px] text-[#C58B52] font-semibold">Lọc phòng gom &rarr;</span>
@@ -1111,15 +1110,15 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
           <div
             className={`p-3 rounded-2xl text-xs font-semibold flex items-center justify-between ${
               locationPermissionStatus === 'granted'
-                ? 'bg-[#F2E8F0] text-[#68415F] border border-[#D8CDD3]'
+                ? 'bg-[#EFFBFF] text-[#006EE9] border border-[#E6E6EE]'
                 : 'bg-amber-50 text-amber-900 border border-amber-200'
             }`}
           >
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#68415F] shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#006EE9] shrink-0" />
               <span>{locationNotice}</span>
             </div>
-            <button onClick={() => setLocationNotice(null)} className="text-[#756871] hover:text-[#211A22] cursor-pointer">
+            <button onClick={() => setLocationNotice(null)} className="text-[#53536A] hover:text-[#000181] cursor-pointer">
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -1160,20 +1159,20 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         {/* LEFT COLUMN: FILTERS & ROOM RESULT CARDS (380px width) */}
         <div className="w-full lg:w-[380px] shrink-0 space-y-4">
           {/* Filter Panel */}
-          <div className="bg-[#FFFCF8] rounded-3xl border border-[#EADFE4] p-5 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-[#EADFE4]/80 pb-3">
-              <h3 className="text-xs font-black uppercase tracking-wider text-[#211A22] flex items-center gap-1.5">
-                <Filter className="w-4 h-4 text-[#68415F]" />
+          <div className="bg-[#FFFFFF] rounded-3xl border border-[#E6E6EE] p-5 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E6E6EE]/80 pb-3">
+              <h3 className="text-xs font-black uppercase tracking-wider text-[#000181] flex items-center gap-1.5">
+                <Filter className="w-4 h-4 text-[#006EE9]" />
                 <span>BỘ LỌC FLASHMAP</span>
               </h3>
-              <span className="text-xs font-bold text-[#68415F] bg-[#F2E8F0] px-2.5 py-0.5 rounded-full border border-[#D8CDD3]">
+              <span className="text-xs font-bold text-[#006EE9] bg-[#EFFBFF] px-2.5 py-0.5 rounded-full border border-[#E6E6EE]">
                 {filteredRooms.length} phòng • {filteredPoints.length} điểm
               </span>
             </div>
 
             {/* City Selector */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-bold uppercase text-[#756871] tracking-wider">
+              <label className="text-[11px] font-bold uppercase text-[#53536A] tracking-wider">
                 THÀNH PHỐ
               </label>
               <div className="grid grid-cols-3 gap-1.5">
@@ -1193,9 +1192,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                       }
                     }}
                     className={`py-2 px-2.5 rounded-xl text-xs font-bold border transition text-center cursor-pointer ${
-                      selectedCity === c.id
-                        ? 'bg-[#68415F] text-white border-[#68415F] shadow-sm'
-                        : 'bg-[#FFFCF8] text-[#352B32] hover:bg-[#FFF8F1] border-[#EADFE4]'
+                      selectedCity === c.id ? 'bg-[#D0FFA4] text-[#000181] border-[#000181] shadow-xs font-black' : 'bg-white text-[#000181] hover:bg-[#EFFBFF] border-[#E6E6EE]'
                     }`}
                   >
                     {c.name}
@@ -1206,7 +1203,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
             {/* Sub-areas Chips */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-bold uppercase text-[#756871] tracking-wider">
+              <label className="text-[11px] font-bold uppercase text-[#53536A] tracking-wider">
                 KHU VỰC CHI TIẾT
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -1215,9 +1212,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                     key={ar.id}
                     onClick={() => handleSelectArea(ar.id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${
-                      selectedArea === ar.id
-                        ? 'bg-[#F2E8F0] text-[#68415F] border-[#D8BCCB] shadow-xs'
-                        : 'bg-[#FFFCF8] text-[#352B32] hover:bg-[#FFF8F1] border-[#EADFE4]'
+                      selectedArea === ar.id ? 'bg-[#D0FFA4] text-[#000181] border-[#000181] shadow-xs font-black' : 'bg-white text-[#000181] hover:bg-[#EFFBFF] border-[#E6E6EE]'
                     }`}
                   >
                     {ar.name}
@@ -1228,10 +1223,10 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
             {/* Pin Type Filters */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-bold uppercase text-[#756871] tracking-wider">
+              <label className="text-[11px] font-bold uppercase text-[#53536A] tracking-wider">
                 LOẠI GHIM HIỂN THỊ
               </label>
-              <div className="grid grid-cols-3 gap-1 bg-[#F2E8F0]/70 p-1 rounded-xl">
+              <div className="grid grid-cols-3 gap-1 bg-[#EFFBFF]/70 p-1 rounded-xl">
                 {[
                   { id: 'all', label: 'Tất cả' },
                   { id: 'rooms', label: '🛒 Phòng gom' },
@@ -1241,9 +1236,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                     key={t.id}
                     onClick={() => setPinTypeFilter(t.id as any)}
                     className={`py-1.5 rounded-lg text-[11px] font-bold transition cursor-pointer text-center ${
-                      pinTypeFilter === t.id
-                        ? 'bg-[#FFFCF8] text-[#68415F] shadow-xs'
-                        : 'text-[#756871] hover:text-[#211A22]'
+                      pinTypeFilter === t.id ? 'bg-[#D0FFA4] text-[#000181] shadow-xs font-black' : 'text-[#53536A] hover:text-[#000181]'
                     }`}
                   >
                     {t.label}
@@ -1254,7 +1247,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
             {/* Search Radius Options */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-bold uppercase text-[#756871] tracking-wider">
+              <label className="text-[11px] font-bold uppercase text-[#53536A] tracking-wider">
                 BÁN KÍNH TÌM KIẾM
               </label>
               <div className="grid grid-cols-5 gap-1">
@@ -1269,9 +1262,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                     key={r.val}
                     onClick={() => setSelectedRadius(r.val)}
                     className={`py-1.5 rounded-xl text-[10px] font-bold border transition text-center cursor-pointer ${
-                      selectedRadius === r.val
-                        ? 'bg-[#68415F] text-white border-[#68415F] shadow-xs'
-                        : 'bg-[#FFFCF8] text-[#756871] hover:bg-[#FFF8F1] border-[#EADFE4]'
+                      selectedRadius === r.val ? 'bg-[#D0FFA4] text-[#000181] border-[#000181] shadow-xs font-black' : 'bg-white text-[#53536A] hover:bg-[#EFFBFF] border-[#E6E6EE]'
                     }`}
                   >
                     {r.label}
@@ -1282,13 +1273,13 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
             {/* Pickup Point Categories */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-bold uppercase text-[#756871] tracking-wider">
+              <label className="text-[11px] font-bold uppercase text-[#53536A] tracking-wider">
                 LOẠI ĐIỂM NHẬN
               </label>
               <select
                 value={selectedPickupType}
                 onChange={(e) => setSelectedPickupType(e.target.value)}
-                className="w-full px-3 py-2 bg-[#FFF8F1] border border-[#EADFE4] rounded-xl text-xs font-bold text-[#211A22] focus:outline-none focus:border-[#68415F]"
+                className="w-full px-3 py-2 bg-[#FCFCF7] border border-[#E6E6EE] rounded-xl text-xs font-bold text-[#000181] focus:outline-none focus:border-[#006EE9]"
               >
                 <option value="all">Tất cả loại điểm nhận</option>
                 <option value="locker">SMART LOCKER (Tự động 24/7)</option>
@@ -1302,16 +1293,16 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             </div>
 
             {/* Special Opportunity Toggle */}
-            <div className="pt-2 border-t border-[#EADFE4]/80">
+            <div className="pt-2 border-t border-[#E6E6EE]/80">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={nearTargetTierOnly}
                   onChange={(e) => setNearTargetTierOnly(e.target.checked)}
-                  className="w-4 h-4 rounded text-[#68415F] focus:ring-[#68415F] border-[#EADFE4]"
+                  className="w-4 h-4 rounded text-[#006EE9] focus:ring-[#006EE9] border-[#E6E6EE]"
                 />
-                <span className="text-xs font-bold text-[#352B32] flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-[#E8957B]" />
+                <span className="text-xs font-bold text-[#000181] flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-[#006EE9]" />
                   Chỉ hiện phòng sắp đạt mốc giá rẻ tiếp theo
                 </span>
               </label>
@@ -1320,12 +1311,12 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
           {/* List of Result Cards */}
           <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
-            <div className="text-[11px] font-black uppercase text-[#756871] tracking-wider flex items-center justify-between">
+            <div className="text-[11px] font-black uppercase text-[#53536A] tracking-wider flex items-center justify-between">
               <span>DANH SÁCH PHÒNG GOM GẦN ĐÂY</span>
               <span>{filteredRooms.length} phòng</span>
             </div>
             {filteredRooms.length === 0 ? (
-              <div className="bg-[#FFFCF8] rounded-2xl p-6 text-center text-xs text-[#756871] border border-[#EADFE4]">
+              <div className="bg-[#FFFFFF] rounded-2xl p-6 text-center text-xs text-[#53536A] border border-[#E6E6EE]">
                 Không có phòng gom nào phù hợp với bộ lọc trong bán kính đã chọn
               </div>
             ) : (
@@ -1347,46 +1338,44 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                         });
                       }
                     }}
-                    className={`bg-[#FFFCF8] rounded-2xl p-4 border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md ${
-                      isSelected
-                        ? 'border-[#68415F] ring-2 ring-[#68415F]/20 bg-[#F2E8F0]/30'
-                        : 'border-[#EADFE4] hover:border-[#D8CDD3]'
+                    className={`bg-[#FFFFFF] rounded-2xl p-4 border transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md ${
+                      isSelected ? 'border-[#83E7FF] ring-2 ring-[#006EE9]/30 bg-[#EAF7FF]' : 'border-[#E6E6EE] hover:border-[#83E7FF] bg-white'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-[#756871] block">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-[#53536A] block">
                           {r.supplierName} • DEMO
                         </span>
-                        <h4 className="font-black text-sm text-[#211A22] mt-0.5">
+                        <h4 className="font-black text-sm text-[#000181] mt-0.5">
                           {r.emoji} {r.productName.toUpperCase()}
                         </h4>
                       </div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F2E8F0] text-[#68415F]">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#EFFBFF] text-[#006EE9]">
                         {r.totalQuantity}/{r.maxQuantity}
                       </span>
                     </div>
 
                     <div className="flex items-baseline gap-2 mt-2">
-                      <span className="text-base font-black text-[#3A2438]">
+                      <span className="text-base font-black text-[#000181]">
                         {formatVND(currentPrice)}
                       </span>
-                      <span className="text-xs text-[#756871] line-through">
+                      <span className="text-xs text-[#53536A] line-through">
                         {formatVND(r.initialPrice)}
                       </span>
                       {nextTier && (
-                        <span className="text-[10px] font-bold text-[#E8957B] bg-[#FFF8F1] px-1.5 py-0.5 rounded border border-[#EADFE4] ml-auto">
+                        <span className="text-[10px] font-bold text-[#006EE9] bg-[#FCFCF7] px-1.5 py-0.5 rounded border border-[#E6E6EE] ml-auto">
                           Còn {nextTier.requiredQuantity} sp để giảm tiếp
                         </span>
                       )}
                     </div>
 
-                    <div className="mt-3 pt-2.5 border-t border-[#EADFE4]/80 flex items-center justify-between text-xs text-[#756871]">
+                    <div className="mt-3 pt-2.5 border-t border-[#E6E6EE]/80 flex items-center justify-between text-xs text-[#53536A]">
                       <div className="flex items-center gap-1.5 truncate">
-                        <MapPin className="w-3.5 h-3.5 text-[#68415F] shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-[#006EE9] shrink-0" />
                         <span className="truncate">{r.pickupPoint}</span>
                       </div>
-                      <span className="font-bold text-[#352B32] shrink-0 ml-2">
+                      <span className="font-bold text-[#000181] shrink-0 ml-2">
                         📏 {r.formattedDistance}
                       </span>
                     </div>
@@ -1397,7 +1386,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                           e.stopPropagation();
                           onSelectRoom(r.id);
                         }}
-                        className="w-full py-2 rounded-xl bg-gradient-to-r from-[#68415F] to-[#C77C86] hover:from-[#3A2438] hover:to-[#68415F] text-white font-extrabold text-xs shadow-sm text-center block transition cursor-pointer"
+                        className="w-full py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-extrabold text-xs shadow-sm text-center block transition cursor-pointer"
                       >
                         XEM PHÒNG
                       </button>
@@ -1406,7 +1395,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                         target="_blank"
                         rel="noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full py-2 rounded-xl bg-[#FFF8F1] hover:bg-[#F2E8F0] text-[#68415F] border border-[#EADFE4] font-extrabold text-xs text-center flex items-center justify-center gap-1 transition cursor-pointer"
+                        className="w-full py-2 rounded-xl bg-white hover:bg-[#EFFBFF] text-[#000181] border border-[#000181] font-extrabold text-xs text-center flex items-center justify-center gap-1 transition cursor-pointer"
                       >
                         <Navigation className="w-3.5 h-3.5" />
                         <span>CHỈ ĐƯỜNG</span>
@@ -1422,14 +1411,14 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         {/* RIGHT COLUMN: LARGE INTERACTIVE STREET MAP CONTAINER (REAL DIMENSIONS) */}
         <div className="w-full lg:flex-1 min-w-0 space-y-4">
           <div
-            className="flashmap-container rounded-3xl overflow-hidden shadow-xl border border-[#EADFE4]"
+            className="flashmap-container rounded-3xl overflow-hidden shadow-xl border border-[#E6E6EE]"
             style={{ width: '100%', minHeight: '650px', height: 'calc(100vh - 140px)' }}
           >
             {/* Loading Indicator */}
             {(!isMapLoaded || isLoadingVectorStyle) && !hasMapError && (
-              <div className="absolute inset-0 z-20 bg-[#FFF8F1]/80 backdrop-blur-xs flex flex-col items-center justify-center space-y-3">
-                <div className="w-10 h-10 border-4 border-[#68415F] border-t-transparent rounded-full animate-spin"></div>
-                <span className="text-xs font-bold text-[#68415F] uppercase tracking-wider">
+              <div className="absolute inset-0 z-20 bg-[#FCFCF7]/80 backdrop-blur-xs flex flex-col items-center justify-center space-y-3">
+                <div className="w-10 h-10 border-4 border-[#006EE9] border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-xs font-bold text-[#006EE9] uppercase tracking-wider">
                   Đang tải bản đồ đường phố vector FlashGroup...
                 </span>
               </div>
@@ -1437,16 +1426,16 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
             {/* Error Fallback (Req 2: Clear configuration / network error) */}
             {hasMapError && (
-              <div className="absolute inset-0 z-30 bg-[#FFFCF8]/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
-                <AlertCircle className="w-12 h-12 text-[#E8957B] mb-3" />
-                <h3 className="text-lg font-black text-[#211A22] uppercase tracking-wide">
+              <div className="absolute inset-0 z-30 bg-[#FFFFFF]/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                <AlertCircle className="w-12 h-12 text-[#006EE9] mb-3" />
+                <h3 className="text-lg font-black text-[#000181] uppercase tracking-wide">
                   KHÔNG THỂ TẢI BẢN ĐỒ VECTOR
                 </h3>
-                <p className="text-xs text-[#756871] max-w-md mt-1 mb-2 leading-relaxed">
+                <p className="text-xs text-[#53536A] max-w-md mt-1 mb-2 leading-relaxed">
                   {vectorStyleError || 'Đã xảy ra sự cố kết nối máy chủ bản đồ vector. Danh sách phòng gom và điểm nhận vẫn hoạt động bình thường.'}
                 </p>
                 {!getMapApiKey() && (
-                  <p className="text-[11px] text-[#68415F] max-w-md mb-4 bg-[#F2E8F0] p-2.5 rounded-xl border border-[#D8CDD3] leading-relaxed">
+                  <p className="text-[11px] text-[#006EE9] max-w-md mb-4 bg-[#EFFBFF] p-2.5 rounded-xl border border-[#E6E6EE] leading-relaxed">
                     💡 Cấu hình: Nếu bạn sử dụng MapTiler hoặc nhà cung cấp vector cần khóa truy cập, vui lòng thiết lập biến môi trường <code>VITE_MAP_API_KEY</code> trong <code>.env</code>.
                   </p>
                 )}
@@ -1455,7 +1444,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                     setHasMapError(false);
                     setActiveStylePreset('streets');
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#68415F] to-[#C77C86] hover:from-[#3A2438] hover:to-[#68415F] text-white font-black text-xs shadow-md transition active:scale-95 cursor-pointer flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs shadow-md transition active:scale-95 cursor-pointer flex items-center gap-2"
                 >
                   <RefreshCw className="w-4 h-4" />
                   <span>THỬ LẠI</span>
@@ -1470,7 +1459,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             />
 
             {/* Floating Map Style Selector (BẢN ĐỒ / TỐI GIẢN / VỆ TINH) */}
-            <div className="absolute top-4 left-4 z-10 flex items-center bg-[#FFFCF8]/95 backdrop-blur-md p-1 rounded-2xl shadow-lg border border-[#EADFE4]">
+            <div className="absolute top-4 left-4 z-10 flex items-center bg-[#FFFFFF]/95 backdrop-blur-md p-1 rounded-2xl shadow-lg border border-[#E6E6EE]">
               {availableStylePresets.map((preset) => {
                 const isActive = activeStylePreset === preset.id;
                 return (
@@ -1480,8 +1469,8 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                     onClick={() => setActiveStylePreset(preset.id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 ${
                       isActive
-                        ? 'bg-[#68415F] text-white shadow-xs'
-                        : 'text-[#756871] hover:text-[#211A22] hover:bg-[#F2E8F0]'
+                        ? 'bg-[#006EE9] text-white shadow-xs'
+                        : 'text-[#53536A] hover:text-[#000181] hover:bg-[#EFFBFF]'
                     }`}
                     title={preset.description}
                   >
@@ -1497,58 +1486,58 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               <button
                 onClick={() => mapInstanceRef.current?.zoomIn()}
                 title="Phóng to (+)"
-                className="w-10 h-10 rounded-xl bg-[#FFFCF8]/95 hover:bg-white text-[#352B32] hover:text-[#68415F] shadow-lg border border-[#EADFE4] flex items-center justify-center transition cursor-pointer"
+                className="w-10 h-10 rounded-xl bg-[#FFFFFF]/95 hover:bg-white text-[#000181] hover:text-[#006EE9] shadow-lg border border-[#E6E6EE] flex items-center justify-center transition cursor-pointer"
               >
                 <Plus className="w-5 h-5" />
               </button>
               <button
                 onClick={() => mapInstanceRef.current?.zoomOut()}
                 title="Thu nhỏ (-)"
-                className="w-10 h-10 rounded-xl bg-[#FFFCF8]/95 hover:bg-white text-[#352B32] hover:text-[#68415F] shadow-lg border border-[#EADFE4] flex items-center justify-center transition cursor-pointer"
+                className="w-10 h-10 rounded-xl bg-[#FFFFFF]/95 hover:bg-white text-[#000181] hover:text-[#006EE9] shadow-lg border border-[#E6E6EE] flex items-center justify-center transition cursor-pointer"
               >
                 <Minus className="w-5 h-5" />
               </button>
               <button
                 onClick={handleRequestUserLocation}
                 title="Vị trí của tôi"
-                className="w-10 h-10 rounded-xl bg-[#FFFCF8]/95 hover:bg-white text-[#352B32] hover:text-[#68415F] shadow-lg border border-[#EADFE4] flex items-center justify-center transition cursor-pointer"
+                className="w-10 h-10 rounded-xl bg-[#FFFFFF]/95 hover:bg-white text-[#000181] hover:text-[#006EE9] shadow-lg border border-[#E6E6EE] flex items-center justify-center transition cursor-pointer"
               >
                 <LocateFixed className="w-5 h-5" />
               </button>
             </div>
 
             {/* Map Legend */}
-            <div className="absolute bottom-4 left-4 z-10 bg-[#FFFCF8]/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-[#EADFE4] text-[11px] font-bold text-[#352B32] space-y-2 pointer-events-auto max-w-xs">
-              <div className="text-[10px] font-black uppercase tracking-wider text-[#756871]">
+            <div className="absolute bottom-4 left-4 z-10 bg-[#FFFFFF]/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-[#E6E6EE] text-[11px] font-bold text-[#000181] space-y-2 pointer-events-auto max-w-xs">
+              <div className="text-[10px] font-black uppercase tracking-wider text-[#53536A]">
                 CHÚ THÍCH BẢN ĐỒ ĐƯỜNG PHỐ
               </div>
               <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-[#7C6FE6] border border-white shrink-0"></div>
+                  <div className="w-3 h-3 rounded-full bg-[#006EE9] border border-white shrink-0"></div>
                   <span>Vị trí của bạn</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-md bg-[#A15C78] border border-white shrink-0"></div>
+                  <div className="w-3 h-3 rounded-md bg-[#E8A0FF] border border-white shrink-0"></div>
                   <span>Phòng gom</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-md bg-[#E58E72] border border-white shrink-0"></div>
+                  <div className="w-3 h-3 rounded-md bg-[#83E7FF] border border-white shrink-0"></div>
                   <span>Điểm nhận</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-md bg-[#C58B52] border border-white shrink-0"></div>
+                  <div className="w-3 h-3 rounded-md bg-[#D0FFA4] border border-white shrink-0"></div>
                   <span>Nhà cung cấp</span>
                 </div>
               </div>
             </div>
 
             {/* Legal Attribution (Requirement 9) */}
-            <div className="absolute bottom-2 right-4 z-10 text-[10px] text-[#756871] bg-[#FFFCF8]/90 px-2 py-0.5 rounded backdrop-blur-xs pointer-events-auto border border-[#EADFE4]">
+            <div className="absolute bottom-2 right-4 z-10 text-[10px] text-[#53536A] bg-[#FFFFFF]/90 px-2 py-0.5 rounded backdrop-blur-xs pointer-events-auto border border-[#E6E6EE]">
               © <a
                 href="https://www.openstreetmap.org/copyright"
                 target="_blank"
                 rel="noreferrer"
-                className="underline hover:text-[#211A22]"
+                className="underline hover:text-[#000181]"
               >
                 OpenStreetMap
               </a> contributors
@@ -1558,7 +1547,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             <div className="lg:hidden absolute bottom-4 right-4 z-10">
               <button
                 onClick={() => setIsMobileSheetOpen((prev) => !prev)}
-                className="px-4 py-2.5 rounded-2xl bg-[#211A22] text-white font-bold text-xs shadow-xl flex items-center gap-2 cursor-pointer active:scale-95"
+                className="px-4 py-2.5 rounded-2xl bg-[#000181] text-white font-bold text-xs shadow-xl flex items-center gap-2 cursor-pointer active:scale-95"
               >
                 <span>{filteredRooms.length} PHÒNG GOM</span>
                 <ChevronUp

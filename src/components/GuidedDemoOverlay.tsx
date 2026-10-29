@@ -58,72 +58,72 @@ export const GUIDED_DEMO_STEPS: GuidedStep[] = [
     title: 'THAM GIA 1 SẢN PHẨM',
     targetRole: 'buyer',
     badge: 'BƯỚC 4 / 11 • BUYER',
-    instruction: 'Nhấn nút "Tham gia phòng gom", chọn số lượng 1 hộp và xác nhận.',
+    instruction: 'Nhấn nút "THAM GIA PHÒNG GOM", chọn số lượng 1 hộp và bấm Xác nhận.',
     explanation:
-      'Lượt tham gia thứ 20 của bạn là mảnh ghép quyết định để đưa cả nhóm vượt ngưỡng bậc giá tối ưu nhất của nhà cung cấp.',
+      'Hành động này đẩy tổng số lượng lên 20 hộp, vừa đủ kích hoạt nấc giảm giá sâu nhất.',
   },
   {
     stepNumber: 5,
-    title: 'MỞ KHÓA MỨC GIÁ 89.000đ',
+    title: 'GIÁ GIẢM XUỐNG 89.000đ',
     targetRole: 'buyer',
     badge: 'BƯỚC 5 / 11 • BUYER',
-    instruction: 'Quan sát phòng gom đạt 20 / 20 thành viên và kích hoạt bảng thông báo MỞ KHÓA MỨC GIÁ 89.000đ!',
+    instruction: 'Chứng kiến phòng đạt 20/20 và giá toàn nhóm lập tức hạ xuống 89.000đ.',
     explanation:
-      'Toàn bộ 20 người tham gia đều được hưởng giá 89.000đ/hộp (tiết kiệm thêm 10.000đ/hộp). Mô hình Mua gom siêu cục bộ phát huy tối đa lợi ích nhóm.',
+      'Cơ chế Dynamic Price Tier được áp dụng cho toàn bộ người trong phòng, người vào trước cũng được hưởng mức giá 89.000đ khi chốt phòng.',
   },
   {
     stepNumber: 6,
-    title: 'ĐẾN TRANG THANH TOÁN (CHECKOUT)',
+    title: 'RÀ SOÁT HỢP ĐỒNG & THANH TOÁN',
     targetRole: 'buyer',
     badge: 'BƯỚC 6 / 11 • BUYER',
-    instruction: 'Nhấn nút "Đến thanh toán" để xác lập hợp đồng giao dịch điện tử từ xa.',
+    instruction: 'Xem màn hình Checkout, tích chọn đồng ý điều khoản giao dịch từ xa và bấm Đặt hàng.',
     explanation:
-      'Hệ thống hiển thị minh bạch hồ sơ giao kết: thông tin pháp lý nhà cung cấp, xuất xứ, địa chỉ điểm nhận Locker, chính sách bảo hành và đổi trả.',
+      'Tổng tiền 1 suất: 89.000đ + 3.000đ ship chia sẻ = 92.000đ. Phí nền tảng 7% không thu trên tiền ship.',
   },
   {
     stepNumber: 7,
-    title: 'XÁC NHẬN THANH TOÁN MÔ PHỎNG',
+    title: 'THEO DÕI GIAO HÀNG CHUNG & MÃ LOCKER',
     targetRole: 'buyer',
     badge: 'BƯỚC 7 / 11 • BUYER',
-    instruction: 'Tích chọn xác nhận điều khoản giao dịch từ xa và nhấn "Tôi xác nhận đặt hàng".',
+    instruction: 'Xem đơn hàng với mã nhận hàng 6 ký tự và timeline theo dõi chuyển hàng về Locker.',
     explanation:
-      'Thanh toán mô phỏng an toàn (không trừ tiền thật), tự động tạo bản lưu Snapshot hợp đồng giao dịch bất biến theo Nghị định 55/2024/NĐ-CP.',
+      'Nhận hàng không tiếp xúc tại Smart Locker KTX Khu A với mã PIN bí mật và mã QR tiện lợi.',
   },
   {
     stepNumber: 8,
-    title: 'THEO DÕI LOGISTICS LÔ HÀNG',
-    targetRole: 'buyer',
-    badge: 'BƯỚC 8 / 11 • BUYER',
-    instruction: 'Tại tab "Đơn Hàng", xem tiến trình vận chuyển lô gom chung về điểm nhận.',
+    title: 'CHUYỂN SANG VAI TRÒ NHÀ CUNG CẤP',
+    targetRole: 'supplier',
+    badge: 'BƯỚC 8 / 11 • SUPPLIER',
+    instruction: 'Trên thanh Presenter Panel bên dưới, nhấn chuyển sang vai trò "NCC".',
     explanation:
-      'Nhà cung cấp gom 20 sản phẩm vào 1 kiện hàng duy nhất gửi về điểm Smart Locker, giảm 90% lượng phương tiện giao hàng rời rạc trong đô thị.',
+      'Giao diện nhà cung cấp cho phép kiểm tra đơn hàng theo lô, chuẩn bị hàng và theo dõi doanh thu đối soát.',
   },
   {
     stepNumber: 9,
-    title: 'MÃ NHẬN HÀNG LOCKER BẢO MẬT',
-    targetRole: 'buyer',
-    badge: 'BƯỚC 9 / 11 • BUYER',
-    instruction: 'Xem mã QR nhận hàng độc bản của bạn để quét mở ngăn tủ Smart Locker.',
+    title: 'KIỂM TRA TÀI CHÍNH NHÀ CUNG CẤP',
+    targetRole: 'supplier',
+    badge: 'BƯỚC 9 / 11 • SUPPLIER',
+    instruction: 'Vào mục "Doanh thu" kiểm tra số liệu: Doanh thu gộp 1.780.000đ, phí sàn 124.600đ, thực nhận 1.655.400đ.',
     explanation:
-      'Người mua có thể chủ động ghé Locker lấy hàng theo khung giờ rảnh, không bị phụ thuộc vào giờ shipper gọi điện.',
+      'Toán tài chính hoàn toàn nhất quán: 20 × 89.000 = 1.780.000đ; 1.780.000 × 7% = 124.600đ; NCC nhận 1.655.400đ.',
   },
   {
     stepNumber: 10,
-    title: 'DOANH THU NHÀ CUNG CẤP (SUPPLIER)',
-    targetRole: 'supplier',
-    badge: 'BƯỚC 10 / 11 • NCC',
-    instruction: 'Dùng Bảng Trình Bày chuyển sang DEMO NCC để xem báo cáo doanh thu & yêu cầu đối soát.',
+    title: 'CHUYỂN SANG VAI TRÒ QUẢN TRỊ VIÊN',
+    targetRole: 'admin',
+    badge: 'BƯỚC 10 / 11 • ADMIN',
+    instruction: 'Trên thanh Presenter Panel, nhấn chuyển sang "ADMIN".',
     explanation:
-      'Tổng GMV: 1.780.000đ. Hoa hồng nền tảng 7%: 124.600đ. Thực nhận ròng của NCC: 1.655.400đ (Phí ship 60.000đ không tính vào hoa hồng).',
+      'Quản trị viên có toàn quyền kiểm soát sàn, theo dõi đối soát hoa hồng 7% và hồ sơ tuân thủ pháp lý.',
   },
   {
     stepNumber: 11,
-    title: 'TỔNG QUAN QUẢN TRỊ (ADMIN)',
+    title: 'XEM ĐỐI SOÁT & KHIẾU NẠI ADMIN',
     targetRole: 'admin',
     badge: 'BƯỚC 11 / 11 • ADMIN',
-    instruction: 'Chuyển sang DEMO ADMIN để duyệt đối soát, giám sát hợp đồng và kiểm tra tuân thủ.',
+    instruction: 'Vào tab Finance kiểm tra doanh thu sàn 124.600đ và tab Compliance xem hồ sơ pháp lý.',
     explanation:
-      'Admin quản lý toàn diện: duyệt xác minh NCC, đối soát minh bạch, xử lý khiếu nại SLA 3 ngày làm việc và lưu vết sự kiện kiểm toán bất biến.',
+      'Hoàn tất toàn bộ chu trình 3 vai trò: Buyer mua rẻ -> NCC bán sỉ tối ưu -> Admin vận hành minh bạch.',
   },
 ];
 
@@ -132,7 +132,7 @@ interface GuidedDemoOverlayProps {
   onNextStep: () => void;
   onPrevStep: () => void;
   onClose: () => void;
-  onJumpToStep?: (index: number) => void;
+  onJumpToStep?: (idx: number) => void;
 }
 
 export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
@@ -143,22 +143,16 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
   onJumpToStep,
 }) => {
   const step = GUIDED_DEMO_STEPS[currentStepIndex] || GUIDED_DEMO_STEPS[0];
+  const isLast = currentStepIndex >= GUIDED_DEMO_STEPS.length - 1;
   const isFirst = currentStepIndex === 0;
-  const isLast = currentStepIndex === GUIDED_DEMO_STEPS.length - 1;
 
   return (
-    <div
-      aria-live="polite"
-      className="fixed bottom-20 md:bottom-6 left-4 z-50 max-w-md w-full animate-slide-up font-sans"
-    >
-      <div className="bg-[#211A22]/95 backdrop-blur-md text-white rounded-3xl p-5 border-2 border-[#F3B37A] shadow-2xl space-y-3.5 relative overflow-hidden">
-        {/* Top Glow Ribbon */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#F3B37A] via-[#C77C86] to-[#68415F]" />
-
-        {/* Header */}
-        <div className="flex items-start justify-between">
+    <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[92vw] max-w-lg animate-fade-in font-sans">
+      <div className="bg-[#000181] text-white rounded-3xl border-2 border-[#83E7FF] p-5 shadow-2xl backdrop-blur-md space-y-3.5">
+        {/* Top Header */}
+        <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <span className="text-[10px] font-black uppercase text-[#F3B37A] tracking-wider block">
+            <span className="text-[10px] font-black uppercase text-[#83E7FF] tracking-wider block">
               {step.badge}
             </span>
             <h3 className="text-sm font-black text-white leading-tight">{step.title}</h3>
@@ -183,9 +177,9 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
               onClick={() => onJumpToStep && onJumpToStep(idx)}
               className={`h-1.5 rounded-full transition-all cursor-pointer ${
                 idx === currentStepIndex
-                  ? 'w-6 bg-[#F3B37A]'
+                  ? 'w-6 bg-[#D0FFA4]'
                   : idx < currentStepIndex
-                  ? 'w-2 bg-[#68415F]'
+                  ? 'w-2 bg-[#006EE9]'
                   : 'w-2 bg-white/20'
               }`}
               title={`Bước ${s.stepNumber}: ${s.title}`}
@@ -194,8 +188,8 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
         </div>
 
         {/* Instruction Spotlight Box */}
-        <div className="bg-[#3A2438]/80 rounded-2xl p-3 border border-[#F3B37A]/40 space-y-1">
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#F3B37A]">
+        <div className="bg-[#003CCB]/60 rounded-2xl p-3 border border-[#83E7FF]/40 space-y-1">
+          <div className="flex items-center gap-1.5 text-xs font-black text-[#D0FFA4]">
             <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>THAO TÁC CẦN THỰC HIỆN:</span>
           </div>
@@ -203,30 +197,30 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
         </div>
 
         {/* Context / Business Logic Explanation */}
-        <p className="text-[11px] text-[#CBBFC6] leading-relaxed italic">
+        <p className="text-[11px] text-[#C8CBF0] leading-relaxed italic">
           💡 {step.explanation}
         </p>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-1 border-t border-white/10 text-xs">
+        <div className="flex items-center justify-between pt-1 border-t border-white/15 text-xs">
           <button
             type="button"
             onClick={onPrevStep}
             disabled={isFirst}
-            className="px-3 py-1.5 rounded-xl border border-white/20 text-[#FFF8F1] hover:bg-white/10 font-bold flex items-center gap-1 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            className="px-3 py-1.5 rounded-xl border border-white/20 text-white hover:bg-white/10 font-bold flex items-center gap-1 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Trước</span>
           </button>
 
-          <span className="text-[10px] text-[#CBBFC6] font-bold">
+          <span className="text-[10px] text-[#C8CBF0] font-bold">
             {currentStepIndex + 1} / {GUIDED_DEMO_STEPS.length}
           </span>
 
           <button
             type="button"
             onClick={onNextStep}
-            className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#F3B37A] to-[#E8957B] hover:opacity-90 text-[#211A22] font-black flex items-center gap-1 transition shadow-md shadow-[#F3B37A]/20 cursor-pointer active:scale-95"
+            className="px-4 py-1.5 rounded-xl bg-[#D0FFA4] hover:bg-[#83E7FF] text-[#000181] font-black flex items-center gap-1 transition shadow-md shadow-[#D0FFA4]/20 cursor-pointer active:scale-95"
           >
             <span>{isLast ? 'Hoàn thành' : 'Tiếp tục'}</span>
             <ChevronRight className="w-4 h-4" />

@@ -7,56 +7,77 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Warm Premium Visual Identity (PHASE 10 Corrective Refinement)
-        'charcoal': '#211A22',
-        'deep-plum': '#3A2438',
-        'plum': '#68415F',
-        'dusty-rose': '#C77C86',
-        'soft-coral': '#E8957B',
-        'apricot': '#F3B37A',
-        'cream': '#FFF8F1',
-        'warm-white': '#FFFCF8',
-        'soft-lavender': '#F2E8F0',
-        'brand-text': '#352B32',
-        'muted-text': '#756871',
-        'brand-border': '#EADFE4',
+        // FlashGroup Master Color System
+        'fg-night': '#000181',        // Night Skies - Primary Dark / Headings / Footer / Structure
+        'fg-blue': '#006EE9',         // Blue Raspberry - Primary CTA / Interactivity / Links
+        'fg-lime': '#D0FFA4',         // Powdered Lime - Price Unlock / Group Success / Positive Badges
+        'fg-violet': '#E8A0FF',       // Violet - Secondary Accent / Social / Referral / Community
+        'fg-sky': '#83E7FF',          // Sunny Skies - FlashMap / Logistics / Info / Location
+
+        // Neutrals
+        'fg-bg': '#FCFCF7',           // Main Background
+        'fg-bg-soft': '#F6F7FB',      // Secondary Background
+        'fg-surface': '#FFFFFF',      // Card / Surface
+        'fg-text': '#000181',         // Primary Text
+        'fg-text-secondary': '#53536A', // Secondary Text
+        'fg-border': '#E6E6EE',       // Border
+
+        // Section Background Tints
+        'fg-tint-lime': '#F4FFE8',    // Lime Section Tint
+        'fg-tint-violet': '#FAF0FF',  // Violet Section Tint
+        'fg-tint-sky': '#EFFBFF',     // Sky Section Tint
 
         // Map marker semantic tokens
-        'marker-user': '#7C6FE6',
-        'marker-room': '#A15C78',
-        'marker-pickup': '#E58E72',
-        'marker-supplier': '#C58B52',
-        'marker-demand': '#D85E69',
+        'marker-user': '#006EE9',
+        'marker-room': '#E8A0FF',
+        'marker-pickup': '#83E7FF',
+        'marker-supplier': '#D0FFA4',
+        'marker-demand': '#EF4444',
 
-        // Semantic states (Green ONLY for success)
-        'status-success': '#10B981',
+        // Semantic states
+        'status-success': '#D0FFA4',
         'status-warning': '#F59E0B',
         'status-error': '#EF4444',
 
-        // Compatibility mappings
-        'brand-navy': '#211A22',
-        'deep-navy': '#3A2438',
-        'cobalt-blue': '#68415F',
-        'electric-blue': '#C77C86',
-        'brand-cyan': '#E8957B',
-        'brand-indigo': '#68415F',
-        'brand-violet': '#A15C78',
-        'coral-accent': '#E8957B',
-        'warm-bg': '#FFF8F1',
-        'light-bg': '#FFFCF8',
-        'neutral-text': '#352B32',
-        'light-border': '#EADFE4',
+        // Backward compatibility mappings (Seamlessly adapts existing components to new palette)
+        'charcoal': '#000181',
+        'deep-plum': '#000181',
+        'plum': '#006EE9',
+        'dusty-rose': '#E8A0FF',
+        'soft-coral': '#83E7FF',
+        'apricot': '#D0FFA4',
+        'cream': '#FCFCF7',
+        'warm-white': '#FFFFFF',
+        'soft-lavender': '#FAF0FF',
+        'brand-text': '#000181',
+        'muted-text': '#53536A',
+        'brand-border': '#E6E6EE',
+        'brand-navy': '#000181',
+        'deep-navy': '#000181',
+        'cobalt-blue': '#006EE9',
+        'electric-blue': '#83E7FF',
+        'brand-cyan': '#83E7FF',
+        'brand-indigo': '#000181',
+        'brand-violet': '#E8A0FF',
+        'coral-accent': '#83E7FF',
+        'warm-bg': '#FCFCF7',
+        'light-bg': '#F6F7FB',
+        'neutral-text': '#000181',
+        'light-border': '#E6E6EE',
       },
       backgroundImage: {
-        'hero-gradient': 'linear-gradient(135deg, #3A2438 0%, #68415F 45%, #C77C86 75%, #F3B37A 100%)',
-        'cta-gradient': 'linear-gradient(135deg, #68415F 0%, #C77C86 100%)',
-        'plum-gradient': 'linear-gradient(135deg, #3A2438 0%, #68415F 100%)',
-        'coral-gradient': 'linear-gradient(135deg, #E8957B 0%, #F3B37A 100%)',
-        'footer-gradient': 'linear-gradient(135deg, #171116 0%, #211A22 50%, #2C1E29 100%)',
-        'highlight-card-gradient': 'linear-gradient(135deg, #FFF8F1 0%, #F2E8F0 100%)',
-        'warm-card-gradient': 'linear-gradient(135deg, #FFF8F1 0%, #FFF1EC 100%)',
-        'accent-gradient': 'linear-gradient(135deg, #68415F 0%, #C77C86 100%)',
-        'trust-gradient': 'linear-gradient(135deg, #FFFCF8 0%, #F2E8F0 100%)',
+        'hero-gradient': 'linear-gradient(135deg, #000181 0%, #003CCB 40%, #006EE9 70%, #83E7FF 100%)',
+        'cta-gradient': 'linear-gradient(135deg, #006EE9 0%, #000181 100%)',
+        'secondary-gradient': 'linear-gradient(135deg, #E8A0FF 0%, #83E7FF 50%, #D0FFA4 100%)',
+        'lime-gradient': 'linear-gradient(135deg, #D0FFA4 0%, #E9FFD6 100%)',
+        'voucher-gradient': 'linear-gradient(135deg, #E8A0FF 0%, #83E7FF 100%)',
+        'progress-gradient': 'linear-gradient(90deg, #006EE9 0%, #83E7FF 100%)',
+        'progress-almost': 'linear-gradient(90deg, #83E7FF 0%, #D0FFA4 100%)',
+        'footer-gradient': 'linear-gradient(135deg, #000181 0%, #000181 100%)',
+        'highlight-card-gradient': 'linear-gradient(135deg, #FCFCF7 0%, #FAF0FF 100%)',
+        'warm-card-gradient': 'linear-gradient(135deg, #FCFCF7 0%, #EFFBFF 100%)',
+        'accent-gradient': 'linear-gradient(135deg, #E8A0FF 0%, #83E7FF 100%)',
+        'trust-gradient': 'linear-gradient(135deg, #FCFCF7 0%, #F6F7FB 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.25s ease-out',

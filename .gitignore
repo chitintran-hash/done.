@@ -6,4 +6,6 @@ dist
 .DS_Store
 *.log
 *.tsbuildinfo
-.vercel
+flashgroup_complete_bundle.json
+flashgroup_source_code.zip
+restore_flashgroup.cjs

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, Smartphone } from 'lucide-react';
+import { Smartphone } from 'lucide-react';
 
 export const InstallPwaButton: React.FC<{ className?: string }> = ({ className = '' }) => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -42,10 +42,10 @@ export const InstallPwaButton: React.FC<{ className?: string }> = ({ className =
     <button
       type="button"
       onClick={handleInstallClick}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#68415F] hover:bg-[#3A2438] text-white font-black text-xs transition shadow-xs cursor-pointer active:scale-95 ${className}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition shadow-xs cursor-pointer active:scale-95 ${className}`}
       title="Cài đặt ứng dụng FlashGroup lên thiết bị của bạn"
     >
-      <Smartphone className="w-3.5 h-3.5 text-[#E8957B]" />
+      <Smartphone className="w-3.5 h-3.5 text-[#D0FFA4]" />
       <span>CÀI FLASHGROUP</span>
     </button>
   );

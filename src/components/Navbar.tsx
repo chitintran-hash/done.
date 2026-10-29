@@ -30,7 +30,7 @@ import {
 import { InstallPwaButton } from './InstallPwaButton';
 
 interface NavbarProps {
-  currentUser: User;
+  currentUser: User | null;
   currentTab: string;
   onNavigate: (tab: any) => void;
   notifications: Notification[];
@@ -47,6 +47,8 @@ interface NavbarProps {
   ordersCount: number;
   favoritesCount: number;
   onOpenSearch?: () => void;
+  onOpenLogin?: () => void;
+  onOpenRegister?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -67,6 +69,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   ordersCount,
   favoritesCount,
   onOpenSearch,
+  onOpenLogin,
+  onOpenRegister,
 }) => {
   // Dropdown States
   const [isNotifOpen, setIsNotifOpen] = useState<boolean>(false);
@@ -78,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const userMenuRef = useRef<HTMLDivElement>(null);
   const supportMenuRef = useRef<HTMLDivElement>(null);
 
-  const userNotifications = notifications.filter((n) => n.userId === currentUser.id);
+  const userNotifications = currentUser ? notifications.filter((n) => n.userId === currentUser.id) : [];
   const unreadCount = userNotifications.filter((n) => !n.read).length;
   const recentNotifications = [...userNotifications]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -101,11 +105,11 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const roleBadgeConfig = {
+  const roleBadgeConfig = currentUser ? {
     buyer: { label: 'BUYER', bg: 'bg-[#FAF0FF]', text: 'text-[#000181]', border: 'border-[#E8A0FF]' },
     supplier: { label: 'SUPPLIER', bg: 'bg-[#F4FFE8]', text: 'text-[#000181]', border: 'border-[#D0FFA4]' },
     admin: { label: 'ADMIN', bg: 'bg-[#000181]', text: 'text-white', border: 'border-[#000181]' },
-  }[currentUser.role];
+  }[currentUser.role] : { label: 'GUEST', bg: 'bg-[#F6F7FB]', text: 'text-[#53536A]', border: 'border-[#E6E6EE]' };
 
   return (
     <>
@@ -115,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* LEFT: LOGO (FLASH #000181 + GROUP #006EE9 + Spark #D0FFA4) */}
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => onNavigate(currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'overview')}
+              onClick={() => onNavigate(!currentUser || currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'overview')}
               className="flex items-center space-x-3 text-left group shrink-0 cursor-pointer"
             >
               <div className="w-11 h-11 rounded-2xl bg-[#000181] flex items-center justify-center text-[#D0FFA4] shadow-md shadow-[#000181]/20 group-hover:scale-105 transition-transform duration-200">
@@ -134,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* CENTER: DESKTOP CLEAN NAVIGATION (ALL UPPERCASE, FONT 700) */}
           <nav className="hidden lg:flex items-center space-x-2">
-            {currentUser.role === 'buyer' ? (
+            {!currentUser || currentUser.role === 'buyer' ? (
               <>
                 {/* 1. KHÁM PHÁ */}
                 <button
@@ -161,9 +165,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span>FLASHMAP</span>
                 </button>
 
+                {currentUser && (
+                  <>
                 {/* 3. PHÒNG CỦA TÔI */}
                 <button
-                  onClick={() => onNavigate('myrooms')}
+                  onClick={() => currentUser ? onNavigate('myrooms') : onOpenLogin?.()}
                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
                     currentTab === 'myrooms'
                       ? 'bg-[#D0FFA4] text-[#000181]'
@@ -181,7 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {/* 4. ĐƠN HÀNG */}
                 <button
-                  onClick={() => onNavigate('orders')}
+                  onClick={() => currentUser ? onNavigate('orders') : onOpenLogin?.()}
                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
                     currentTab === 'orders'
                       ? 'bg-[#D0FFA4] text-[#000181]'
@@ -197,6 +203,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </button>
 
+                </>
+                )}
                 {/* 5. HỖ TRỢ */}
                 <div className="relative" ref={supportMenuRef}>
                   <button
@@ -366,7 +374,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* PWA Install Button */}
             <InstallPwaButton className="hidden md:inline-flex mr-1" />
 
-            {/* Notification Bell with Badge & Dropdown */}
+            {!currentUser ? (
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={onOpenLogin}
+                  className="px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-[#000181] hover:bg-[#83E7FF] transition cursor-pointer"
+                >
+                  Đăng nhập
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenRegister}
+                  className="px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-[#006EE9] text-white hover:bg-[#000181] shadow-sm transition cursor-pointer"
+                >
+                  Đăng ký
+                </button>
+              </div>
+            ) : (
+              <>
+              {/* Notification Bell with Badge & Dropdown */}
             <div className="relative" ref={notifRef}>
               <button
                 onClick={() => setIsNotifOpen((prev) => !prev)}
@@ -631,6 +658,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
+              </>
+            )}
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMobileDrawerOpen(true)}
@@ -845,7 +874,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* 5. TÀI KHOẢN */}
         <button
-          onClick={() => onNavigate('profile')}
+          onClick={() => currentUser ? onNavigate('profile') : onOpenLogin?.()}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
             currentTab === 'profile' ? 'text-[#006EE9] font-black' : 'text-[#77778A] font-medium'
           }`}

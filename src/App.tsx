@@ -8,6 +8,8 @@ import {
   Share2,
   CheckCircle2,
   Lock,
+  Bell,
+  MessageSquare,
   ArrowRight,
   TrendingDown,
   ShoppingBag,
@@ -262,7 +264,7 @@ export default function FlashGroupApp() {
           if (session?.user) {
             // Fetch full profile via authService
             const user = await authService.getCurrentUser();
-            if (user) setCurrentUser(user);
+            if (user) setAuthenticatedUser(user);
           }
         }
       } catch (e) {
@@ -284,9 +286,41 @@ export default function FlashGroupApp() {
     return safeParseStorage<User[]>('flashgroup_v3_users', createInitialUsers());
   });
 
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    return safeParseStorage<User | null>('flashgroup_v3_current_user', createInitialUsers()[0]);
+  const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(() => {
+    return safeParseStorage<User | null>('flashgroup_v3_auth_user', null);
   });
+
+  const [presentedDemoUser, setPresentedDemoUser] = useState<User | null>(() => {
+    if (typeof window !== 'undefined' && (window.location.search.includes('presentation=true') || window.location.search.includes('demo=true'))) {
+      return createInitialUsers()[0];
+    }
+    return null;
+  });
+
+  // Current active user for view rendering: demo persona override if active, else real authenticated user
+  const currentUser: User | null = presentedDemoUser || authenticatedUser;
+
+  // Presentation permission: Owner Admin (tutrungkien2006@gmail.com with role: admin) or query param
+  const isPresentationAllowed = Boolean(
+    (authenticatedUser && authenticatedUser.role === 'admin') ||
+    (typeof window !== 'undefined' && (window.location.search.includes('presentation=true') || window.location.search.includes('demo=true')))
+  );
+
+  // Auth modal state for public visitor login/register
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [authModalMode, setAuthModalMode] = useState<'login' | 'register' | 'forgot_password'>('login');
+  const [authModalRole, setAuthModalRole] = useState<'buyer' | 'supplier'>('buyer');
+
+  const openLoginModal = () => {
+    setAuthModalMode('login');
+    setIsAuthModalOpen(true);
+  };
+
+  const openRegisterModal = (initialRole: 'buyer' | 'supplier' = 'buyer') => {
+    setAuthModalMode('register');
+    setAuthModalRole(initialRole);
+    setIsAuthModalOpen(true);
+  };
 
   // Suppliers & Products
   const [suppliers, setSuppliers] = useState<Supplier[]>(() => {
@@ -480,9 +514,7 @@ export default function FlashGroupApp() {
   // Phase 12: Presentation, Screenshot & Guided Demo State
   const [isPresentationMode, setIsPresentationMode] = useState<boolean>(() => {
     return (
-      (typeof window !== 'undefined' && window.location.search.includes('presentation=true')) ||
-      import.meta.env.VITE_APP_MODE === 'demo' ||
-      true
+      (typeof window !== 'undefined' && (window.location.search.includes('presentation=true') || window.location.search.includes('demo=true')))
     );
   });
   const [isScreenshotMode, setIsScreenshotMode] = useState<boolean>(false);
@@ -513,12 +545,14 @@ export default function FlashGroupApp() {
   }, [users]);
 
   useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(currentUser));
+    if (authenticatedUser) {
+      localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(authenticatedUser));
+      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(authenticatedUser));
     } else {
+      localStorage.removeItem('flashgroup_v3_auth_user');
       localStorage.removeItem('flashgroup_v3_current_user');
     }
-  }, [currentUser]);
+  }, [authenticatedUser]);
 
   useEffect(() => {
     localStorage.setItem('flashgroup_v3_suppliers', JSON.stringify(suppliers));
@@ -1501,35 +1535,40 @@ export default function FlashGroupApp() {
 
   // Phase 12: Role Switcher for Presenter Demo Mode
   const handleSwitchRole = (targetRole: 'buyer' | 'supplier' | 'admin') => {
-    const targetUser =
-      users.find((u) => u.role === targetRole) ||
-      createInitialUsers().find((u) => u.role === targetRole);
-    if (targetUser) {
-      setCurrentUser(targetUser);
-      setSelectedRoomId(null);
-      setCheckoutRoomId(null);
-      if (targetRole === 'buyer') {
-        setBuyerTab('discovery');
-        navigate('/marketplace');
-      } else if (targetRole === 'supplier') {
-        setSupplierTab('dashboard');
-        navigate('/');
-      } else {
-        setAdminTab('overview');
-        navigate('/');
+    if (targetRole === 'admin') {
+      // Revert persona override so genuine admin authenticated account is active
+      setPresentedDemoUser(null);
+      setAdminTab('overview');
+      navigate('/');
+      showToast('Đã trở lại bảng quản trị Admin của bạn', 'INFO');
+    } else {
+      const demoUser = users.find((u) => u.role === targetRole) || createInitialUsers().find((u) => u.role === targetRole);
+      if (demoUser) {
+        setPresentedDemoUser(demoUser);
+        setSelectedRoomId(null);
+        setCheckoutRoomId(null);
+        if (targetRole === 'buyer') {
+          setBuyerTab('discovery');
+          navigate('/marketplace');
+        } else {
+          setSupplierTab('dashboard');
+          navigate('/');
+        }
+        showToast(`Đã chuyển demo sang ${targetRole.toUpperCase()}: ${demoUser.name}`, 'INFO');
       }
-      showToast(`Đã chuyển sang vai trò ${targetRole.toUpperCase()}: ${targetUser.name}`, 'INFO');
     }
   };
 
   // Reset Demo (Requirements 53 & 54, Phase 12 Idempotent Scenario Reset)
   const handleResetData = (keepCurrentUser: boolean = false) => {
-    const preservedUser = keepCurrentUser ? currentUser : null;
     FLASHGROUP_V3_KEYS.forEach((key) => localStorage.removeItem(key));
     localStorage.removeItem('flashgroup_v3_pending_ref');
     const initialUsersList = createInitialUsers();
     setUsers(initialUsersList);
-    setCurrentUser(preservedUser || (keepCurrentUser ? initialUsersList[0] : null));
+    if (!keepCurrentUser) {
+      setAuthenticatedUser(null);
+      setPresentedDemoUser(null);
+    }
     setSuppliers(createInitialSuppliers());
     setProducts(createInitialProducts());
     setRooms(createInitialRooms());
@@ -1590,7 +1629,9 @@ export default function FlashGroupApp() {
       }
     }
     localStorage.removeItem('flashgroup_v3_current_user');
-    setCurrentUser(null);
+    localStorage.removeItem('flashgroup_v3_auth_user');
+    setAuthenticatedUser(null);
+    setPresentedDemoUser(null);
     setSelectedRoomId(null);
     setCheckoutRoomId(null);
     setBuyerTab('discovery');
@@ -3039,145 +3080,6 @@ export default function FlashGroupApp() {
     );
   }
 
-  if (!currentUser) {
-    return (
-      <AuthModalOrPage
-        isSupabaseMode={isSupabaseConfigured && !useLocalDemoMode}
-        onLogin={async (email: string, password: string, rememberMe: boolean = true) => {
-          if (isSupabaseConfigured && !useLocalDemoMode) {
-            // Supabase auth
-            const result = await authService.signIn(email, password);
-            if (result.error || !result.user) {
-              const rawErr = result.error || '';
-              const friendlyErr = rawErr.toLowerCase().includes('invalid') || rawErr.toLowerCase().includes('credentials')
-                ? 'Email hoặc mật khẩu chưa chính xác.'
-                : rawErr.toLowerCase().includes('network')
-                ? 'Không thể kết nối. Vui lòng kiểm tra mạng và thử lại.'
-                : rawErr || 'Đăng nhập không thành công.';
-              return { success: false, error: friendlyErr };
-            }
-            if (rememberMe) {
-              localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(result.user));
-            } else {
-              localStorage.removeItem('flashgroup_v3_current_user');
-            }
-            setCurrentUser(result.user);
-            if (result.user.role === 'supplier') {
-              setSupplierTab('dashboard');
-              navigate('/');
-            } else if (result.user.role === 'admin') {
-              setAdminTab('overview');
-              navigate('/');
-            } else {
-              setBuyerTab('discovery');
-              navigate('/marketplace');
-            }
-            showToast(`Đăng nhập thành công với vai trò ${result.user.role.toUpperCase()}!`);
-            return { success: true };
-          } else {
-            // Local demo fallback
-            const found = users.find(
-              (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-            );
-            if (!found) {
-              return { success: false, error: 'Email hoặc mật khẩu chưa chính xác.' };
-            }
-            if (rememberMe) {
-              localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(found));
-            } else {
-              localStorage.removeItem('flashgroup_v3_current_user');
-            }
-            setCurrentUser(found);
-            if (found.role === 'supplier') {
-              setSupplierTab('dashboard');
-              navigate('/');
-            } else if (found.role === 'admin') {
-              setAdminTab('overview');
-              navigate('/');
-            } else {
-              setBuyerTab('discovery');
-              navigate('/marketplace');
-            }
-            showToast(`Đăng nhập thành công với vai trò ${found.role.toUpperCase()}!`);
-            return { success: true };
-          }
-        }}
-        onRegister={async (payload) => {
-          const targetRole = payload.role === 'supplier' ? 'supplier' : 'buyer'; // STRICTLY NO ADMIN
-          if (isSupabaseConfigured && !useLocalDemoMode) {
-            // Supabase register
-            const result = await authService.signUp(payload);
-            if (result.error || !result.user) {
-              return { success: false, error: result.error || 'Đăng ký không thành công.' };
-            }
-            localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(result.user));
-            setCurrentUser(result.user);
-            if (result.user.role === 'supplier') {
-              setSupplierTab('dashboard');
-              navigate('/');
-              showToast('Đăng ký tài khoản Nhà cung cấp thành công! Chào mừng bạn đến với FlashGroup.');
-            } else {
-              setBuyerTab('discovery');
-              navigate('/marketplace');
-              showToast('Đăng ký tài khoản Người mua thành công! Hãy bắt đầu khám phá phòng gom.');
-            }
-            return { success: true };
-          } else {
-            // Local demo fallback
-            const duplicate = users.find((u) => u.email.toLowerCase() === payload.email.toLowerCase());
-            if (duplicate) {
-              return { success: false, error: 'Email này đã được sử dụng.' };
-            }
-            const newUserId = `${targetRole}-${Date.now()}`;
-            const newUser: User = {
-              id: newUserId,
-              name: payload.name,
-              email: payload.email,
-              password: payload.password,
-              role: targetRole, // strictly buyer or supplier
-              phone: payload.phone,
-              preferredPickupPoint: payload.preferredPickupPoint,
-              status: 'active' as const,
-              createdAt: new Date().toISOString(),
-            };
-            setUsers((prev) => [...prev, newUser]);
-
-            if (targetRole === 'supplier') {
-              const newSupplierRecord: Supplier = {
-                id: `sup-${Date.now()}`,
-                userId: newUserId,
-                businessName: payload.businessName || payload.name,
-                supplierType: (payload.businessType as any) || 'local_retailer',
-                verificationStatus: 'pending',
-                contactPhone: payload.phone,
-                email: payload.email,
-                businessAddress: payload.businessAddress,
-                sourceDescription: payload.operatingRegion || 'Hộ kinh doanh / Nhà phân phối địa phương',
-                rating: 5.0,
-                totalReviews: 0,
-                isDemo: false,
-                createdAt: new Date().toISOString(),
-              };
-              setSuppliers((prev) => [...prev, newSupplierRecord]);
-              localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
-              setCurrentUser(newUser);
-              setSupplierTab('dashboard');
-              navigate('/');
-              showToast('Đăng ký tài khoản Nhà cung cấp thành công! Vui lòng hoàn thiện hồ sơ xác minh để đăng bán.');
-            } else {
-              localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
-              setCurrentUser(newUser);
-              setBuyerTab('discovery');
-              navigate('/marketplace');
-              showToast('Đăng ký tài khoản Người mua thành công! Hãy bắt đầu khám phá phòng gom.');
-            }
-            return { success: true };
-          }
-        }}
-      />
-    );
-  }
-
   // ==========================================
   // 4. MAIN MARKETPLACE APP (LOGGED IN)
   // ==========================================
@@ -3186,6 +3088,161 @@ export default function FlashGroupApp() {
       <div>
         {/* TOP OFFLINE DETECTION BANNER (Phase 11) */}
         <OfflineBanner />
+
+        {/* AUTH MODAL (MODAL OVERLAY FOR PUBLIC VISITORS) */}
+        {isAuthModalOpen && (
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="relative w-full max-w-lg my-8">
+              <AuthModalOrPage
+                initialMode={authModalMode}
+                initialRole={authModalRole}
+                onClose={() => setIsAuthModalOpen(false)}
+                isSupabaseMode={isSupabaseConfigured && !useLocalDemoMode}
+                onLogin={async (email: string, password: string, rememberMe: boolean = true) => {
+                  if (isSupabaseConfigured && !useLocalDemoMode) {
+                    const result = await authService.signIn(email, password);
+                    if (result.error || !result.user) {
+                      const rawErr = result.error || '';
+                      const friendlyErr = rawErr.toLowerCase().includes('invalid') || rawErr.toLowerCase().includes('credentials')
+                        ? 'Email hoặc mật khẩu chưa chính xác.'
+                        : rawErr.toLowerCase().includes('network')
+                        ? 'Không thể kết nối. Vui lòng kiểm tra mạng và thử lại.'
+                        : rawErr || 'Đăng nhập không thành công.';
+                      return { success: false, error: friendlyErr };
+                    }
+                    if (rememberMe) {
+                      localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(result.user));
+                      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(result.user));
+                    }
+                    setAuthenticatedUser(result.user);
+                    setPresentedDemoUser(null);
+                    setIsAuthModalOpen(false);
+                    if (result.user.role === 'supplier') {
+                      setSupplierTab('dashboard');
+                      navigate('/');
+                    } else if (result.user.role === 'admin') {
+                      setAdminTab('overview');
+                      navigate('/');
+                    } else {
+                      setBuyerTab('discovery');
+                      navigate('/marketplace');
+                    }
+                    showToast(`Đăng nhập thành công với vai trò ${result.user.role.toUpperCase()}!`);
+                    return { success: true };
+                  } else {
+                    const found = users.find(
+                      (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+                    );
+                    if (!found) {
+                      return { success: false, error: 'Email hoặc mật khẩu chưa chính xác.' };
+                    }
+                    if (rememberMe) {
+                      localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(found));
+                      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(found));
+                    }
+                    setAuthenticatedUser(found);
+                    setPresentedDemoUser(null);
+                    setIsAuthModalOpen(false);
+                    if (found.role === 'supplier') {
+                      setSupplierTab('dashboard');
+                      navigate('/');
+                    } else if (found.role === 'admin') {
+                      setAdminTab('overview');
+                      navigate('/');
+                    } else {
+                      setBuyerTab('discovery');
+                      navigate('/marketplace');
+                    }
+                    showToast(`Đăng nhập thành công với vai trò ${found.role.toUpperCase()}!`);
+                    return { success: true };
+                  }
+                }}
+                onRegister={async (payload) => {
+                  const targetRole = payload.role === 'supplier' ? 'supplier' : 'buyer';
+                  if (isSupabaseConfigured && !useLocalDemoMode) {
+                    const result = await authService.signUp(payload);
+                    if (result.error || !result.user) {
+                      return { success: false, error: result.error || 'Đăng ký không thành công.' };
+                    }
+                    localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(result.user));
+                    localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(result.user));
+                    setAuthenticatedUser(result.user);
+                    setPresentedDemoUser(null);
+                    setIsAuthModalOpen(false);
+                    if (result.user.role === 'supplier') {
+                      setSupplierTab('dashboard');
+                      navigate('/');
+                      showToast('Đăng ký tài khoản Nhà cung cấp thành công! Chào mừng bạn đến với FlashGroup.');
+                    } else {
+                      setBuyerTab('discovery');
+                      navigate('/marketplace');
+                      showToast('Đăng ký tài khoản Người mua thành công! Hãy bắt đầu khám phá phòng gom.');
+                    }
+                    return { success: true };
+                  } else {
+                    const duplicate = users.find((u) => u.email.toLowerCase() === payload.email.toLowerCase());
+                    if (duplicate) {
+                      return { success: false, error: 'Email này đã được sử dụng.' };
+                    }
+                    const newUserId = `${targetRole}-${Date.now()}`;
+                    const newUser: User = {
+                      id: newUserId,
+                      name: payload.name,
+                      email: payload.email,
+                      password: payload.password,
+                      role: targetRole,
+                      phone: payload.phone,
+                      preferredPickupPoint: payload.preferredPickupPoint,
+                      status: 'active' as const,
+                      createdAt: new Date().toISOString(),
+                    };
+                    setUsers((prev) => [...prev, newUser]);
+
+                    if (targetRole === 'supplier') {
+                      const newSupplierRecord: Supplier = {
+                        id: `sup-${Date.now()}`,
+                        userId: newUserId,
+                        businessName: payload.businessName || payload.name,
+                        supplierType: (payload.businessType as any) || 'local_retailer',
+                        verificationStatus: 'pending',
+                        contactPhone: payload.phone,
+                        email: payload.email,
+                        businessAddress: payload.businessAddress,
+                        sourceDescription: payload.operatingRegion || 'Hộ kinh doanh / Nhà phân phối địa phương',
+                        rating: 5.0,
+                        totalReviews: 0,
+                        isDemo: false,
+                        createdAt: new Date().toISOString(),
+                      };
+                      setSuppliers((prev) => [...prev, newSupplierRecord]);
+                      localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(newUser));
+                      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
+                      setAuthenticatedUser(newUser);
+                      setPresentedDemoUser(null);
+                      setIsAuthModalOpen(false);
+                      setSupplierTab('dashboard');
+                      navigate('/');
+                      showToast('Đăng ký tài khoản Nhà cung cấp thành công! Vui lòng hoàn thiện hồ sơ xác minh để đăng bán.');
+                    } else {
+                      localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(newUser));
+                      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
+                      setAuthenticatedUser(newUser);
+                      setPresentedDemoUser(null);
+                      setIsAuthModalOpen(false);
+                      setBuyerTab('discovery');
+                      navigate('/marketplace');
+                      showToast('Đăng ký tài khoản Người mua thành công! Hãy bắt đầu khám phá phòng gom.');
+                    }
+                    return { success: true };
+                  }
+                }}
+                onResetPassword={async (email) => {
+                  return await authService.resetPassword(email);
+                }}
+              />
+            </div>
+          </div>
+        )}
 
         {/* UNIFIED TOAST CONTAINER (Phase 11) */}
         <ToastContainer toasts={toasts} onDismiss={dismissToast} />
@@ -3245,7 +3302,7 @@ export default function FlashGroupApp() {
         {/* SHARE ROOM MODAL (Requirements 4, 5, 48) */}
         <ShareRoomModal
           room={shareModalRoom}
-          currentUserId={currentUser.id}
+          currentUserId={currentUser ? currentUser.id : "guest"}
           isOpen={Boolean(shareModalRoom)}
           onClose={() => setShareModalRoomId(null)}
           onRoomShared={handleRoomShared}
@@ -3277,7 +3334,7 @@ export default function FlashGroupApp() {
             setSellerInfoModalSupplierId(null);
             setSelectedRoomId(null);
             setCheckoutRoomId(null);
-            if (currentUser.role === 'buyer') {
+            if (!currentUser || currentUser.role === 'buyer') {
               setBuyerTab('complaints');
             }
           }}
@@ -3320,8 +3377,10 @@ export default function FlashGroupApp() {
         {/* ROLE-BASED NAVBAR */}
         <Navbar
           currentUser={currentUser}
+          onOpenLogin={openLoginModal}
+          onOpenRegister={() => openRegisterModal('buyer')}
           currentTab={
-            currentUser.role === 'buyer'
+            !currentUser || currentUser.role === 'buyer'
               ? buyerTab
               : currentUser.role === 'supplier'
               ? supplierTab
@@ -3330,11 +3389,14 @@ export default function FlashGroupApp() {
           onNavigate={(tab) => {
             setSelectedRoomId(null);
             setCheckoutRoomId(null);
-            if (currentUser.role === 'buyer') {
+            if (!currentUser || currentUser.role === 'buyer') {
               setBuyerTab(tab);
               if (tab === 'discovery') navigate('/marketplace');
               else if (tab === 'flashmap') navigate('/flashmap');
-              else if (tab === 'orders') navigate('/orders');
+              else if (tab === 'orders') {
+                if (!currentUser) openLoginModal();
+                else navigate('/orders');
+              }
               else if (tab === 'complaints') navigate('/complaints');
               else if (tab === 'privacy') navigate('/privacy-center');
               else if (tab === 'help') navigate('/help');
@@ -3356,6 +3418,7 @@ export default function FlashGroupApp() {
             );
           }}
           onMarkAllNotificationsAsRead={() => {
+            if (!currentUser) return;
             setNotifications((prev) =>
               prev.map((n) => (n.userId === currentUser.id ? { ...n, read: true } : n))
             );
@@ -3366,7 +3429,7 @@ export default function FlashGroupApp() {
               setSelectedRoomId(roomId);
               setCheckoutRoomId(null);
             } else if (orderId) {
-              if (currentUser.role === 'buyer') setBuyerTab('orders');
+              if (!currentUser || currentUser.role === 'buyer') setBuyerTab('orders');
               else if (currentUser.role === 'supplier') setSupplierTab('orders');
             }
           }}
@@ -3377,12 +3440,12 @@ export default function FlashGroupApp() {
           isPresentationMode={isPresentationMode}
           onOpenBusinessModel={() => setIsBusinessModelOpen(true)}
           joinedRoomsCount={myJoinedRoomIds.length}
-          ordersCount={orders.filter((o) => o.userId === currentUser.id).length}
+          ordersCount={currentUser ? orders.filter((o) => o.userId === currentUser.id).length : 0}
           favoritesCount={favoriteRoomIds.length}
         />
 
         {/* SUPPLIER VERIFICATION BANNER (Requirement 35 & Phase 8 Req 1 & 29) */}
-        {currentUser.role === 'supplier' &&
+        {currentUser && currentUser.role === 'supplier' && currentSupplier &&
           (currentSupplier.verificationStatus === 'pending' ||
             currentSupplier.verificationStatus === 'unverified' ||
             currentSupplier.verificationStatus === 'rejected' ||
@@ -3413,9 +3476,9 @@ export default function FlashGroupApp() {
           {/* ======================================================== */}
           {/* BUYER ROLE VIEWS                                         */}
           {/* ======================================================== */}
-          {currentUser.role === 'buyer' && (
+          {(!currentUser || currentUser.role === 'buyer') && (
             <>
-              {checkoutRoomId ? (
+              {checkoutRoomId && currentUser ? (
                 <CheckoutView
                   roomId={checkoutRoomId}
                   rooms={rooms}
@@ -3559,36 +3622,98 @@ export default function FlashGroupApp() {
               ) : location.pathname === '/community-rules' ? (
                 <LegalPolicyPageView slug="community_review_rules" documents={legalDocuments} />
               ) : buyerTab === 'myrooms' || location.pathname === '/my-rooms' ? (
-                <MyRoomsView
-                  rooms={rooms}
-                  participations={participations}
-                  orders={orders}
-                  currentUserId={currentUser.id}
-                  onSelectRoom={(id) => setSelectedRoomId(id)}
-                  onGoCheckout={(id) => setCheckoutRoomId(id)}
-                  onExplore={() => setBuyerTab('discovery')}
-                  getSecondsLeft={getSecondsLeft}
-                />
+                !currentUser ? (
+                  <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                        <Users className="w-7 h-7" />
+                      </div>
+                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#53536A] leading-relaxed">
+                        Vui lòng đăng nhập để theo dõi danh sách các phòng mua chung bạn đã tham gia.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={openLoginModal}
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                      >
+                        Đăng nhập ngay
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <MyRoomsView
+                    rooms={rooms}
+                    participations={participations}
+                    orders={orders}
+                    currentUserId={currentUser.id}
+                    onSelectRoom={(id) => setSelectedRoomId(id)}
+                    onGoCheckout={(id) => setCheckoutRoomId(id)}
+                    onExplore={() => setBuyerTab('discovery')}
+                    getSecondsLeft={getSecondsLeft}
+                  />
+                )
               ) : location.pathname === '/orders' || buyerTab === 'orders' ? (
-                <OrdersView
-                  orders={orders.filter((o) => o.userId === currentUser.id)}
-                  rooms={rooms}
-                  pickupPoints={pickupPoints}
-                  deliveryBatches={deliveryBatches}
-                  deliveryEvents={deliveryEvents}
-                  reviews={reviews}
-                  refunds={refunds}
-                  onOpenReview={(order) => setReviewOrderModal(order)}
-                  onOpenRefund={(order) => setRefundOrderModal(order)}
-                  onOpenReceipt={(order) => setReceiptOrderModal(order)}
-                  onOpenSnapshot={(order) => setSnapshotModalOrder(order)}
-                  onOpenComplaint={(order) => {
-                    setComplaintInitialOrderId(order.id);
-                    navigate('/complaints');
-                  }}
-                  onExplore={() => navigate('/marketplace')}
-                />
+                !currentUser ? (
+                  <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                        <Package className="w-7 h-7" />
+                      </div>
+                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#53536A] leading-relaxed">
+                        Vui lòng đăng nhập để xem lịch sử và quản lý đơn hàng của bạn.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={openLoginModal}
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                      >
+                        Đăng nhập ngay
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <OrdersView
+                    orders={orders.filter((o) => o.userId === currentUser.id)}
+                    rooms={rooms}
+                    pickupPoints={pickupPoints}
+                    deliveryBatches={deliveryBatches}
+                    deliveryEvents={deliveryEvents}
+                    reviews={reviews}
+                    refunds={refunds}
+                    onOpenReview={(order) => setReviewOrderModal(order)}
+                    onOpenRefund={(order) => setRefundOrderModal(order)}
+                    onOpenReceipt={(order) => setReceiptOrderModal(order)}
+                    onOpenSnapshot={(order) => setSnapshotModalOrder(order)}
+                    onOpenComplaint={(order) => {
+                      setComplaintInitialOrderId(order.id);
+                      navigate('/complaints');
+                    }}
+                    onExplore={() => navigate('/marketplace')}
+                  />
+                )
               ) : location.pathname === '/complaints' || buyerTab === 'complaints' ? (
+                !currentUser ? (
+                  <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                        <MessageSquare className="w-7 h-7 text-[#006EE9]" />
+                      </div>
+                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#53536A] leading-relaxed">
+                        Vui lòng đăng nhập để gửi và theo dõi khiếu nại, phản hồi của bạn.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={openLoginModal}
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                      >
+                        Đăng nhập ngay
+                      </button>
+                    </div>
+                  </div>
+                ) : (
                 <ComplaintCenterView
                   currentUser={currentUser}
                   orders={orders}
@@ -3600,7 +3725,28 @@ export default function FlashGroupApp() {
                   onReplyComplaint={handleReplyComplaint}
                   showToast={showToast}
                 />
-              ) : location.pathname.startsWith('/privacy-center') || buyerTab === 'privacy' ? (
+              )
+            ) : location.pathname.startsWith('/privacy-center') || buyerTab === 'privacy' ? (
+                !currentUser ? (
+                  <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                        <Lock className="w-7 h-7 text-[#006EE9]" />
+                      </div>
+                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#53536A] leading-relaxed">
+                        Vui lòng đăng nhập để xem và quản lý thiết lập quyền riêng tư dữ liệu của bạn.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={openLoginModal}
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                      >
+                        Đăng nhập ngay
+                      </button>
+                    </div>
+                  </div>
+                ) : (
                 <PrivacyCenterView
                   currentUser={currentUser}
                   orders={orders}
@@ -3612,7 +3758,8 @@ export default function FlashGroupApp() {
                   onOpenLegalDoc={(slug) => setLegalModalSlug(slug)}
                   showToast={showToast}
                 />
-              ) : buyerTab === 'favorites' ? (
+              )
+            ) : buyerTab === 'favorites' ? (
                 <FavoritesView
                   favoriteRoomIds={favoriteRoomIds}
                   rooms={rooms}
@@ -3622,6 +3769,26 @@ export default function FlashGroupApp() {
                   getSecondsLeft={getSecondsLeft}
                 />
               ) : buyerTab === 'notifications' ? (
+                !currentUser ? (
+                  <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                        <Bell className="w-7 h-7 text-[#006EE9]" />
+                      </div>
+                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#53536A] leading-relaxed">
+                        Vui lòng đăng nhập để xem tất cả thông báo của bạn.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={openLoginModal}
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                      >
+                        Đăng nhập ngay
+                      </button>
+                    </div>
+                  </div>
+                ) : (
                 <NotificationCenter
                   notifications={notifications}
                   currentUserId={currentUser.id}
@@ -3641,23 +3808,47 @@ export default function FlashGroupApp() {
                     else if (orderId) setBuyerTab('orders');
                   }}
                 />
-              ) : buyerTab === 'profile' || location.pathname === '/profile' ? (
-                <BuyerProfileView
-                  currentUser={currentUser}
-                  orders={orders}
-                  participations={participations}
-                  rooms={rooms}
-                  reviews={reviews}
-                  loyaltyTransactions={loyaltyTransactions}
-                  referrals={referrals}
-                  onUpdateProfile={(updatedData) => {
-                    setCurrentUser({ ...currentUser, ...updatedData });
-                    setUsers((prev) =>
-                      prev.map((u) => (u.id === currentUser.id ? { ...u, ...updatedData } : u))
-                    );
-                  }}
-                  showToast={showToast}
-                />
+              )
+            ) : buyerTab === 'profile' || location.pathname === '/profile' ? (
+                !currentUser ? (
+                  <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
+                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                        <Users className="w-7 h-7 text-[#006EE9]" />
+                      </div>
+                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#53536A] leading-relaxed">
+                        Vui lòng đăng nhập để xem và quản lý thông tin tài khoản của bạn.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={openLoginModal}
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                      >
+                        Đăng nhập ngay
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <BuyerProfileView
+                    currentUser={currentUser}
+                    orders={orders}
+                    participations={participations}
+                    rooms={rooms}
+                    reviews={reviews}
+                    loyaltyTransactions={loyaltyTransactions}
+                    referrals={referrals}
+                    onUpdateProfile={(updatedData) => {
+                      if (authenticatedUser) {
+                        setAuthenticatedUser({ ...authenticatedUser, ...updatedData });
+                      }
+                      setUsers((prev) =>
+                        prev.map((u) => (u.id === currentUser.id ? { ...u, ...updatedData } : u))
+                      );
+                    }}
+                    showToast={showToast}
+                  />
+                )
               ) : location.pathname === '/' || location.pathname === '/marketplace' || buyerTab === 'discovery' ? (
                 /* DISCOVERY VIEW (Phase 9 Editorial Rebuild) */
                 <div className="space-y-12">
@@ -4224,7 +4415,7 @@ export default function FlashGroupApp() {
           {/* ======================================================== */}
           {/* SUPPLIER ROLE VIEWS                                      */}
           {/* ======================================================== */}
-          {currentUser.role === 'supplier' && (
+          {currentUser && currentUser.role === 'supplier' && (
             <>
               {selectedRoomId && activeRoom ? (
                 <GroupRoomView
@@ -4379,7 +4570,7 @@ export default function FlashGroupApp() {
           {/* ======================================================== */}
           {/* ADMIN ROLE VIEWS                                         */}
           {/* ======================================================== */}
-          {currentUser.role === 'admin' && (
+          {currentUser && currentUser.role === 'admin' && (
             selectedRoomId && activeRoom ? (
               <GroupRoomView
                 room={activeRoom}
@@ -4499,7 +4690,7 @@ export default function FlashGroupApp() {
                         ...s,
                         verificationStatus: newStatus,
                         verifiedAt: isApprovedState ? nowIso : s.verifiedAt,
-                        verifiedBy: isApprovedState ? currentUser.id : s.verifiedBy,
+                        verifiedBy: isApprovedState ? (currentUser?.id || 'admin') : s.verifiedBy,
                         suspensionReason: newStatus === 'suspended' ? note : undefined,
                       };
                     })
@@ -4581,7 +4772,7 @@ export default function FlashGroupApp() {
         onNavigateTab={(tab) => {
           setSelectedRoomId(null);
           setCheckoutRoomId(null);
-          if (currentUser.role === 'buyer') setBuyerTab(tab as any);
+          if (!currentUser || currentUser.role === 'buyer') setBuyerTab(tab as any);
           else if (currentUser.role === 'supplier') setSupplierTab(tab as any);
           else setAdminTab(tab as any);
         }}
@@ -4592,7 +4783,7 @@ export default function FlashGroupApp() {
       {/* PHASE 11: MOBILE APP BOTTOM NAVIGATION BAR */}
       <MobileBottomNav
         isAuthenticated={Boolean(currentUser)}
-        onOpenAuth={() => {}}
+        onOpenAuth={openLoginModal}
       />
 
       {/* PHASE 11: DEMO READINESS & SCENARIO CHECK MODAL */}
@@ -4607,8 +4798,8 @@ export default function FlashGroupApp() {
         onResetDemo={() => handleResetData(true)}
       />
 
-      {/* PHASE 12: PRESENTER CONTROL PANEL */}
-      {isPresentationMode && (
+      {/* PHASE 12: PRESENTER CONTROL PANEL (OWNER ADMIN OR PRESENTATION PARAM ONLY) */}
+      {isPresentationAllowed && isPresentationMode && (
         <PresenterPanel
           currentUser={currentUser}
           onSwitchRole={handleSwitchRole}

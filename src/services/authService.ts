@@ -217,6 +217,22 @@ export const authService = {
     }
   },
 
+  // Reset password via email (Requirement 19)
+  async resetPassword(email: string): Promise<{ success: boolean; error?: string }> {
+    if (!isSupabaseConfigured) {
+      return { success: true };
+    }
+    try {
+      await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/reset-password` : undefined,
+      });
+      return { success: true };
+    } catch (err: any) {
+      console.warn('Reset password error:', err);
+      return { success: true }; // Do not disclose whether email exists
+    }
+  },
+
   // Get current active session user
   async getCurrentUser(): Promise<User | null> {
     if (!isSupabaseConfigured) return null;

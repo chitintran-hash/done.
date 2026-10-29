@@ -171,13 +171,13 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-400 font-semibold">Net Earnings (Thực nhận)</span>
-          <div className="text-xl sm:text-2xl font-black text-emerald-600 mt-1">{formatVND(netEarnings)}</div>
-          <span className="text-[11px] text-emerald-600 font-bold mt-1 inline-block">Sau trừ phí nền tảng</span>
+          <div className="text-xl sm:text-2xl font-black text-[#000181] mt-1">{formatVND(netEarnings)}</div>
+          <span className="text-[11px] text-[#000181] font-bold mt-1 inline-block">Sau trừ phí nền tảng</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-400 font-semibold">Platform Fees (Phí sàn)</span>
-          <div className="text-xl sm:text-2xl font-black text-indigo-600 mt-1">{formatVND(platformFees)}</div>
+          <div className="text-xl sm:text-2xl font-black text-[#006EE9] mt-1">{formatVND(platformFees)}</div>
           <span className="text-[11px] text-slate-400 mt-1 inline-block">Phí nền tảng demo</span>
         </div>
 
@@ -206,17 +206,17 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
           <div className="text-lg sm:text-xl font-black text-slate-900 mt-1">
             {bestPerformingTier.label}
           </div>
-          <span className="text-[11px] text-emerald-700 font-semibold mt-1 inline-block">
+          <span className="text-[11px] text-[#000181] font-semibold mt-1 inline-block">
             Đã gom {bestPerformingTier.units} đơn vị qua {bestPerformingTier.roomsCount} phòng gom
           </span>
         </div>
       </div>
 
       {/* Phase 7 Req 36, 37, 38: Batch Efficiency & Simulated Logistics Savings */}
-      <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 rounded-3xl border border-emerald-200 p-6 shadow-sm space-y-4">
+      <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 rounded-3xl border border-[#D0FFA4] p-6 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-[#D0FFA4]/40 px-2.5 py-0.5 rounded-full">
               <Truck className="w-3.5 h-3.5" />
               Hiệu quả Gom Đơn & Giao Hàng Chung (Batch Logistics Efficiency)
             </span>
@@ -224,7 +224,7 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
               Tác động tối ưu hóa vận chuyển chặng cuối (Last-Mile Consolidation)
             </h3>
           </div>
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-white px-3 py-1 rounded-full border border-indigo-200 self-start sm:self-auto">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#000181] bg-white px-3 py-1 rounded-full border border-indigo-200 self-start sm:self-auto">
             <Sparkles className="w-3.5 h-3.5" />
             Ước tính mô phỏng
           </span>
@@ -235,7 +235,7 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
             <div className="text-xs font-bold text-slate-500">
               Estimated Delivery Trips Reduced
             </div>
-            <div className="text-2xl font-black text-emerald-700 mt-1">
+            <div className="text-2xl font-black text-[#000181] mt-1">
               -{tripsAvoided} chuyến giao lẻ
             </div>
             <div className="text-[11px] text-slate-500 mt-1">
@@ -256,16 +256,16 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-600">Shared batch shipping:</span>
-                <span className="font-black text-emerald-700">{formatVND(estSharedShippingTotal)}</span>
+                <span className="font-black text-[#000181]">{formatVND(estSharedShippingTotal)}</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-emerald-200">
-            <div className="text-xs font-bold text-emerald-700">
+          <div className="bg-white rounded-2xl p-4 border border-[#D0FFA4]">
+            <div className="text-xs font-bold text-[#000181]">
               Estimated Logistics Saving (Ước tính mô phỏng)
             </div>
-            <div className="text-2xl font-black text-emerald-600 mt-1">
+            <div className="text-2xl font-black text-[#000181] mt-1">
               {formatVND(estLogisticsSaving)}
             </div>
             <div className="text-[11px] text-slate-500 mt-1">
@@ -296,7 +296,7 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-black text-emerald-700">{formatVND(prod.gmv)}</div>
+                  <div className="font-black text-[#000181]">{formatVND(prod.gmv)}</div>
                   <div className="text-[10px] text-slate-400">Net: {formatVND(prod.net)}</div>
                 </div>
               </div>
@@ -306,7 +306,7 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
 
         <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
           <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
-            <BarChart3 className="w-4 h-4 text-emerald-600" />
+            <BarChart3 className="w-4 h-4 text-[#000181]" />
             <span>Sản lượng gom theo ngành hàng (Units Pooled by Category)</span>
           </h3>
 
@@ -319,7 +319,7 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
                 <div key={cat} className="space-y-1">
                   <div className="flex justify-between text-xs font-bold text-slate-700">
                     <span>{cat}</span>
-                    <span className="text-emerald-700">{qty} sản phẩm</span>
+                    <span className="text-[#000181]">{qty} sản phẩm</span>
                   </div>
                   <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
                     <div

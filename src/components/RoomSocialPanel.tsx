@@ -83,8 +83,8 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
     switch (ev.eventType) {
       case 'joined':
         return {
-          icon: <UserPlus className="w-3.5 h-3.5 text-emerald-600" />,
-          bg: 'bg-emerald-50 border-emerald-200',
+          icon: <UserPlus className="w-3.5 h-3.5 text-[#000181]" />,
+          bg: 'bg-[#F4FFE8] border-[#D0FFA4]',
           text: (
             <span>
               <strong className="text-slate-900">{firstName}</strong> vừa tham gia phòng gom ({qty} {unit})
@@ -123,8 +123,8 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
         };
       case 'room_full':
         return {
-          icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />,
-          bg: 'bg-emerald-100 border-emerald-300',
+          icon: <CheckCircle2 className="w-3.5 h-3.5 text-[#000181]" />,
+          bg: 'bg-[#D0FFA4]/40 border-[#D0FFA4]',
           text: (
             <span className="font-bold text-emerald-900">
               🎯 Phòng đã gom đủ số lượng mục tiêu ({room.maxQuantity} {room.unit})!
@@ -155,10 +155,10 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
         <div>
           <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
             <h3 className="text-sm font-black text-slate-900 flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-emerald-600" />
+              <Activity className="w-4 h-4 text-[#000181]" />
               <span>Hoạt động phòng gom</span>
             </h3>
-            <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-[#000181] bg-[#F4FFE8] px-2 py-0.5 rounded-full border border-[#D0FFA4]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
               <span>Realtime</span>
             </span>
@@ -207,7 +207,7 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div>
             <h3 className="text-sm font-black text-slate-900 flex items-center space-x-2">
-              <MessageCircle className="w-4 h-4 text-emerald-600" />
+              <MessageCircle className="w-4 h-4 text-[#000181]" />
               <span>Chat phòng gom</span>
               <span className="text-xs font-bold text-slate-400">({messages.length})</span>
             </h3>
@@ -249,7 +249,7 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
                   <div
                     className={`w-8 h-8 rounded-xl font-black text-[11px] flex items-center justify-center shrink-0 ${
                       isMe
-                        ? 'bg-emerald-600 text-white'
+                        ? 'bg-[#006EE9] text-white'
                         : 'bg-slate-200 text-slate-700'
                     }`}
                   >
@@ -263,7 +263,7 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
                         isHidden
                           ? 'bg-slate-100 border-slate-200 text-slate-400 italic'
                           : isMe
-                          ? 'bg-emerald-50 border-emerald-200 text-slate-900'
+                          ? 'bg-[#F4FFE8] border-[#D0FFA4] text-slate-900'
                           : 'bg-slate-50 border-slate-200/80 text-slate-800'
                       }`}
                     >
@@ -321,7 +321,7 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
                               onClick={() => onToggleReaction(msg.id, emoji)}
                               className={`px-2 py-0.5 rounded-full text-[11px] border transition flex items-center space-x-1 ${
                                 hasReacted
-                                  ? 'bg-emerald-100 border-emerald-400 text-emerald-900 font-bold'
+                                  ? 'bg-[#D0FFA4]/40 border-emerald-400 text-emerald-900 font-bold'
                                   : count > 0
                                   ? 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
                                   : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-100 hover:border-slate-200 opacity-75 hover:opacity-100'
@@ -351,12 +351,12 @@ export const RoomSocialPanel: React.FC<RoomSocialPanelProps> = ({
               value={messageInput}
               onChange={(e) => setMessageInput(e.target.value)}
               placeholder="Nhắn vào phòng gom..."
-              className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white disabled:opacity-50"
+              className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-800 focus:outline-none focus:border-[#D0FFA4] focus:bg-white disabled:opacity-50"
             />
             <button
               type="submit"
               disabled={!canSendChat || !messageInput.trim()}
-              className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white font-bold text-xs flex items-center space-x-1.5 transition shrink-0 shadow-sm"
+              className="px-4 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white disabled:opacity-40 text-white font-bold text-xs flex items-center space-x-1.5 transition shrink-0 shadow-sm"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Gửi</span>

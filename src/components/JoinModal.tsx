@@ -76,7 +76,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
           <div className="flex items-center space-x-3">
             <span className="text-3xl">{room.emoji}</span>
             <div>
-              <span className="text-[11px] font-black uppercase text-emerald-600 tracking-wider block">
+              <span className="text-[11px] font-black uppercase text-[#000181] tracking-wider block">
                 THAM GIA PHÒNG GOM
               </span>
               <h3 className="text-lg font-black text-slate-900 leading-snug">{room.productName}</h3>
@@ -141,13 +141,13 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               </div>
 
               <div className="border-l border-slate-200 pl-3">
-                <span className="text-emerald-700 font-bold block mb-0.5">
+                <span className="text-[#000181] font-bold block mb-0.5">
                   Sau khi bạn tham gia:
                 </span>
                 <div className="font-bold text-slate-900">
                   {projectedQuantity} / {room.maxQuantity} sản phẩm
                 </div>
-                <div className="text-sm font-black text-emerald-600 mt-0.5">
+                <div className="text-sm font-black text-[#000181] mt-0.5">
                   {formatVND(projectedPrice)}/{room.unit}
                 </div>
               </div>
@@ -155,8 +155,8 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 
             {/* Unlock tier highlight */}
             {isTierUnlocked ? (
-              <div className="bg-emerald-100/70 border border-emerald-300 rounded-xl p-3 flex items-start space-x-2.5">
-                <Sparkles className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="bg-[#D0FFA4]/40/70 border border-[#D0FFA4] rounded-xl p-3 flex items-start space-x-2.5">
+                <Sparkles className="w-5 h-5 text-[#000181] shrink-0 mt-0.5" />
                 <div className="text-xs">
                   <div className="font-black text-emerald-900">
                     🎉 SẼ MỞ KHÓA MỨC GIÁ MỚI CHO TOÀN BỘ NHÓM!
@@ -176,8 +176,8 @@ export const JoinModal: React.FC<JoinModalProps> = ({
                 </span>
               </div>
             ) : (
-              <div className="text-xs text-emerald-800 font-bold flex items-center space-x-1.5 bg-emerald-50 p-2 rounded-xl border border-emerald-200">
-                <Check className="w-4 h-4 text-emerald-600" />
+              <div className="text-xs text-emerald-800 font-bold flex items-center space-x-1.5 bg-[#F4FFE8] p-2 rounded-xl border border-[#D0FFA4]">
+                <Check className="w-4 h-4 text-[#000181]" />
                 <span>Bạn đang ở bậc giá thấp nhất tối đa của nhà cung cấp!</span>
               </div>
             )}
@@ -205,7 +205,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
             type="button"
             onClick={handleConfirm}
             disabled={Boolean(validationError) || isSubmitting}
-            className="w-2/3 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-1.5 disabled:opacity-40 disabled:cursor-not-allowed active:scale-98"
+            className="w-2/3 py-3.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-black text-xs transition shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-1.5 disabled:opacity-40 disabled:cursor-not-allowed active:scale-98"
           >
             {isSubmitting ? (
               <div className="flex items-center space-x-2">

@@ -696,7 +696,7 @@ export function getSupplierVerificationDisplay(supplier?: Supplier | null): {
     badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
   } else if (isAdminApproved) {
     buyerBadgeLabel = supplier.isDemo ? 'Đã xác minh • Dữ liệu mô phỏng' : 'Đã xác minh';
-    badgeColor = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+    badgeColor = 'bg-[#F4FFE8] text-emerald-800 border-[#D0FFA4]';
   } else if (supplier.isDemo) {
     buyerBadgeLabel = 'Dữ liệu mô phỏng';
     badgeColor = 'bg-amber-50 text-amber-800 border-amber-200';

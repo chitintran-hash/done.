@@ -3098,7 +3098,7 @@ export default function FlashGroupApp() {
   // 4. MAIN MARKETPLACE APP (LOGGED IN)
   // ==========================================
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-emerald-100 selection:text-emerald-900 flex flex-col justify-between pb-20 md:pb-0">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-[#D0FFA4]/40 selection:text-emerald-900 flex flex-col justify-between pb-20 md:pb-0">
       <div>
         {/* TOP OFFLINE DETECTION BANNER (Phase 11) */}
         <OfflineBanner />
@@ -3666,7 +3666,7 @@ export default function FlashGroupApp() {
                                   {featuredRoom.emoji} {featuredRoom.productName}
                                 </h4>
                                 <div className="mt-1 flex items-baseline gap-2">
-                                  <span className="text-lg font-black text-indigo-600">
+                                  <span className="text-lg font-black text-[#006EE9]">
                                     {formatVND(
                                       featuredRoom.finalPrice ??
                                         getCurrentPrice(featuredRoom.totalQuantity, featuredRoom.priceTiers)
@@ -3682,7 +3682,7 @@ export default function FlashGroupApp() {
                             <div className="space-y-1.5 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
                               <div className="flex justify-between text-xs font-semibold text-slate-700">
                                 <span className="flex items-center gap-1">
-                                  <Users className="w-3.5 h-3.5 text-indigo-600" />
+                                  <Users className="w-3.5 h-3.5 text-[#006EE9]" />
                                   {featuredRoom.participantCount} người tham gia
                                 </span>
                                 <span>
@@ -3691,7 +3691,7 @@ export default function FlashGroupApp() {
                               </div>
                               <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                                 <div
-                                  className="bg-indigo-600 h-full rounded-full transition-all duration-500"
+                                  className="bg-[#006EE9] h-full rounded-full transition-all duration-500"
                                   style={{
                                     width: `${Math.min(
                                       100,
@@ -3700,7 +3700,7 @@ export default function FlashGroupApp() {
                                   }}
                                 />
                               </div>
-                              <div className="text-[11px] text-right font-medium text-indigo-700">
+                              <div className="text-[11px] text-right font-medium text-[#000181]">
                                 Điểm gom: <strong>{featuredRoom.pickupPoint}</strong>
                               </div>
                             </div>
@@ -3900,7 +3900,7 @@ export default function FlashGroupApp() {
                                 />
                                 <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
                                   <span className="bg-white/95 backdrop-blur-md text-slate-800 text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-slate-200/50 flex items-center space-x-1">
-                                    <MapPin className="w-3 h-3 text-emerald-600" />
+                                    <MapPin className="w-3 h-3 text-[#000181]" />
                                     <span>{room.distance}</span>
                                   </span>
                                   <StatusBadge status={roomBadgeStatus} size="sm" />
@@ -3970,7 +3970,7 @@ export default function FlashGroupApp() {
                                         e.stopPropagation();
                                         setSellerInfoModalSupplierId(room.supplierId);
                                       }}
-                                      className="truncate max-w-[160px] hover:text-emerald-700 hover:underline font-medium text-left"
+                                      className="truncate max-w-[160px] hover:text-[#000181] hover:underline font-medium text-left"
                                       title="Xem hồ sơ pháp lý nhà cung cấp"
                                     >
                                       {room.supplierName}
@@ -3978,14 +3978,14 @@ export default function FlashGroupApp() {
                                     <span
                                       className={`text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
                                         verifDisplay.isAdminVerified
-                                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                          ? 'bg-[#F4FFE8] text-[#000181] border-[#D0FFA4]'
                                           : 'bg-slate-100 text-slate-600 border-slate-200'
                                       }`}
                                     >
                                       {verifDisplay.buyerBadgeLabel}
                                     </span>
                                   </div>
-                                  <h3 className="font-bold text-slate-900 text-base line-clamp-1 group-hover:text-emerald-600 transition">
+                                  <h3 className="font-bold text-slate-900 text-base line-clamp-1 group-hover:text-[#000181] transition">
                                     {room.emoji} {room.productName}
                                   </h3>
                                 </div>
@@ -3998,11 +3998,11 @@ export default function FlashGroupApp() {
                                     <div className="text-lg font-black text-slate-900">{formatVND(currentPrice)}</div>
                                   </div>
                                   <div className="flex items-center justify-between text-xs">
-                                    <div className="text-emerald-700 font-semibold flex items-center gap-1">
+                                    <div className="text-[#000181] font-semibold flex items-center gap-1">
                                       <TrendingDown className="w-3.5 h-3.5" />
                                       Mục tiêu giá thấp nhất:
                                     </div>
-                                    <div className="font-extrabold text-emerald-600">{formatVND(lowestPrice)}</div>
+                                    <div className="font-extrabold text-[#000181]">{formatVND(lowestPrice)}</div>
                                   </div>
                                 </div>
 
@@ -4023,11 +4023,11 @@ export default function FlashGroupApp() {
                                         Còn {nextTierInfo.requiredQuantity} sp để mở khóa {formatVND(nextTierInfo.nextPrice)}
                                       </span>
                                     ) : room.finalPrice !== undefined ? (
-                                      <span className="text-emerald-700 font-bold">
+                                      <span className="text-[#000181] font-bold">
                                         ✓ Đã chốt mức giá: {formatVND(room.finalPrice)}
                                       </span>
                                     ) : (
-                                      <span className="text-emerald-600 font-bold">✓ Đã đạt mức giá mục tiêu tối ưu!</span>
+                                      <span className="text-[#000181] font-bold">✓ Đã đạt mức giá mục tiêu tối ưu!</span>
                                     )}
                                   </div>
 
@@ -4068,9 +4068,9 @@ export default function FlashGroupApp() {
                                         e.stopPropagation();
                                         setSelectedRoomId(room.id);
                                       }}
-                                      className="w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm bg-emerald-100 text-emerald-800 border border-emerald-300"
+                                      className="w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]"
                                     >
-                                      <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                                      <CheckCircle2 className="w-4 h-4 text-[#000181]" />
                                       <span>Bạn đã tham gia • Xem phòng</span>
                                     </button>
                                   ) : room.status !== 'active' ? (
@@ -4662,7 +4662,7 @@ function GroupRoomView({
           {/* Requirement 4: Rủ bạn cùng mua button */}
           <button
             onClick={onOpenShareModal}
-            className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center space-x-1.5 shadow-sm shadow-emerald-600/20"
+            className="px-3.5 py-2 rounded-xl bg-[#006EE9] hover:bg-emerald-500 text-white text-xs font-black transition flex items-center space-x-1.5 shadow-sm shadow-emerald-600/20"
           >
             <Share2 className="w-4 h-4" />
             <span>Rủ bạn cùng mua</span>
@@ -4674,7 +4674,7 @@ function GroupRoomView({
               onClick={onOpenSellerInfo}
               className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition flex items-center space-x-1.5"
             >
-              <Building2 className="w-4 h-4 text-emerald-600" />
+              <Building2 className="w-4 h-4 text-[#000181]" />
               <span>Hồ sơ pháp lý NCC</span>
             </button>
           )}
@@ -4765,7 +4765,7 @@ function GroupRoomView({
                 <span
                   className={`text-[10px] font-black px-2 py-0.5 rounded ${
                     verifDisplay.isAdminVerified
-                      ? 'bg-emerald-100 text-emerald-800'
+                      ? 'bg-[#D0FFA4]/40 text-emerald-800'
                       : 'bg-slate-200 text-slate-700'
                   }`}
                 >
@@ -4782,7 +4782,7 @@ function GroupRoomView({
                     : 'GIÁ HIỆN TẠI MỞ KHÓA CHO CẢ NHÓM:'}
                 </div>
                 <div className="flex items-baseline space-x-3">
-                  <span className="text-4xl sm:text-5xl font-black text-emerald-600 tracking-tight">
+                  <span className="text-4xl sm:text-5xl font-black text-[#000181] tracking-tight">
                     {formatVND(currentPrice)}
                   </span>
                   <span className="text-slate-400 line-through text-lg">{formatVND(room.initialPrice)}</span>
@@ -4817,8 +4817,8 @@ function GroupRoomView({
                   </span>
                 </div>
               ) : (
-                <div className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 text-emerald-900 text-xs font-bold flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <div className="bg-[#F4FFE8] border border-[#D0FFA4] rounded-2xl p-4 text-emerald-900 text-xs font-bold flex items-center space-x-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#000181] shrink-0" />
                   <span>
                     Cả nhóm đã đạt mốc số lượng cao nhất! Toàn bộ người tham gia nhận mức giá tối ưu {formatVND(currentPrice)}.
                   </span>
@@ -4829,10 +4829,10 @@ function GroupRoomView({
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs space-y-2">
                 <div className="flex items-center justify-between text-slate-700 font-bold">
                   <span className="flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-emerald-600" />
+                    <Truck className="w-4 h-4 text-[#000181]" />
                     Shared group shipping ({room.participantCount} người cùng chia):
                   </span>
-                  <span className="text-emerald-700 font-black text-sm">
+                  <span className="text-[#000181] font-black text-sm">
                     {formatVND(shippingPerPerson)}/người
                   </span>
                 </div>
@@ -4848,8 +4848,8 @@ function GroupRoomView({
                     <span className="font-black text-slate-900">{formatVND(shippingPerPerson)}</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-emerald-700 font-bold block">You save (Ship):</span>
-                    <span className="font-black text-emerald-600">{formatVND(shippingSaved)}</span>
+                    <span className="text-[#000181] font-bold block">You save (Ship):</span>
+                    <span className="font-black text-[#000181]">{formatVND(shippingSaved)}</span>
                   </div>
                 </div>
               </div>
@@ -4862,13 +4862,13 @@ function GroupRoomView({
             <div className="space-y-2 bg-white rounded-xl p-4 border border-slate-200">
               <div className="flex items-center justify-between">
                 <span className="font-black text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <Building2 className="w-4 h-4 text-emerald-600" />
+                  <Building2 className="w-4 h-4 text-[#000181]" />
                   Định danh Nhà cung cấp (Nghị định 85/2021)
                 </span>
                 <span
                   className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${
                     verifDisplay.isAdminVerified
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      ? 'bg-[#F4FFE8] text-emerald-800 border-[#D0FFA4]'
                       : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}
                 >
@@ -4902,7 +4902,7 @@ function GroupRoomView({
                 <button
                   type="button"
                   onClick={onOpenSellerInfo}
-                  className="mt-1 inline-flex items-center space-x-1 text-emerald-700 hover:text-emerald-800 font-bold text-[11px] underline"
+                  className="mt-1 inline-flex items-center space-x-1 text-[#000181] hover:text-emerald-800 font-bold text-[11px] underline"
                 >
                   <span>Xem đầy đủ hồ sơ pháp lý nhà cung cấp</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -4914,7 +4914,7 @@ function GroupRoomView({
             <div className="space-y-2 bg-white rounded-xl p-4 border border-slate-200">
               <div className="flex items-center justify-between">
                 <span className="font-black text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <FileCheck className="w-4 h-4 text-emerald-600" />
+                  <FileCheck className="w-4 h-4 text-[#000181]" />
                   Thông tin Nhãn hàng hóa & ATTP (NĐ 111/2021)
                 </span>
                 {product?.foodComplianceStatus && product.foodComplianceStatus !== 'not_applicable' && (
@@ -4979,10 +4979,10 @@ function GroupRoomView({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-black text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  <MapPin className="w-4 h-4 text-[#000181]" />
                   Điểm nhận hàng chung (Pickup Point)
                 </span>
-                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
+                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]">
                   {roomPickupPoint?.status || 'active'}
                 </span>
               </div>
@@ -4997,7 +4997,7 @@ function GroupRoomView({
                 Giờ mở cửa:{' '}
                 <strong>{roomPickupPoint?.operatingHours || '07:00 – 22:00'}</strong> • Khung giờ
                 nhận dự kiến:{' '}
-                <strong className="text-indigo-700">
+                <strong className="text-[#000181]">
                   {room.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
                 </strong>
               </div>
@@ -5010,7 +5010,7 @@ function GroupRoomView({
                       : '32 / 50'}{' '}
                     occupied
                   </span>
-                  <span className="text-emerald-700">Available</span>
+                  <span className="text-[#000181]">Available</span>
                 </div>
                 <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                   <div
@@ -5036,7 +5036,7 @@ function GroupRoomView({
 
             <div className="bg-white rounded-xl p-4 border border-slate-200 space-y-1.5">
               <div className="font-black text-slate-900 text-xs flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <ShieldCheck className="w-4 h-4 text-[#000181]" />
                 Cách nhận hàng (Pickup Instructions)
               </div>
               <div className="text-slate-600 whitespace-pre-line leading-relaxed text-[11px]">
@@ -5049,7 +5049,7 @@ function GroupRoomView({
           <div className="space-y-2 bg-slate-50 p-6 rounded-2xl border border-slate-200">
             <div className="flex justify-between items-center text-xs font-bold text-slate-700">
               <span className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-emerald-600" />
+                <Users className="w-4 h-4 text-[#000181]" />
                 <span>{room.participantCount} người tham gia</span>
                 <span>•</span>
                 <span>
@@ -5076,7 +5076,7 @@ function GroupRoomView({
 
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-              <Layers className="w-4 h-4 text-emerald-600" />
+              <Layers className="w-4 h-4 text-[#000181]" />
               <span>Bậc thang giá theo số lượng sản phẩm (Price Ladder)</span>
             </h3>
 
@@ -5210,8 +5210,8 @@ function GroupRoomView({
               </div>
             ) : isEligibleForCheckout ? (
               <div className="w-full flex flex-col sm:flex-row items-center gap-3">
-                <div className="w-full sm:w-auto bg-indigo-50 text-indigo-900 border border-indigo-200 px-5 py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                <div className="w-full sm:w-auto bg-[#EFFBFF] text-indigo-900 border border-indigo-200 px-5 py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center space-x-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#006EE9]" />
                   <span>
                     Đã chốt giá: {formatVND(room.finalPrice!)} • {participation.quantity} {room.unit}
                   </span>
@@ -5344,7 +5344,7 @@ function GroupRoomView({
           onClick={scrollToSocialSection}
           className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-3.5 rounded-xl text-xs flex items-center space-x-1 border border-slate-200"
         >
-          <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+          <MessageCircle className="w-3.5 h-3.5 text-[#000181]" />
           <span>Chat</span>
         </button>
       </div>
@@ -5624,7 +5624,7 @@ function CheckoutView({
 
       <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
         <div className="border-b border-slate-200 pb-4">
-          <span className="text-xs uppercase font-extrabold text-emerald-600 tracking-wider">
+          <span className="text-xs uppercase font-extrabold text-[#000181] tracking-wider">
             KIỂM TRA ĐƠN HÀNG & CÔNG BỐ GIAO DỊCH TỪ XA (FINAL CHECKOUT)
           </span>
           <h2 className="text-2xl font-black text-slate-900 mt-1">Rà soát hợp đồng & Thanh toán</h2>
@@ -5633,7 +5633,7 @@ function CheckoutView({
         {/* REQUIREMENT 20: EXPLICIT DELIVERY METHOD (NHẬN TẠI ĐIỂM GOM vs GIAO ĐẾN ĐỊA CHỈ) */}
         <div className="space-y-3">
           <label className="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-1.5">
-            <Building2 className="w-4 h-4 text-emerald-600" />
+            <Building2 className="w-4 h-4 text-[#000181]" />
             <span>Phương thức giao nhận (Logistics Mode)</span>
           </label>
 
@@ -5702,7 +5702,7 @@ function CheckoutView({
                 <button
                   type="button"
                   onClick={() => setShowAddressSelectorModal(true)}
-                  className="text-xs font-bold text-emerald-700 hover:underline cursor-pointer flex items-center gap-1"
+                  className="text-xs font-bold text-[#000181] hover:underline cursor-pointer flex items-center gap-1"
                 >
                   <Plus className="w-3 h-3" />
                   Thêm địa chỉ mới
@@ -5715,7 +5715,7 @@ function CheckoutView({
                   <button
                     type="button"
                     onClick={() => setShowAddressSelectorModal(true)}
-                    className="text-emerald-700 font-bold underline ml-1"
+                    className="text-[#000181] font-bold underline ml-1"
                   >
                     Tạo địa chỉ giao hàng
                   </button>
@@ -5727,7 +5727,7 @@ function CheckoutView({
                       key={addr.id}
                       className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${
                         selectedAddressId === addr.id
-                          ? 'bg-white border-emerald-500 shadow-xs'
+                          ? 'bg-white border-[#D0FFA4] shadow-xs'
                           : 'bg-white/60 border-slate-200 hover:bg-white'
                       }`}
                     >
@@ -5736,14 +5736,14 @@ function CheckoutView({
                         name="checkoutSavedAddress"
                         checked={selectedAddressId === addr.id}
                         onChange={() => setSelectedAddressId(addr.id)}
-                        className="mt-0.5 text-emerald-600 focus:ring-emerald-500"
+                        className="mt-0.5 text-[#000181] focus:ring-emerald-500"
                       />
                       <div className="text-xs flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-900">{addr.label}</span>
                           <span className="text-slate-500">• {addr.recipientName} ({addr.recipientPhone})</span>
                           {addr.isDefault && (
-                            <span className="text-[9px] bg-emerald-100 text-emerald-800 font-black px-1.5 py-0.2 rounded uppercase">
+                            <span className="text-[9px] bg-[#D0FFA4]/40 text-emerald-800 font-black px-1.5 py-0.2 rounded uppercase">
                               Mặc định
                             </span>
                           )}
@@ -5805,17 +5805,17 @@ function CheckoutView({
 
 
         {/* Phase 6: Mã ưu đãi / Voucher Section (Requirements 33, 34, 35 & Phase 8 Req 19, 20) */}
-        <div className="bg-emerald-50/60 rounded-2xl p-4 border border-emerald-200 space-y-3">
+        <div className="bg-[#F4FFE8]/60 rounded-2xl p-4 border border-[#D0FFA4] space-y-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-black text-slate-800 flex items-center gap-1.5">
-              <Ticket className="w-4 h-4 text-emerald-600" />
+              <Ticket className="w-4 h-4 text-[#000181]" />
               <span>Mã ưu đãi (Giới hạn khuyến mại tối đa 50% theo NĐ 81/2018/NĐ-CP)</span>
             </label>
             {onOpenLegalDoc && (
               <button
                 type="button"
                 onClick={() => onOpenLegalDoc('promotion_voucher_terms')}
-                className="text-[11px] font-bold text-emerald-700 hover:underline"
+                className="text-[11px] font-bold text-[#000181] hover:underline"
               >
                  thể lệ ưu đãi
               </button>
@@ -5865,11 +5865,11 @@ function CheckoutView({
           )}
 
           {appliedVoucher && fin.voucherDiscount > 0 && (
-            <div className="bg-emerald-100/80 border border-emerald-300 rounded-xl px-3 py-2 flex items-center justify-between text-xs">
+            <div className="bg-[#D0FFA4]/40/80 border border-[#D0FFA4] rounded-xl px-3 py-2 flex items-center justify-between text-xs">
               <span className="font-bold text-emerald-900">
                 ✓ Đã áp dụng <strong>{appliedVoucher.code}</strong>: giảm {formatVND(fin.voucherDiscount)}
               </span>
-              <span className="text-[10px] font-bold text-emerald-700 uppercase">
+              <span className="text-[10px] font-bold text-[#000181] uppercase">
                 Tài trợ: {appliedVoucher.fundedBy === 'platform' ? 'Sàn FlashGroup' : 'Nhà cung cấp'}
               </span>
             </div>
@@ -5887,8 +5887,8 @@ function CheckoutView({
                   onClick={() => handleApplyVoucherCode(v.code)}
                   className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border transition ${
                     appliedVoucher?.code === v.code
-                      ? 'bg-emerald-600 text-white border-emerald-600'
-                      : 'bg-white text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                      ? 'bg-[#006EE9] text-white border-emerald-600'
+                      : 'bg-white text-emerald-800 border-[#D0FFA4] hover:bg-[#D0FFA4]/40'
                   }`}
                 >
                   {v.code} ({v.type === 'fixed' ? `-${formatVND(v.value)}` : `-${v.value}%`}, đơn từ {formatVND(v.minimumOrder ?? 0)})
@@ -5921,7 +5921,7 @@ function CheckoutView({
           {/* Mandatory Seller & Transaction Terms Disclosure */}
           <div className="bg-white rounded-xl p-3.5 border border-slate-200/90 text-[11px] text-slate-600 space-y-1.5">
             <div className="font-black text-slate-900 uppercase tracking-wider text-[10px] flex items-center gap-1.5 text-emerald-800">
-              <Scale className="w-3.5 h-3.5 text-emerald-600" />
+              <Scale className="w-3.5 h-3.5 text-[#000181]" />
               Thông tin bắt buộc trong giao dịch từ xa (Điều 37 Luật BVNTD 2023)
             </div>
             <div>
@@ -5959,7 +5959,7 @@ function CheckoutView({
               <span className="font-bold text-slate-800">{formatVND(productSubtotal)}</span>
             </div>
             {fin.voucherDiscount > 0 && (
-              <div className="flex justify-between text-emerald-700 font-bold">
+              <div className="flex justify-between text-[#000181] font-bold">
                 <span>Voucher ({appliedVoucher?.code}):</span>
                 <span>-{formatVND(fin.voucherDiscount)}</span>
               </div>
@@ -5978,7 +5978,7 @@ function CheckoutView({
             </div>
             <div className="flex justify-between text-slate-600">
               <span>Khung giờ nhận hàng (Pickup Window):</span>
-              <span className="font-bold text-indigo-700">
+              <span className="font-bold text-[#000181]">
                 {room.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
               </span>
             </div>
@@ -6284,7 +6284,7 @@ function OrdersView({
                 </div>
 
                 {/* Req 30: Cách nhận hàng instructions */}
-                <div className="bg-emerald-50/50 rounded-xl p-3 border border-emerald-100 text-[11px] text-slate-600">
+                <div className="bg-[#F4FFE8]/50 rounded-xl p-3 border border-emerald-100 text-[11px] text-slate-600">
                   <div className="font-bold text-slate-800 mb-0.5">
                     Cách nhận hàng tại {ord.pickupPointName || ord.pickupPoint}:
                   </div>
@@ -6296,7 +6296,7 @@ function OrdersView({
 
                 <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
                   <div className="flex items-center space-x-1">
-                    <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                    <MapPin className="w-3.5 h-3.5 text-[#000181]" />
                     <span className="font-semibold text-slate-700">
                       {ord.pickupPointName || ord.pickupPoint}
                     </span>
@@ -6308,7 +6308,7 @@ function OrdersView({
                         e.stopPropagation();
                         onOpenReceipt(ord);
                       }}
-                      className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition flex items-center space-x-1"
+                      className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#F4FFE8] text-[#000181] hover:bg-[#D0FFA4]/40 border border-[#D0FFA4] transition flex items-center space-x-1"
                     >
                       <Receipt className="w-3.5 h-3.5" />
                       <span>Chi tiết thanh toán</span>
@@ -6321,7 +6321,7 @@ function OrdersView({
                           e.stopPropagation();
                           onOpenSnapshot(ord);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition flex items-center space-x-1"
+                        className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#EFFBFF] text-[#000181] hover:bg-[#FAF0FF] border border-indigo-200 transition flex items-center space-x-1"
                       >
                         <FileCheck className="w-3.5 h-3.5" />
                         <span>Tải hồ sơ giao dịch</span>
@@ -6386,7 +6386,7 @@ function OrdersView({
         {/* Phase 7 Req 26 & 56: Mobile-friendly Pickup QR & Pickup Code Card */}
         {selectedOrderForQR && (
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xl text-center space-y-4 h-fit sticky top-24">
-            <span className="text-xs uppercase font-extrabold text-emerald-700 tracking-wider block">
+            <span className="text-xs uppercase font-extrabold text-[#000181] tracking-wider block">
               THẺ NHẬN HÀNG TẠI LOCKER / ĐIỂM GOM
             </span>
 
@@ -6418,13 +6418,13 @@ function OrdersView({
                 <rect x="45" y="75" width="8" height="8" />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-slate-950 p-1.5 rounded-lg border border-emerald-500/50">
+                <div className="bg-slate-950 p-1.5 rounded-lg border border-[#D0FFA4]/50">
                   <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl font-mono text-sm font-black text-emerald-900">
+            <div className="bg-[#F4FFE8] border border-[#D0FFA4] p-3 rounded-xl font-mono text-sm font-black text-emerald-900">
               Pickup Code: {selectedOrderForQR.pickupCode}
             </div>
 
@@ -6437,13 +6437,13 @@ function OrdersView({
               </div>
               <div className="text-slate-500">
                 Pickup Time:{' '}
-                <strong className="text-indigo-700">
+                <strong className="text-[#000181]">
                   {selectedOrderForQR.pickupWindow || '26 Oct • 18:00 – 21:00'}
                 </strong>
               </div>
               <div className="text-slate-500">
                 Delivery Status:{' '}
-                <strong className="uppercase text-emerald-700">{selectedOrderForQR.status}</strong>
+                <strong className="uppercase text-[#000181]">{selectedOrderForQR.status}</strong>
               </div>
               <div className="text-slate-500">
                 Mã đơn: <strong className="text-slate-800">{selectedOrderForQR.id}</strong>
@@ -6463,7 +6463,7 @@ function OrdersView({
               {onOpenSnapshot && (
                 <button
                   onClick={() => onOpenSnapshot(selectedOrderForQR)}
-                  className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
+                  className="w-full py-2.5 rounded-xl bg-[#006EE9] hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
                 >
                   <FileCheck className="w-3.5 h-3.5" />
                   <span>Tải hồ sơ giao dịch (Hợp đồng)</span>
@@ -6471,7 +6471,7 @@ function OrdersView({
               )}
             </div>
 
-            <p className="text-[11px] text-emerald-800 font-semibold bg-emerald-50 p-2 rounded-xl">
+            <p className="text-[11px] text-emerald-800 font-semibold bg-[#F4FFE8] p-2 rounded-xl">
               Quét mã QR hoặc nhập Pickup Code tại điểm nhận để xác thực nhận hàng!
             </p>
           </div>
@@ -6577,7 +6577,7 @@ function MyRoomsView({
           <button
             onClick={() => setTab('ready_checkout')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-              tab === 'ready_checkout' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              tab === 'ready_checkout' ? 'bg-[#006EE9] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Sẵn sàng thanh toán ({readyCheckoutItems.length})
@@ -6631,7 +6631,7 @@ function MyRoomsView({
                       <span>•</span>
                       <span>{room.pickupPoint}</span>
                     </div>
-                    <div className="mt-2 text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg inline-block">
+                    <div className="mt-2 text-xs font-bold text-[#000181] bg-[#F4FFE8] px-2.5 py-0.5 rounded-lg inline-block">
                       Đã giảm: {formatVND(savings)}/{room.unit}
                     </div>
                   </div>

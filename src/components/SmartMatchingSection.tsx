@@ -127,7 +127,7 @@ export const SmartMatchingSection: React.FC<SmartMatchingSectionProps> = ({
                       {room.emoji} {room.productName}
                     </h3>
                     <div className="flex items-baseline gap-1.5 mt-0.5">
-                      <span className="text-base font-black text-indigo-600">
+                      <span className="text-base font-black text-[#006EE9]">
                         {formatVND(currentPrice)}
                       </span>
                       <span className="text-xs line-through text-slate-400">
@@ -143,11 +143,11 @@ export const SmartMatchingSection: React.FC<SmartMatchingSectionProps> = ({
                     <span>
                       {room.totalQuantity} / {room.maxQuantity} {room.unit}
                     </span>
-                    <span className="font-bold text-indigo-600">{percentFilled}%</span>
+                    <span className="font-bold text-[#006EE9]">{percentFilled}%</span>
                   </div>
                   <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                     <div
-                      className="bg-indigo-600 h-full rounded-full transition-all duration-500"
+                      className="bg-[#006EE9] h-full rounded-full transition-all duration-500"
                       style={{ width: `${percentFilled}%` }}
                     />
                   </div>

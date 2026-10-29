@@ -248,12 +248,12 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
       {/* 1. Data Collected & Connected Processing Summary (Req 14) */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
         <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-          <Eye className="w-5 h-5 text-emerald-600" />
+          <Eye className="w-5 h-5 text-[#000181]" />
           <span>1. Danh mục dữ liệu đang lưu trữ & Mục đích xử lý liên kết</span>
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
-            <span className="text-[10px] font-black uppercase text-emerald-700">
+            <span className="text-[10px] font-black uppercase text-[#000181]">
               Dữ liệu định danh cơ bản
             </span>
             <div className="font-bold text-slate-900">{currentUser.name}</div>
@@ -294,7 +294,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-emerald-600" />
+              <Sliders className="w-5 h-5 text-[#000181]" />
               <span>2. Quản lý sự đồng ý theo từng mục đích (Purpose-Specific Consent)</span>
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -323,7 +323,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
                   item.isRequired
                     ? 'bg-slate-50 border-slate-200'
                     : isAccepted
-                    ? 'bg-emerald-50/50 border-emerald-300'
+                    ? 'bg-[#F4FFE8]/50 border-[#D0FFA4]'
                     : 'bg-white border-slate-200'
                 }`}
               >
@@ -338,7 +338,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase shrink-0 ${
                           isAccepted
-                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                            ? 'bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]'
                             : 'bg-slate-100 text-slate-600 border border-slate-200'
                         }`}
                       >
@@ -368,7 +368,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
                       className={`px-3 py-1 rounded-lg font-bold text-xs transition ${
                         isAccepted
                           ? 'bg-rose-100 hover:bg-rose-200 text-rose-800'
-                          : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                          : 'bg-[#006EE9] hover:bg-[#000181] text-white text-white'
                       }`}
                     >
                       {isAccepted ? 'Rút lại đồng ý (Tắt)' : 'Cấp sự đồng ý (Bật)'}
@@ -396,7 +396,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
             <button
               type="button"
               onClick={handleExportAccountData}
-              className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
+              className="px-3.5 py-2 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Xuất dữ liệu tài khoản (Export JSON)</span>
@@ -512,9 +512,9 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
                           req.status === 'completed'
-                            ? 'bg-emerald-100 text-emerald-800'
+                            ? 'bg-[#D0FFA4]/40 text-emerald-800'
                             : req.status === 'partially_retained'
-                            ? 'bg-indigo-100 text-indigo-800'
+                            ? 'bg-[#FAF0FF] text-indigo-800'
                             : 'bg-amber-100 text-amber-800'
                         }`}
                       >
@@ -523,7 +523,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
                     </div>
                     <p className="text-slate-600">{req.details}</p>
                     {req.retainedCategoriesExplanation && (
-                      <p className="text-[11px] text-indigo-800 bg-indigo-50 p-2 rounded-lg border border-indigo-100">
+                      <p className="text-[11px] text-indigo-800 bg-[#EFFBFF] p-2 rounded-lg border border-indigo-100">
                         <strong>Giải thích dữ liệu bảo lưu:</strong> {req.retainedCategoriesExplanation}
                       </p>
                     )}
@@ -565,7 +565,7 @@ export const PrivacyCenterView: React.FC<PrivacyCenterViewProps> = ({
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-bold ${
                         rec.accepted
-                          ? 'bg-emerald-100 text-emerald-800'
+                          ? 'bg-[#D0FFA4]/40 text-emerald-800'
                           : 'bg-slate-200 text-slate-700'
                       }`}
                     >

@@ -689,15 +689,17 @@ export const ContactPage: React.FC = () => {
           <div className="space-y-3 text-xs text-slate-600">
             <div className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <div>
+              <div className="space-y-0.5">
                 <strong>Trụ sở nghiên cứu đồ án:</strong>
-                <p>Khu Đô Thị Đại Học Quốc Gia TP.HCM, Phường Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+                <p className="text-slate-800 font-semibold">Trường Đại học Tôn Đức Thắng</p>
+                <p>19 Nguyễn Hữu Thọ, phường Tân Hưng, TP. Hồ Chí Minh</p>
+                <p className="text-[11px] text-slate-500 italic">(trước đây thuộc phường Tân Phong, Quận 7)</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-blue-600 shrink-0" />
               <div>
-                <strong>Hotline điều phối (Demo):</strong> 1900 6868 (08:00 – 21:00)
+                <strong>Hotline điều phối (Demo):</strong> 0906025608 (08:00 – 21:00)
               </div>
             </div>
             <div className="flex items-center gap-3">

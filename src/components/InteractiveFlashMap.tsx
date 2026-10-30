@@ -1586,7 +1586,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
                   <span>Điểm nhận</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-md bg-[#C7F000] border border-white shrink-0"></div>
+                  <div className="w-3 h-3 rounded-md bg-[#7B3FF2] border border-white shrink-0"></div>
                   <span>Nhà cung cấp</span>
                 </div>
               </div>

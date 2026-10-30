@@ -113,29 +113,26 @@ export function getBaseVectorStyleUrl(preset: MapStylePreset): string {
     return `https://api.maptiler.com/maps/streets-v2/style.json?key=${apiKey}`;
   }
 
-  // Zero-Key Open Vector Providers (CARTO Voyager / Positron vector styles)
-  if (preset === 'minimal') {
-    return 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
-  }
-  return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
+  // Without an API key, do not load any external provider requiring credentials
+  return '';
 }
 
-// Guaranteed OpenStreetMap Humanitarian street basemap style (Zero watermark, 100% open, high detail)
+// Guaranteed OpenStreetMap street basemap style (Zero watermark, 100% open, high detail)
 export function getOsmRasterStyle(): StyleSpecification {
   return {
     version: 8,
     name: 'FlashGroup Standard Streets',
-    glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
+    glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
     sources: {
-      'osm-hot': {
+      'osm-tiles': {
         type: 'raster',
         tiles: [
+          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           'https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
           'https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-          'https://c.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         ],
         tileSize: 256,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/">OSM France</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxzoom: 19,
       },
       'flashgroup-geographic-labels': {
@@ -145,9 +142,9 @@ export function getOsmRasterStyle(): StyleSpecification {
     },
     layers: [
       {
-        id: 'osm-hot-layer',
+        id: 'osm-tiles-layer',
         type: 'raster',
-        source: 'osm-hot',
+        source: 'osm-tiles',
         minzoom: 0,
         maxzoom: 19,
       },
@@ -191,7 +188,7 @@ export function getMinimalRasterStyle(): StyleSpecification {
   return {
     version: 8,
     name: 'FlashGroup Minimal Canvas',
-    glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
+    glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
     sources: {
       'esri-gray-base': {
         type: 'raster',
@@ -270,7 +267,7 @@ export function getSatelliteRasterStyle(): StyleSpecification {
   return {
     version: 8,
     name: 'FlashGroup Satellite Imagery',
-    glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
+    glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
     sources: {
       'esri-satellite': {
         type: 'raster',
@@ -354,7 +351,7 @@ export async function buildFlashGroupVectorStyle(
   // Default 'streets' preset:
   const apiKey = getMapApiKey();
   if (!apiKey) {
-    // Zero-Key: Return Carto Voyager street style instantly with full Vietnamese labels
+    // Zero-Key: Return OpenStreetMap street style instantly with full Vietnamese labels
     const streetsStyle = getOsmRasterStyle();
     vectorStyleCache.set(cacheKey, streetsStyle);
     return streetsStyle;

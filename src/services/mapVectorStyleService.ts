@@ -120,24 +120,23 @@ export function getBaseVectorStyleUrl(preset: MapStylePreset): string {
   return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 }
 
-// Guaranteed Carto Voyager street basemap style (Zero blocked tiles, 100% availability, @2x crisp raster)
+// Guaranteed OpenStreetMap Humanitarian street basemap style (Zero watermark, 100% open, high detail)
 export function getOsmRasterStyle(): StyleSpecification {
   return {
     version: 8,
     name: 'FlashGroup Standard Streets',
     glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
     sources: {
-      'carto-voyager': {
+      'osm-hot': {
         type: 'raster',
         tiles: [
-          'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-          'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-          'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
-          'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+          'https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+          'https://b.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+          'https://c.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
         ],
         tileSize: 256,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        maxzoom: 20,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/">OSM France</a>',
+        maxzoom: 19,
       },
       'flashgroup-geographic-labels': {
         type: 'geojson',
@@ -146,11 +145,11 @@ export function getOsmRasterStyle(): StyleSpecification {
     },
     layers: [
       {
-        id: 'carto-voyager-layer',
+        id: 'osm-hot-layer',
         type: 'raster',
-        source: 'carto-voyager',
+        source: 'osm-hot',
         minzoom: 0,
-        maxzoom: 20,
+        maxzoom: 19,
       },
       {
         id: 'flashgroup-geographic-labels-layer',
@@ -187,24 +186,29 @@ export function getOsmRasterStyle(): StyleSpecification {
   };
 }
 
-// Minimal basemap style (Carto Positron @2x Retina)
+// Minimal basemap style (Esri Light Gray Canvas & Labels - Clean & Watermark-Free)
 export function getMinimalRasterStyle(): StyleSpecification {
   return {
     version: 8,
-    name: 'FlashGroup Minimal Positron',
+    name: 'FlashGroup Minimal Canvas',
     glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
     sources: {
-      'carto-positron': {
+      'esri-gray-base': {
         type: 'raster',
         tiles: [
-          'https://a.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
-          'https://b.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
-          'https://c.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
-          'https://d.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
         ],
         tileSize: 256,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        maxzoom: 20,
+        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+        maxzoom: 19,
+      },
+      'esri-gray-labels': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 19,
       },
       'flashgroup-geographic-labels': {
         type: 'geojson',
@@ -213,11 +217,18 @@ export function getMinimalRasterStyle(): StyleSpecification {
     },
     layers: [
       {
-        id: 'carto-positron-layer',
+        id: 'esri-gray-base-layer',
         type: 'raster',
-        source: 'carto-positron',
+        source: 'esri-gray-base',
         minzoom: 0,
-        maxzoom: 20,
+        maxzoom: 19,
+      },
+      {
+        id: 'esri-gray-labels-layer',
+        type: 'raster',
+        source: 'esri-gray-labels',
+        minzoom: 0,
+        maxzoom: 19,
       },
       {
         id: 'flashgroup-geographic-labels-layer',

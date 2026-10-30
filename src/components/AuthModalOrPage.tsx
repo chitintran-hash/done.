@@ -30,7 +30,7 @@ interface AuthProps {
   isSupabaseMode: boolean;
   onClose?: () => void;
   initialMode?: 'login' | 'register' | 'forgot_password';
-  initialRole?: 'buyer' | 'supplier' | 'admin';
+  initialRole?: 'buyer' | 'supplier';
 }
 
 export const AuthModalOrPage: React.FC<AuthProps> = ({
@@ -47,8 +47,8 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
   const [registerRole, setRegisterRole] = useState<'buyer' | 'supplier'>(
     initialRole === 'supplier' ? 'supplier' : 'buyer'
   ); // Strictly NO admin in registration
-  const [loginRole, setLoginRole] = useState<'buyer' | 'supplier' | 'admin'>(
-    initialRole === 'admin' ? 'admin' : initialRole === 'supplier' ? 'supplier' : 'buyer'
+  const [loginRole, setLoginRole] = useState<'buyer' | 'supplier'>(
+    initialRole === 'supplier' ? 'supplier' : 'buyer'
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -364,12 +364,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 </p>
               </div>
 
-              {/* Role Selection for Login: Buyer, Supplier, Admin */}
+              {/* Role Selection for Login: Buyer & Supplier */}
               <div className="mb-3.5">
                 <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-2">
                   Bạn muốn đăng nhập với vai trò nào?
                 </label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2.5">
                   {/* Option 1: Buyer */}
                   <button
                     type="button"
@@ -421,63 +421,19 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       <div className="text-[10px] text-[#53536A] font-medium">Supplier</div>
                     </div>
                   </button>
-
-                  {/* Option 3: Admin */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLoginRole('admin');
-                      setLoginError(null);
-                    }}
-                    className={`p-2.5 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
-                      loginRole === 'admin'
-                        ? 'border-[#000181] bg-[#000181] text-white ring-2 ring-[#000181]/30 shadow-xs'
-                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
-                    }`}
-                  >
-                    <div
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                        loginRole === 'admin' ? 'bg-[#D0FFA4] text-[#000181]' : 'bg-[#E6E6EE] text-[#53536A]'
-                      }`}
-                    >
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div
-                        className={`text-xs font-black ${
-                          loginRole === 'admin' ? 'text-white' : 'text-[#000181]'
-                        }`}
-                      >
-                        Quản trị viên
-                      </div>
-                      <div
-                        className={`text-[10px] font-medium ${
-                          loginRole === 'admin' ? 'text-indigo-200' : 'text-[#53536A]'
-                        }`}
-                      >
-                        Admin
-                      </div>
-                    </div>
-                  </button>
                 </div>
               </div>
 
               {/* 1-Click Fast Fill for the selected role */}
               <div className="mb-4 p-2.5 rounded-2xl bg-[#F6F7FB] border border-[#E6E6EE] flex items-center justify-between gap-2">
                 <div className="text-[11px] text-[#53536A] truncate">
-                  {loginRole === 'buyer' && (
+                  {loginRole === 'buyer' ? (
                     <span>
                       Tài khoản mẫu: <strong className="text-[#000181]">buyer@flashgroup.demo</strong>
                     </span>
-                  )}
-                  {loginRole === 'supplier' && (
+                  ) : (
                     <span>
                       Tài khoản mẫu: <strong className="text-[#000181]">supplier@flashgroup.demo</strong>
-                    </span>
-                  )}
-                  {loginRole === 'admin' && (
-                    <span>
-                      Admin: <strong className="text-[#000181]">tranchitin2006@gmail.com</strong>
                     </span>
                   )}
                 </div>
@@ -487,11 +443,8 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     if (loginRole === 'buyer') {
                       setEmail('buyer@flashgroup.demo');
                       setPassword('123456');
-                    } else if (loginRole === 'supplier') {
-                      setEmail('supplier@flashgroup.demo');
-                      setPassword('123456');
                     } else {
-                      setEmail('tranchitin2006@gmail.com');
+                      setEmail('supplier@flashgroup.demo');
                       setPassword('123456');
                     }
                     setLoginError(null);
@@ -588,13 +541,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`w-full py-3 px-4 font-black text-xs uppercase tracking-wider rounded-2xl shadow-md transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed ${
-                    loginRole === 'admin'
-                      ? 'bg-[#000181] text-[#D0FFA4] hover:bg-indigo-950 shadow-[#000181]/25'
-                      : loginRole === 'supplier'
-                      ? 'bg-[#000181] text-white hover:bg-[#006EE9] shadow-[#000181]/20'
-                      : 'bg-[#006EE9] text-white hover:bg-[#000181] shadow-[#006EE9]/20'
-                  }`}
+                  className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <>
@@ -603,13 +550,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     </>
                   ) : (
                     <>
-                      <span>
-                        {loginRole === 'admin'
-                          ? 'ĐĂNG NHẬP QUẢN TRỊ VIÊN (ADMIN)'
-                          : loginRole === 'supplier'
-                          ? 'ĐĂNG NHẬP NHÀ CUNG CẤP'
-                          : 'ĐĂNG NHẬP NGƯỜI MUA'}
-                      </span>
+                      <span>ĐĂNG NHẬP</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}

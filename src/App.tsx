@@ -344,11 +344,11 @@ export default function FlashGroupApp() {
   // Auth modal state for public visitor login/register
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register' | 'forgot_password'>('login');
-  const [authModalRole, setAuthModalRole] = useState<'buyer' | 'supplier' | 'admin'>('buyer');
+  const [authModalRole, setAuthModalRole] = useState<'buyer' | 'supplier'>('buyer');
 
-  const openLoginModal = (roleOrEvent?: 'buyer' | 'supplier' | 'admin' | React.MouseEvent | unknown) => {
+  const openLoginModal = (roleOrEvent?: 'buyer' | 'supplier' | React.MouseEvent | unknown) => {
     setAuthModalMode('login');
-    if (typeof roleOrEvent === 'string' && (roleOrEvent === 'buyer' || roleOrEvent === 'supplier' || roleOrEvent === 'admin')) {
+    if (typeof roleOrEvent === 'string' && (roleOrEvent === 'buyer' || roleOrEvent === 'supplier')) {
       setAuthModalRole(roleOrEvent);
     } else {
       setAuthModalRole('buyer');

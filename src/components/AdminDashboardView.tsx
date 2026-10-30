@@ -77,6 +77,7 @@ import {
 
 interface AdminDashboardProps {
   currentAdminTab: string;
+  onSelectTab?: (tab: string) => void;
   users: User[];
   suppliers: Supplier[];
   products: Product[];
@@ -171,6 +172,7 @@ interface AdminDashboardProps {
 
 export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
   currentAdminTab,
+  onSelectTab,
   users,
   suppliers,
   products,
@@ -221,6 +223,20 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
   onUpdateChecklistItem,
   showToast,
 }) => {
+  const [localTab, setLocalTab] = useState<string>(currentAdminTab);
+  React.useEffect(() => {
+    setLocalTab(currentAdminTab);
+  }, [currentAdminTab]);
+
+  const activeTab = localTab || currentAdminTab;
+
+  const handleTabChange = (tabId: string) => {
+    setLocalTab(tabId);
+    if (onSelectTab) {
+      onSelectTab(tabId);
+    }
+  };
+
   const [forceCloseModalRoomId, setForceCloseModalRoomId] = useState<string | null>(null);
   const [rateDraftPct, setRateDraftPct] = useState<number>(Math.round(commissionRate * 100));
 
@@ -635,6 +651,55 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
         </div>
       </div>
 
+      {/* Admin Sub-Tab Navigation Bar */}
+      <div className="bg-white p-2 rounded-2xl border border-[#E6E6EE] shadow-sm">
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-thin pb-1">
+          {[
+            { id: 'overview', label: 'Tổng quan', count: null },
+            { id: 'finance', label: 'Tài chính & Phí sàn', count: null },
+            { id: 'payouts', label: 'Đối soát Payout', count: payouts.filter((p) => p.status === 'pending').length },
+            { id: 'orders', label: 'Đơn hàng', count: orders.length },
+            { id: 'rooms', label: 'Phòng gom', count: rooms.length },
+            { id: 'products', label: 'Sản phẩm', count: products.length },
+            { id: 'users', label: 'Người dùng', count: users.length },
+            { id: 'suppliers', label: 'Nhà cung cấp', count: suppliers.length },
+            { id: 'refunds', label: 'Hoàn tiền', count: pendingRefunds },
+            { id: 'vouchers', label: 'Vouchers', count: vouchers.length },
+            { id: 'logistics', label: 'Logistics & Hub', count: pickupPoints.length },
+            { id: 'growth', label: 'Tăng trưởng & Social', count: null },
+            { id: 'compliance', label: 'Pháp lý & KYC', count: productReports.filter((r) => r.status === 'open').length },
+            { id: 'reports', label: 'Báo cáo vi phạm', count: null },
+          ].map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => handleTabChange(tab.id)}
+                className={`shrink-0 px-3.5 py-2 rounded-xl text-xs font-black tracking-wide uppercase transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
+                  isActive
+                    ? 'bg-[#000181] text-[#D0FFA4] shadow-sm scale-[1.02]'
+                    : 'text-[#53536A] hover:text-[#000181] hover:bg-[#F6F7FB]'
+                }`}
+              >
+                <span>{tab.label}</span>
+                {typeof tab.count === 'number' && tab.count > 0 && (
+                  <span
+                    className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      isActive
+                        ? 'bg-[#D0FFA4] text-[#000181]'
+                        : 'bg-[#EFFBFF] text-[#006EE9] border border-[#83E7FF]'
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Requirement 23: Warning if Refund occurred after Payout was already paid */}
       {refundedAfterPaidOrders.length > 0 && (
         <div className="bg-rose-50 border-2 border-rose-400 rounded-2xl p-4 flex items-start space-x-3 text-xs text-rose-900 shadow-sm">
@@ -651,7 +716,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: OVERVIEW (With Requirement 14 Platform Revenue Cards) */}
-      {currentAdminTab === 'overview' && (
+      {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* Operational KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -780,7 +845,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: FINANCE (Requirement 15 & Requirement 21 Commission Settings) */}
-      {currentAdminTab === 'finance' && (
+      {activeTab === 'finance' && (
         <div className="space-y-6">
           {/* 6 Finance Summary Cards (Req 15) */}
           <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
@@ -973,7 +1038,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: PAYOUTS (Requirement 12: Admin Payout Management) */}
-      {currentAdminTab === 'payouts' && (
+      {activeTab === 'payouts' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -1089,7 +1154,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: USERS */}
-      {currentAdminTab === 'users' && (
+      {activeTab === 'users' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100 flex items-center justify-between">
             <h3 className="font-bold text-slate-900 text-sm">Danh sách Tài khoản người dùng ({users.length})</h3>
@@ -1153,7 +1218,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: SUPPLIERS */}
-      {currentAdminTab === 'suppliers' && (
+      {activeTab === 'suppliers' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100">
             <h3 className="font-bold text-slate-900 text-sm">Quản lý Nhà cung cấp ({suppliers.length})</h3>
@@ -1245,7 +1310,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: PRODUCTS */}
-      {currentAdminTab === 'products' && (
+      {activeTab === 'products' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100">
             <h3 className="font-bold text-slate-900 text-sm">Danh mục Toàn bộ Sản phẩm ({products.length})</h3>
@@ -1309,7 +1374,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: ROOMS */}
-      {currentAdminTab === 'rooms' && (
+      {activeTab === 'rooms' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100">
             <h3 className="font-bold text-slate-900 text-sm">Toàn bộ Phòng gom trên nền tảng ({rooms.length})</h3>
@@ -1360,7 +1425,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: ORDERS */}
-      {currentAdminTab === 'orders' && (
+      {activeTab === 'orders' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100">
             <h3 className="font-bold text-slate-900 text-sm">Lịch sử Giao dịch Đơn hàng & Snapshot Tài chính ({orders.length})</h3>
@@ -1414,7 +1479,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: REFUNDS */}
-      {currentAdminTab === 'refunds' && (
+      {activeTab === 'refunds' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
           <div className="p-5 border-b border-slate-100">
             <h3 className="font-bold text-slate-900 text-sm">Xử lý Yêu cầu Hoàn tiền ({refunds.length})</h3>
@@ -1503,7 +1568,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: VOUCHERS (Requirement 39 & 40: Admin Voucher Management) */}
-      {currentAdminTab === 'vouchers' && (
+      {activeTab === 'vouchers' && (
         <div className="space-y-6">
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -1679,7 +1744,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: GROWTH & LOYALTY DASHBOARD (Requirements 44 & 45) */}
-      {currentAdminTab === 'growth' && (() => {
+      {activeTab === 'growth' && (() => {
         const shareEventsCount = roomEvents.filter((e) => e.eventType === 'shared').length;
         const inviteLinksCreated = Math.max(shareEventsCount + referrals.length, referrals.length);
         const referralClicks = referrals.length;
@@ -2009,7 +2074,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: LOGISTICS & PICKUP POINT NETWORK (Phase 7 Req 19, 20, 36-42, 46, 53-55) */}
-      {currentAdminTab === 'logistics' && (
+      {activeTab === 'logistics' && (
         <div className="space-y-6">
           {(() => {
             const activeBatchesCount = deliveryBatches.filter(
@@ -2913,7 +2978,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: COMPLIANCE (Phase 8 Req 29, 30, 33) */}
-      {currentAdminTab === 'compliance' && (
+      {activeTab === 'compliance' && (
         <AdminComplianceTab
           suppliers={suppliers}
           verificationDocuments={verificationDocuments}
@@ -2944,7 +3009,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       )}
 
       {/* VIEW: REPORTS (Requirement 26: Admin Analytics) */}
-      {currentAdminTab === 'reports' && (
+      {activeTab === 'reports' && (
         <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
           <div>
             <h3 className="font-bold text-slate-900 text-base">

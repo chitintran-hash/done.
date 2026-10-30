@@ -120,6 +120,9 @@ import {
   createInitialSuppliers,
   createInitialProducts,
   createInitialRooms,
+  createInitialParticipations,
+  createInitialOrders,
+  createInitialPayouts,
   createInitialNotifications,
   createInitialReviews,
   createInitialRefunds,
@@ -337,12 +340,14 @@ export default function FlashGroupApp() {
   });
 
   const [participations, setParticipations] = useState<GroupParticipation[]>(() => {
-    return safeParseStorage<GroupParticipation[]>('flashgroup_v3_participations', []);
+    const stored = safeParseStorage<GroupParticipation[]>('flashgroup_v3_participations', []);
+    return stored && stored.length > 0 ? stored : createInitialParticipations();
   });
 
   // Orders, Notifications, Reviews, Refunds, Favorites, Payouts & Commission Rate
   const [orders, setOrders] = useState<Order[]>(() => {
-    return safeParseStorage<Order[]>('flashgroup_v3_orders', []);
+    const stored = safeParseStorage<Order[]>('flashgroup_v3_orders', []);
+    return stored && stored.length > 0 ? stored : createInitialOrders();
   });
 
   const [notifications, setNotifications] = useState<Notification[]>(() => {
@@ -362,7 +367,8 @@ export default function FlashGroupApp() {
   });
 
   const [payouts, setPayouts] = useState<SupplierPayout[]>(() => {
-    return safeParseStorage<SupplierPayout[]>('flashgroup_v3_payouts', []);
+    const stored = safeParseStorage<SupplierPayout[]>('flashgroup_v3_payouts', []);
+    return stored && stored.length > 0 ? stored : createInitialPayouts();
   });
 
   const [commissionRate, setCommissionRate] = useState<number>(() => {
@@ -1572,13 +1578,13 @@ export default function FlashGroupApp() {
     setSuppliers(createInitialSuppliers());
     setProducts(createInitialProducts());
     setRooms(createInitialRooms());
-    setParticipations([]);
-    setOrders([]);
+    setParticipations(createInitialParticipations());
+    setOrders(createInitialOrders());
     setNotifications(createInitialNotifications());
     setReviews(createInitialReviews());
     setRefunds(createInitialRefunds());
     setFavoriteRoomIds([]);
-    setPayouts([]);
+    setPayouts(createInitialPayouts());
     setCommissionRate(DEFAULT_PLATFORM_COMMISSION_RATE);
     setReferrals(createInitialReferrals());
     setRoomEvents(createInitialRoomEvents());
@@ -3239,6 +3245,19 @@ export default function FlashGroupApp() {
                 onResetPassword={async (email) => {
                   return await authService.resetPassword(email);
                 }}
+                onUpdatePassword={async (email, newPass) => {
+                  const targetUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+                  if (!targetUser) {
+                    return { success: false, error: 'Không tìm thấy tài khoản với email này trên hệ thống.' };
+                  }
+                  setUsers((prev) => {
+                    const updated = prev.map((u) => (u.id === targetUser.id ? { ...u, password: newPass } : u));
+                    localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                    return updated;
+                  });
+                  showToast(`Đặt lại mật khẩu thành công cho ${email}!`);
+                  return { success: true };
+                }}
               />
             </div>
           </div>
@@ -4603,6 +4622,7 @@ export default function FlashGroupApp() {
             ) : (
               <AdminDashboardView
                 currentAdminTab={adminTab}
+                onSelectTab={(tab) => setAdminTab(tab as any)}
                 users={users}
                 suppliers={suppliers}
                 products={products}

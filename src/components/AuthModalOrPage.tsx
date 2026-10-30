@@ -26,6 +26,7 @@ interface AuthProps {
   onLogin: (email: string, password: string, rememberMe?: boolean) => Promise<{ success: boolean; error?: string }>;
   onRegister: (payload: SignUpPayload) => Promise<{ success: boolean; error?: string }>;
   onResetPassword?: (email: string) => Promise<{ success: boolean; error?: string }>;
+  onUpdatePassword?: (email: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   isSupabaseMode: boolean;
   onClose?: () => void;
   initialMode?: 'login' | 'register' | 'forgot_password';
@@ -36,6 +37,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
   onLogin,
   onRegister,
   onResetPassword,
+  onUpdatePassword,
   isSupabaseMode,
   onClose,
   initialMode = 'login',
@@ -77,7 +79,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
 
   // Forgot password state
   const [forgotEmail, setForgotEmail] = useState<string>('');
-  const [forgotSuccess, setForgotSuccess] = useState<boolean>(false);
+  const [resetStep, setResetStep] = useState<'request' | 'verify_and_set'>('request');
+  const [resetOtp, setResetOtp] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>('');
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [resetSuccessMessage, setResetSuccessMessage] = useState<string | null>(null);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -195,16 +203,67 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
     e.preventDefault();
     if (isLoading) return;
     const trimmed = forgotEmail.trim();
-    if (!trimmed) return;
+    if (!trimmed) {
+      setResetError('Vui lòng nhập địa chỉ email.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmed)) {
+      setResetError('Định dạng email chưa hợp lệ.');
+      return;
+    }
 
+    setResetError(null);
     setIsLoading(true);
     try {
       if (onResetPassword) {
         await onResetPassword(trimmed);
       }
-      setForgotSuccess(true);
-    } catch (err) {
-      setForgotSuccess(true);
+      setResetStep('verify_and_set');
+      setResetOtp('123456');
+    } catch (err: any) {
+      setResetStep('verify_and_set');
+      setResetOtp('123456');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPasswordConfirm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isLoading) return;
+    setResetError(null);
+
+    if (!resetOtp.trim()) {
+      setResetError('Vui lòng nhập mã xác thực OTP.');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setResetError('Mật khẩu mới phải có ít nhất 6 ký tự.');
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setResetError('Xác nhận mật khẩu mới không khớp.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      if (onUpdatePassword) {
+        const res = await onUpdatePassword(forgotEmail.trim(), newPassword);
+        if (!res.success) {
+          setResetError(res.error || 'Không thể đặt lại mật khẩu.');
+          setIsLoading(false);
+          return;
+        }
+      }
+      setResetSuccessMessage('Đặt lại mật khẩu thành công! Bạn có thể đăng nhập ngay bằng mật khẩu mới.');
+      setEmail(forgotEmail.trim());
+      setPassword(newPassword);
+    } catch (err: any) {
+      setResetError('Lỗi cập nhật mật khẩu. Vui lòng thử lại.');
     } finally {
       setIsLoading(false);
     }
@@ -738,37 +797,50 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
           {/* ================= MODE: FORGOT PASSWORD (REQ 19) ================= */}
           {authMode === 'forgot_password' && (
             <div>
+              {/* Header */}
               <div className="mb-4 text-center">
                 <div className="w-12 h-12 rounded-2xl bg-[#EFFBFF] text-[#006EE9] flex items-center justify-center mx-auto mb-2">
                   <KeyRound className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-black text-[#000181]">
-                  Khôi phục mật khẩu
+                  {resetStep === 'request' ? 'Khôi phục mật khẩu' : 'Đặt lại mật khẩu mới'}
                 </h3>
                 <p className="text-xs text-[#53536A] mt-1 max-w-sm mx-auto">
-                  Nhập địa chỉ email tài khoản của bạn để nhận hướng dẫn đặt lại mật khẩu an toàn.
+                  {resetStep === 'request'
+                    ? 'Nhập địa chỉ email tài khoản của bạn để nhận mã xác thực đặt lại mật khẩu an toàn.'
+                    : `Xác thực và thiết lập mật khẩu mới cho tài khoản: ${forgotEmail}`}
                 </p>
               </div>
 
-              {forgotSuccess ? (
-                <div className="p-4 rounded-2xl bg-[#F4FFE8] border border-[#D0FFA4] text-[#000181] text-xs space-y-3 animate-fade-in text-center">
-                  <CheckCircle2 className="w-8 h-8 text-[#006EE9] mx-auto" />
-                  <p className="font-bold leading-relaxed">
-                    Nếu email tồn tại, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến hòm thư của bạn.
+              {/* Reset Error */}
+              {resetError && (
+                <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-2 animate-shake">
+                  <X className="w-4 h-4 shrink-0 text-rose-500" />
+                  <span>{resetError}</span>
+                </div>
+              )}
+
+              {/* Reset Success Message */}
+              {resetSuccessMessage ? (
+                <div className="p-5 rounded-2xl bg-[#F4FFE8] border border-[#D0FFA4] text-[#000181] text-xs space-y-3.5 animate-fade-in text-center">
+                  <CheckCircle2 className="w-9 h-9 text-[#006EE9] mx-auto" />
+                  <p className="font-extrabold text-sm leading-relaxed text-[#000181]">
+                    {resetSuccessMessage}
                   </p>
                   <button
                     type="button"
                     onClick={() => {
                       setAuthMode('login');
-                      setForgotSuccess(false);
-                      setForgotEmail('');
+                      setResetSuccessMessage(null);
+                      setResetStep('request');
                     }}
-                    className="w-full py-2.5 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer"
+                    className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer shadow-md shadow-[#006EE9]/20"
                   >
-                    Quay lại Đăng nhập
+                    Đăng nhập ngay
                   </button>
                 </div>
-              ) : (
+              ) : resetStep === 'request' ? (
+                /* STEP 1: REQUEST EMAIL */
                 <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                   <div>
                     <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
@@ -792,11 +864,11 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     {isLoading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
-                        <span>Đang gửi liên kết...</span>
+                        <span>Đang gửi mã...</span>
                       </>
                     ) : (
                       <>
-                        <span>GỬI LIÊN KẾT ĐẶT LẠI MẬT KHẨU</span>
+                        <span>TIẾP TỤC & GỬI MÃ XÁC THỰC</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
@@ -809,6 +881,107 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       className="text-xs font-bold text-[#53536A] hover:text-[#000181] cursor-pointer"
                     >
                       &larr; Quay lại Đăng nhập
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                /* STEP 2: ENTER OTP & NEW PASSWORD */
+                <form onSubmit={handleResetPasswordConfirm} className="space-y-3.5">
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-black text-[#000181] uppercase tracking-wider">
+                        Mã xác thực OTP <span className="text-rose-500">*</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setResetOtp('123456')}
+                        className="text-[11px] font-bold text-[#006EE9] hover:underline cursor-pointer"
+                      >
+                        Dùng mã demo: 123456
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={resetOtp}
+                      onChange={(e) => setResetOtp(e.target.value)}
+                      placeholder="Nhập mã 6 chữ số"
+                      maxLength={6}
+                      required
+                      className="block w-full px-3.5 py-2.5 text-center tracking-widest text-lg font-black bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                      Mật khẩu mới <span className="text-rose-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showNewPassword ? 'text' : 'password'}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Tối thiểu 6 ký tự"
+                        minLength={6}
+                        required
+                        className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword((prev) => !prev)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#53536A] hover:text-[#000181] transition cursor-pointer"
+                      >
+                        {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                      Xác nhận mật khẩu mới <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type={showNewPassword ? 'text' : 'password'}
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      placeholder="Nhập lại mật khẩu mới"
+                      minLength={6}
+                      required
+                      className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
+                        <span>Đang cập nhật...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>XÁC NHẬN ĐỔI MẬT KHẨU</span>
+                        <CheckCircle2 className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+
+                  <div className="flex items-center justify-between pt-2 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setResetStep('request')}
+                      className="font-bold text-[#53536A] hover:text-[#000181] cursor-pointer"
+                    >
+                      &larr; Đổi email khác
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAuthMode('login')}
+                      className="font-bold text-[#006EE9] hover:underline cursor-pointer"
+                    >
+                      Về Đăng nhập
                     </button>
                   </div>
                 </form>

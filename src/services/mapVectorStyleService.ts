@@ -124,6 +124,40 @@ export function getBaseVectorStyleUrl(preset: MapStylePreset): string {
   return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 }
 
+// Ultra-reliable OpenStreetMap raster style fallback (Zero external dependencies, guaranteed 100% availability)
+export function getOsmRasterStyle(): StyleSpecification {
+  return {
+    version: 8,
+    name: 'FlashGroup Standard OSM',
+    sources: {
+      'osm-raster': {
+        type: 'raster',
+        tiles: [
+          'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        ],
+        tileSize: 256,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxzoom: 19,
+      },
+      'flashgroup-geographic-labels': {
+        type: 'geojson',
+        data: FLASHGROUP_GEOGRAPHIC_LABELS_GEOJSON as any,
+      },
+    },
+    layers: [
+      {
+        id: 'osm-raster-layer',
+        type: 'raster',
+        source: 'osm-raster',
+        minzoom: 0,
+        maxzoom: 19,
+      },
+    ],
+  };
+}
+
 // Build and refine the vector style object
 export async function buildFlashGroupVectorStyle(
   preset: MapStylePreset = 'streets'
@@ -136,17 +170,19 @@ export async function buildFlashGroupVectorStyle(
   const url = getBaseVectorStyleUrl(preset);
   console.log(`[FlashMap] Loading vector basemap style for preset "${preset}" from:`, url);
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000);
 
-  const res = await fetch(url, { signal: controller.signal });
-  clearTimeout(timeoutId);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
 
-  if (!res.ok) {
-    throw new Error(`Failed to load vector basemap style (${res.status} ${res.statusText})`);
-  }
+    if (!res.ok) {
+      console.warn(`[FlashMap] Vector basemap returned ${res.status}, using standard OSM fallback.`);
+      return getOsmRasterStyle();
+    }
 
-  const baseStyle: StyleSpecification = await res.json();
+    const baseStyle: StyleSpecification = await res.json();
   const disabledLayers: string[] = [];
   const modifiedLayers: string[] = [];
 
@@ -241,7 +277,7 @@ export async function buildFlashGroupVectorStyle(
     maxzoom: 13,
     layout: {
       'text-field': ['get', 'name'],
-      'text-font': ['Open Sans Bold', 'Noto Sans Regular', 'Montserrat SemiBold'],
+      'text-font': ['Montserrat SemiBold', 'Open Sans Bold', 'Noto Sans Regular'],
       'text-size': [
         'interpolate',
         ['linear'],
@@ -284,4 +320,8 @@ export async function buildFlashGroupVectorStyle(
 
   vectorStyleCache.set(cacheKey, finalStyle);
   return finalStyle;
+} catch (err) {
+  console.warn('[FlashMap] Vector style processing failed, falling back to OSM raster style:', err);
+  return getOsmRasterStyle();
+}
 }

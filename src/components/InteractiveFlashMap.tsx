@@ -35,6 +35,7 @@ import {
   MapStylePreset,
   getAvailableStylePresets,
   buildFlashGroupVectorStyle,
+  getOsmRasterStyle,
   getMapApiKey,
 } from '../services/mapVectorStyleService';
 
@@ -337,15 +338,31 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
           attributionControl: { compact: true },
         });
 
-        map.on('load', () => {
-          console.log('[FlashMap] Vector basemap loaded successfully! Style preset:', activeStylePreset);
-          if (isMounted) {
-            setIsMapLoaded(true);
-            setHasMapError(false);
-            setIsLoadingVectorStyle(false);
-          }
+        let hasMarkedReady = false;
+        const markMapReady = () => {
+          if (hasMarkedReady || !isMounted) return;
+          hasMarkedReady = true;
+          console.log('[FlashMap] Map is ready for display! Style preset:', activeStylePreset);
+          setIsMapLoaded(true);
+          setHasMapError(false);
+          setIsLoadingVectorStyle(false);
           map.resize();
+        };
+
+        map.once('load', markMapReady);
+        map.once('idle', markMapReady);
+        map.once('styledata', markMapReady);
+        map.once('render', () => {
+          markMapReady();
         });
+
+        // Fail-safe guard timeout: Never let the loading spinner hang for more than 2.5s
+        const loadGuardTimer = setTimeout(() => {
+          if (!hasMarkedReady) {
+            console.warn('[FlashMap] Map load timeout guard triggered, forcing display');
+            markMapReady();
+          }
+        }, 2500);
 
         map.on('error', (e) => {
           console.warn('[FlashMap] Vector map runtime event:', e);
@@ -376,6 +393,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         observer.observe(mapContainerRef.current);
 
         return () => {
+          clearTimeout(loadGuardTimer);
           clearTimeout(t1);
           clearTimeout(t2);
           clearTimeout(t3);
@@ -385,11 +403,27 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
           mapInstanceRef.current = null;
         };
       } catch (err: any) {
-        console.error('[FlashMap] Failed to initialize vector map:', err);
-        if (isMounted) {
-          setHasMapError(true);
-          setVectorStyleError(err.message || 'Không thể tải bản đồ vector.');
-          setIsLoadingVectorStyle(false);
+        console.error('[FlashMap] Failed to initialize vector map, trying fallback:', err);
+        if (isMounted && mapContainerRef.current) {
+          try {
+            const fallbackStyle = getOsmRasterStyle();
+            const map = new Map({
+              container: mapContainerRef.current,
+              style: fallbackStyle,
+              center: [106.7009, 10.7769],
+              zoom: 13.5,
+              attributionControl: { compact: true },
+            });
+            mapInstanceRef.current = map;
+            setIsMapLoaded(true);
+            setHasMapError(false);
+            setIsLoadingVectorStyle(false);
+            setTimeout(() => map.resize(), 100);
+          } catch (fallbackErr) {
+            setHasMapError(true);
+            setVectorStyleError('Không thể tải bản đồ. Vui lòng kiểm tra kết nối mạng.');
+            setIsLoadingVectorStyle(false);
+          }
         }
       }
     };

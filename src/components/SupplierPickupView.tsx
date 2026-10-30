@@ -205,7 +205,7 @@ export const SupplierPickupView: React.FC<SupplierPickupProps> = ({
           <div>
             <div className="flex items-center justify-between">
               <span className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                <Box className="w-4 h-4 text-[#006EE9]" />
+                <Box className="w-4 h-4 text-[#3155FF]" />
                 Sức chứa Tủ / Điểm nhận
               </span>
               {(() => {
@@ -223,7 +223,7 @@ export const SupplierPickupView: React.FC<SupplierPickupProps> = ({
                     ? 'bg-rose-100 text-rose-700'
                     : label === 'Near Full'
                     ? 'bg-amber-100 text-amber-800'
-                    : 'bg-[#D0FFA4]/40 text-[#000181]';
+                    : 'bg-[#F5FBD9] text-[#0C0D10]';
                 return (
                   <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase ${badgeClass}`}>
                     {label}
@@ -296,7 +296,7 @@ export const SupplierPickupView: React.FC<SupplierPickupProps> = ({
                 className={`bg-white rounded-2xl border p-5 shadow-sm space-y-4 relative overflow-hidden ${
                   ord.status === 'pickup_overdue'
                     ? 'border-rose-300 bg-rose-50/20'
-                    : 'border-[#D0FFA4]'
+                    : 'border-[#C7F000]'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -315,7 +315,7 @@ export const SupplierPickupView: React.FC<SupplierPickupProps> = ({
                       QUÁ HẠN NHẬN (OVERDUE)
                     </span>
                   ) : (
-                    <span className="bg-[#F4FFE8] text-[#000181] border border-[#D0FFA4] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">
+                    <span className="bg-[#F5FBD9] text-[#0C0D10] border border-[#C7F000] text-[10px] font-black px-2.5 py-1 rounded-full uppercase">
                       CHỜ QUÉT MÃ
                     </span>
                   )}
@@ -330,7 +330,7 @@ export const SupplierPickupView: React.FC<SupplierPickupProps> = ({
 
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-center justify-between text-xs">
                   <div className="flex items-center space-x-1.5 text-slate-600">
-                    <MapPin className="w-3.5 h-3.5 text-[#000181] shrink-0" />
+                    <MapPin className="w-3.5 h-3.5 text-[#0C0D10] shrink-0" />
                     <span>{ord.pickupPointName || ord.pickupPoint}</span>
                   </div>
 
@@ -391,7 +391,7 @@ export const SupplierPickupView: React.FC<SupplierPickupProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">Mã PIN xác thực:</span>
-                <span className="font-mono font-bold text-[#000181] text-sm">
+                <span className="font-mono font-bold text-[#0C0D10] text-sm">
                   {scanningOrder.pickupCode}
                 </span>
               </div>

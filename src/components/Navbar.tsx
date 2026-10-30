@@ -106,30 +106,30 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   const roleBadgeConfig = currentUser ? {
-    buyer: { label: 'BUYER', bg: 'bg-[#FAF0FF]', text: 'text-[#000181]', border: 'border-[#E8A0FF]' },
-    supplier: { label: 'SUPPLIER', bg: 'bg-[#F4FFE8]', text: 'text-[#000181]', border: 'border-[#D0FFA4]' },
-    admin: { label: 'ADMIN', bg: 'bg-[#000181]', text: 'text-white', border: 'border-[#000181]' },
-  }[currentUser.role] : { label: 'GUEST', bg: 'bg-[#F6F7FB]', text: 'text-[#53536A]', border: 'border-[#E6E6EE]' };
+    buyer: { label: 'BUYER', bg: 'bg-[#F3EEFF]', text: 'text-[#7B3FF2]', border: 'border-[#7B3FF2]/30' },
+    supplier: { label: 'SUPPLIER', bg: 'bg-[#F5FBD9]', text: 'text-[#0C0D10]', border: 'border-[#C7F000]' },
+    admin: { label: 'ADMIN', bg: 'bg-[#0C0D10]', text: 'text-white', border: 'border-white/20' },
+  }[currentUser.role] : { label: 'GUEST', bg: 'bg-[#F6F7FC]', text: 'text-[#596273]', border: 'border-[#E4E8F0]' };
 
   return (
     <>
-      {/* 1. TOP HEADER (Height 72-80px: h-20, Neutral #FCFCF7, subtle border #E6E6EE) */}
-      <header className="sticky top-0 z-40 bg-[#FCFCF7]/95 backdrop-blur-md border-b border-[#E6E6EE] shadow-xs h-20 transition-all">
+      {/* 1. TOP HEADER (Height 72-80px: h-20, Cobalt #3155FF, border #2444DC) */}
+      <header className="sticky top-0 z-40 bg-[#3155FF] border-b border-[#2444DC] shadow-md h-20 transition-all text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-          {/* LEFT: LOGO (FLASH #000181 + GROUP #006EE9 + Spark #D0FFA4) */}
+          {/* LEFT: LOGO (FLASH white + GROUP #C7F000 + Spark #C7F000) */}
           <div className="flex items-center space-x-3">
             <button
               onClick={() => onNavigate(!currentUser || currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'overview')}
               className="flex items-center space-x-3 text-left group shrink-0 cursor-pointer"
             >
-              <div className="w-11 h-11 rounded-2xl bg-[#000181] flex items-center justify-center text-[#D0FFA4] shadow-md shadow-[#000181]/20 group-hover:scale-105 transition-transform duration-200">
-                <Zap className="w-6 h-6 fill-[#D0FFA4] stroke-[#000181]" />
+              <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-[#3155FF] shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-200">
+                <Zap className="w-6 h-6 fill-[#C7F000] stroke-[#3155FF]" />
               </div>
               <div>
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-[#000181] block leading-none">
-                  FLASH<span className="text-[#006EE9]">GROUP</span>
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-white block leading-none">
+                  FLASH<span className="text-[#C7F000]">GROUP</span>
                 </span>
-                <span className="block text-[10px] text-[#53536A] font-bold uppercase tracking-wider mt-0.5">
+                <span className="block text-[10px] text-white/80 font-bold uppercase tracking-wider mt-0.5">
                   CÀNG ĐÔNG, CÀNG RẺ
                 </span>
               </div>
@@ -145,8 +145,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onNavigate('discovery')}
                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 cursor-pointer ${
                     currentTab === 'discovery'
-                      ? 'bg-[#D0FFA4] text-[#000181]'
-                      : 'text-[#000181] hover:bg-[#83E7FF] hover:text-[#000181]'
+                      ? 'bg-white text-[#3155FF] shadow-xs'
+                      : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   KHÁM PHÁ
@@ -157,11 +157,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onNavigate('flashmap')}
                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
                     currentTab === 'flashmap'
-                      ? 'bg-[#D0FFA4] text-[#000181]'
-                      : 'text-[#000181] hover:bg-[#83E7FF] hover:text-[#000181]'
+                      ? 'bg-white text-[#3155FF] shadow-xs'
+                      : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  <MapPin className="w-3.5 h-3.5 text-[#006EE9]" />
+                  <MapPin className={`w-3.5 h-3.5 ${currentTab === 'flashmap' ? 'text-[#3155FF]' : 'text-white/90'}`} />
                   <span>FLASHMAP</span>
                 </button>
 
@@ -172,14 +172,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => currentUser ? onNavigate('myrooms') : onOpenLogin?.()}
                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
                     currentTab === 'myrooms'
-                      ? 'bg-[#D0FFA4] text-[#000181]'
-                      : 'text-[#000181] hover:bg-[#83E7FF] hover:text-[#000181]'
+                      ? 'bg-white text-[#3155FF] shadow-xs'
+                      : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  <Users className="w-3.5 h-3.5 text-[#000181]" />
+                  <Users className={`w-3.5 h-3.5 ${currentTab === 'myrooms' ? 'text-[#3155FF]' : 'text-white/90'}`} />
                   <span>PHÒNG CỦA TÔI</span>
                   {joinedRoomsCount > 0 && (
-                    <span className="bg-[#000181] text-[#D0FFA4] text-[10px] font-black px-1.5 py-0.2 rounded-full">
+                    <span className="bg-[#C7F000] text-[#0C0D10] text-[10px] font-black px-1.5 py-0.2 rounded-full">
                       {joinedRoomsCount}
                     </span>
                   )}
@@ -190,14 +190,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => currentUser ? onNavigate('orders') : onOpenLogin?.()}
                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
                     currentTab === 'orders'
-                      ? 'bg-[#D0FFA4] text-[#000181]'
-                      : 'text-[#000181] hover:bg-[#83E7FF] hover:text-[#000181]'
+                      ? 'bg-white text-[#3155FF] shadow-xs'
+                      : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  <Package className="w-3.5 h-3.5 text-[#000181]" />
+                  <Package className={`w-3.5 h-3.5 ${currentTab === 'orders' ? 'text-[#3155FF]' : 'text-white/90'}`} />
                   <span>ĐƠN HÀNG</span>
                   {ordersCount > 0 && (
-                    <span className="bg-[#E6E6EE] text-[#000181] text-[10px] font-bold px-1.5 py-0.2 rounded-full">
+                    <span className="bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
                       {ordersCount}
                     </span>
                   )}
@@ -211,24 +211,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setIsSupportMenuOpen((prev) => !prev)}
                     className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1 cursor-pointer ${
                       isSupportMenuOpen
-                        ? 'bg-[#D0FFA4] text-[#000181]'
-                        : 'text-[#000181] hover:bg-[#83E7FF] hover:text-[#000181]'
+                        ? 'bg-white text-[#3155FF]'
+                        : 'text-white/90 hover:bg-white/10 hover:text-white'
                     }`}
                   >
                     <span>HỖ TRỢ</span>
-                    <ChevronDown className="w-3.5 h-3.5 text-[#53536A]" />
+                    <ChevronDown className={`w-3.5 h-3.5 ${isSupportMenuOpen ? 'text-[#3155FF]' : 'text-white/80'}`} />
                   </button>
 
                   {isSupportMenuOpen && (
-                    <div className="absolute left-0 mt-2 w-60 bg-[#FFFFFF] rounded-2xl shadow-xl border border-[#E6E6EE] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold">
+                    <div className="absolute left-0 mt-2 w-60 bg-[#FFFFFF] rounded-2xl shadow-xl border border-[#E4E8F0] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold text-[#0C0D10]">
                       <button
                         onClick={() => {
                           onNavigate('help');
                           setIsSupportMenuOpen(false);
                         }}
-                        className="w-full px-4 py-2.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181] transition"
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10] transition"
                       >
-                        <HelpCircle className="w-4 h-4 text-[#006EE9]" />
+                        <HelpCircle className="w-4 h-4 text-[#3155FF]" />
                         <span>TRUNG TÂM TRỢ GIÚP</span>
                       </button>
 
@@ -237,9 +237,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onNavigate('complaints');
                           setIsSupportMenuOpen(false);
                         }}
-                        className="w-full px-4 py-2.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181] transition"
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10] transition"
                       >
-                        <MessageSquare className="w-4 h-4 text-[#E8A0FF]" />
+                        <MessageSquare className="w-4 h-4 text-[#7B3FF2]" />
                         <span>KHIẾU NẠI & TRANH CHẤP</span>
                       </button>
 
@@ -248,9 +248,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onNavigate('refund-policy');
                           setIsSupportMenuOpen(false);
                         }}
-                        className="w-full px-4 py-2.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181] transition"
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10] transition"
                       >
-                        <FileText className="w-4 h-4 text-[#53536A]" />
+                        <FileText className="w-4 h-4 text-[#596273]" />
                         <span>ĐỔI TRẢ & HOÀN TIỀN</span>
                       </button>
 
@@ -259,9 +259,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onNavigate('contact');
                           setIsSupportMenuOpen(false);
                         }}
-                        className="w-full px-4 py-2.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181] transition border-t border-[#E6E6EE]"
+                        className="w-full px-4 py-2.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10] transition border-t border-[#E4E8F0]"
                       >
-                        <PhoneCall className="w-4 h-4 text-[#006EE9]" />
+                        <PhoneCall className="w-4 h-4 text-[#3155FF]" />
                         <span>LIÊN HỆ</span>
                       </button>
                     </div>
@@ -273,7 +273,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('dashboard')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'dashboard' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'dashboard' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   TỔNG QUAN
@@ -281,7 +281,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('products')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'products' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'products' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   SẢN PHẨM
@@ -289,7 +289,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('rooms')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'rooms' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'rooms' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   PHÒNG GOM
@@ -297,7 +297,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('orders')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'orders' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'orders' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   ĐƠN HÀNG
@@ -305,7 +305,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('earnings')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'earnings' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'earnings' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   DOANH THU
@@ -316,7 +316,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('overview')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'overview' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'overview' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   OVERVIEW
@@ -324,7 +324,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('users')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'users' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'users' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   USERS
@@ -332,7 +332,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('suppliers')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'suppliers' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'suppliers' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   SUPPLIERS
@@ -340,7 +340,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('finance')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'finance' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'finance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   FINANCE
@@ -348,7 +348,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   onClick={() => onNavigate('compliance')}
                   className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
-                    currentTab === 'compliance' ? 'bg-[#D0FFA4] text-[#000181]' : 'text-[#000181] hover:bg-[#83E7FF]'
+                    currentTab === 'compliance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   COMPLIANCE
@@ -366,9 +366,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 else onNavigate('flashmap');
               }}
               title="Tìm kiếm phòng gom, điểm nhận..."
-              className="p-2.5 rounded-xl text-[#000181] hover:bg-[#EFFBFF] transition cursor-pointer"
+              className="p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer"
             >
-              <Search className="w-5 h-5" />
+              <Search className="w-5 h-5 text-white" />
             </button>
 
             {/* PWA Install Button */}
@@ -379,14 +379,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   type="button"
                   onClick={onOpenLogin}
-                  className="px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-[#000181] hover:bg-[#83E7FF] transition cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-white hover:bg-white/10 transition cursor-pointer"
                 >
                   Đăng nhập
                 </button>
                 <button
                   type="button"
                   onClick={onOpenRegister}
-                  className="px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-[#006EE9] text-white hover:bg-[#000181] shadow-sm transition cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-[#C7F000] text-[#0C0D10] hover:bg-[#B6DC00] shadow-sm transition cursor-pointer"
                 >
                   Đăng ký
                 </button>
@@ -397,12 +397,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="relative" ref={notifRef}>
               <button
                 onClick={() => setIsNotifOpen((prev) => !prev)}
-                className="relative p-2.5 rounded-xl text-[#000181] hover:bg-[#EFFBFF] transition cursor-pointer"
+                className="relative p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer"
                 title="Thông báo"
               >
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#D0FFA4] text-[#000181] text-[10px] font-black flex items-center justify-center ring-2 ring-[#000181]">
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#C7F000] text-[#0C0D10] text-[10px] font-black flex items-center justify-center ring-2 ring-[#3155FF]">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
@@ -410,24 +410,24 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Notification Dropdown */}
               {isNotifOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E6E6EE] z-50 overflow-hidden animate-fade-in">
-                  <div className="p-3.5 bg-[#F6F7FB] border-b border-[#E6E6EE] flex items-center justify-between">
-                    <span className="font-black text-xs uppercase tracking-wider text-[#000181]">
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 overflow-hidden animate-fade-in text-[#0C0D10]">
+                  <div className="p-3.5 bg-[#F6F7FC] border-b border-[#E4E8F0] flex items-center justify-between">
+                    <span className="font-black text-xs uppercase tracking-wider text-[#0C0D10]">
                       THÔNG BÁO ({unreadCount} CHƯA ĐỌC)
                     </span>
                     {unreadCount > 0 && (
                       <button
                         onClick={() => onMarkAllNotificationsAsRead()}
-                        className="text-[11px] font-bold text-[#006EE9] hover:underline cursor-pointer"
+                        className="text-[11px] font-bold text-[#3155FF] hover:underline cursor-pointer"
                       >
                         Đọc tất cả
                       </button>
                     )}
                   </div>
 
-                  <div className="divide-y divide-[#E6E6EE]/60 max-h-80 overflow-y-auto">
+                  <div className="divide-y divide-[#E4E8F0]/60 max-h-80 overflow-y-auto">
                     {recentNotifications.length === 0 ? (
-                      <div className="p-6 text-center text-xs text-[#53536A]">
+                      <div className="p-6 text-center text-xs text-[#596273]">
                         Không có thông báo mới nào
                       </div>
                     ) : (
@@ -441,15 +441,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                             }
                             setIsNotifOpen(false);
                           }}
-                          className={`p-3 text-xs transition cursor-pointer hover:bg-[#EFFBFF] flex items-start space-x-2.5 ${
-                            !notif.read ? 'bg-[#FAF0FF] font-semibold' : 'text-[#53536A]'
+                          className={`p-3 text-xs transition cursor-pointer hover:bg-[#EEF1FF] flex items-start space-x-2.5 ${
+                            !notif.read ? 'bg-[#F3EEFF] font-semibold' : 'text-[#596273]'
                           }`}
                         >
-                          <div className="w-2 h-2 rounded-full bg-[#006EE9] shrink-0 mt-1.5 opacity-80" />
+                          <div className="w-2 h-2 rounded-full bg-[#3155FF] shrink-0 mt-1.5 opacity-80" />
                           <div className="flex-1">
-                            <h5 className="font-bold text-[#000181] text-xs">{notif.title}</h5>
-                            <p className="text-[11px] text-[#53536A] line-clamp-2 mt-0.5">{notif.message}</p>
-                            <span className="text-[10px] text-[#53536A]/70 mt-1 block">
+                            <h5 className="font-bold text-[#0C0D10] text-xs">{notif.title}</h5>
+                            <p className="text-[11px] text-[#596273] line-clamp-2 mt-0.5">{notif.message}</p>
+                            <span className="text-[10px] text-[#596273]/70 mt-1 block">
                               {new Date(notif.createdAt).toLocaleTimeString('vi-VN', {
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -461,13 +461,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </div>
 
-                  <div className="p-2.5 bg-[#F6F7FB] border-t border-[#E6E6EE] text-center">
+                  <div className="p-2.5 bg-[#F6F7FC] border-t border-[#E4E8F0] text-center">
                     <button
                       onClick={() => {
                         onNavigate('notifications');
                         setIsNotifOpen(false);
                       }}
-                      className="text-xs font-bold text-[#006EE9] hover:underline cursor-pointer"
+                      className="text-xs font-bold text-[#3155FF] hover:underline cursor-pointer"
                     >
                       Xem toàn bộ thông báo &rarr;
                     </button>
@@ -480,9 +480,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center space-x-2 p-1.5 rounded-2xl hover:bg-[#EFFBFF] transition text-left cursor-pointer border border-transparent hover:border-[#E6E6EE]"
+                className="flex items-center space-x-2 p-1.5 rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white"
               >
-                <div className="w-9 h-9 rounded-xl bg-[#000181] text-[#D0FFA4] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden">
+                <div className="w-9 h-9 rounded-xl bg-white text-[#3155FF] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden">
                   {currentUser.avatar ? (
                     <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
                   ) : (
@@ -490,23 +490,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </div>
                 <div className="hidden sm:block">
-                  <span className="text-xs font-black text-[#000181] block leading-tight truncate max-w-[120px]">
+                  <span className="text-xs font-black text-white block leading-tight truncate max-w-[120px]">
                     {currentUser.name}
                   </span>
                   <span className={`inline-block text-[9px] font-black px-1.5 py-0.2 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border} mt-0.5`}>
                     {roleBadgeConfig.label}
                   </span>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-[#53536A]" />
+                <ChevronDown className="w-3.5 h-3.5 text-white/80" />
               </button>
 
               {/* Profile Menu Dropdown */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E6E6EE] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold">
+                <div className="absolute right-0 mt-2 w-64 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold text-[#0C0D10]">
                   {/* Header: User Info */}
-                  <div className="px-4 py-3 bg-[#F6F7FB] border-b border-[#E6E6EE]">
-                    <div className="font-black text-[#000181] text-sm">{currentUser.name}</div>
-                    <div className="text-[11px] text-[#53536A] font-medium truncate">{currentUser.email}</div>
+                  <div className="px-4 py-3 bg-[#F6F7FC] border-b border-[#E4E8F0]">
+                    <div className="font-black text-[#0C0D10] text-sm">{currentUser.name}</div>
+                    <div className="text-[11px] text-[#596273] font-medium truncate">{currentUser.email}</div>
                     <div className="mt-1.5">
                       <span className={`inline-block text-[10px] font-black px-2 py-0.5 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border}`}>
                         {roleBadgeConfig.label}
@@ -521,9 +521,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigate('profile');
                         setIsUserMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181]"
+                      className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10]"
                     >
-                      <UserIcon className="w-4 h-4 text-[#53536A]" />
+                      <UserIcon className="w-4 h-4 text-[#596273]" />
                       <span>TÀI KHOẢN CỦA TÔI</span>
                     </button>
 
@@ -532,9 +532,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigate('orders');
                         setIsUserMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181]"
+                      className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10]"
                     >
-                      <Package className="w-4 h-4 text-[#53536A]" />
+                      <Package className="w-4 h-4 text-[#596273]" />
                       <span>ĐƠN HÀNG ({ordersCount})</span>
                     </button>
 
@@ -543,9 +543,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigate('myrooms');
                         setIsUserMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181]"
+                      className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10]"
                     >
-                      <Users className="w-4 h-4 text-[#53536A]" />
+                      <Users className="w-4 h-4 text-[#596273]" />
                       <span>PHÒNG CỦA TÔI ({joinedRoomsCount})</span>
                     </button>
 
@@ -554,9 +554,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigate('favorites');
                         setIsUserMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181]"
+                      className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10]"
                     >
-                      <Heart className="w-4 h-4 text-[#E8A0FF]" />
+                      <Heart className="w-4 h-4 text-[#FF4FA3]" />
                       <span>ĐÃ LƯU ({favoritesCount})</span>
                     </button>
 
@@ -565,9 +565,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigate('complaints');
                         setIsUserMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181]"
+                      className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10]"
                     >
-                      <MessageSquare className="w-4 h-4 text-[#E8A0FF]" />
+                      <MessageSquare className="w-4 h-4 text-[#7B3FF2]" />
                       <span>KHIẾU NẠI & TRANH CHẤP</span>
                     </button>
 
@@ -576,24 +576,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onNavigate('privacy');
                         setIsUserMenuOpen(false);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#000181]"
+                      className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#0C0D10]"
                     >
-                      <Lock className="w-4 h-4 text-[#006EE9]" />
+                      <Lock className="w-4 h-4 text-[#3155FF]" />
                       <span>QUYỀN RIÊNG TƯ</span>
                     </button>
                   </div>
 
                   {/* Divider & Business Model */}
-                  <div className="border-t border-[#E6E6EE] py-1">
+                  <div className="border-t border-[#E4E8F0] py-1">
                     {onOpenBusinessModel && (
                       <button
                         onClick={() => {
                           onOpenBusinessModel();
                           setIsUserMenuOpen(false);
                         }}
-                        className="w-full px-4 py-2 text-left hover:bg-[#EFFBFF] flex items-center space-x-2.5 text-[#006EE9]"
+                        className="w-full px-4 py-2 text-left hover:bg-[#EEF1FF] flex items-center space-x-2.5 text-[#3155FF]"
                       >
-                        <HelpCircle className="w-4 h-4 text-[#006EE9]" />
+                        <HelpCircle className="w-4 h-4 text-[#3155FF]" />
                         <span>MÔ HÌNH FLASHGROUP</span>
                       </button>
                     )}
@@ -606,9 +606,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onTogglePresentationMode();
                         }}
                         title="Bật/tắt Bảng điều khiển trình bày kịch bản Demo"
-                        className="w-full px-4 py-1.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2 text-[11px] font-black text-[#000181] hover:text-[#006EE9]"
+                        className="w-full px-4 py-1.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2 text-[11px] font-black text-[#0C0D10] hover:text-[#3155FF]"
                       >
-                        <Presentation className="w-3.5 h-3.5 text-[#D0FFA4]" />
+                        <Presentation className="w-3.5 h-3.5 text-[#7B3FF2]" />
                         <span>{isPresentationMode ? 'Ẩn Bảng Trình Bày' : 'CHẾ ĐỘ TRÌNH BÀY'}</span>
                       </button>
                     )}
@@ -621,9 +621,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           onOpenDemoCheckModal();
                         }}
                         title="Kiểm tra kịch bản & độ sẵn sàng Demo"
-                        className="w-full px-4 py-1.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2 text-[11px] font-semibold text-[#006EE9] hover:text-[#000181]"
+                        className="w-full px-4 py-1.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2 text-[11px] font-semibold text-[#3155FF] hover:text-[#0C0D10]"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-[#D0FFA4]" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#3155FF]" />
                         <span>Kịch bản Demo (19/20 Dâu Đà Lạt)</span>
                       </button>
                     )}
@@ -634,7 +634,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onResetDemo();
                       }}
                       title="Khôi phục trạng thái dữ liệu demo"
-                      className="w-full px-4 py-1.5 text-left hover:bg-[#EFFBFF] flex items-center space-x-2 text-[11px] font-semibold text-[#53536A] hover:text-[#000181]"
+                      className="w-full px-4 py-1.5 text-left hover:bg-[#EEF1FF] flex items-center space-x-2 text-[11px] font-semibold text-[#596273] hover:text-[#0C0D10]"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Khôi phục dữ liệu Demo</span>
@@ -642,7 +642,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </div>
 
                   {/* Divider & Logout */}
-                  <div className="border-t border-[#E6E6EE] pt-1">
+                  <div className="border-t border-[#E4E8F0] pt-1">
                     <button
                       onClick={() => {
                         setIsUserMenuOpen(false);
@@ -663,7 +663,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMobileDrawerOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-[#000181] hover:bg-[#EFFBFF] transition cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-white hover:bg-white/10 transition cursor-pointer"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -677,38 +677,38 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Backdrop */}
           <div
             onClick={() => setIsMobileDrawerOpen(false)}
-            className="fixed inset-0 bg-[#000181]/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-[#0C0D10]/50 backdrop-blur-xs transition-opacity"
           />
 
           {/* Drawer Menu */}
-          <div className="fixed top-0 right-0 bottom-0 w-80 bg-[#FCFCF7] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-fade-in border-l border-[#E6E6EE]">
+          <div className="fixed top-0 right-0 bottom-0 w-80 bg-[#F6F7FC] shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-fade-in border-l border-[#E4E8F0]">
             <div className="space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-[#E6E6EE]">
+              <div className="flex items-center justify-between pb-4 border-b border-[#E4E8F0]">
                 <div className="flex items-center space-x-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-[#000181] flex items-center justify-center text-[#D0FFA4]">
-                    <Zap className="w-5 h-5 fill-[#D0FFA4] stroke-[#000181]" />
+                  <div className="w-8 h-8 rounded-xl bg-[#3155FF] flex items-center justify-center text-[#C7F000]">
+                    <Zap className="w-5 h-5 fill-[#C7F000] stroke-[#3155FF]" />
                   </div>
-                  <span className="font-black text-lg text-[#000181]">
-                    FLASH<span className="text-[#006EE9]">GROUP</span>
+                  <span className="font-black text-lg text-[#0C0D10]">
+                    FLASH<span className="text-[#3155FF]">GROUP</span>
                   </span>
                 </div>
                 <button
                   onClick={() => setIsMobileDrawerOpen(false)}
-                  className="p-1 rounded-lg text-[#53536A] hover:text-[#000181]"
+                  className="p-1 rounded-lg text-[#596273] hover:text-[#0C0D10]"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Navigation Items */}
-              <nav className="space-y-1.5 font-bold text-xs uppercase tracking-wider text-[#000181]">
+              <nav className="space-y-1.5 font-bold text-xs uppercase tracking-wider text-[#0C0D10]">
                 <button
                   onClick={() => {
                     onNavigate('discovery');
                     setIsMobileDrawerOpen(false);
                   }}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl transition ${
-                    currentTab === 'discovery' ? 'bg-[#D0FFA4] text-[#000181] font-black' : 'hover:bg-[#83E7FF]'
+                    currentTab === 'discovery' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
                   }`}
                 >
                   KHÁM PHÁ
@@ -720,10 +720,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileDrawerOpen(false);
                   }}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl transition flex items-center space-x-2 ${
-                    currentTab === 'flashmap' ? 'bg-[#D0FFA4] text-[#000181] font-black' : 'hover:bg-[#83E7FF]'
+                    currentTab === 'flashmap' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
                   }`}
                 >
-                  <MapPin className="w-4 h-4 text-[#006EE9]" />
+                  <MapPin className="w-4 h-4 text-[#3155FF]" />
                   <span>FLASHMAP BẢN ĐỒ</span>
                 </button>
 
@@ -733,12 +733,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileDrawerOpen(false);
                   }}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl transition flex items-center justify-between ${
-                    currentTab === 'myrooms' ? 'bg-[#D0FFA4] text-[#000181] font-black' : 'hover:bg-[#83E7FF]'
+                    currentTab === 'myrooms' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
                   }`}
                 >
                   <span>PHÒNG CỦA TÔI</span>
                   {joinedRoomsCount > 0 && (
-                    <span className="bg-[#000181] text-[#D0FFA4] text-[10px] px-2 py-0.5 rounded-full font-black">
+                    <span className="bg-[#C7F000] text-[#0C0D10] text-[10px] px-2 py-0.5 rounded-full font-black">
                       {joinedRoomsCount}
                     </span>
                   )}
@@ -750,12 +750,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setIsMobileDrawerOpen(false);
                   }}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl transition flex items-center justify-between ${
-                    currentTab === 'orders' ? 'bg-[#D0FFA4] text-[#000181] font-black' : 'hover:bg-[#83E7FF]'
+                    currentTab === 'orders' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
                   }`}
                 >
                   <span>ĐƠN HÀNG</span>
                   {ordersCount > 0 && (
-                    <span className="bg-[#E6E6EE] text-[#000181] text-[10px] px-2 py-0.5 rounded-full">
+                    <span className="bg-[#E4E8F0] text-[#0C0D10] text-[10px] px-2 py-0.5 rounded-full">
                       {ordersCount}
                     </span>
                   )}
@@ -766,7 +766,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onNavigate('favorites');
                     setIsMobileDrawerOpen(false);
                   }}
-                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#83E7FF] transition"
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#EEF1FF] transition"
                 >
                   ĐÃ LƯU ({favoritesCount})
                 </button>
@@ -776,7 +776,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onNavigate('complaints');
                     setIsMobileDrawerOpen(false);
                   }}
-                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#83E7FF] transition"
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#EEF1FF] transition"
                 >
                   KHIẾU NẠI & TRANH CHẤP
                 </button>
@@ -786,14 +786,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onNavigate('privacy');
                     setIsMobileDrawerOpen(false);
                   }}
-                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#83E7FF] transition text-[#006EE9]"
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl hover:bg-[#EEF1FF] transition text-[#3155FF]"
                 >
                   TRUNG TÂM QUYỀN RIÊNG TƯ
                 </button>
               </nav>
             </div>
 
-            <div className="pt-4 border-t border-[#E6E6EE] space-y-3">
+            <div className="pt-4 border-t border-[#E4E8F0] space-y-3">
               <button
                 onClick={() => {
                   setIsMobileDrawerOpen(false);
@@ -809,18 +809,18 @@ export const Navbar: React.FC<NavbarProps> = ({
       )}
 
       {/* 3. MOBILE BOTTOM NAVIGATION */}
-      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t border-[#E6E6EE] py-1 px-2 shadow-2xl flex items-center justify-around">
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t border-[#E4E8F0] py-1 px-2 shadow-2xl flex items-center justify-around">
         {/* 1. KHÁM PHÁ */}
         <button
           onClick={() => onNavigate('discovery')}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
-            currentTab === 'discovery' ? 'text-[#006EE9] font-black' : 'text-[#77778A] font-medium'
+            currentTab === 'discovery' ? 'text-[#3155FF] font-black' : 'text-[#596273] font-medium'
           }`}
         >
-          <Zap className={`w-5 h-5 ${currentTab === 'discovery' ? 'fill-[#006EE9]' : ''}`} />
+          <Zap className={`w-5 h-5 ${currentTab === 'discovery' ? 'fill-[#3155FF]' : ''}`} />
           <span className="text-[10px] mt-0.5 tracking-tight uppercase">KHÁM PHÁ</span>
           {currentTab === 'discovery' && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9] mt-0.5" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C7F000] ring-2 ring-[#3155FF] mt-0.5" />
           )}
         </button>
 
@@ -828,13 +828,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => onNavigate('flashmap')}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
-            currentTab === 'flashmap' ? 'text-[#006EE9] font-black' : 'text-[#77778A] font-medium'
+            currentTab === 'flashmap' ? 'text-[#3155FF] font-black' : 'text-[#596273] font-medium'
           }`}
         >
           <MapPin className="w-5 h-5" />
           <span className="text-[10px] mt-0.5 tracking-tight uppercase">FLASHMAP</span>
           {currentTab === 'flashmap' && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9] mt-0.5" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C7F000] ring-2 ring-[#3155FF] mt-0.5" />
           )}
         </button>
 
@@ -842,16 +842,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => onNavigate('myrooms')}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
-            currentTab === 'myrooms' ? 'text-[#006EE9] font-black' : 'text-[#77778A] font-medium'
+            currentTab === 'myrooms' ? 'text-[#3155FF] font-black' : 'text-[#596273] font-medium'
           }`}
         >
           <Users className="w-5 h-5" />
           <span className="text-[10px] mt-0.5 tracking-tight uppercase">PHÒNG</span>
           {joinedRoomsCount > 0 && (
-            <span className="absolute top-0 right-1 w-2 h-2 rounded-full bg-[#D0FFA4] ring-1 ring-[#000181]"></span>
+            <span className="absolute top-0 right-1 w-2 h-2 rounded-full bg-[#C7F000] ring-1 ring-[#3155FF]"></span>
           )}
           {currentTab === 'myrooms' && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9] mt-0.5" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C7F000] ring-2 ring-[#3155FF] mt-0.5" />
           )}
         </button>
 
@@ -859,16 +859,16 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => onNavigate('orders')}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
-            currentTab === 'orders' ? 'text-[#006EE9] font-black' : 'text-[#77778A] font-medium'
+            currentTab === 'orders' ? 'text-[#3155FF] font-black' : 'text-[#596273] font-medium'
           }`}
         >
           <Package className="w-5 h-5" />
           <span className="text-[10px] mt-0.5 tracking-tight uppercase">ĐƠN HÀNG</span>
           {ordersCount > 0 && (
-            <span className="absolute top-0 right-1 w-2 h-2 rounded-full bg-[#83E7FF] ring-1 ring-[#000181]"></span>
+            <span className="absolute top-0 right-1 w-2 h-2 rounded-full bg-[#3155FF] ring-1 ring-white"></span>
           )}
           {currentTab === 'orders' && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9] mt-0.5" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C7F000] ring-2 ring-[#3155FF] mt-0.5" />
           )}
         </button>
 
@@ -876,13 +876,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         <button
           onClick={() => currentUser ? onNavigate('profile') : onOpenLogin?.()}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition cursor-pointer relative ${
-            currentTab === 'profile' ? 'text-[#006EE9] font-black' : 'text-[#77778A] font-medium'
+            currentTab === 'profile' ? 'text-[#3155FF] font-black' : 'text-[#596273] font-medium'
           }`}
         >
           <UserIcon className="w-5 h-5" />
           <span className="text-[10px] mt-0.5 tracking-tight uppercase">TÀI KHOẢN</span>
           {currentTab === 'profile' && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9] mt-0.5" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C7F000] ring-2 ring-[#3155FF] mt-0.5" />
           )}
         </button>
       </nav>

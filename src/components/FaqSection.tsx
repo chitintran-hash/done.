@@ -33,7 +33,7 @@ export const FaqSection: React.FC = () => {
   };
 
   return (
-    <section className="py-12 px-6 sm:px-8 rounded-3xl bg-[#F6F7FB] border border-[#E6E6EE] my-8 shadow-xs">
+    <section className="py-12 px-6 sm:px-8 rounded-3xl bg-[#F6F7FC] border border-[#E4E8F0] my-8 shadow-xs">
       <SectionHeader
         badge="GIẢI ĐÁP THẮC MẮC"
         title="CÂU HỎI THƯỜNG GẶP"
@@ -47,19 +47,19 @@ export const FaqSection: React.FC = () => {
           return (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-[#E6E6EE] shadow-xs overflow-hidden transition-all duration-200"
+              className="bg-white rounded-2xl border border-[#E4E8F0] shadow-xs overflow-hidden transition-all duration-200"
             >
               <button
                 type="button"
                 onClick={() => toggle(i)}
-                className="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#EFFBFF]/60 transition-colors"
+                className="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#EEF1FF]/60 transition-colors"
               >
-                <span className="font-extrabold text-[#000181] text-xs sm:text-sm leading-snug">
+                <span className="font-extrabold text-[#0C0D10] text-xs sm:text-sm leading-snug">
                   {f.q}
                 </span>
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                    isOpen ? 'rotate-180 bg-[#D0FFA4] text-[#000181]' : 'bg-[#FCFCF7] text-[#53536A]'
+                    isOpen ? 'rotate-180 bg-[#C7F000] text-[#0C0D10]' : 'bg-[#F6F7FC] text-[#596273]'
                   }`}
                 >
                   <ChevronDown className="w-4 h-4" />
@@ -67,7 +67,7 @@ export const FaqSection: React.FC = () => {
               </button>
 
               {isOpen && (
-                <div className="px-6 pb-5 pt-1 text-xs text-[#53536A] leading-relaxed border-t border-[#E6E6EE]/60 bg-[#FCFCF7]">
+                <div className="px-6 pb-5 pt-1 text-xs text-[#596273] leading-relaxed border-t border-[#E4E8F0]/60 bg-[#F6F7FC]">
                   {f.a}
                 </div>
               )}

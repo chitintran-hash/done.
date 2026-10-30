@@ -27,29 +27,29 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
 
   return (
-    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-4 sm:p-5 shadow-xs space-y-4">
+    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-4 sm:p-5 shadow-xs space-y-4">
       {/* Top Search & Sort Row */}
       <div className="flex flex-col sm:flex-row items-center gap-3">
         {/* Search Input */}
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-[#53536A] absolute left-3.5 top-3.5" />
+          <Search className="w-4 h-4 text-[#596273] absolute left-3.5 top-3.5" />
           <input
             type="text"
             placeholder="Tìm theo tên sản phẩm, nhà cung cấp hoặc ngành hàng..."
             value={filters.searchQuery}
             onChange={(e) => onChangeFilters({ ...filters, searchQuery: e.target.value })}
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#E6E6EE] bg-[#FCFCF7] focus:bg-white text-xs font-semibold text-[#000181] focus:outline-none focus:border-[#006EE9] focus:ring-2 focus:ring-[#006EE9]/15 transition placeholder:text-[#53536A]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-[#E4E8F0] bg-[#F6F7FC] focus:bg-white text-xs font-semibold text-[#0C0D10] focus:outline-none focus:border-[#3155FF] focus:ring-2 focus:ring-[#3155FF]/15 transition placeholder:text-[#596273]"
           />
         </div>
 
         {/* Sort Select */}
         <div className="flex items-center space-x-2 w-full sm:w-auto shrink-0">
           <div className="relative flex-1 sm:flex-initial">
-            <ArrowUpDown className="w-3.5 h-3.5 text-[#53536A] absolute left-3 top-3 pointer-events-none" />
+            <ArrowUpDown className="w-3.5 h-3.5 text-[#596273] absolute left-3 top-3 pointer-events-none" />
             <select
               value={filters.sortBy}
               onChange={(e) => onChangeFilters({ ...filters, sortBy: e.target.value as any })}
-              className="pl-8 pr-8 py-2.5 rounded-2xl border border-[#E6E6EE] bg-[#FCFCF7] text-xs font-bold text-[#000181] focus:outline-none focus:border-[#006EE9] focus:ring-2 focus:ring-[#006EE9]/15 appearance-none w-full cursor-pointer"
+              className="pl-8 pr-8 py-2.5 rounded-2xl border border-[#E4E8F0] bg-[#F6F7FC] text-xs font-bold text-[#0C0D10] focus:outline-none focus:border-[#3155FF] focus:ring-2 focus:ring-[#3155FF]/15 appearance-none w-full cursor-pointer"
             >
               <option value="near_me">Gần tôi nhất (Near Me)</option>
               <option value="ending_soon">Sắp kết thúc (Ending Soon)</option>
@@ -58,7 +58,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
               <option value="most_popular">Đông người nhất (Most Popular)</option>
               <option value="newest">Mới mở gom (Newest)</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-[#53536A] absolute right-3 top-3.5 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-[#596273] absolute right-3 top-3.5 pointer-events-none" />
           </div>
 
           {/* Toggle Filter Button */}
@@ -66,8 +66,8 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
             onClick={() => setShowAdvanced((prev) => !prev)}
             className={`p-2.5 rounded-2xl border text-xs font-bold transition flex items-center space-x-1.5 shrink-0 cursor-pointer ${
               showAdvanced
-                ? 'bg-[#D0FFA4] border-[#000181]/30 text-[#000181] shadow-xs'
-                : 'bg-[#FCFCF7] border-[#E6E6EE] text-[#000181] hover:bg-[#EFFBFF]'
+                ? 'bg-[#C7F000] border-[#3155FF]/30 text-[#0C0D10] shadow-xs'
+                : 'bg-[#F6F7FC] border-[#E4E8F0] text-[#0C0D10] hover:bg-[#EEF1FF]'
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -78,13 +78,13 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
 
       {/* Advanced Filter Options */}
       {showAdvanced && (
-        <div className="pt-3 border-t border-[#E6E6EE] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs animate-fade-in">
+        <div className="pt-3 border-t border-[#E4E8F0] grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs animate-fade-in">
           <div>
-            <label className="font-bold text-[#000181] block mb-1">Khoảng cách tối đa</label>
+            <label className="font-bold text-[#0C0D10] block mb-1">Khoảng cách tối đa</label>
             <select
               value={filters.maxDistanceMeters}
               onChange={(e) => onChangeFilters({ ...filters, maxDistanceMeters: Number(e.target.value) })}
-              className="w-full p-2 rounded-xl border border-[#E6E6EE] bg-white text-[#000181] focus:border-[#006EE9]"
+              className="w-full p-2 rounded-xl border border-[#E4E8F0] bg-white text-[#0C0D10] focus:border-[#3155FF]"
             >
               <option value={500}>Dưới 500m</option>
               <option value={1000}>Dưới 1km</option>
@@ -94,11 +94,11 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           </div>
 
           <div>
-            <label className="font-bold text-[#000181] block mb-1">Trạng thái phòng</label>
+            <label className="font-bold text-[#0C0D10] block mb-1">Trạng thái phòng</label>
             <select
               value={filters.status}
               onChange={(e) => onChangeFilters({ ...filters, status: e.target.value })}
-              className="w-full p-2 rounded-xl border border-[#E6E6EE] bg-white text-[#000181] focus:border-[#006EE9]"
+              className="w-full p-2 rounded-xl border border-[#E4E8F0] bg-white text-[#0C0D10] focus:border-[#3155FF]"
             >
               <option value="all">Tất cả trạng thái</option>
               <option value="active">Đang mở gom (Active)</option>
@@ -108,11 +108,11 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           </div>
 
           <div>
-            <label className="font-bold text-[#000181] block mb-1">Điểm nhận (Pickup Point)</label>
+            <label className="font-bold text-[#0C0D10] block mb-1">Điểm nhận (Pickup Point)</label>
             <select
               value={filters.pickupPoint}
               onChange={(e) => onChangeFilters({ ...filters, pickupPoint: e.target.value })}
-              className="w-full p-2 rounded-xl border border-[#E6E6EE] bg-white text-[#000181] focus:border-[#006EE9]"
+              className="w-full p-2 rounded-xl border border-[#E4E8F0] bg-white text-[#0C0D10] focus:border-[#3155FF]"
             >
               <option value="all">Tất cả điểm nhận</option>
               <option value="Locker Quận 1">Smart Locker Quận 1</option>
@@ -126,7 +126,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
           <div className="flex items-end">
             <button
               onClick={onResetFilters}
-              className="w-full py-2 px-3 rounded-xl border border-[#000181] text-[#000181] hover:bg-[#E8A0FF] font-black transition flex items-center justify-center space-x-1.5 cursor-pointer"
+              className="w-full py-2 px-3 rounded-xl border border-[#3155FF] text-[#0C0D10] hover:bg-[#7B3FF2] font-black transition flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Xóa bộ lọc (Reset)</span>

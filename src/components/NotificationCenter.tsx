@@ -38,7 +38,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   const getIconForType = (type: Notification['type']) => {
     switch (type) {
       case 'price_unlock':
-        return <TrendingDown className="w-5 h-5 text-[#000181]" />;
+        return <TrendingDown className="w-5 h-5 text-[#0C0D10]" />;
       case 'pickup_ready':
         return <CheckCircle2 className="w-5 h-5 text-teal-600" />;
       case 'payment':
@@ -56,7 +56,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-            <Bell className="w-6 h-6 text-[#000181]" />
+            <Bell className="w-6 h-6 text-[#0C0D10]" />
             <span>Trung tâm thông báo</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -69,7 +69,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
             onClick={onMarkAllAsRead}
             className="self-start sm:self-auto px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-sm transition flex items-center space-x-1.5"
           >
-            <Check className="w-4 h-4 text-[#000181]" />
+            <Check className="w-4 h-4 text-[#0C0D10]" />
             <span>Đánh dấu đã đọc tất cả</span>
           </button>
         )}
@@ -118,7 +118,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               }}
               className={`p-5 rounded-2xl border transition cursor-pointer flex items-start justify-between gap-4 ${
                 !notif.read
-                  ? 'bg-[#F4FFE8]/50 border-[#D0FFA4] shadow-sm'
+                  ? 'bg-[#F5FBD9]/50 border-[#C7F000] shadow-sm'
                   : 'bg-white border-slate-200 hover:border-slate-300'
               }`}
             >
@@ -145,7 +145,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               </div>
 
               {(notif.roomId || notif.orderId) && (
-                <div className="shrink-0 flex items-center text-xs font-bold text-[#000181] space-x-1 pt-1">
+                <div className="shrink-0 flex items-center text-xs font-bold text-[#0C0D10] space-x-1 pt-1">
                   <span>Xem chi tiết</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>

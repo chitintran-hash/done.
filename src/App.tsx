@@ -3100,12 +3100,12 @@ export default function FlashGroupApp() {
   // ==========================================
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FCFCF7] p-6 max-w-7xl mx-auto space-y-6">
+      <div className="min-h-screen bg-[#F6F7FC] p-6 max-w-7xl mx-auto space-y-6">
         <div className="h-16 bg-[#F2E8F0] rounded-2xl w-full animate-pulse" />
-        <div className="h-64 bg-[#E6E6EE]/50 rounded-3xl w-full animate-pulse flex items-center justify-center">
+        <div className="h-64 bg-[#E4E8F0]/50 rounded-3xl w-full animate-pulse flex items-center justify-center">
           <div className="text-center space-y-2">
-            <Loader2 className="w-8 h-8 text-[#006EE9] animate-spin mx-auto" />
-            <p className="text-xs font-bold text-[#53536A]">Đang đồng bộ dữ liệu FlashGroup...</p>
+            <Loader2 className="w-8 h-8 text-[#3155FF] animate-spin mx-auto" />
+            <p className="text-xs font-bold text-[#596273]">Đang đồng bộ dữ liệu FlashGroup...</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -3127,7 +3127,7 @@ export default function FlashGroupApp() {
   // 4. MAIN MARKETPLACE APP (LOGGED IN)
   // ==========================================
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-[#D0FFA4]/40 selection:text-emerald-900 flex flex-col justify-between pb-20 md:pb-0">
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-[#C7F000]/40 selection:text-emerald-900 flex flex-col justify-between pb-20 md:pb-0">
       <div>
         {/* TOP OFFLINE DETECTION BANNER (Phase 11) */}
         <OfflineBanner />
@@ -3719,18 +3719,18 @@ export default function FlashGroupApp() {
               ) : buyerTab === 'myrooms' || location.pathname === '/my-rooms' ? (
                 !currentUser ? (
                   <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
-                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EEF1FF] text-[#3155FF] mx-auto flex items-center justify-center">
                         <Users className="w-7 h-7" />
                       </div>
-                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
-                      <p className="text-xs text-[#53536A] leading-relaxed">
+                      <h3 className="text-base font-black text-[#0C0D10]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#596273] leading-relaxed">
                         Vui lòng đăng nhập để theo dõi danh sách các phòng mua chung bạn đã tham gia.
                       </p>
                       <button
                         type="button"
                         onClick={openLoginModal}
-                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer"
                       >
                         Đăng nhập ngay
                       </button>
@@ -3751,18 +3751,18 @@ export default function FlashGroupApp() {
               ) : location.pathname === '/orders' || buyerTab === 'orders' ? (
                 !currentUser ? (
                   <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
-                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
+                    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EEF1FF] text-[#3155FF] mx-auto flex items-center justify-center">
                         <Package className="w-7 h-7" />
                       </div>
-                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
-                      <p className="text-xs text-[#53536A] leading-relaxed">
+                      <h3 className="text-base font-black text-[#0C0D10]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#596273] leading-relaxed">
                         Vui lòng đăng nhập để xem lịch sử và quản lý đơn hàng của bạn.
                       </p>
                       <button
                         type="button"
                         onClick={openLoginModal}
-                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer"
                       >
                         Đăng nhập ngay
                       </button>
@@ -3791,18 +3791,18 @@ export default function FlashGroupApp() {
               ) : location.pathname === '/complaints' || buyerTab === 'complaints' ? (
                 !currentUser ? (
                   <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
-                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
-                        <MessageSquare className="w-7 h-7 text-[#006EE9]" />
+                    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EEF1FF] text-[#3155FF] mx-auto flex items-center justify-center">
+                        <MessageSquare className="w-7 h-7 text-[#3155FF]" />
                       </div>
-                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
-                      <p className="text-xs text-[#53536A] leading-relaxed">
+                      <h3 className="text-base font-black text-[#0C0D10]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#596273] leading-relaxed">
                         Vui lòng đăng nhập để gửi và theo dõi khiếu nại, phản hồi của bạn.
                       </p>
                       <button
                         type="button"
                         onClick={openLoginModal}
-                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer"
                       >
                         Đăng nhập ngay
                       </button>
@@ -3824,18 +3824,18 @@ export default function FlashGroupApp() {
             ) : location.pathname.startsWith('/privacy-center') || buyerTab === 'privacy' ? (
                 !currentUser ? (
                   <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
-                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
-                        <Lock className="w-7 h-7 text-[#006EE9]" />
+                    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EEF1FF] text-[#3155FF] mx-auto flex items-center justify-center">
+                        <Lock className="w-7 h-7 text-[#3155FF]" />
                       </div>
-                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
-                      <p className="text-xs text-[#53536A] leading-relaxed">
+                      <h3 className="text-base font-black text-[#0C0D10]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#596273] leading-relaxed">
                         Vui lòng đăng nhập để xem và quản lý thiết lập quyền riêng tư dữ liệu của bạn.
                       </p>
                       <button
                         type="button"
                         onClick={openLoginModal}
-                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer"
                       >
                         Đăng nhập ngay
                       </button>
@@ -3866,18 +3866,18 @@ export default function FlashGroupApp() {
               ) : buyerTab === 'notifications' ? (
                 !currentUser ? (
                   <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
-                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
-                        <Bell className="w-7 h-7 text-[#006EE9]" />
+                    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EEF1FF] text-[#3155FF] mx-auto flex items-center justify-center">
+                        <Bell className="w-7 h-7 text-[#3155FF]" />
                       </div>
-                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
-                      <p className="text-xs text-[#53536A] leading-relaxed">
+                      <h3 className="text-base font-black text-[#0C0D10]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#596273] leading-relaxed">
                         Vui lòng đăng nhập để xem tất cả thông báo của bạn.
                       </p>
                       <button
                         type="button"
                         onClick={openLoginModal}
-                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer"
                       >
                         Đăng nhập ngay
                       </button>
@@ -3907,18 +3907,18 @@ export default function FlashGroupApp() {
             ) : buyerTab === 'profile' || location.pathname === '/profile' ? (
                 !currentUser ? (
                   <div className="min-h-[50vh] flex items-center justify-center p-6 text-center animate-fade-in">
-                    <div className="bg-white rounded-3xl border border-[#E6E6EE] p-8 max-w-md w-full shadow-lg space-y-4">
-                      <div className="w-14 h-14 rounded-2xl bg-[#EFFBFF] text-[#006EE9] mx-auto flex items-center justify-center">
-                        <Users className="w-7 h-7 text-[#006EE9]" />
+                    <div className="bg-white rounded-3xl border border-[#E4E8F0] p-8 max-w-md w-full shadow-lg space-y-4">
+                      <div className="w-14 h-14 rounded-2xl bg-[#EEF1FF] text-[#3155FF] mx-auto flex items-center justify-center">
+                        <Users className="w-7 h-7 text-[#3155FF]" />
                       </div>
-                      <h3 className="text-base font-black text-[#000181]">BẠN CHƯA ĐĂNG NHẬP</h3>
-                      <p className="text-xs text-[#53536A] leading-relaxed">
+                      <h3 className="text-base font-black text-[#0C0D10]">BẠN CHƯA ĐĂNG NHẬP</h3>
+                      <p className="text-xs text-[#596273] leading-relaxed">
                         Vui lòng đăng nhập để xem và quản lý thông tin tài khoản của bạn.
                       </p>
                       <button
                         type="button"
                         onClick={openLoginModal}
-                        className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer"
                       >
                         Đăng nhập ngay
                       </button>
@@ -3950,22 +3950,22 @@ export default function FlashGroupApp() {
                   {/* 1. HERO SECTION (Warm Premium Plum/Dusty Rose/Coral System) */}
                   <div
                     style={{
-                      background: 'linear-gradient(135deg, #000181 0%, #003CCB 40%, #006EE9 70%, #83E7FF 100%)',
+                      background: 'linear-gradient(120deg, #2444DC 0%, #3155FF 60%, #6336D6 100%)',
                     }}
                     className="relative rounded-3xl text-white p-8 sm:p-12 overflow-hidden shadow-2xl border border-white/10"
                   >
                     <div className="absolute top-0 right-0 translate-x-16 -translate-y-12 opacity-15 pointer-events-none">
-                      <Zap className="w-96 h-96 text-[#83E7FF]/20 fill-[#83E7FF]/10" />
+                      <Zap className="w-96 h-96 text-white/10 fill-white/5" />
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                       <div className="lg:col-span-7 space-y-6">
                         <div className="inline-flex items-center space-x-2 bg-white/15 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-white border border-white/20">
-                          <Sparkles className="w-4 h-4 text-[#D0FFA4]" />
+                          <Sparkles className="w-4 h-4 text-[#C7F000]" />
                           <span>MÔ HÌNH MUA GOM SIÊU CỤC BỘ • TIẾT KIỆM ĐẾN 35%</span>
                         </div>
                         <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight uppercase">
                           CÀNG ĐÔNG, CÀNG RẺ. <br className="hidden sm:inline" />
-                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#83E7FF] to-[#D0FFA4]">
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#EEF1FF] to-[#C7F000]">
                             GIAO CHUNG MỘT ĐIỂM.
                           </span>
                         </h1>
@@ -3975,7 +3975,7 @@ export default function FlashGroupApp() {
 
                         <div className="flex flex-wrap items-center gap-3 pt-2">
                           <CTAButton
-                            variant="primary"
+                            variant="hero"
                             size="lg"
                             icon={ArrowRight}
                             onClick={() => {
@@ -3985,20 +3985,20 @@ export default function FlashGroupApp() {
                           >
                             KHÁM PHÁ PHÒNG GOM
                           </CTAButton>
-                          <button onClick={() => navigate('/seller-policy')} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base bg-transparent hover:bg-[#E8A0FF] hover:text-[#000181] text-white border-2 border-white transition cursor-pointer active:scale-98 uppercase"><span>DÀNH CHO NHÀ CUNG CẤP</span><Building2 className="w-5 h-5" /></button>
+                          <button onClick={() => navigate('/seller-policy')} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base bg-transparent hover:bg-white/10 hover:text-white text-white border-2 border-white transition cursor-pointer active:scale-98 uppercase"><span>DÀNH CHO NHÀ CUNG CẤP</span><Building2 className="w-5 h-5" /></button>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 pt-4 text-xs font-semibold text-white/90 border-t border-white/15">
                           <span className="flex items-center gap-1.5">
-                            <ShieldCheck className="w-4 h-4 text-[#D0FFA4]" />
+                            <ShieldCheck className="w-4 h-4 text-[#C7F000]" />
                             Minh bạch pháp lý Nghị định 55/2024
                           </span>
                           <span className="flex items-center gap-1.5">
-                            <Lock className="w-4 h-4 text-[#D0FFA4]" />
+                            <Lock className="w-4 h-4 text-[#C7F000]" />
                             Nhận hàng Locker bảo mật QR
                           </span>
                           <span className="flex items-center gap-1.5">
-                            <RotateCcw className="w-4 h-4 text-[#D0FFA4]" />
+                            <RotateCcw className="w-4 h-4 text-[#C7F000]" />
                             Hoàn tiền 100% nếu không đủ nhóm
                           </span>
                         </div>
@@ -4036,7 +4036,7 @@ export default function FlashGroupApp() {
                                   {featuredRoom.emoji} {featuredRoom.productName}
                                 </h4>
                                 <div className="mt-1 flex items-baseline gap-2">
-                                  <span className="text-lg font-black text-[#006EE9]">
+                                  <span className="text-lg font-black text-[#3155FF]">
                                     {formatVND(
                                       featuredRoom.finalPrice ??
                                         getCurrentPrice(featuredRoom.totalQuantity, featuredRoom.priceTiers)
@@ -4052,7 +4052,7 @@ export default function FlashGroupApp() {
                             <div className="space-y-1.5 mb-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
                               <div className="flex justify-between text-xs font-semibold text-slate-700">
                                 <span className="flex items-center gap-1">
-                                  <Users className="w-3.5 h-3.5 text-[#006EE9]" />
+                                  <Users className="w-3.5 h-3.5 text-[#3155FF]" />
                                   {featuredRoom.participantCount} người tham gia
                                 </span>
                                 <span>
@@ -4061,7 +4061,7 @@ export default function FlashGroupApp() {
                               </div>
                               <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                                 <div
-                                  className="bg-[#006EE9] h-full rounded-full transition-all duration-500"
+                                  className="bg-[#3155FF] h-full rounded-full transition-all duration-500"
                                   style={{
                                     width: `${Math.min(
                                       100,
@@ -4070,7 +4070,7 @@ export default function FlashGroupApp() {
                                   }}
                                 />
                               </div>
-                              <div className="text-[11px] text-right font-medium text-[#000181]">
+                              <div className="text-[11px] text-right font-medium text-[#0C0D10]">
                                 Điểm gom: <strong>{featuredRoom.pickupPoint}</strong>
                               </div>
                             </div>
@@ -4270,7 +4270,7 @@ export default function FlashGroupApp() {
                                 />
                                 <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
                                   <span className="bg-white/95 backdrop-blur-md text-slate-800 text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-slate-200/50 flex items-center space-x-1">
-                                    <MapPin className="w-3 h-3 text-[#000181]" />
+                                    <MapPin className="w-3 h-3 text-[#0C0D10]" />
                                     <span>{room.distance}</span>
                                   </span>
                                   <StatusBadge status={roomBadgeStatus} size="sm" />
@@ -4340,7 +4340,7 @@ export default function FlashGroupApp() {
                                         e.stopPropagation();
                                         setSellerInfoModalSupplierId(room.supplierId);
                                       }}
-                                      className="truncate max-w-[160px] hover:text-[#000181] hover:underline font-medium text-left"
+                                      className="truncate max-w-[160px] hover:text-[#0C0D10] hover:underline font-medium text-left"
                                       title="Xem hồ sơ pháp lý nhà cung cấp"
                                     >
                                       {room.supplierName}
@@ -4348,14 +4348,14 @@ export default function FlashGroupApp() {
                                     <span
                                       className={`text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
                                         verifDisplay.isAdminVerified
-                                          ? 'bg-[#F4FFE8] text-[#000181] border-[#D0FFA4]'
+                                          ? 'bg-[#F5FBD9] text-[#0C0D10] border-[#C7F000]'
                                           : 'bg-slate-100 text-slate-600 border-slate-200'
                                       }`}
                                     >
                                       {verifDisplay.buyerBadgeLabel}
                                     </span>
                                   </div>
-                                  <h3 className="font-bold text-slate-900 text-base line-clamp-1 group-hover:text-[#000181] transition">
+                                  <h3 className="font-bold text-slate-900 text-base line-clamp-1 group-hover:text-[#0C0D10] transition">
                                     {room.emoji} {room.productName}
                                   </h3>
                                 </div>
@@ -4368,11 +4368,11 @@ export default function FlashGroupApp() {
                                     <div className="text-lg font-black text-slate-900">{formatVND(currentPrice)}</div>
                                   </div>
                                   <div className="flex items-center justify-between text-xs">
-                                    <div className="text-[#000181] font-semibold flex items-center gap-1">
+                                    <div className="text-[#0C0D10] font-semibold flex items-center gap-1">
                                       <TrendingDown className="w-3.5 h-3.5" />
                                       Mục tiêu giá thấp nhất:
                                     </div>
-                                    <div className="font-extrabold text-[#000181]">{formatVND(lowestPrice)}</div>
+                                    <div className="font-extrabold text-[#0C0D10]">{formatVND(lowestPrice)}</div>
                                   </div>
                                 </div>
 
@@ -4393,11 +4393,11 @@ export default function FlashGroupApp() {
                                         Còn {nextTierInfo.requiredQuantity} sp để mở khóa {formatVND(nextTierInfo.nextPrice)}
                                       </span>
                                     ) : room.finalPrice !== undefined ? (
-                                      <span className="text-[#000181] font-bold">
+                                      <span className="text-[#0C0D10] font-bold">
                                         ✓ Đã chốt mức giá: {formatVND(room.finalPrice)}
                                       </span>
                                     ) : (
-                                      <span className="text-[#000181] font-bold">✓ Đã đạt mức giá mục tiêu tối ưu!</span>
+                                      <span className="text-[#0C0D10] font-bold">✓ Đã đạt mức giá mục tiêu tối ưu!</span>
                                     )}
                                   </div>
 
@@ -4438,9 +4438,9 @@ export default function FlashGroupApp() {
                                         e.stopPropagation();
                                         setSelectedRoomId(room.id);
                                       }}
-                                      className="w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]"
+                                      className="w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm bg-[#C7F000]/40 text-emerald-800 border border-[#C7F000]"
                                     >
-                                      <CheckCircle2 className="w-4 h-4 text-[#000181]" />
+                                      <CheckCircle2 className="w-4 h-4 text-[#0C0D10]" />
                                       <span>Bạn đã tham gia • Xem phòng</span>
                                     </button>
                                   ) : room.status !== 'active' ? (
@@ -4459,7 +4459,7 @@ export default function FlashGroupApp() {
                                         e.stopPropagation();
                                         setJoinModalRoomId(room.id);
                                       }}
-                                      className="w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm bg-[#006EE9] hover:bg-[#000181] text-white shadow-md shadow-[#006EE9]/20 cursor-pointer"
+                                      className="w-full py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1.5 shadow-sm bg-[#3155FF] hover:bg-[#2444DC] text-white shadow-md shadow-[#3155FF]/20 cursor-pointer"
                                     >
                                       <span>THAM GIA GOM</span>
                                       <ArrowRight className="w-3.5 h-3.5" />
@@ -5033,7 +5033,7 @@ function GroupRoomView({
           {/* Requirement 4: Rủ bạn cùng mua button */}
           <button
             onClick={onOpenShareModal}
-            className="px-3.5 py-2 rounded-xl bg-[#006EE9] hover:bg-emerald-500 text-white text-xs font-black transition flex items-center space-x-1.5 shadow-sm shadow-emerald-600/20"
+            className="px-3.5 py-2 rounded-xl bg-[#3155FF] hover:bg-emerald-500 text-white text-xs font-black transition flex items-center space-x-1.5 shadow-sm shadow-emerald-600/20"
           >
             <Share2 className="w-4 h-4" />
             <span>Rủ bạn cùng mua</span>
@@ -5045,7 +5045,7 @@ function GroupRoomView({
               onClick={onOpenSellerInfo}
               className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition flex items-center space-x-1.5"
             >
-              <Building2 className="w-4 h-4 text-[#000181]" />
+              <Building2 className="w-4 h-4 text-[#0C0D10]" />
               <span>Hồ sơ pháp lý NCC</span>
             </button>
           )}
@@ -5136,7 +5136,7 @@ function GroupRoomView({
                 <span
                   className={`text-[10px] font-black px-2 py-0.5 rounded ${
                     verifDisplay.isAdminVerified
-                      ? 'bg-[#D0FFA4]/40 text-emerald-800'
+                      ? 'bg-[#C7F000]/40 text-emerald-800'
                       : 'bg-slate-200 text-slate-700'
                   }`}
                 >
@@ -5153,7 +5153,7 @@ function GroupRoomView({
                     : 'GIÁ HIỆN TẠI MỞ KHÓA CHO CẢ NHÓM:'}
                 </div>
                 <div className="flex items-baseline space-x-3">
-                  <span className="text-4xl sm:text-5xl font-black text-[#000181] tracking-tight">
+                  <span className="text-4xl sm:text-5xl font-black text-[#0C0D10] tracking-tight">
                     {formatVND(currentPrice)}
                   </span>
                   <span className="text-slate-400 line-through text-lg">{formatVND(room.initialPrice)}</span>
@@ -5188,8 +5188,8 @@ function GroupRoomView({
                   </span>
                 </div>
               ) : (
-                <div className="bg-[#F4FFE8] border border-[#D0FFA4] rounded-2xl p-4 text-emerald-900 text-xs font-bold flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#000181] shrink-0" />
+                <div className="bg-[#F5FBD9] border border-[#C7F000] rounded-2xl p-4 text-emerald-900 text-xs font-bold flex items-center space-x-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#0C0D10] shrink-0" />
                   <span>
                     Cả nhóm đã đạt mốc số lượng cao nhất! Toàn bộ người tham gia nhận mức giá tối ưu {formatVND(currentPrice)}.
                   </span>
@@ -5200,10 +5200,10 @@ function GroupRoomView({
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs space-y-2">
                 <div className="flex items-center justify-between text-slate-700 font-bold">
                   <span className="flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-[#000181]" />
+                    <Truck className="w-4 h-4 text-[#0C0D10]" />
                     Shared group shipping ({room.participantCount} người cùng chia):
                   </span>
-                  <span className="text-[#000181] font-black text-sm">
+                  <span className="text-[#0C0D10] font-black text-sm">
                     {formatVND(shippingPerPerson)}/người
                   </span>
                 </div>
@@ -5219,8 +5219,8 @@ function GroupRoomView({
                     <span className="font-black text-slate-900">{formatVND(shippingPerPerson)}</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[#000181] font-bold block">You save (Ship):</span>
-                    <span className="font-black text-[#000181]">{formatVND(shippingSaved)}</span>
+                    <span className="text-[#0C0D10] font-bold block">You save (Ship):</span>
+                    <span className="font-black text-[#0C0D10]">{formatVND(shippingSaved)}</span>
                   </div>
                 </div>
               </div>
@@ -5233,13 +5233,13 @@ function GroupRoomView({
             <div className="space-y-2 bg-white rounded-xl p-4 border border-slate-200">
               <div className="flex items-center justify-between">
                 <span className="font-black text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <Building2 className="w-4 h-4 text-[#000181]" />
+                  <Building2 className="w-4 h-4 text-[#0C0D10]" />
                   Định danh Nhà cung cấp (Nghị định 85/2021)
                 </span>
                 <span
                   className={`text-[10px] font-black px-2 py-0.5 rounded-full border ${
                     verifDisplay.isAdminVerified
-                      ? 'bg-[#F4FFE8] text-emerald-800 border-[#D0FFA4]'
+                      ? 'bg-[#F5FBD9] text-emerald-800 border-[#C7F000]'
                       : 'bg-slate-100 text-slate-700 border-slate-200'
                   }`}
                 >
@@ -5273,7 +5273,7 @@ function GroupRoomView({
                 <button
                   type="button"
                   onClick={onOpenSellerInfo}
-                  className="mt-1 inline-flex items-center space-x-1 text-[#000181] hover:text-emerald-800 font-bold text-[11px] underline"
+                  className="mt-1 inline-flex items-center space-x-1 text-[#0C0D10] hover:text-emerald-800 font-bold text-[11px] underline"
                 >
                   <span>Xem đầy đủ hồ sơ pháp lý nhà cung cấp</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -5285,7 +5285,7 @@ function GroupRoomView({
             <div className="space-y-2 bg-white rounded-xl p-4 border border-slate-200">
               <div className="flex items-center justify-between">
                 <span className="font-black text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <FileCheck className="w-4 h-4 text-[#000181]" />
+                  <FileCheck className="w-4 h-4 text-[#0C0D10]" />
                   Thông tin Nhãn hàng hóa & ATTP (NĐ 111/2021)
                 </span>
                 {product?.foodComplianceStatus && product.foodComplianceStatus !== 'not_applicable' && (
@@ -5350,10 +5350,10 @@ function GroupRoomView({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-black text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-[#000181]" />
+                  <MapPin className="w-4 h-4 text-[#0C0D10]" />
                   Điểm nhận hàng chung (Pickup Point)
                 </span>
-                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4]">
+                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase bg-[#C7F000]/40 text-emerald-800 border border-[#C7F000]">
                   {roomPickupPoint?.status || 'active'}
                 </span>
               </div>
@@ -5368,7 +5368,7 @@ function GroupRoomView({
                 Giờ mở cửa:{' '}
                 <strong>{roomPickupPoint?.operatingHours || '07:00 – 22:00'}</strong> • Khung giờ
                 nhận dự kiến:{' '}
-                <strong className="text-[#000181]">
+                <strong className="text-[#0C0D10]">
                   {room.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
                 </strong>
               </div>
@@ -5381,7 +5381,7 @@ function GroupRoomView({
                       : '32 / 50'}{' '}
                     occupied
                   </span>
-                  <span className="text-[#000181]">Available</span>
+                  <span className="text-[#0C0D10]">Available</span>
                 </div>
                 <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                   <div
@@ -5407,7 +5407,7 @@ function GroupRoomView({
 
             <div className="bg-white rounded-xl p-4 border border-slate-200 space-y-1.5">
               <div className="font-black text-slate-900 text-xs flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-[#000181]" />
+                <ShieldCheck className="w-4 h-4 text-[#0C0D10]" />
                 Cách nhận hàng (Pickup Instructions)
               </div>
               <div className="text-slate-600 whitespace-pre-line leading-relaxed text-[11px]">
@@ -5420,7 +5420,7 @@ function GroupRoomView({
           <div className="space-y-2 bg-slate-50 p-6 rounded-2xl border border-slate-200">
             <div className="flex justify-between items-center text-xs font-bold text-slate-700">
               <span className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-[#000181]" />
+                <Users className="w-4 h-4 text-[#0C0D10]" />
                 <span>{room.participantCount} người tham gia</span>
                 <span>•</span>
                 <span>
@@ -5436,10 +5436,10 @@ function GroupRoomView({
                   width: `${percentFilled}%`,
                   background:
                     percentFilled >= 100
-                      ? "#D0FFA4"
+                      ? "#C7F000"
                       : percentFilled >= 80
-                      ? "linear-gradient(90deg, #83E7FF 0%, #D0FFA4 100%)"
-                      : "linear-gradient(90deg, #006EE9 0%, #83E7FF 100%)"
+                      ? "linear-gradient(90deg, #3155FF 0%, #C7F000 100%)"
+                      : "linear-gradient(90deg, #2444DC 0%, #3155FF 100%)"
                 }}
               />
             </div>
@@ -5447,7 +5447,7 @@ function GroupRoomView({
 
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-              <Layers className="w-4 h-4 text-[#000181]" />
+              <Layers className="w-4 h-4 text-[#0C0D10]" />
               <span>Bậc thang giá theo số lượng sản phẩm (Price Ladder)</span>
             </h3>
 
@@ -5467,24 +5467,24 @@ function GroupRoomView({
                     key={idx}
                     className={`rounded-2xl p-4 border transition-all text-center relative ${
                       isFinalPriceLock || isCurrent
-                        ? 'bg-[#D0FFA4] border-2 border-[#000181] text-[#000181] shadow-md ring-2 ring-[#000181]/15'
+                        ? 'bg-[#F5FBD9] border-2 border-[#C7F000] text-[#0C0D10] shadow-md ring-2 ring-[#3155FF]/15'
                         : isNextTier
-                        ? 'bg-[#F8E9FF] border-2 border-[#E8A0FF] text-[#000181] shadow-xs'
+                        ? 'bg-[#FFF0F7] border-2 border-[#7B3FF2]/30 text-[#0C0D10] shadow-xs'
                         : isUnlocked
-                        ? 'bg-[#EAF6FF] border border-[#83E7FF] text-[#000181]'
-                        : 'bg-[#F6F7FB] border border-[#E6E6EE] text-[#53536A] opacity-70'
+                        ? 'bg-[#EEF1FF] border border-[#3155FF]/30 text-[#0C0D10]'
+                        : 'bg-[#F6F7FC] border border-[#E4E8F0] text-[#596273] opacity-70'
                     }`}
                   >
                     {isFinalPriceLock ? (
-                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#000181] text-[#D0FFA4] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#3155FF] text-[#C7F000] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
                         FINAL PRICE
                       </span>
                     ) : isCurrent ? (
-                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#000181] text-[#D0FFA4] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#3155FF] text-[#C7F000] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
                         CURRENT TIER
                       </span>
                     ) : isNextTier ? (
-                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#E8A0FF] text-[#000181] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-[#FF4FA3] text-[#0C0D10] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
                         NEXT TIER
                       </span>
                     ) : null}
@@ -5497,12 +5497,12 @@ function GroupRoomView({
                     <div
                       className={`text-lg font-black ${
                         isFinalPriceLock || isCurrent
-                          ? 'text-[#000181]'
+                          ? 'text-[#0C0D10]'
                           : isNextTier
-                          ? 'text-[#000181]'
+                          ? 'text-[#0C0D10]'
                           : isUnlocked
-                          ? 'text-[#006EE9]'
-                          : 'text-[#53536A]'
+                          ? 'text-[#3155FF]'
+                          : 'text-[#596273]'
                       }`}
                     >
                       {formatVND(tier.price)}
@@ -5510,23 +5510,23 @@ function GroupRoomView({
 
                     <div className="mt-2 text-[11px] font-bold flex items-center justify-center space-x-1">
                       {isFinalPriceLock ? (
-                        <span className="text-[#000181] flex items-center gap-1 font-black">
+                        <span className="text-[#0C0D10] flex items-center gap-1 font-black">
                           <CheckCircle2 className="w-3.5 h-3.5" /> Mức giá chốt
                         </span>
                       ) : isCurrent ? (
-                        <span className="text-[#000181] flex items-center gap-1 font-black">
+                        <span className="text-[#0C0D10] flex items-center gap-1 font-black">
                           <CheckCircle2 className="w-3.5 h-3.5" /> Mức hiện tại
                         </span>
                       ) : isNextTier ? (
-                        <span className="text-[#000181] flex items-center gap-1 font-black">
+                        <span className="text-[#0C0D10] flex items-center gap-1 font-black">
                           ★ Nấc tiếp theo
                         </span>
                       ) : isUnlocked ? (
-                        <span className="text-[#006EE9] flex items-center gap-1 font-bold">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#006EE9]" /> Đã mở khóa
+                        <span className="text-[#3155FF] flex items-center gap-1 font-bold">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#3155FF]" /> Đã mở khóa
                         </span>
                       ) : (
-                        <span className="text-[#53536A] flex items-center gap-1 font-medium">
+                        <span className="text-[#596273] flex items-center gap-1 font-medium">
                           <Lock className="w-3 h-3" /> Chưa mở
                         </span>
                       )}
@@ -5537,10 +5537,10 @@ function GroupRoomView({
             </div>
           </div>
 
-          <div className="bg-[#FAF0FF] border border-[#E8A0FF] rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-[#F3EEFF] border border-[#7B3FF2]/30 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h4 className="font-bold text-[#000181] text-sm flex items-center gap-1.5">
-                <Share2 className="w-4 h-4 text-[#006EE9]" />
+              <h4 className="font-bold text-[#0C0D10] text-sm flex items-center gap-1.5">
+                <Share2 className="w-4 h-4 text-[#3155FF]" />
                 Rủ bạn cùng mua – Càng đông, càng rẻ!
               </h4>
               <p className="text-xs text-slate-600 mt-0.5">
@@ -5565,7 +5565,7 @@ function GroupRoomView({
               <button
                 onClick={onOpenJoinModal}
                 disabled={room.status !== 'active' || secondsLeft <= 0}
-                className="w-full sm:flex-1 bg-[#006EE9] hover:bg-[#000181] text-white font-black py-4 px-8 rounded-2xl transition shadow-xl shadow-[#006EE9]/25 text-base active:scale-98 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center space-x-2 cursor-pointer"
+                className="w-full sm:flex-1 bg-[#3155FF] hover:bg-[#2444DC] text-white font-black py-4 px-8 rounded-2xl transition shadow-xl shadow-[#3155FF]/25 text-base active:scale-98 disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Zap className="w-5 h-5 fill-white" />
                 <span>THAM GIA GOM (MỞ KHÓA GIÁ RẺ)</span>
@@ -5581,15 +5581,15 @@ function GroupRoomView({
               </div>
             ) : isEligibleForCheckout ? (
               <div className="w-full flex flex-col sm:flex-row items-center gap-3">
-                <div className="w-full sm:w-auto bg-[#EFFBFF] text-indigo-900 border border-indigo-200 px-5 py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#006EE9]" />
+                <div className="w-full sm:w-auto bg-[#EEF1FF] text-indigo-900 border border-indigo-200 px-5 py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center space-x-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#3155FF]" />
                   <span>
                     Đã chốt giá: {formatVND(room.finalPrice!)} • {participation.quantity} {room.unit}
                   </span>
                 </div>
                 <button
                   onClick={onGoCheckout}
-                  className="w-full sm:flex-1 bg-[#006EE9] hover:bg-[#000181] text-white font-black py-3.5 px-6 rounded-2xl transition shadow-lg shadow-[#006EE9]/25 text-sm flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
+                  className="w-full sm:flex-1 bg-[#3155FF] hover:bg-[#2444DC] text-white font-black py-3.5 px-6 rounded-2xl transition shadow-lg shadow-[#3155FF]/25 text-sm flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
                 >
                   <span>TIẾP TỤC THANH TOÁN ({formatVND(room.finalPrice! * participation.quantity + shippingPerPerson)})</span>
                   <ArrowRight className="w-4 h-4" />
@@ -5686,7 +5686,7 @@ function GroupRoomView({
           <button
             onClick={onOpenJoinModal}
             disabled={room.status !== 'active' || secondsLeft <= 0}
-            className="flex-1 bg-[#006EE9] hover:bg-[#000181] disabled:opacity-50 text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-sm"
+            className="flex-1 bg-[#3155FF] hover:bg-[#2444DC] disabled:opacity-50 text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-sm"
           >
             <Zap className="w-3.5 h-3.5 fill-white" />
             <span>Tham gia</span>
@@ -5694,13 +5694,13 @@ function GroupRoomView({
         ) : isEligibleForCheckout ? (
           <button
             onClick={onGoCheckout}
-            className="flex-1 bg-[#006EE9] hover:bg-[#000181] text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
+            className="flex-1 bg-[#3155FF] hover:bg-[#2444DC] text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
           >
             <CreditCard className="w-3.5 h-3.5" />
             <span>Thanh toán</span>
           </button>
         ) : (
-          <div className="flex-1 bg-[#D0FFA4] text-[#000181] border border-[#000181]/20 font-black py-2.5 px-3 rounded-xl text-[11px] text-center truncate">
+          <div className="flex-1 bg-[#C7F000] text-[#0C0D10] border border-[#3155FF]/20 font-black py-2.5 px-3 rounded-xl text-[11px] text-center truncate">
             ✓ Đã tham gia
           </div>
         )}
@@ -5715,7 +5715,7 @@ function GroupRoomView({
           onClick={scrollToSocialSection}
           className="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 px-3.5 rounded-xl text-xs flex items-center space-x-1 border border-slate-200"
         >
-          <MessageCircle className="w-3.5 h-3.5 text-[#000181]" />
+          <MessageCircle className="w-3.5 h-3.5 text-[#0C0D10]" />
           <span>Chat</span>
         </button>
       </div>
@@ -5995,7 +5995,7 @@ function CheckoutView({
 
       <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 sm:p-8 space-y-6">
         <div className="border-b border-slate-200 pb-4">
-          <span className="text-xs uppercase font-extrabold text-[#000181] tracking-wider">
+          <span className="text-xs uppercase font-extrabold text-[#0C0D10] tracking-wider">
             KIỂM TRA ĐƠN HÀNG & CÔNG BỐ GIAO DỊCH TỪ XA (FINAL CHECKOUT)
           </span>
           <h2 className="text-2xl font-black text-slate-900 mt-1">Rà soát hợp đồng & Thanh toán</h2>
@@ -6004,7 +6004,7 @@ function CheckoutView({
         {/* REQUIREMENT 20: EXPLICIT DELIVERY METHOD (NHẬN TẠI ĐIỂM GOM vs GIAO ĐẾN ĐỊA CHỈ) */}
         <div className="space-y-3">
           <label className="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-1.5">
-            <Building2 className="w-4 h-4 text-[#000181]" />
+            <Building2 className="w-4 h-4 text-[#0C0D10]" />
             <span>Phương thức giao nhận (Logistics Mode)</span>
           </label>
 
@@ -6015,23 +6015,23 @@ function CheckoutView({
               onClick={() => setDeliveryMode('pickup')}
               className={`p-4 rounded-2xl text-left border transition cursor-pointer relative ${
                 deliveryMode === 'pickup'
-                  ? 'bg-[#EFFBFF] border-2 border-[#006EE9] ring-2 ring-[#006EE9]/15'
-                  : 'bg-white border-[#E6E6EE] hover:border-[#83E7FF]'
+                  ? 'bg-[#EEF1FF] border-2 border-[#3155FF] ring-2 ring-[#3155FF]/15'
+                  : 'bg-white border-[#E4E8F0] hover:border-[#3155FF]/30'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-[#000181] flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#006EE9]" />
+                <span className="text-xs font-black text-[#0C0D10] flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-[#3155FF]" />
                   NHẬN TẠI ĐIỂM GOM
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#D0FFA4] text-[#000181] text-[9px] font-black uppercase border border-[#000181]/20">
+                <span className="px-2 py-0.5 rounded-full bg-[#C7F000] text-[#0C0D10] text-[9px] font-black uppercase border border-[#3155FF]/20">
                   MẶC ĐỊNH
                 </span>
               </div>
-              <p className="text-[11px] text-[#53536A] mt-1.5 leading-relaxed">
+              <p className="text-[11px] text-[#596273] mt-1.5 leading-relaxed">
                 Tối ưu chi phí bằng cách gom chung về Smart Locker / Điểm nhận gần bạn.
               </p>
-              <div className="mt-2 text-xs font-bold text-[#000181] bg-white p-2 rounded-xl border border-[#83E7FF]">
+              <div className="mt-2 text-xs font-bold text-[#0C0D10] bg-white p-2 rounded-xl border border-[#3155FF]/30">
                 {room.pickupPointName || room.pickupPoint}
               </div>
             </button>
@@ -6042,23 +6042,23 @@ function CheckoutView({
               onClick={() => setDeliveryMode('home')}
               className={`p-4 rounded-2xl text-left border transition cursor-pointer relative ${
                 deliveryMode === 'home'
-                  ? 'bg-[#EFFBFF] border-2 border-[#006EE9] ring-2 ring-[#006EE9]/15'
-                  : 'bg-white border-[#E6E6EE] hover:border-[#83E7FF]'
+                  ? 'bg-[#EEF1FF] border-2 border-[#3155FF] ring-2 ring-[#3155FF]/15'
+                  : 'bg-white border-[#E4E8F0] hover:border-[#3155FF]/30'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-[#000181] flex items-center gap-1.5">
-                  <Home className="w-3.5 h-3.5 text-[#006EE9]" />
+                <span className="text-xs font-black text-[#0C0D10] flex items-center gap-1.5">
+                  <Home className="w-3.5 h-3.5 text-[#3155FF]" />
                   GIAO ĐẾN ĐỊA CHỈ
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#F6F7FB] text-[#000181] text-[9px] font-black uppercase border border-[#E6E6EE]">
+                <span className="px-2 py-0.5 rounded-full bg-[#F6F7FC] text-[#0C0D10] text-[9px] font-black uppercase border border-[#E4E8F0]">
                   TẬN NƠI
                 </span>
               </div>
-              <p className="text-[11px] text-[#53536A] mt-1.5 leading-relaxed">
+              <p className="text-[11px] text-[#596273] mt-1.5 leading-relaxed">
                 Giao hàng đến địa chỉ nhà riêng hoặc văn phòng của bạn tại Việt Nam.
               </p>
-              <div className="mt-2 text-xs font-bold text-[#000181] bg-white p-2 rounded-xl border border-[#E6E6EE] truncate">
+              <div className="mt-2 text-xs font-bold text-[#0C0D10] bg-white p-2 rounded-xl border border-[#E4E8F0] truncate">
                 {savedAddresses.find((a) => a.id === selectedAddressId)?.address.formattedAddress ||
                   'Chọn hoặc thêm địa chỉ'}
               </div>
@@ -6073,7 +6073,7 @@ function CheckoutView({
                 <button
                   type="button"
                   onClick={() => setShowAddressSelectorModal(true)}
-                  className="text-xs font-bold text-[#000181] hover:underline cursor-pointer flex items-center gap-1"
+                  className="text-xs font-bold text-[#0C0D10] hover:underline cursor-pointer flex items-center gap-1"
                 >
                   <Plus className="w-3 h-3" />
                   Thêm địa chỉ mới
@@ -6086,7 +6086,7 @@ function CheckoutView({
                   <button
                     type="button"
                     onClick={() => setShowAddressSelectorModal(true)}
-                    className="text-[#000181] font-bold underline ml-1"
+                    className="text-[#0C0D10] font-bold underline ml-1"
                   >
                     Tạo địa chỉ giao hàng
                   </button>
@@ -6098,7 +6098,7 @@ function CheckoutView({
                       key={addr.id}
                       className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${
                         selectedAddressId === addr.id
-                          ? 'bg-white border-[#D0FFA4] shadow-xs'
+                          ? 'bg-white border-[#C7F000] shadow-xs'
                           : 'bg-white/60 border-slate-200 hover:bg-white'
                       }`}
                     >
@@ -6107,14 +6107,14 @@ function CheckoutView({
                         name="checkoutSavedAddress"
                         checked={selectedAddressId === addr.id}
                         onChange={() => setSelectedAddressId(addr.id)}
-                        className="mt-0.5 text-[#000181] focus:ring-emerald-500"
+                        className="mt-0.5 text-[#0C0D10] focus:ring-emerald-500"
                       />
                       <div className="text-xs flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-900">{addr.label}</span>
                           <span className="text-slate-500">• {addr.recipientName} ({addr.recipientPhone})</span>
                           {addr.isDefault && (
-                            <span className="text-[9px] bg-[#D0FFA4]/40 text-emerald-800 font-black px-1.5 py-0.2 rounded uppercase">
+                            <span className="text-[9px] bg-[#C7F000]/40 text-emerald-800 font-black px-1.5 py-0.2 rounded uppercase">
                               Mặc định
                             </span>
                           )}
@@ -6176,17 +6176,17 @@ function CheckoutView({
 
 
         {/* Phase 6: Mã ưu đãi / Voucher Section (Requirements 33, 34, 35 & Phase 8 Req 19, 20) */}
-        <div className="bg-[#F4FFE8]/60 rounded-2xl p-4 border border-[#D0FFA4] space-y-3">
+        <div className="bg-[#F5FBD9]/60 rounded-2xl p-4 border border-[#C7F000] space-y-3">
           <div className="flex items-center justify-between">
             <label className="text-xs font-black text-slate-800 flex items-center gap-1.5">
-              <Ticket className="w-4 h-4 text-[#000181]" />
+              <Ticket className="w-4 h-4 text-[#0C0D10]" />
               <span>Mã ưu đãi (Giới hạn khuyến mại tối đa 50% theo NĐ 81/2018/NĐ-CP)</span>
             </label>
             {onOpenLegalDoc && (
               <button
                 type="button"
                 onClick={() => onOpenLegalDoc('promotion_voucher_terms')}
-                className="text-[11px] font-bold text-[#000181] hover:underline"
+                className="text-[11px] font-bold text-[#0C0D10] hover:underline"
               >
                  thể lệ ưu đãi
               </button>
@@ -6236,11 +6236,11 @@ function CheckoutView({
           )}
 
           {appliedVoucher && fin.voucherDiscount > 0 && (
-            <div className="bg-[#D0FFA4]/40/80 border border-[#D0FFA4] rounded-xl px-3 py-2 flex items-center justify-between text-xs">
+            <div className="bg-[#C7F000]/40/80 border border-[#C7F000] rounded-xl px-3 py-2 flex items-center justify-between text-xs">
               <span className="font-bold text-emerald-900">
                 ✓ Đã áp dụng <strong>{appliedVoucher.code}</strong>: giảm {formatVND(fin.voucherDiscount)}
               </span>
-              <span className="text-[10px] font-bold text-[#000181] uppercase">
+              <span className="text-[10px] font-bold text-[#0C0D10] uppercase">
                 Tài trợ: {appliedVoucher.fundedBy === 'platform' ? 'Sàn FlashGroup' : 'Nhà cung cấp'}
               </span>
             </div>
@@ -6258,8 +6258,8 @@ function CheckoutView({
                   onClick={() => handleApplyVoucherCode(v.code)}
                   className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border transition ${
                     appliedVoucher?.code === v.code
-                      ? 'bg-[#006EE9] text-white border-emerald-600'
-                      : 'bg-white text-emerald-800 border-[#D0FFA4] hover:bg-[#D0FFA4]/40'
+                      ? 'bg-[#3155FF] text-white border-emerald-600'
+                      : 'bg-white text-emerald-800 border-[#C7F000] hover:bg-[#C7F000]/40'
                   }`}
                 >
                   {v.code} ({v.type === 'fixed' ? `-${formatVND(v.value)}` : `-${v.value}%`}, đơn từ {formatVND(v.minimumOrder ?? 0)})
@@ -6292,7 +6292,7 @@ function CheckoutView({
           {/* Mandatory Seller & Transaction Terms Disclosure */}
           <div className="bg-white rounded-xl p-3.5 border border-slate-200/90 text-[11px] text-slate-600 space-y-1.5">
             <div className="font-black text-slate-900 uppercase tracking-wider text-[10px] flex items-center gap-1.5 text-emerald-800">
-              <Scale className="w-3.5 h-3.5 text-[#000181]" />
+              <Scale className="w-3.5 h-3.5 text-[#0C0D10]" />
               Thông tin bắt buộc trong giao dịch từ xa (Điều 37 Luật BVNTD 2023)
             </div>
             <div>
@@ -6330,7 +6330,7 @@ function CheckoutView({
               <span className="font-bold text-slate-800">{formatVND(productSubtotal)}</span>
             </div>
             {fin.voucherDiscount > 0 && (
-              <div className="flex justify-between text-[#000181] font-bold">
+              <div className="flex justify-between text-[#0C0D10] font-bold">
                 <span>Voucher ({appliedVoucher?.code}):</span>
                 <span>-{formatVND(fin.voucherDiscount)}</span>
               </div>
@@ -6349,27 +6349,27 @@ function CheckoutView({
             </div>
             <div className="flex justify-between text-slate-600">
               <span>Khung giờ nhận hàng (Pickup Window):</span>
-              <span className="font-bold text-[#000181]">
+              <span className="font-bold text-[#0C0D10]">
                 {room.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
               </span>
             </div>
           </div>
 
-          <div className="border-t border-[#E6E6EE] pt-3 flex justify-between items-baseline">
+          <div className="border-t border-[#E4E8F0] pt-3 flex justify-between items-baseline">
             <div>
-              <span className="text-sm font-bold text-[#000181] block">Tổng số tiền thanh toán cuối cùng:</span>
-              <span className="text-[11px] text-[#53536A]">
+              <span className="text-sm font-bold text-[#0C0D10] block">Tổng số tiền thanh toán cuối cùng:</span>
+              <span className="text-[11px] text-[#596273]">
                 (Tiền hàng {formatVND(productSubtotal)}
                 {fin.voucherDiscount > 0 ? ` - Voucher ${formatVND(fin.voucherDiscount)}` : ''} + Ship chia sẻ {formatVND(sharedShipping)})
               </span>
             </div>
-            <span className="text-3xl font-black text-[#000181]">{formatVND(grandTotal)}</span>
+            <span className="text-3xl font-black text-[#0C0D10]">{formatVND(grandTotal)}</span>
           </div>
         </div>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-[#000181] uppercase tracking-wider block">
+            <label className="text-xs font-bold text-[#0C0D10] uppercase tracking-wider block">
               Chọn phương thức thanh toán
             </label>
             <span className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-lg">
@@ -6389,26 +6389,26 @@ function CheckoutView({
                 onClick={() => setSelectedPayment(p.id)}
                 className={`p-3.5 rounded-2xl border text-left flex items-center space-x-3 transition cursor-pointer ${
                   selectedPayment === p.id
-                    ? 'border-2 border-[#006EE9] bg-[#EFFBFF] shadow-xs'
-                    : 'border-[#E6E6EE] hover:bg-[#F6F7FB]'
+                    ? 'border-2 border-[#3155FF] bg-[#EEF1FF] shadow-xs'
+                    : 'border-[#E4E8F0] hover:bg-[#F6F7FC]'
                 }`}
               >
                 <span className="text-xl">{p.icon}</span>
-                <span className="text-xs font-bold text-[#000181]">{p.label}</span>
+                <span className="text-xs font-bold text-[#0C0D10]">{p.label}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* Phase 8 Req 5: Explicit Unchecked Pre-Contract Consent Checkbox */}
-        <label className="flex items-start space-x-3 p-4 rounded-2xl bg-[#F6F7FB] border border-[#E6E6EE] cursor-pointer select-none">
+        <label className="flex items-start space-x-3 p-4 rounded-2xl bg-[#F6F7FC] border border-[#E4E8F0] cursor-pointer select-none">
           <input
             type="checkbox"
             checked={confirmedRemoteContract}
             onChange={(e) => setConfirmedRemoteContract(e.target.checked)}
-            className="mt-0.5 w-4 h-4 rounded border-[#E6E6EE] text-[#006EE9] focus:ring-[#006EE9]"
+            className="mt-0.5 w-4 h-4 rounded border-[#E4E8F0] text-[#3155FF] focus:ring-[#3155FF]"
           />
-          <span className="text-xs text-[#53536A] leading-relaxed">
+          <span className="text-xs text-[#596273] leading-relaxed">
             Tôi đã kiểm tra đầy đủ thông tin Nhà cung cấp, sản phẩm, giá gom cuối cùng ({formatVND(finalUnitPrice)}), phí giao hàng chia sẻ ({formatVND(sharedShipping)}), điều kiện nhận hàng tại Locker, chính sách đổi trả/hoàn tiền và đồng ý xác lập giao dịch điện tử này.
           </span>
         </label>
@@ -6416,7 +6416,7 @@ function CheckoutView({
         <button
           onClick={handlePay}
           disabled={isProcessing || !confirmedRemoteContract}
-          className="w-full bg-[#006EE9] hover:bg-[#000181] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-4 px-6 rounded-2xl transition shadow-xl shadow-[#006EE9]/25 text-base active:scale-98 flex items-center justify-center space-x-2 cursor-pointer"
+          className="w-full bg-[#3155FF] hover:bg-[#2444DC] disabled:opacity-50 disabled:cursor-not-allowed text-white font-black py-4 px-6 rounded-2xl transition shadow-xl shadow-[#3155FF]/25 text-base active:scale-98 flex items-center justify-center space-x-2 cursor-pointer"
         >
           {isProcessing ? (
             <div className="flex items-center space-x-2">
@@ -6553,18 +6553,18 @@ function OrdersView({
                 onClick={() => setSelectedOrderForQR(ord)}
                 className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 ${
                   isSelected
-                    ? 'bg-white border-2 border-[#006EE9] shadow-md ring-2 ring-[#006EE9]/15'
-                    : 'bg-white border-[#E6E6EE] hover:border-[#83E7FF]'
+                    ? 'bg-white border-2 border-[#3155FF] shadow-md ring-2 ring-[#3155FF]/15'
+                    : 'bg-white border-[#E4E8F0] hover:border-[#3155FF]/30'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[11px] font-mono font-bold text-[#53536A] block">
+                    <span className="text-[11px] font-mono font-bold text-[#596273] block">
                       {ord.id} {batch ? `• Batch #${batch.id}` : ''}
                     </span>
-                    <h4 className="font-bold text-[#000181] text-base">{ord.productName}</h4>
-                    <span className="text-xs text-[#53536A] font-medium">
-                      Số lượng: <strong className="text-[#000181]">{ord.quantity}</strong> ({formatVND(ord.unitPrice)}/sp)
+                    <h4 className="font-bold text-[#0C0D10] text-base">{ord.productName}</h4>
+                    <span className="text-xs text-[#596273] font-medium">
+                      Số lượng: <strong className="text-[#0C0D10]">{ord.quantity}</strong> ({formatVND(ord.unitPrice)}/sp)
                     </span>
                   </div>
                   <div className="text-right">
@@ -6573,17 +6573,17 @@ function OrdersView({
                         ord.status === 'pickup_overdue' || ord.status === 'cancelled'
                           ? 'bg-rose-50 text-rose-700 border-rose-200'
                           : ord.status === 'ready_for_pickup'
-                          ? 'bg-[#F4FFE8] text-[#000181] border-[#D0FFA4]'
+                          ? 'bg-[#F5FBD9] text-[#0C0D10] border-[#C7F000]'
                           : ord.status === 'in_transit' || ord.status === 'preparing'
-                          ? 'bg-[#EFFBFF] text-[#000181] border-[#83E7FF]'
+                          ? 'bg-[#EEF1FF] text-[#0C0D10] border-[#3155FF]/30'
                           : ord.status === 'awaiting_payment'
-                          ? 'bg-[#FAF0FF] text-[#000181] border-[#E8A0FF]'
-                          : 'bg-[#D0FFA4] text-[#000181] border-[#000181]/20'
+                          ? 'bg-[#F3EEFF] text-[#0C0D10] border-[#7B3FF2]/30'
+                          : 'bg-[#C7F000] text-[#0C0D10] border-[#3155FF]/20'
                       }`}
                     >
                       {ord.status}
                     </span>
-                    <div className="text-base font-black text-[#000181] mt-1">
+                    <div className="text-base font-black text-[#0C0D10] mt-1">
                       {formatVND(ord.totalAmount)}
                     </div>
                   </div>
@@ -6598,13 +6598,13 @@ function OrdersView({
                 )}
 
                 {/* Phase 7 Req 21 & 50: Theo dõi giao hàng chung (6-step visual timeline) */}
-                <div className="bg-[#FCFCF7] rounded-2xl p-4 border border-[#E6E6EE] space-y-3">
+                <div className="bg-[#F6F7FC] rounded-2xl p-4 border border-[#E4E8F0] space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-[#000181] flex items-center gap-1.5">
-                      <Truck className="w-4 h-4 text-[#006EE9]" />
+                    <span className="text-xs font-black text-[#0C0D10] flex items-center gap-1.5">
+                      <Truck className="w-4 h-4 text-[#3155FF]" />
                       Theo dõi giao hàng chung ({batch?.carrierName || 'Đối tác giao nhận mô phỏng'})
                     </span>
-                    <span className="text-[11px] font-bold text-[#006EE9]">
+                    <span className="text-[11px] font-bold text-[#3155FF]">
                       Khung giờ nhận: {ord.pickupWindow || batch?.pickupWindow || room?.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
                     </span>
                   </div>
@@ -6615,13 +6615,13 @@ function OrdersView({
                         key={idx}
                         className={`p-2 rounded-xl border text-center transition ${
                           st.done
-                            ? 'bg-[#EFFBFF] border-[#83E7FF] text-[#000181]'
-                            : 'bg-white border-[#E6E6EE] text-[#53536A]'
+                            ? 'bg-[#EEF1FF] border-[#3155FF]/30 text-[#0C0D10]'
+                            : 'bg-white border-[#E4E8F0] text-[#596273]'
                         }`}
                       >
                         <div className="flex items-center justify-center mb-1">
                           {st.done ? (
-                            <CheckCircle2 className="w-4 h-4 text-[#006EE9]" />
+                            <CheckCircle2 className="w-4 h-4 text-[#3155FF]" />
                           ) : (
                             <Clock className="w-4 h-4 text-slate-300" />
                           )}
@@ -6655,7 +6655,7 @@ function OrdersView({
                 </div>
 
                 {/* Req 30: Cách nhận hàng instructions */}
-                <div className="bg-[#F4FFE8]/50 rounded-xl p-3 border border-emerald-100 text-[11px] text-slate-600">
+                <div className="bg-[#F5FBD9]/50 rounded-xl p-3 border border-emerald-100 text-[11px] text-slate-600">
                   <div className="font-bold text-slate-800 mb-0.5">
                     Cách nhận hàng tại {ord.pickupPointName || ord.pickupPoint}:
                   </div>
@@ -6667,7 +6667,7 @@ function OrdersView({
 
                 <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
                   <div className="flex items-center space-x-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#000181]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#0C0D10]" />
                     <span className="font-semibold text-slate-700">
                       {ord.pickupPointName || ord.pickupPoint}
                     </span>
@@ -6679,7 +6679,7 @@ function OrdersView({
                         e.stopPropagation();
                         onOpenReceipt(ord);
                       }}
-                      className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#F4FFE8] text-[#000181] hover:bg-[#D0FFA4]/40 border border-[#D0FFA4] transition flex items-center space-x-1"
+                      className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#F5FBD9] text-[#0C0D10] hover:bg-[#C7F000]/40 border border-[#C7F000] transition flex items-center space-x-1"
                     >
                       <Receipt className="w-3.5 h-3.5" />
                       <span>Chi tiết thanh toán</span>
@@ -6692,7 +6692,7 @@ function OrdersView({
                           e.stopPropagation();
                           onOpenSnapshot(ord);
                         }}
-                        className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#EFFBFF] text-[#000181] hover:bg-[#FAF0FF] border border-indigo-200 transition flex items-center space-x-1"
+                        className="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#EEF1FF] text-[#0C0D10] hover:bg-[#F3EEFF] border border-indigo-200 transition flex items-center space-x-1"
                       >
                         <FileCheck className="w-3.5 h-3.5" />
                         <span>Tải hồ sơ giao dịch</span>
@@ -6757,7 +6757,7 @@ function OrdersView({
         {/* Phase 7 Req 26 & 56: Mobile-friendly Pickup QR & Pickup Code Card */}
         {selectedOrderForQR && (
           <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xl text-center space-y-4 h-fit sticky top-24">
-            <span className="text-xs uppercase font-extrabold text-[#000181] tracking-wider block">
+            <span className="text-xs uppercase font-extrabold text-[#0C0D10] tracking-wider block">
               THẺ NHẬN HÀNG TẠI LOCKER / ĐIỂM GOM
             </span>
 
@@ -6789,13 +6789,13 @@ function OrdersView({
                 <rect x="45" y="75" width="8" height="8" />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-slate-950 p-1.5 rounded-lg border border-[#D0FFA4]/50">
+                <div className="bg-slate-950 p-1.5 rounded-lg border border-[#C7F000]/50">
                   <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#F4FFE8] border border-[#D0FFA4] p-3 rounded-xl font-mono text-sm font-black text-emerald-900">
+            <div className="bg-[#F5FBD9] border border-[#C7F000] p-3 rounded-xl font-mono text-sm font-black text-emerald-900">
               Pickup Code: {selectedOrderForQR.pickupCode}
             </div>
 
@@ -6808,13 +6808,13 @@ function OrdersView({
               </div>
               <div className="text-slate-500">
                 Pickup Time:{' '}
-                <strong className="text-[#000181]">
+                <strong className="text-[#0C0D10]">
                   {selectedOrderForQR.pickupWindow || '26 Oct • 18:00 – 21:00'}
                 </strong>
               </div>
               <div className="text-slate-500">
                 Delivery Status:{' '}
-                <strong className="uppercase text-[#000181]">{selectedOrderForQR.status}</strong>
+                <strong className="uppercase text-[#0C0D10]">{selectedOrderForQR.status}</strong>
               </div>
               <div className="text-slate-500">
                 Mã đơn: <strong className="text-slate-800">{selectedOrderForQR.id}</strong>
@@ -6834,7 +6834,7 @@ function OrdersView({
               {onOpenSnapshot && (
                 <button
                   onClick={() => onOpenSnapshot(selectedOrderForQR)}
-                  className="w-full py-2.5 rounded-xl bg-[#006EE9] hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
+                  className="w-full py-2.5 rounded-xl bg-[#3155FF] hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
                 >
                   <FileCheck className="w-3.5 h-3.5" />
                   <span>Tải hồ sơ giao dịch (Hợp đồng)</span>
@@ -6842,7 +6842,7 @@ function OrdersView({
               )}
             </div>
 
-            <p className="text-[11px] text-emerald-800 font-semibold bg-[#F4FFE8] p-2 rounded-xl">
+            <p className="text-[11px] text-emerald-800 font-semibold bg-[#F5FBD9] p-2 rounded-xl">
               Quét mã QR hoặc nhập Pickup Code tại điểm nhận để xác thực nhận hàng!
             </p>
           </div>
@@ -6948,7 +6948,7 @@ function MyRoomsView({
           <button
             onClick={() => setTab('ready_checkout')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-              tab === 'ready_checkout' ? 'bg-[#006EE9] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              tab === 'ready_checkout' ? 'bg-[#3155FF] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Sẵn sàng thanh toán ({readyCheckoutItems.length})
@@ -7002,7 +7002,7 @@ function MyRoomsView({
                       <span>•</span>
                       <span>{room.pickupPoint}</span>
                     </div>
-                    <div className="mt-2 text-xs font-bold text-[#000181] bg-[#F4FFE8] px-2.5 py-0.5 rounded-lg inline-block">
+                    <div className="mt-2 text-xs font-bold text-[#0C0D10] bg-[#F5FBD9] px-2.5 py-0.5 rounded-lg inline-block">
                       Đã giảm: {formatVND(savings)}/{room.unit}
                     </div>
                   </div>

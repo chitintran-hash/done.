@@ -48,10 +48,10 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
         <button
           type="button"
           onClick={onToggleScreenshotMode}
-          className="bg-[#000181] text-white text-[11px] font-bold px-3.5 py-1.5 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md hover:bg-[#006EE9]"
+          className="bg-[#0C0D10] text-white text-[11px] font-bold px-3.5 py-1.5 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md hover:bg-[#3155FF]"
           title="Thoát chế độ chụp màn hình"
         >
-          <Camera className="w-3.5 h-3.5 text-[#D0FFA4]" />
+          <Camera className="w-3.5 h-3.5 text-[#C7F000]" />
           <span>Thoát Chụp Màn Hình</span>
         </button>
       </div>
@@ -64,10 +64,10 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
         <button
           type="button"
           onClick={() => setIsCollapsed(false)}
-          className="bg-[#000181] text-white p-3 rounded-2xl shadow-2xl flex items-center gap-2 border border-white/20 hover:scale-105 active:scale-95 transition cursor-pointer"
+          className="bg-[#0C0D10] text-white p-3 rounded-2xl shadow-2xl flex items-center gap-2 border border-white/20 hover:scale-105 active:scale-95 transition cursor-pointer"
           title="Mở Bảng Điều Khiển Trình Bày"
         >
-          <Presentation className="w-5 h-5 text-[#D0FFA4]" />
+          <Presentation className="w-5 h-5 text-[#C7F000]" />
           <span className="text-xs font-black tracking-wider uppercase hidden sm:inline">
             TRÌNH BÀY DEMO
           </span>
@@ -79,19 +79,19 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
   return (
     <aside
       aria-label="Presenter Control Panel"
-      className="fixed bottom-20 md:bottom-6 right-4 z-50 w-80 sm:w-96 bg-[#000181] text-white rounded-3xl border border-white/20 shadow-2xl overflow-hidden animate-slide-up transition-all font-sans"
+      className="fixed bottom-20 md:bottom-6 right-4 z-50 w-80 sm:w-96 bg-[#0C0D10] text-white rounded-3xl border border-white/20 shadow-2xl overflow-hidden animate-slide-up transition-all font-sans"
     >
       {/* Header */}
-      <div className="p-3.5 bg-[#000181] border-b border-white/15 flex items-center justify-between">
+      <div className="p-3.5 bg-[#0C0D10] border-b border-white/15 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-xl bg-white/10 text-[#D0FFA4]">
+          <div className="p-1.5 rounded-xl bg-white/10 text-[#C7F000]">
             <Presentation className="w-4 h-4" />
           </div>
           <div>
             <h4 className="text-xs font-black uppercase tracking-wider text-white">
               BẢNG ĐIỀU KHIỂN TRÌNH BÀY
             </h4>
-            <span className="text-[10px] text-[#83E7FF] font-bold block leading-none">
+            <span className="text-[10px] text-[#EEF1FF] font-bold block leading-none">
               VITE_APP_MODE = DEMO
             </span>
           </div>
@@ -123,14 +123,14 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
         {/* Current Active Role */}
         <div className="bg-white/10 rounded-2xl p-2.5 border border-white/10 flex items-center justify-between">
           <span className="text-[11px] text-white/80 font-semibold">Vai trò đang xem:</span>
-          <span className="px-2.5 py-0.5 rounded-full bg-[#006EE9] text-[#D0FFA4] font-black uppercase tracking-wider text-[10px] border border-white/20">
+          <span className="px-2.5 py-0.5 rounded-full bg-[#3155FF] text-[#C7F000] font-black uppercase tracking-wider text-[10px] border border-white/20">
             {currentUser?.role?.toUpperCase() || 'CHƯA ĐĂNG NHẬP'}
           </span>
         </div>
 
         {/* 1. ROLE SWITCHER */}
         <div>
-          <label className="text-[10px] font-black uppercase tracking-widest text-[#83E7FF] block mb-2">
+          <label className="text-[10px] font-black uppercase tracking-widest text-[#EEF1FF] block mb-2">
             CHUYỂN NHANH VAI TRÒ (DEMO ONLY)
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -139,11 +139,11 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
               onClick={() => onSwitchRole('buyer')}
               className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition cursor-pointer ${
                 currentUser?.role === 'buyer'
-                  ? 'bg-[#006EE9] border-[#D0FFA4] text-[#D0FFA4] shadow-md'
+                  ? 'bg-[#3155FF] border-[#C7F000] text-[#C7F000] shadow-md'
                   : 'bg-white/10 border-white/10 hover:bg-white/15 text-white/90'
               }`}
             >
-              <UserCheck className="w-4 h-4 text-[#D0FFA4]" />
+              <UserCheck className="w-4 h-4 text-[#C7F000]" />
               <span className="text-[10px] font-black uppercase">BUYER</span>
             </button>
 
@@ -152,11 +152,11 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
               onClick={() => onSwitchRole('supplier')}
               className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition cursor-pointer ${
                 currentUser?.role === 'supplier'
-                  ? 'bg-[#006EE9] border-[#D0FFA4] text-[#D0FFA4] shadow-md'
+                  ? 'bg-[#3155FF] border-[#C7F000] text-[#C7F000] shadow-md'
                   : 'bg-white/10 border-white/10 hover:bg-white/15 text-white/90'
               }`}
             >
-              <Building2 className="w-4 h-4 text-[#83E7FF]" />
+              <Building2 className="w-4 h-4 text-[#C7F000]" />
               <span className="text-[10px] font-black uppercase">NCC</span>
             </button>
 
@@ -165,11 +165,11 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
               onClick={() => onSwitchRole('admin')}
               className={`p-2 rounded-xl border flex flex-col items-center justify-center gap-1 transition cursor-pointer ${
                 currentUser?.role === 'admin'
-                  ? 'bg-[#006EE9] border-[#D0FFA4] text-[#D0FFA4] shadow-md'
+                  ? 'bg-[#3155FF] border-[#C7F000] text-[#C7F000] shadow-md'
                   : 'bg-white/10 border-white/10 hover:bg-white/15 text-white/90'
               }`}
             >
-              <Shield className="w-4 h-4 text-[#E8A0FF]" />
+              <Shield className="w-4 h-4 text-[#7B3FF2]" />
               <span className="text-[10px] font-black uppercase">ADMIN</span>
             </button>
           </div>
@@ -177,14 +177,14 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
 
         {/* 2. DEMO ACTIONS */}
         <div className="space-y-2 pt-1 border-t border-white/15">
-          {/* Primary Action in Powdered Lime */}
+          {/* Primary Action in Lime */}
           <button
             type="button"
             onClick={onStartGuidedDemo}
             className={`w-full py-2.5 px-3.5 rounded-xl font-black text-xs flex items-center justify-between transition cursor-pointer ${
               isGuidedDemoActive
-                ? 'bg-[#83E7FF] text-[#000181] shadow-md'
-                : 'bg-[#D0FFA4] hover:bg-[#83E7FF] text-[#000181]'
+                ? 'bg-[#3155FF] text-white shadow-md'
+                : 'bg-[#C7F000] hover:bg-[#B6DC00] text-[#0C0D10]'
             }`}
           >
             <span className="flex items-center gap-2">
@@ -195,14 +195,14 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
           </button>
 
           <div className="grid grid-cols-2 gap-2">
-            {/* Secondary Action in Sunny Skies */}
+            {/* Secondary Action in Cobalt */}
             <button
               type="button"
               onClick={onResetDemo}
-              className="py-2 px-3 rounded-xl bg-[#83E7FF] hover:bg-[#D0FFA4] text-[#000181] font-black text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
+              className="py-2 px-3 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs"
               title="Khôi phục trạng thái chuẩn: Phòng Dâu 19/20 người"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#000181]" />
+              <RotateCcw className="w-3.5 h-3.5 text-white" />
               <span>RESET DEMO</span>
             </button>
 
@@ -210,10 +210,10 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
             <button
               type="button"
               onClick={onOpenChecklist}
-              className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer border border-[#E8A0FF]/40"
+              className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-[11px] flex items-center justify-center gap-1.5 transition cursor-pointer border border-[#7B3FF2]/40"
               title="Kiểm tra độ sẵn sàng của 7 thành phần hệ thống"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#E8A0FF]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#7B3FF2]" />
               <span>KIỂM TRA HỆ THỐNG</span>
             </button>
           </div>
@@ -223,7 +223,7 @@ export const PresenterPanel: React.FC<PresenterPanelProps> = ({
             onClick={onToggleScreenshotMode}
             className="w-full py-1.5 px-3 rounded-xl bg-transparent hover:bg-white/10 text-white/80 hover:text-white font-bold text-[10px] flex items-center justify-center gap-1.5 transition cursor-pointer border border-dashed border-white/20"
           >
-            <Camera className="w-3 h-3 text-[#83E7FF]" />
+            <Camera className="w-3 h-3 text-[#EEF1FF]" />
             <span>CHẾ ĐỘ CHỤP MÀN HÌNH (ẨN DEBUG / PANEL)</span>
           </button>
         </div>

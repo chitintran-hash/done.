@@ -65,7 +65,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
       <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden transform transition-all">
         <div className="flex items-start justify-between pb-4 border-b border-slate-100">
           <div>
-            <span className="text-[11px] font-black uppercase text-[#000181] tracking-wider block">
+            <span className="text-[11px] font-black uppercase text-[#0C0D10] tracking-wider block">
               ĐÁNH GIÁ ĐƠN HÀNG HOÀN TẤT
             </span>
             <h3 className="text-base font-black text-slate-900 mt-0.5">{order.productName}</h3>
@@ -110,7 +110,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
               placeholder="Chia sẻ cảm nhận về giá thành, chất lượng và trải nghiệm nhận hàng..."
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-[#D0FFA4]"
+              className="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:border-[#C7F000]"
             />
           </div>
 
@@ -124,7 +124,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             </button>
             <button
               type="submit"
-              className="w-2/3 py-3 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-black text-xs transition shadow-md shadow-emerald-600/20 flex items-center justify-center space-x-1.5 active:scale-98"
+              className="w-2/3 py-3 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white font-black text-xs transition shadow-md shadow-emerald-600/20 flex items-center justify-center space-x-1.5 active:scale-98"
             >
               <Check className="w-4 h-4" />
               <span>GỬI ĐÁNH GIÁ</span>

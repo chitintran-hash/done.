@@ -1,11 +1,11 @@
 import React from 'react';
 
 export const SkeletonBox: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`animate-pulse bg-[#E6E6EE]/60 rounded-xl ${className}`} />
+  <div className={`animate-pulse bg-[#E4E8F0]/60 rounded-xl ${className}`} />
 );
 
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`bg-white rounded-3xl border border-[#E6E6EE] p-5 space-y-4 shadow-xs ${className}`}>
+  <div className={`bg-white rounded-3xl border border-[#E4E8F0] p-5 space-y-4 shadow-xs ${className}`}>
     <div className="flex items-center gap-3">
       <SkeletonBox className="w-12 h-12 rounded-2xl shrink-0" />
       <div className="flex-1 space-y-2">
@@ -22,7 +22,7 @@ export const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' 
 );
 
 export const SkeletonRoom: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`bg-white rounded-3xl border border-[#E6E6EE] p-5 sm:p-6 space-y-4 shadow-xs ${className}`}>
+  <div className={`bg-white rounded-3xl border border-[#E4E8F0] p-5 sm:p-6 space-y-4 shadow-xs ${className}`}>
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <SkeletonBox className="w-8 h-8 rounded-xl" />
@@ -34,7 +34,7 @@ export const SkeletonRoom: React.FC<{ className?: string }> = ({ className = '' 
       <SkeletonBox className="h-5 w-4/5" />
       <SkeletonBox className="h-3 w-3/5" />
     </div>
-    <div className="bg-[#F6F7FB] p-3.5 rounded-2xl space-y-2.5 border border-[#E6E6EE]">
+    <div className="bg-[#F6F7FC] p-3.5 rounded-2xl space-y-2.5 border border-[#E4E8F0]">
       <div className="flex justify-between">
         <SkeletonBox className="h-4 w-20" />
         <SkeletonBox className="h-4 w-24" />
@@ -49,7 +49,7 @@ export const SkeletonRoom: React.FC<{ className?: string }> = ({ className = '' 
 );
 
 export const SkeletonOrder: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`bg-white rounded-2xl border border-[#E6E6EE] p-4 sm:p-5 space-y-3 ${className}`}>
+  <div className={`bg-white rounded-2xl border border-[#E4E8F0] p-4 sm:p-5 space-y-3 ${className}`}>
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-2">
         <SkeletonBox className="h-4 w-24" />
@@ -64,7 +64,7 @@ export const SkeletonOrder: React.FC<{ className?: string }> = ({ className = ''
         <SkeletonBox className="h-3 w-2/5" />
       </div>
     </div>
-    <div className="flex items-center justify-between pt-2 border-t border-[#E6E6EE]">
+    <div className="flex items-center justify-between pt-2 border-t border-[#E4E8F0]">
       <SkeletonBox className="h-4 w-28" />
       <SkeletonBox className="h-6 w-20 rounded-lg" />
     </div>
@@ -72,7 +72,7 @@ export const SkeletonOrder: React.FC<{ className?: string }> = ({ className = ''
 );
 
 export const SkeletonMapCard: React.FC = () => (
-  <div className="bg-white rounded-2xl p-4 border border-[#E6E6EE] space-y-3">
+  <div className="bg-white rounded-2xl p-4 border border-[#E4E8F0] space-y-3">
     <div className="flex items-center justify-between">
       <SkeletonBox className="h-3 w-20" />
       <SkeletonBox className="h-4 w-12 rounded-full" />

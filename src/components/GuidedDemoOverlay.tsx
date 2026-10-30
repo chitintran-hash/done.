@@ -148,11 +148,11 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
 
   return (
     <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[92vw] max-w-lg animate-fade-in font-sans">
-      <div className="bg-[#000181] text-white rounded-3xl border-2 border-[#83E7FF] p-5 shadow-2xl backdrop-blur-md space-y-3.5">
+      <div className="bg-[#3155FF] text-white rounded-3xl border-2 border-[#3155FF]/30 p-5 shadow-2xl backdrop-blur-md space-y-3.5">
         {/* Top Header */}
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <span className="text-[10px] font-black uppercase text-[#83E7FF] tracking-wider block">
+            <span className="text-[10px] font-black uppercase text-[#3155FF] tracking-wider block">
               {step.badge}
             </span>
             <h3 className="text-sm font-black text-white leading-tight">{step.title}</h3>
@@ -177,9 +177,9 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
               onClick={() => onJumpToStep && onJumpToStep(idx)}
               className={`h-1.5 rounded-full transition-all cursor-pointer ${
                 idx === currentStepIndex
-                  ? 'w-6 bg-[#D0FFA4]'
+                  ? 'w-6 bg-[#C7F000]'
                   : idx < currentStepIndex
-                  ? 'w-2 bg-[#006EE9]'
+                  ? 'w-2 bg-[#3155FF]'
                   : 'w-2 bg-white/20'
               }`}
               title={`Bước ${s.stepNumber}: ${s.title}`}
@@ -188,8 +188,8 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
         </div>
 
         {/* Instruction Spotlight Box */}
-        <div className="bg-[#003CCB]/60 rounded-2xl p-3 border border-[#83E7FF]/40 space-y-1">
-          <div className="flex items-center gap-1.5 text-xs font-black text-[#D0FFA4]">
+        <div className="bg-[#003CCB]/60 rounded-2xl p-3 border border-[#3155FF]/30/40 space-y-1">
+          <div className="flex items-center gap-1.5 text-xs font-black text-[#C7F000]">
             <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>THAO TÁC CẦN THỰC HIỆN:</span>
           </div>
@@ -220,7 +220,7 @@ export const GuidedDemoOverlay: React.FC<GuidedDemoOverlayProps> = ({
           <button
             type="button"
             onClick={onNextStep}
-            className="px-4 py-1.5 rounded-xl bg-[#D0FFA4] hover:bg-[#83E7FF] text-[#000181] font-black flex items-center gap-1 transition shadow-md shadow-[#D0FFA4]/20 cursor-pointer active:scale-95"
+            className="px-4 py-1.5 rounded-xl bg-[#C7F000] hover:bg-[#EEF1FF] text-[#0C0D10] font-black flex items-center gap-1 transition shadow-md shadow-[#C7F000]/20 cursor-pointer active:scale-95"
           >
             <span>{isLast ? 'Hoàn thành' : 'Tiếp tục'}</span>
             <ChevronRight className="w-4 h-4" />

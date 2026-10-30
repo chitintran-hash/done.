@@ -9,28 +9,28 @@ interface PickupDeliverySectionProps {
 export const PickupDeliverySection: React.FC<PickupDeliverySectionProps> = ({ onOpenMap }) => {
   const cards = [
     {
-      icon: <Truck className="w-5 h-5 text-[#006EE9]" />,
+      icon: <Truck className="w-5 h-5 text-[#3155FF]" />,
       title: 'MỘT CHUYẾN GIAO CHUNG DUY NHẤT',
       description:
         'Thay vì mỗi người gọi một shipper riêng lẻ tốn 20.000đ – 30.000đ/đơn, toàn bộ đơn trong phòng gom được gộp vào 1 lô chuyển thẳng từ kho nhà cung cấp.',
       highlight: 'Chia đều cước ship',
     },
     {
-      icon: <Box className="w-5 h-5 text-[#006EE9]" />,
+      icon: <Box className="w-5 h-5 text-[#3155FF]" />,
       title: 'MẠNG LƯỚI PICKUP POINT & LOCKER',
       description:
         'Tủ Locker thông minh và quầy đại lý đối tác đặt ngay tại sảnh KTX, chung cư hoặc cửa hàng tiện lợi, thuận tiện nhận đồ khi đi học, đi làm về.',
       highlight: 'Locker thông minh',
     },
     {
-      icon: <QrCode className="w-5 h-5 text-[#006EE9]" />,
+      icon: <QrCode className="w-5 h-5 text-[#3155FF]" />,
       title: 'MÃ QR & MÃ NHẬN HÀNG RIÊNG TƯ',
       description:
         'Mỗi người mua có mã nhận hàng 6 ký tự và QR code được mã hóa an toàn, không lo thất lạc hay nhầm lẫn sản phẩm.',
       highlight: 'Mã hóa an toàn',
     },
     {
-      icon: <Clock className="w-5 h-5 text-[#006EE9]" />,
+      icon: <Clock className="w-5 h-5 text-[#3155FF]" />,
       title: 'KHUNG GIỜ NHẬN LINH HOẠT 24H',
       description:
         'Hàng được lưu an toàn tại ngăn tủ hoặc điểm nhận tối đa 24 giờ. Người mua chủ động sắp xếp thời gian nhận hàng mà không cần chờ đợi shipper gọi.',
@@ -39,7 +39,7 @@ export const PickupDeliverySection: React.FC<PickupDeliverySectionProps> = ({ on
   ];
 
   return (
-    <section className="py-12 px-6 sm:px-8 rounded-3xl bg-[#EFFBFF] border border-[#83E7FF] my-8 shadow-xs">
+    <section className="py-12 px-6 sm:px-8 rounded-3xl bg-[#EEF1FF] border border-[#3155FF]/30 my-8 shadow-xs">
       <SectionHeader
         badge="LOGISTICS SIÊU CỤC BỘ"
         title="ĐIỂM NHẬN HÀNG & GIAO HÀNG CHUNG"
@@ -49,9 +49,9 @@ export const PickupDeliverySection: React.FC<PickupDeliverySectionProps> = ({ on
             <button
               type="button"
               onClick={onOpenMap}
-              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-extrabold text-xs transition cursor-pointer shadow-md"
+              className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white font-extrabold text-xs transition cursor-pointer shadow-md"
             >
-              <MapPin className="w-4 h-4 text-[#83E7FF]" />
+              <MapPin className="w-4 h-4 text-[#3155FF]" />
               <span>Xem FlashMap điểm nhận</span>
             </button>
           )
@@ -62,21 +62,21 @@ export const PickupDeliverySection: React.FC<PickupDeliverySectionProps> = ({ on
         {cards.map((c, i) => (
           <div
             key={i}
-            className="bg-white rounded-3xl p-6 border border-[#E6E6EE] shadow-xs hover:border-[#83E7FF] hover:shadow-md transition-all duration-200 flex items-start gap-4"
+            className="bg-white rounded-3xl p-6 border border-[#E4E8F0] shadow-xs hover:border-[#3155FF]/30 hover:shadow-md transition-all duration-200 flex items-start gap-4"
           >
-            <div className="w-12 h-12 rounded-2xl bg-[#EFFBFF] border border-[#83E7FF]/60 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-[#EEF1FF] border border-[#3155FF]/30/60 flex items-center justify-center shrink-0">
               {c.icon}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <h4 className="font-extrabold text-[#000181] text-xs sm:text-sm uppercase tracking-tight">
+                <h4 className="font-extrabold text-[#0C0D10] text-xs sm:text-sm uppercase tracking-tight">
                   {c.title}
                 </h4>
-                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#83E7FF] text-[#000181] border border-[#006EE9]/20 shrink-0">
+                <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#EEF1FF] text-[#0C0D10] border border-[#3155FF]/20 shrink-0">
                   {c.highlight}
                 </span>
               </div>
-              <p className="text-xs text-[#53536A] font-normal leading-relaxed">
+              <p className="text-xs text-[#596273] font-normal leading-relaxed">
                 {c.description}
               </p>
             </div>

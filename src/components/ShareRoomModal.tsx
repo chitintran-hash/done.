@@ -134,7 +134,7 @@ export const ShareRoomModal: React.FC<ShareRoomModalProps> = ({
                 <div>
                   <h4 className="text-sm font-black text-slate-900">{room.productName}</h4>
                   <span className="text-[11px] text-slate-500 flex items-center gap-1">
-                    <Users className="w-3 h-3 text-[#000181]" />
+                    <Users className="w-3 h-3 text-[#0C0D10]" />
                     Hiện tại: <strong>{room.totalQuantity} sản phẩm</strong> ({room.participantCount} người)
                   </span>
                 </div>
@@ -160,23 +160,23 @@ export const ShareRoomModal: React.FC<ShareRoomModalProps> = ({
                   </div>
                 </div>
                 <div className="bg-white border border-amber-300 px-3 py-1.5 rounded-xl text-right shrink-0 shadow-sm">
-                  <span className="text-lg font-black text-[#000181] block">
+                  <span className="text-lg font-black text-[#0C0D10] block">
                     {formatVND(nextTier.nextPrice)}
                   </span>
                 </div>
               </div>
             ) : (
-              <div className="bg-[#F4FFE8] border border-[#D0FFA4] rounded-xl p-3 text-xs font-bold text-emerald-800 flex items-center justify-between">
+              <div className="bg-[#F5FBD9] border border-[#C7F000] rounded-xl p-3 text-xs font-bold text-emerald-800 flex items-center justify-between">
                 <span>🎉 Phòng đã mở khóa mức giá nhóm ưu đãi:</span>
-                <span className="text-base font-black text-[#000181]">{formatVND(currentPrice)}</span>
+                <span className="text-base font-black text-[#0C0D10]">{formatVND(currentPrice)}</span>
               </div>
             )}
           </div>
 
           {/* Referral Reward Notice */}
           {currentUserId && (
-            <div className="bg-[#F4FFE8]/70 border border-[#D0FFA4] rounded-2xl p-3.5 flex items-start space-x-2.5 text-xs text-emerald-900">
-              <Gift className="w-4 h-4 text-[#000181] shrink-0 mt-0.5" />
+            <div className="bg-[#F5FBD9]/70 border border-[#C7F000] rounded-2xl p-3.5 flex items-start space-x-2.5 text-xs text-emerald-900">
+              <Gift className="w-4 h-4 text-[#0C0D10] shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold">Thưởng giới thiệu +20 FlashPoints (Điểm thưởng demo):</span>{' '}
                 Khi bạn bè mở link của bạn, tham gia phòng và nhận hàng thành công tại Locker (`picked_up`), bạn sẽ nhận ngay +20 điểm thưởng!
@@ -196,7 +196,7 @@ export const ShareRoomModal: React.FC<ShareRoomModalProps> = ({
                 readOnly
                 value={shareUrl}
                 onClick={(e) => (e.target as HTMLInputElement).select()}
-                className="flex-1 text-xs font-mono bg-slate-100 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#D0FFA4]"
+                className="flex-1 text-xs font-mono bg-slate-100 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-800 focus:outline-none focus:border-[#C7F000]"
               />
               <button
                 type="button"
@@ -223,7 +223,7 @@ export const ShareRoomModal: React.FC<ShareRoomModalProps> = ({
               <button
                 type="button"
                 onClick={handleCopyFullMessage}
-                className="text-[11px] font-bold text-[#000181] hover:text-emerald-800 flex items-center space-x-1"
+                className="text-[11px] font-bold text-[#0C0D10] hover:text-emerald-800 flex items-center space-x-1"
               >
                 {copiedMessage ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 <span>{copiedMessage ? 'Đã sao chép lời nhắn!' : 'Sao chép cả tin nhắn'}</span>
@@ -247,7 +247,7 @@ export const ShareRoomModal: React.FC<ShareRoomModalProps> = ({
             <button
               type="button"
               onClick={handleNativeShare}
-              className="py-3 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-black text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20 transition"
+              className="py-3 px-4 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white font-black text-xs flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20 transition"
             >
               <Share2 className="w-4 h-4" />
               <span>Share</span>

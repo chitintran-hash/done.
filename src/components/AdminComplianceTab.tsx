@@ -206,7 +206,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
           <span className="text-[10px] font-bold uppercase text-slate-400 block">
             Pending Product Documents
           </span>
-          <span className="text-2xl font-black text-[#000181] mt-1 block">
+          <span className="text-2xl font-black text-[#0C0D10] mt-1 block">
             {pendingDocsCount}
           </span>
         </button>
@@ -271,7 +271,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
           <span className="text-[10px] font-bold uppercase text-slate-400 block">
             Privacy Requests
           </span>
-          <span className="text-2xl font-black text-[#006EE9] mt-1 block">
+          <span className="text-2xl font-black text-[#3155FF] mt-1 block">
             {pendingPrivacyCount}
           </span>
         </button>
@@ -284,7 +284,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
           <span className="text-[10px] font-bold uppercase text-slate-400 block">
             Moderated Reviews
           </span>
-          <span className="text-2xl font-black text-[#000181] mt-1 block">
+          <span className="text-2xl font-black text-[#0C0D10] mt-1 block">
             {moderatedReviewsCount}
           </span>
         </button>
@@ -422,7 +422,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
           <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-[#000181]" />
+                <FileText className="w-5 h-5 text-[#0C0D10]" />
                 <span>Kiểm duyệt Chứng từ Tuân thủ theo Danh mục ({verificationDocuments.length})</span>
               </h4>
               <span className="text-[11px] text-slate-500">
@@ -442,7 +442,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
                           doc.status === 'approved'
-                            ? 'bg-[#D0FFA4]/40 text-emerald-800'
+                            ? 'bg-[#F5FBD9] text-emerald-800'
                             : doc.status === 'rejected'
                             ? 'bg-rose-100 text-rose-800'
                             : 'bg-amber-100 text-amber-800'
@@ -458,7 +458,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                       <code>{doc.fileMetadata?.fileName || 'metadata.pdf'}</code>
                     </div>
                     {doc.reviewNote && (
-                      <div className="text-[#000181] font-medium">
+                      <div className="text-[#0C0D10] font-medium">
                         Nhận xét của Admin: {doc.reviewNote}
                       </div>
                     )}
@@ -483,7 +483,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                           docNoteMap[doc.id] || 'Chứng từ hợp lệ theo danh mục sản phẩm.'
                         )
                       }
-                      className="px-3 py-1.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold"
+                      className="px-3 py-1.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white font-bold"
                     >
                       Duyệt
                     </button>
@@ -562,7 +562,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                           'Đã xử lý cảnh báo và cập nhật trạng thái sản phẩm.'
                         )
                       }
-                      className="px-3 py-1.5 rounded-xl bg-[#006EE9] text-white font-bold"
+                      className="px-3 py-1.5 rounded-xl bg-[#3155FF] text-white font-bold"
                     >
                       Hoàn tất xử lý
                     </button>
@@ -647,7 +647,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                           productReasonMap[prod.id] || 'Đã bổ sung đầy đủ hồ sơ hợp lệ'
                         )
                       }
-                      className="px-2.5 py-1.5 rounded-xl bg-[#D0FFA4]/40 hover:bg-emerald-200 text-emerald-900 font-bold"
+                      className="px-2.5 py-1.5 rounded-xl bg-[#F5FBD9] hover:bg-emerald-200 text-emerald-900 font-bold"
                     >
                       Khôi phục
                     </button>
@@ -779,7 +779,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
       {subTab === 'privacy_deletion' && (
         <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
           <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-            <Lock className="w-5 h-5 text-[#006EE9]" />
+            <Lock className="w-5 h-5 text-[#3155FF]" />
             <span>Xử lý Yêu cầu Quyền riêng tư & Quy trình Xóa tài khoản Bảo lưu Chứng từ ({privacyRequests.length})</span>
           </h4>
           <div className="space-y-3">
@@ -793,7 +793,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                     <span className="font-bold text-slate-900">
                       {req.userName || req.userId} — Loại: {req.requestType.toUpperCase()}
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#FAF0FF] text-indigo-800 font-bold text-[10px]">
+                    <span className="px-2 py-0.5 rounded-full bg-[#F3EEFF] text-indigo-800 font-bold text-[10px]">
                       Status: {req.status}
                     </span>
                     {req.deletionStage && (
@@ -860,7 +860,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                         privacyNoteMap[req.id] || 'Đã xử lý yêu cầu quyền chủ thể dữ liệu.'
                       )
                     }
-                    className="px-3 py-1.5 rounded-xl bg-[#006EE9] text-white font-bold"
+                    className="px-3 py-1.5 rounded-xl bg-[#3155FF] text-white font-bold"
                   >
                     Xác nhận hoàn tất
                   </button>
@@ -936,7 +936,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                     <button
                       type="button"
                       onClick={() => onModerateReview(rev.id, false)}
-                      className="px-3 py-1.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white font-bold flex items-center gap-1"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Khôi phục hiển thị</span>
@@ -957,7 +957,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-                  <ClipboardCheck className="w-5 h-5 text-[#000181]" />
+                  <ClipboardCheck className="w-5 h-5 text-[#0C0D10]" />
                   <span>Danh mục Rà soát Tuân thủ Nội bộ (Admin-Only Internal Checklist – Req 33)</span>
                 </h4>
                 <p className="text-xs text-slate-500">
@@ -974,7 +974,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                 >
                   <div className="space-y-0.5">
                     <div className="font-bold text-slate-900">{item.title}</div>
-                    <div className="text-[11px] text-[#000181] font-semibold">
+                    <div className="text-[11px] text-[#0C0D10] font-semibold">
                       Căn cứ tham chiếu: {item.legalBasis}
                     </div>
                     <p className="text-[11px] text-slate-600">{item.description}</p>
@@ -1022,7 +1022,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-                  <History className="w-5 h-5 text-[#006EE9]" />
+                  <History className="w-5 h-5 text-[#3155FF]" />
                   <span>Nhật ký Kiểm toán Giao dịch & Tuân thủ Bất biến (Append-Only Audit Trail – Req 7 & 30)</span>
                 </h4>
                 <p className="text-xs text-slate-500">
@@ -1052,7 +1052,7 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                         {new Date(ev.timestamp).toLocaleString('vi-VN')}
                       </td>
                       <td className="py-2.5 px-3">
-                        <span className="px-2 py-0.5 rounded bg-[#EFFBFF] text-indigo-800 border border-indigo-200 font-mono font-bold text-[11px]">
+                        <span className="px-2 py-0.5 rounded bg-[#EEF1FF] text-indigo-800 border border-indigo-200 font-mono font-bold text-[11px]">
                           {ev.eventType}
                         </span>
                       </td>

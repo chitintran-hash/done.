@@ -7,77 +7,85 @@ export default {
   theme: {
     extend: {
       colors: {
-        // FlashGroup Master Color System
-        'fg-night': '#000181',        // Night Skies - Primary Dark / Headings / Footer / Structure
-        'fg-blue': '#006EE9',         // Blue Raspberry - Primary CTA / Interactivity / Links
-        'fg-lime': '#D0FFA4',         // Powdered Lime - Price Unlock / Group Success / Positive Badges
-        'fg-violet': '#E8A0FF',       // Violet - Secondary Accent / Social / Referral / Community
-        'fg-sky': '#83E7FF',          // Sunny Skies - FlashMap / Logistics / Info / Location
+        // FlashGroup Master Color System (Final Rebrand)
+        'cobalt': '#3155FF',
+        'cobalt-hover': '#2444DC',
+        'cobalt-active': '#1C35B8',
+        'cobalt-soft': '#EEF1FF',
 
-        // Neutrals
-        'fg-bg': '#FCFCF7',           // Main Background
-        'fg-bg-soft': '#F6F7FB',      // Secondary Background
-        'fg-surface': '#FFFFFF',      // Card / Surface
-        'fg-text': '#000181',         // Primary Text
-        'fg-text-secondary': '#53536A', // Secondary Text
-        'fg-border': '#E6E6EE',       // Border
+        'lime': '#C7F000',
+        'lime-hover': '#B6DC00',
+        'lime-soft': '#F5FBD9',
 
-        // Section Background Tints
-        'fg-tint-lime': '#F4FFE8',    // Lime Section Tint
-        'fg-tint-violet': '#FAF0FF',  // Violet Section Tint
-        'fg-tint-sky': '#EFFBFF',     // Sky Section Tint
+        'pink': '#FF4FA3',
+        'pink-soft': '#FFF0F7',
+
+        'violet': '#7B3FF2',
+        'violet-soft': '#F3EEFF',
+
+        'silver': '#C4CCD8',
+        'black': '#0C0D10',
+
+        'page': '#F6F7FC',
+        'surface': '#FFFFFF',
+        'text-main': '#0C0D10',
+        'text-muted': '#596273',
+        'border-ui': '#E4E8F0',
+        'input-border': '#C4CCD8',
+
+        // Functional aliases
+        'primary': '#3155FF',
+        'primary-hover': '#2444DC',
+        'primary-active': '#1C35B8',
+        'highlight': '#C7F000',
+        'highlight-hover': '#B6DC00',
 
         // Map marker semantic tokens
-        'marker-user': '#006EE9',
-        'marker-room': '#E8A0FF',
-        'marker-pickup': '#83E7FF',
-        'marker-supplier': '#D0FFA4',
+        'marker-user': '#3155FF',
+        'marker-room': '#3155FF',
+        'marker-pickup': '#C7F000',
+        'marker-supplier': '#7B3FF2',
         'marker-demand': '#EF4444',
 
         // Semantic states
-        'status-success': '#D0FFA4',
+        'status-success': '#C7F000',
         'status-warning': '#F59E0B',
         'status-error': '#EF4444',
 
-        // Backward compatibility mappings (Seamlessly adapts existing components to new palette)
-        'charcoal': '#000181',
-        'deep-plum': '#000181',
-        'plum': '#006EE9',
-        'dusty-rose': '#E8A0FF',
-        'soft-coral': '#83E7FF',
-        'apricot': '#D0FFA4',
-        'cream': '#FCFCF7',
-        'warm-white': '#FFFFFF',
-        'soft-lavender': '#FAF0FF',
-        'brand-text': '#000181',
-        'muted-text': '#53536A',
-        'brand-border': '#E6E6EE',
-        'brand-navy': '#000181',
-        'deep-navy': '#000181',
-        'cobalt-blue': '#006EE9',
-        'electric-blue': '#83E7FF',
-        'brand-cyan': '#83E7FF',
-        'brand-indigo': '#000181',
-        'brand-violet': '#E8A0FF',
-        'coral-accent': '#83E7FF',
-        'warm-bg': '#FCFCF7',
-        'light-bg': '#F6F7FB',
-        'neutral-text': '#000181',
-        'light-border': '#E6E6EE',
+        // Legacy compatibility mappings mapped to Final Palette
+        'fg-night': '#3155FF',
+        'fg-blue': '#3155FF',
+        'fg-lime': '#C7F000',
+        'fg-violet': '#7B3FF2',
+        'fg-sky': '#EEF1FF',
+        'fg-bg': '#F6F7FC',
+        'fg-bg-soft': '#EEF1FF',
+        'fg-surface': '#FFFFFF',
+        'fg-text': '#0C0D10',
+        'fg-text-secondary': '#596273',
+        'fg-border': '#E4E8F0',
+        'fg-tint-lime': '#F5FBD9',
+        'fg-tint-violet': '#F3EEFF',
+        'fg-tint-sky': '#EEF1FF',
+      },
+      boxShadow: {
+        'card': '0 6px 24px rgba(12, 13, 16, 0.06)',
+        'hover': '0 12px 32px rgba(49, 85, 255, 0.12)',
+        'card-hover': '0 12px 32px rgba(49, 85, 255, 0.12)',
       },
       backgroundImage: {
-        'hero-gradient': 'linear-gradient(135deg, #000181 0%, #003CCB 40%, #006EE9 70%, #83E7FF 100%)',
-        'cta-gradient': 'linear-gradient(135deg, #006EE9 0%, #000181 100%)',
-        'secondary-gradient': 'linear-gradient(135deg, #E8A0FF 0%, #83E7FF 50%, #D0FFA4 100%)',
-        'lime-gradient': 'linear-gradient(135deg, #D0FFA4 0%, #E9FFD6 100%)',
-        'voucher-gradient': 'linear-gradient(135deg, #E8A0FF 0%, #83E7FF 100%)',
-        'progress-gradient': 'linear-gradient(90deg, #006EE9 0%, #83E7FF 100%)',
-        'progress-almost': 'linear-gradient(90deg, #83E7FF 0%, #D0FFA4 100%)',
-        'footer-gradient': 'linear-gradient(135deg, #000181 0%, #000181 100%)',
-        'highlight-card-gradient': 'linear-gradient(135deg, #FCFCF7 0%, #FAF0FF 100%)',
-        'warm-card-gradient': 'linear-gradient(135deg, #FCFCF7 0%, #EFFBFF 100%)',
-        'accent-gradient': 'linear-gradient(135deg, #E8A0FF 0%, #83E7FF 100%)',
-        'trust-gradient': 'linear-gradient(135deg, #FCFCF7 0%, #F6F7FB 100%)',
+        'hero-gradient': 'linear-gradient(120deg, #2444DC 0%, #3155FF 60%, #6336D6 100%)',
+        'cta-gradient': 'linear-gradient(135deg, #3155FF 0%, #2444DC 100%)',
+        'secondary-gradient': 'linear-gradient(135deg, #7B3FF2 0%, #3155FF 50%, #C7F000 100%)',
+        'lime-gradient': 'linear-gradient(135deg, #C7F000 0%, #F5FBD9 100%)',
+        'voucher-gradient': 'linear-gradient(135deg, #FF4FA3 0%, #7B3FF2 100%)',
+        'progress-gradient': 'linear-gradient(90deg, #3155FF 0%, #C7F000 100%)',
+        'progress-almost': 'linear-gradient(90deg, #3155FF 0%, #C7F000 100%)',
+        'footer-gradient': 'linear-gradient(135deg, #0C0D10 0%, #0C0D10 100%)',
+        'highlight-card-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #F5FBD9 100%)',
+        'warm-card-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #EEF1FF 100%)',
+        'accent-gradient': 'linear-gradient(135deg, #FF4FA3 0%, #7B3FF2 100%)',
+        'trust-gradient': 'linear-gradient(135deg, #FFFFFF 0%, #F6F7FC 100%)',
       },
       animation: {
         'fade-in': 'fadeIn 0.25s ease-out',

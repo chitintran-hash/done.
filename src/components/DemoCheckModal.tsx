@@ -63,19 +63,19 @@ export const DemoCheckModal: React.FC<DemoCheckModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000181]/60 backdrop-blur-xs animate-fade-in font-sans">
-      <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-[#E6E6EE] text-xs space-y-5 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3155FF]/60 backdrop-blur-xs animate-fade-in font-sans">
+      <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-[#E4E8F0] text-xs space-y-5 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#E6E6EE] pb-3.5">
+        <div className="flex items-center justify-between border-b border-[#E4E8F0] pb-3.5">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-2xl bg-[#EFFBFF] text-[#006EE9] flex items-center justify-center border border-[#83E7FF]/40">
-              <Sparkles className="w-5 h-5 text-[#006EE9]" />
+            <div className="w-9 h-9 rounded-2xl bg-[#EEF1FF] text-[#3155FF] flex items-center justify-center border border-[#3155FF]/30/40">
+              <Sparkles className="w-5 h-5 text-[#3155FF]" />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase text-[#006EE9] tracking-widest block">
+              <span className="text-[10px] font-black uppercase text-[#3155FF] tracking-widest block">
                 ADMIN DEMO SUITE (PHASE 11)
               </span>
-              <h3 className="text-base font-black text-[#000181]">
+              <h3 className="text-base font-black text-[#0C0D10]">
                 Kiểm Tra & Chuẩn Bị Demo Kịch Bản
               </h3>
             </div>
@@ -83,7 +83,7 @@ export const DemoCheckModal: React.FC<DemoCheckModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="text-[#53536A] hover:text-[#000181] p-1 rounded-xl cursor-pointer"
+            className="text-[#596273] hover:text-[#0C0D10] p-1 rounded-xl cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -91,28 +91,28 @@ export const DemoCheckModal: React.FC<DemoCheckModalProps> = ({
 
         {/* Checklist */}
         <div className="space-y-2.5">
-          <span className="text-[10px] font-black uppercase text-[#53536A] tracking-wider block">
+          <span className="text-[10px] font-black uppercase text-[#596273] tracking-wider block">
             DEMO READINESS CHECKLIST (8 TIÊU CHÍ)
           </span>
           <div className="space-y-2">
             {checklist.map((item) => (
               <div
                 key={item.id}
-                className="p-3 rounded-2xl bg-[#FCFCF7] border border-[#E6E6EE] flex items-start justify-between gap-3 shadow-2xs"
+                className="p-3 rounded-2xl bg-[#F6F7FC] border border-[#E4E8F0] flex items-start justify-between gap-3 shadow-2xs"
               >
                 <div className="space-y-0.5">
-                  <div className="font-bold text-[#000181] text-xs">{item.title}</div>
-                  <div className="text-[11px] text-[#53536A]">{item.detail}</div>
+                  <div className="font-bold text-[#0C0D10] text-xs">{item.title}</div>
+                  <div className="text-[11px] text-[#596273]">{item.detail}</div>
                 </div>
                 <div className="shrink-0 pt-0.5">
                   {item.status === 'ready' && (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#000181] bg-[#D0FFA4] px-2.5 py-0.5 rounded-full border border-[#000181]/20">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#000181]" />
+                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#0C0D10] bg-[#C7F000] px-2.5 py-0.5 rounded-full border border-[#3155FF]/20">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#0C0D10]" />
                       SẴN SÀNG
                     </span>
                   )}
                   {item.status === 'fallback' && (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#000181] bg-[#83E7FF] px-2.5 py-0.5 rounded-full border border-[#006EE9]/30">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#0C0D10] bg-[#EEF1FF] px-2.5 py-0.5 rounded-full border border-[#3155FF]/30">
                       LOCAL DEMO
                     </span>
                   )}
@@ -134,17 +134,17 @@ export const DemoCheckModal: React.FC<DemoCheckModalProps> = ({
         </div>
 
         {/* Demo Reset Action Box */}
-        <div className="p-4 rounded-2xl bg-[#F6F7FB] border border-[#E6E6EE] space-y-3">
+        <div className="p-4 rounded-2xl bg-[#F6F7FC] border border-[#E4E8F0] space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-black text-[#000181] text-xs uppercase flex items-center gap-1.5">
-              <RefreshCw className="w-3.5 h-3.5 text-[#006EE9]" />
+            <span className="font-black text-[#0C0D10] text-xs uppercase flex items-center gap-1.5">
+              <RefreshCw className="w-3.5 h-3.5 text-[#3155FF]" />
               Kịch bản kích hoạt nấc giá mới (19/20)
             </span>
-            <span className="text-[10px] bg-[#006EE9] text-white px-2 py-0.5 rounded-md font-black">
+            <span className="text-[10px] bg-[#3155FF] text-white px-2 py-0.5 rounded-md font-black">
               19 → 20 LƯỢT
             </span>
           </div>
-          <p className="text-[11px] text-[#53536A] leading-relaxed">
+          <p className="text-[11px] text-[#596273] leading-relaxed">
             Đặt lại phòng gom "Dâu Tây Đà Lạt" về trạng thái 19/20 người. Khi người mua tiếp theo bấm tham gia, hệ thống sẽ mở khóa nấc giá <strong>99.000đ → 89.000đ</strong> và hiển thị modal mở khóa giá mới!
           </p>
 
@@ -152,7 +152,7 @@ export const DemoCheckModal: React.FC<DemoCheckModalProps> = ({
             <button
               type="button"
               onClick={() => setShowConfirmReset(true)}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs transition shadow-md shadow-[#006EE9]/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95 uppercase tracking-wider"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs transition shadow-md shadow-[#3155FF]/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95 uppercase tracking-wider"
             >
               <RefreshCw className="w-3.5 h-3.5" />
               <span>RESET KỊCH BẢN DEMO (19/20)</span>

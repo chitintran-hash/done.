@@ -60,18 +60,18 @@ const STATUS_BADGE: Record<
   },
   picked_up_from_supplier: {
     label: 'Handed Over (Đã bàn giao xe)',
-    color: 'text-[#000181]',
-    bg: 'bg-[#EFFBFF] border-indigo-200',
+    color: 'text-[#0C0D10]',
+    bg: 'bg-[#EEF1FF] border-indigo-200',
   },
   in_transit: {
     label: 'In Transit (Đang vận chuyển)',
-    color: 'text-[#000181]',
-    bg: 'bg-[#FAF0FF] border-[#E8A0FF]',
+    color: 'text-[#0C0D10]',
+    bg: 'bg-[#F3EEFF] border-[#7B3FF2]/30',
   },
   arrived_at_pickup: {
     label: 'Arrived at Pickup (Đã đến điểm nhận)',
-    color: 'text-[#000181]',
-    bg: 'bg-[#F4FFE8] border-[#D0FFA4]',
+    color: 'text-[#0C0D10]',
+    bg: 'bg-[#F5FBD9] border-[#C7F000]',
   },
   completed: {
     label: 'Completed (Hoàn tất giao nhận)',
@@ -146,9 +146,9 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
             <div className="text-xs font-semibold text-slate-500">Tổng lô giao</div>
             <div className="text-xl font-black text-slate-900">{supplierBatches.length}</div>
           </div>
-          <div className="bg-[#EFFBFF]/70 rounded-2xl px-4 py-3 border border-indigo-100 text-center">
-            <div className="text-xs font-semibold text-[#006EE9]">Đang xử lý</div>
-            <div className="text-xl font-black text-[#000181]">
+          <div className="bg-[#EEF1FF]/70 rounded-2xl px-4 py-3 border border-indigo-100 text-center">
+            <div className="text-xs font-semibold text-[#3155FF]">Đang xử lý</div>
+            <div className="text-xl font-black text-[#0C0D10]">
               {
                 supplierBatches.filter(
                   (b) => b.status !== 'completed' && b.status !== 'cancelled'
@@ -156,9 +156,9 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
               }
             </div>
           </div>
-          <div className="bg-[#F4FFE8]/70 rounded-2xl px-4 py-3 border border-emerald-100 text-center">
-            <div className="text-xs font-semibold text-[#000181]">Tổng đơn gộp</div>
-            <div className="text-xl font-black text-[#000181]">
+          <div className="bg-[#F5FBD9]/70 rounded-2xl px-4 py-3 border border-emerald-100 text-center">
+            <div className="text-xs font-semibold text-[#0C0D10]">Tổng đơn gộp</div>
+            <div className="text-xl font-black text-[#0C0D10]">
               {supplierBatches.reduce((sum, b) => sum + b.totalOrders, 0)}
             </div>
           </div>
@@ -243,7 +243,7 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                             `Bàn giao ${batch.totalUnits} sản phẩm cho ${batch.carrierName}`
                           )
                         }
-                        className="px-4 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
+                        className="px-4 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
                       >
                         <Package className="w-4 h-4" />
                         Ready for Carrier / Handed Over (Bàn giao xe)
@@ -260,7 +260,7 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                             `Lô hàng đang di chuyển đến ${batch.pickupPointName || point?.name || 'điểm nhận'}`
                           )
                         }
-                        className="px-4 py-2.5 rounded-xl bg-[#E8A0FF] hover:bg-[#D0FFA4] text-[#000181] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
+                        className="px-4 py-2.5 rounded-xl bg-[#7B3FF2] hover:bg-[#C7F000] text-[#0C0D10] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
                       >
                         <ArrowRight className="w-4 h-4" />
                         Dispatch In Transit (Bắt đầu vận chuyển)
@@ -277,7 +277,7 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                             'Tất cả đơn hàng trong lô đã chuyển sang trạng thái Sẵn sàng nhận hàng (Ready for pickup)'
                           )
                         }
-                        className="px-4 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
+                        className="px-4 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
                       >
                         <MapPin className="w-4 h-4" />
                         Mark Arrived at Pickup (Đã đến điểm nhận)
@@ -319,7 +319,7 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                   <div className="bg-slate-50 rounded-2xl p-3">
                     <div className="text-[11px] font-semibold text-slate-500">Khung giờ nhận (Slot)</div>
                     <div className="text-sm font-bold text-slate-900 mt-0.5 flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-[#006EE9] shrink-0" />
+                      <Calendar className="w-3.5 h-3.5 text-[#3155FF] shrink-0" />
                       <span className="truncate">
                         {batch.pickupWindow || room?.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00'}
                       </span>
@@ -347,9 +347,9 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                     </div>
                   </div>
 
-                  <div className="bg-[#F4FFE8]/70 rounded-2xl p-3 border border-emerald-100">
-                    <div className="text-[11px] font-semibold text-[#000181]">Ship chia sẻ / Buyer</div>
-                    <div className="text-sm font-black text-[#000181] mt-0.5">
+                  <div className="bg-[#F5FBD9]/70 rounded-2xl p-3 border border-emerald-100">
+                    <div className="text-[11px] font-semibold text-[#0C0D10]">Ship chia sẻ / Buyer</div>
+                    <div className="text-sm font-black text-[#0C0D10] mt-0.5">
                       {formatCurrency(batch.shippingPerBuyer)} / người
                     </div>
                   </div>
@@ -432,14 +432,14 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                             <td className="py-3 px-4 font-bold text-slate-900">
                               {order.quantity} {order.unit || 'sp'}
                             </td>
-                            <td className="py-3 px-4 font-mono text-xs font-bold text-[#006EE9]">
+                            <td className="py-3 px-4 font-mono text-xs font-bold text-[#3155FF]">
                               {order.pickupCode}
                             </td>
                             <td className="py-3 px-4">
                               <span
                                 className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold ${
                                   order.status === 'picked_up'
-                                    ? 'bg-[#D0FFA4]/40 text-[#000181]'
+                                    ? 'bg-[#F5FBD9] text-[#0C0D10]'
                                     : order.status === 'ready_for_pickup'
                                     ? 'bg-amber-100 text-amber-800'
                                     : order.status === 'pickup_overdue'
@@ -468,7 +468,7 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
             {/* Delivery Events Timeline */}
             <div>
               <h3 className="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#006EE9]" />
+                <Clock className="w-4 h-4 text-[#3155FF]" />
                 Nhật ký vận chuyển (Delivery Events)
               </h3>
               <div className="space-y-3">
@@ -479,7 +479,7 @@ export const SupplierLogisticsView: React.FC<SupplierLogisticsViewProps> = ({
                       key={evt.id}
                       className="flex items-start gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/70"
                     >
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#006EE9] mt-1.5 shrink-0" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-[#3155FF] mt-1.5 shrink-0" />
                       <div className="flex-1">
                         <div className="flex items-center justify-between gap-2">
                           <span className="text-xs font-bold text-slate-900">{evt.title}</span>

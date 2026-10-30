@@ -192,11 +192,11 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
         {/* Header */}
         <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#D0FFA4]/40 text-[#000181] flex items-center justify-center">
+            <div className="w-11 h-11 rounded-2xl bg-[#F5FBD9] text-[#0C0D10] flex items-center justify-center">
               <FileCheck2 className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#000181] block">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#0C0D10] block">
                 HỒ SƠ HỢP ĐỒNG GIAO DỊCH BẤT BIẾN (IMMUTABLE CONTRACT SNAPSHOT)
               </span>
               <h3 className="text-base sm:text-lg font-black text-slate-900">
@@ -235,7 +235,7 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
             <span className="text-slate-400 block text-[10px] uppercase font-bold">
               Sự kiện xác nhận của Người mua
             </span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded bg-[#D0FFA4]/40 text-emerald-800 font-bold text-[11px]">
+            <span className="inline-flex items-center px-2 py-0.5 rounded bg-[#F5FBD9] text-emerald-800 font-bold text-[11px]">
               “{effectiveSnapshot.confirmationEvent}”
             </span>
           </div>
@@ -284,7 +284,7 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
 
           <div className="rounded-2xl border border-slate-200 p-4 space-y-1.5">
             <div className="font-black text-slate-900 flex items-center gap-1.5">
-              <Package className="w-4 h-4 text-[#000181]" />
+              <Package className="w-4 h-4 text-[#0C0D10]" />
               <span>Thông tin Sản phẩm (Đã khóa)</span>
             </div>
             <div className="text-slate-600 space-y-1 text-[11px]">
@@ -325,7 +325,7 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
           </div>
           <div className="flex justify-between">
             <span className="text-slate-600">Khuyến mại / Voucher (Discount):</span>
-            <span className="font-bold text-[#000181]">
+            <span className="font-bold text-[#0C0D10]">
               -{formatVND(effectiveSnapshot.discount)}
             </span>
           </div>
@@ -343,7 +343,7 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
             <span className="font-black text-slate-900 text-sm">
               Tổng giá trị hợp đồng giao dịch (Final Payable):
             </span>
-            <span className="font-black text-[#000181] text-lg">
+            <span className="font-black text-[#0C0D10] text-lg">
               {formatVND(effectiveSnapshot.finalPrice)}
             </span>
           </div>
@@ -362,8 +362,8 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
           </div>
         </div>
 
-        <div className="bg-[#F4FFE8] border border-[#D0FFA4] rounded-xl p-3 flex items-start gap-2 text-[11px] text-emerald-900">
-          <ShieldCheck className="w-4 h-4 text-[#000181] shrink-0 mt-0.5" />
+        <div className="bg-[#F5FBD9] border border-[#C7F000] rounded-xl p-3 flex items-start gap-2 text-[11px] text-emerald-900">
+          <ShieldCheck className="w-4 h-4 text-[#0C0D10] shrink-0 mt-0.5" />
           <span>
             Bản chụp giao dịch này được khóa cố định tại thời điểm bạn nhấn <strong>“Tôi xác nhận đặt hàng”</strong>. Mọi thay đổi giá sản phẩm hoặc thông tin nhà cung cấp về sau không làm thay đổi hồ sơ giao dịch lịch sử này.
           </span>
@@ -375,7 +375,7 @@ export const TransactionSnapshotModal: React.FC<TransactionSnapshotModalProps> =
             <button
               type="button"
               onClick={handleDownloadHtml}
-              className="px-3.5 py-2.5 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
+              className="px-3.5 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Tải hồ sơ giao dịch (.HTML)</span>

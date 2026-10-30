@@ -275,14 +275,14 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#000181]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 font-sans selection:bg-[#D0FFA4] selection:text-[#000181]">
-      <div className="relative w-full max-w-lg my-6 bg-[#FFFFFF] rounded-3xl shadow-2xl border border-[#E6E6EE] overflow-hidden animate-fade-in">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#0C0D10]/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 font-sans selection:bg-[#C7F000] selection:text-[#0C0D10]">
+      <div className="relative w-full max-w-lg my-6 bg-[#FFFFFF] rounded-3xl shadow-2xl border border-[#E4E8F0] overflow-hidden animate-fade-in">
         {/* Close button if modal */}
         {onClose && (
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-[#F6F7FB] hover:bg-[#E6E6EE] text-[#53536A] hover:text-[#000181] flex items-center justify-center cursor-pointer transition"
+            className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-[#F6F7FC] hover:bg-[#E4E8F0] text-[#596273] hover:text-[#0C0D10] flex items-center justify-center cursor-pointer transition"
             title="Đóng cửa sổ"
           >
             <X className="w-5 h-5" />
@@ -293,32 +293,32 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
           {/* Header Brand Logo */}
           <div className="text-center mb-5">
             <div className="inline-flex items-center space-x-2.5 mb-2">
-              <div className="w-10 h-10 rounded-2xl bg-[#000181] flex items-center justify-center text-[#D0FFA4] shadow-md shadow-[#000181]/20">
-                <Zap className="w-5 h-5 fill-[#D0FFA4]" />
+              <div className="w-10 h-10 rounded-2xl bg-[#3155FF] flex items-center justify-center text-[#C7F000] shadow-md shadow-[#3155FF]/20">
+                <Zap className="w-5 h-5 fill-[#C7F000]" />
               </div>
               <div className="text-left">
-                <div className="text-xl font-black tracking-tight leading-none text-[#000181]">
-                  FLASH<span className="text-[#006EE9]">GROUP</span>
+                <div className="text-xl font-black tracking-tight leading-none text-[#0C0D10]">
+                  FLASH<span className="text-[#3155FF]">GROUP</span>
                 </div>
-                <div className="text-[9px] uppercase font-black tracking-wider text-[#53536A] mt-0.5">
+                <div className="text-[9px] uppercase font-black tracking-wider text-[#596273] mt-0.5">
                   Càng Đông, Càng Rẻ
                 </div>
               </div>
             </div>
 
-            <p className="text-xs text-[#53536A] font-medium max-w-sm mx-auto">
+            <p className="text-xs text-[#596273] font-medium max-w-sm mx-auto">
               Nền tảng Mua chung Siêu Cục Bộ & Tủ Thông Minh Smart Locker
             </p>
 
-            <div className="mt-2.5 inline-flex items-center space-x-1.5 bg-[#F4FFE8] border border-[#D0FFA4] text-[#000181] text-[10px] px-3 py-0.5 rounded-full font-bold">
-              <ShieldCheck className="w-3 h-3 text-[#006EE9] shrink-0" />
+            <div className="mt-2.5 inline-flex items-center space-x-1.5 bg-[#F5FBD9] border border-[#C7F000] text-[#0C0D10] text-[10px] px-3 py-0.5 rounded-full font-bold">
+              <ShieldCheck className="w-3 h-3 text-[#3155FF] shrink-0" />
               <span>{isSupabaseMode ? 'Xác thực Supabase Cloud Bảo mật' : 'Hệ thống Xác thực FlashGroup'}</span>
             </div>
           </div>
 
           {/* Segmented Switcher (Login vs Register) when not in forgot password */}
           {authMode !== 'forgot_password' && (
-            <div className="flex p-1 bg-[#F6F7FB] rounded-2xl mb-5 border border-[#E6E6EE]">
+            <div className="flex p-1 bg-[#F6F7FC] rounded-2xl mb-5 border border-[#E4E8F0]">
               <button
                 type="button"
                 onClick={() => {
@@ -327,8 +327,8 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 }}
                 className={`flex-1 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   authMode === 'login'
-                    ? 'bg-[#000181] text-white shadow-xs'
-                    : 'text-[#53536A] hover:text-[#000181]'
+                    ? 'bg-[#3155FF] text-white shadow-xs'
+                    : 'text-[#596273] hover:text-[#0C0D10]'
                 }`}
               >
                 <LogIn className="w-3.5 h-3.5" />
@@ -342,8 +342,8 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 }}
                 className={`flex-1 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5 ${
                   authMode === 'register'
-                    ? 'bg-[#000181] text-white shadow-xs'
-                    : 'text-[#53536A] hover:text-[#000181]'
+                    ? 'bg-[#3155FF] text-white shadow-xs'
+                    : 'text-[#596273] hover:text-[#0C0D10]'
                 }`}
               >
                 <UserPlus className="w-3.5 h-3.5" />
@@ -356,17 +356,17 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
           {authMode === 'login' && (
             <div>
               <div className="mb-3">
-                <h3 className="text-base font-black text-[#000181]">
+                <h3 className="text-base font-black text-[#0C0D10]">
                   Đăng nhập tài khoản
                 </h3>
-                <p className="text-xs text-[#53536A] mt-0.5">
+                <p className="text-xs text-[#596273] mt-0.5">
                   Chọn vai trò tài khoản để đăng nhập vào đúng cổng chức năng.
                 </p>
               </div>
 
               {/* Role Selection for Login: Buyer & Supplier */}
               <div className="mb-3.5">
-                <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-2">
+                <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-2">
                   Bạn muốn đăng nhập với vai trò nào?
                 </label>
                 <div className="grid grid-cols-2 gap-2.5">
@@ -379,20 +379,20 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     }}
                     className={`p-2.5 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
                       loginRole === 'buyer'
-                        ? 'border-[#006EE9] bg-[#EFFBFF] ring-2 ring-[#006EE9]/25 shadow-xs'
-                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                        ? 'border-[#3155FF] bg-[#EEF1FF] ring-2 ring-[#3155FF]/25 shadow-xs'
+                        : 'border-[#E4E8F0] bg-[#FFFFFF] hover:bg-[#F6F7FC]'
                     }`}
                   >
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                        loginRole === 'buyer' ? 'bg-[#006EE9] text-white' : 'bg-[#E6E6EE] text-[#53536A]'
+                        loginRole === 'buyer' ? 'bg-[#3155FF] text-white' : 'bg-[#E4E8F0] text-[#596273]'
                       }`}
                     >
                       <ShoppingCart className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-[#000181]">Người mua</div>
-                      <div className="text-[10px] text-[#53536A] font-medium">Buyer</div>
+                      <div className="text-xs font-black text-[#0C0D10]">Người mua</div>
+                      <div className="text-[10px] text-[#596273] font-medium">Buyer</div>
                     </div>
                   </button>
 
@@ -405,35 +405,35 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     }}
                     className={`p-2.5 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
                       loginRole === 'supplier'
-                        ? 'border-[#000181] bg-[#F4FFE8] ring-2 ring-[#000181]/20 shadow-xs'
-                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                        ? 'border-[#3155FF] bg-[#F5FBD9] ring-2 ring-[#3155FF]/20 shadow-xs'
+                        : 'border-[#E4E8F0] bg-[#FFFFFF] hover:bg-[#F6F7FC]'
                     }`}
                   >
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
-                        loginRole === 'supplier' ? 'bg-[#000181] text-[#D0FFA4]' : 'bg-[#E6E6EE] text-[#53536A]'
+                        loginRole === 'supplier' ? 'bg-[#3155FF] text-[#C7F000]' : 'bg-[#E4E8F0] text-[#596273]'
                       }`}
                     >
                       <Store className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-[#000181]">Nhà cung cấp</div>
-                      <div className="text-[10px] text-[#53536A] font-medium">Supplier</div>
+                      <div className="text-xs font-black text-[#0C0D10]">Nhà cung cấp</div>
+                      <div className="text-[10px] text-[#596273] font-medium">Supplier</div>
                     </div>
                   </button>
                 </div>
               </div>
 
               {/* 1-Click Fast Fill for the selected role */}
-              <div className="mb-4 p-2.5 rounded-2xl bg-[#F6F7FB] border border-[#E6E6EE] flex items-center justify-between gap-2">
-                <div className="text-[11px] text-[#53536A] truncate">
+              <div className="mb-4 p-2.5 rounded-2xl bg-[#F6F7FC] border border-[#E4E8F0] flex items-center justify-between gap-2">
+                <div className="text-[11px] text-[#596273] truncate">
                   {loginRole === 'buyer' ? (
                     <span>
-                      Tài khoản mẫu: <strong className="text-[#000181]">buyer@flashgroup.demo</strong>
+                      Tài khoản mẫu: <strong className="text-[#0C0D10]">buyer@flashgroup.demo</strong>
                     </span>
                   ) : (
                     <span>
-                      Tài khoản mẫu: <strong className="text-[#000181]">supplier@flashgroup.demo</strong>
+                      Tài khoản mẫu: <strong className="text-[#0C0D10]">supplier@flashgroup.demo</strong>
                     </span>
                   )}
                 </div>
@@ -449,7 +449,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     }
                     setLoginError(null);
                   }}
-                  className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-[#006EE9] text-white hover:bg-[#000181] transition cursor-pointer shrink-0 active:scale-95 shadow-xs"
+                  className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-[#3155FF] text-white hover:bg-[#3155FF] transition cursor-pointer shrink-0 active:scale-95 shadow-xs"
                 >
                   Điền nhanh
                 </button>
@@ -467,11 +467,11 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               <form onSubmit={handleLoginSubmit} className="space-y-3.5">
                 {/* Email */}
                 <div>
-                  <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                     Email <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#53536A]">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#596273]">
                       <Mail className="w-4 h-4" />
                     </div>
                     <input
@@ -480,7 +480,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="tenban@gmail.com"
                       required
-                      className="block w-full pl-10 pr-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      className="block w-full pl-10 pr-3.5 py-2.5 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                     />
                   </div>
                 </div>
@@ -488,19 +488,19 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 {/* Password with Show/Hide toggle */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider">
                       Mật khẩu <span className="text-rose-500">*</span>
                     </label>
                     <button
                       type="button"
                       onClick={() => setAuthMode('forgot_password')}
-                      className="text-xs font-bold text-[#006EE9] hover:text-[#000181] hover:underline transition cursor-pointer"
+                      className="text-xs font-bold text-[#3155FF] hover:text-[#0C0D10] hover:underline transition cursor-pointer"
                     >
                       Quên mật khẩu?
                     </button>
                   </div>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#53536A]">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#596273]">
                       <Lock className="w-4 h-4" />
                     </div>
                     <input
@@ -509,12 +509,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       required
-                      className="block w-full pl-10 pr-11 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      className="block w-full pl-10 pr-11 py-2.5 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((prev) => !prev)}
-                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#53536A] hover:text-[#000181] cursor-pointer"
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#596273] hover:text-[#0C0D10] cursor-pointer"
                       title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -529,9 +529,9 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 rounded text-[#006EE9] focus:ring-[#006EE9] border-[#E6E6EE]"
+                      className="w-4 h-4 rounded text-[#3155FF] focus:ring-[#3155FF] border-[#E4E8F0]"
                     />
-                    <span className="text-xs font-bold text-[#53536A] select-none">
+                    <span className="text-xs font-bold text-[#596273] select-none">
                       Ghi nhớ đăng nhập
                     </span>
                   </label>
@@ -541,11 +541,11 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full py-3 px-4 bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#3155FF]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
+                      <Loader2 className="w-4 h-4 animate-spin text-[#C7F000]" />
                       <span>Đang đăng nhập...</span>
                     </>
                   ) : (
@@ -558,7 +558,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               </form>
 
               {/* Footer Switch */}
-              <div className="mt-5 text-center text-xs text-[#53536A]">
+              <div className="mt-5 text-center text-xs text-[#596273]">
                 Chưa có tài khoản?{' '}
                 <button
                   type="button"
@@ -566,7 +566,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     setAuthMode('register');
                     setRegError(null);
                   }}
-                  className="font-black text-[#006EE9] hover:text-[#000181] hover:underline cursor-pointer"
+                  className="font-black text-[#3155FF] hover:text-[#0C0D10] hover:underline cursor-pointer"
                 >
                   Đăng ký ngay
                 </button>
@@ -579,7 +579,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
             <div>
               {/* Role Selector Header */}
               <div className="mb-4">
-                <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-2">
+                <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-2">
                   Bạn muốn tham gia FlashGroup với vai trò nào?
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -592,18 +592,18 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     }}
                     className={`p-3 rounded-2xl border text-left transition cursor-pointer flex items-start gap-2.5 ${
                       registerRole === 'buyer'
-                        ? 'border-[#006EE9] bg-[#EFFBFF] ring-2 ring-[#006EE9]/25'
-                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                        ? 'border-[#3155FF] bg-[#EEF1FF] ring-2 ring-[#3155FF]/25'
+                        : 'border-[#E4E8F0] bg-[#FFFFFF] hover:bg-[#F6F7FC]'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                      registerRole === 'buyer' ? 'bg-[#006EE9] text-white' : 'bg-[#E6E6EE] text-[#53536A]'
+                      registerRole === 'buyer' ? 'bg-[#3155FF] text-white' : 'bg-[#E4E8F0] text-[#596273]'
                     }`}>
                       <ShoppingCart className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-[#000181]">🛒 Người mua</div>
-                      <div className="text-[11px] text-[#53536A] mt-0.5 leading-tight">
+                      <div className="text-xs font-black text-[#0C0D10]">🛒 Người mua</div>
+                      <div className="text-[11px] text-[#596273] mt-0.5 leading-tight">
                         Mua chung và tiết kiệm cùng cộng đồng.
                       </div>
                     </div>
@@ -618,18 +618,18 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     }}
                     className={`p-3 rounded-2xl border text-left transition cursor-pointer flex items-start gap-2.5 ${
                       registerRole === 'supplier'
-                        ? 'border-[#006EE9] bg-[#EFFBFF] ring-2 ring-[#006EE9]/25'
-                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                        ? 'border-[#3155FF] bg-[#EEF1FF] ring-2 ring-[#3155FF]/25'
+                        : 'border-[#E4E8F0] bg-[#FFFFFF] hover:bg-[#F6F7FC]'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                      registerRole === 'supplier' ? 'bg-[#000181] text-[#D0FFA4]' : 'bg-[#E6E6EE] text-[#53536A]'
+                      registerRole === 'supplier' ? 'bg-[#3155FF] text-[#C7F000]' : 'bg-[#E4E8F0] text-[#596273]'
                     }`}>
                       <Store className="w-4 h-4" />
                     </div>
                     <div>
-                      <div className="text-xs font-black text-[#000181]">🏪 Nhà cung cấp</div>
-                      <div className="text-[11px] text-[#53536A] mt-0.5 leading-tight">
+                      <div className="text-xs font-black text-[#0C0D10]">🏪 Nhà cung cấp</div>
+                      <div className="text-[11px] text-[#596273] mt-0.5 leading-tight">
                         Đưa sản phẩm đến các nhóm mua chung.
                       </div>
                     </div>
@@ -649,7 +649,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               <form onSubmit={handleRegisterSubmit} className="space-y-3">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                  <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                     {registerRole === 'supplier' ? 'Họ và tên người đại diện *' : 'Họ và tên *'}
                   </label>
                   <input
@@ -658,14 +658,14 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     onChange={(e) => setRegName(e.target.value)}
                     placeholder={registerRole === 'supplier' ? 'Nguyễn Văn Doanh' : 'Nguyễn Minh Anh'}
                     required
-                    className="block w-full px-3.5 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                    className="block w-full px-3.5 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                   />
                 </div>
 
                 {/* Email and Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Email đăng ký <span className="text-rose-500">*</span>
                     </label>
                     <input
@@ -674,12 +674,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       onChange={(e) => setRegEmail(e.target.value)}
                       placeholder="email@cuaban.com"
                       required
-                      className="block w-full px-3 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      className="block w-full px-3 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Số điện thoại {registerRole === 'supplier' && <span className="text-rose-500">*</span>}
                     </label>
                     <input
@@ -688,7 +688,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       onChange={(e) => setRegPhone(e.target.value)}
                       placeholder="0901234567"
                       required={registerRole === 'supplier'}
-                      className="block w-full px-3 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      className="block w-full px-3 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                     />
                   </div>
                 </div>
@@ -696,7 +696,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 {/* Password & Confirm */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Mật khẩu (≥ 6 ký tự) <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
@@ -706,12 +706,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         onChange={(e) => setRegPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="block w-full pl-3 pr-8 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                        className="block w-full pl-3 pr-8 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                       />
                       <button
                         type="button"
                         onClick={() => setShowRegPassword((prev) => !prev)}
-                        className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#53536A] hover:text-[#000181] cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#596273] hover:text-[#0C0D10] cursor-pointer"
                       >
                         {showRegPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                       </button>
@@ -719,7 +719,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Xác nhận mật khẩu <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
@@ -729,12 +729,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         onChange={(e) => setRegConfirmPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="block w-full pl-3 pr-8 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                        className="block w-full pl-3 pr-8 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                       />
                       <button
                         type="button"
                         onClick={() => setShowRegConfirmPassword((prev) => !prev)}
-                        className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#53536A] hover:text-[#000181] cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-[#596273] hover:text-[#0C0D10] cursor-pointer"
                       >
                         {showRegConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                       </button>
@@ -744,14 +744,14 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
 
                 {/* Specific fields for Supplier */}
                 {registerRole === 'supplier' && (
-                  <div className="space-y-2.5 pt-1 border-t border-[#E6E6EE]">
-                    <div className="text-xs font-black text-[#000181] uppercase tracking-wider flex items-center gap-1.5 pt-1">
-                      <Building2 className="w-3.5 h-3.5 text-[#006EE9]" />
+                  <div className="space-y-2.5 pt-1 border-t border-[#E4E8F0]">
+                    <div className="text-xs font-black text-[#0C0D10] uppercase tracking-wider flex items-center gap-1.5 pt-1">
+                      <Building2 className="w-3.5 h-3.5 text-[#3155FF]" />
                       <span>Thông tin Doanh nghiệp / Cửa hàng</span>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                         Tên cửa hàng / doanh nghiệp <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -760,19 +760,19 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         onChange={(e) => setSupplierBusinessName(e.target.value)}
                         placeholder="Ví dụ: Nông Trại Xanh Đà Lạt Co., Ltd"
                         required
-                        className="block w-full px-3.5 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                        className="block w-full px-3.5 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <div>
-                        <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                           Loại hình kinh doanh <span className="text-rose-500">*</span>
                         </label>
                         <select
                           value={supplierBusinessType}
                           onChange={(e) => setSupplierBusinessType(e.target.value)}
-                          className="block w-full px-3 py-2 text-xs bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none text-[#000181] font-bold"
+                          className="block w-full px-3 py-2 text-xs bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none text-[#0C0D10] font-bold"
                         >
                           <option value="manufacturer">Nhà sản xuất / Nhà vườn</option>
                           <option value="official_distributor">Nhà phân phối chính hãng</option>
@@ -782,13 +782,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                           Khu vực hoạt động <span className="text-rose-500">*</span>
                         </label>
                         <select
                           value={supplierOperatingRegion}
                           onChange={(e) => setSupplierOperatingRegion(e.target.value)}
-                          className="block w-full px-3 py-2 text-xs bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none text-[#000181] font-bold"
+                          className="block w-full px-3 py-2 text-xs bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none text-[#0C0D10] font-bold"
                         >
                           <option value="TP.HCM & Đông Nam Bộ">TP.HCM & Đông Nam Bộ</option>
                           <option value="Lâm Đồng & Tây Nguyên">Lâm Đồng & Tây Nguyên</option>
@@ -800,7 +800,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                      <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                         Địa chỉ kinh doanh / Kho hàng <span className="text-rose-500">*</span>
                       </label>
                       <input
@@ -809,7 +809,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         onChange={(e) => setSupplierAddress(e.target.value)}
                         placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/TP"
                         required
-                        className="block w-full px-3.5 py-2 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                        className="block w-full px-3.5 py-2 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                       />
                     </div>
                   </div>
@@ -822,15 +822,15 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       type="checkbox"
                       checked={termsAccepted}
                       onChange={(e) => setTermsAccepted(e.target.checked)}
-                      className="w-4 h-4 mt-0.5 rounded text-[#006EE9] focus:ring-[#006EE9] border-[#E6E6EE]"
+                      className="w-4 h-4 mt-0.5 rounded text-[#3155FF] focus:ring-[#3155FF] border-[#E4E8F0]"
                     />
-                    <span className="text-xs text-[#53536A] leading-tight select-none">
+                    <span className="text-xs text-[#596273] leading-tight select-none">
                       Tôi đã đọc và đồng ý với{' '}
-                      <span className="font-bold text-[#006EE9] hover:underline">
+                      <span className="font-bold text-[#3155FF] hover:underline">
                         Điều khoản sử dụng
                       </span>{' '}
                       và{' '}
-                      <span className="font-bold text-[#006EE9] hover:underline">
+                      <span className="font-bold text-[#3155FF] hover:underline">
                         Chính sách quyền riêng tư
                       </span>
                       . <span className="text-rose-500 font-bold">*</span>
@@ -843,9 +843,9 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       type="checkbox"
                       checked={marketingConsent}
                       onChange={(e) => setMarketingConsent(e.target.checked)}
-                      className="w-4 h-4 mt-0.5 rounded text-[#006EE9] focus:ring-[#006EE9] border-[#E6E6EE]"
+                      className="w-4 h-4 mt-0.5 rounded text-[#3155FF] focus:ring-[#3155FF] border-[#E4E8F0]"
                     />
-                    <span className="text-xs text-[#53536A] leading-tight select-none">
+                    <span className="text-xs text-[#596273] leading-tight select-none">
                       Tôi muốn nhận ưu đãi và thông tin từ FlashGroup. (Mặc định tắt)
                     </span>
                   </label>
@@ -855,11 +855,11 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+                  className="w-full py-3 px-4 bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#3155FF]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
+                      <Loader2 className="w-4 h-4 animate-spin text-[#C7F000]" />
                       <span>Đang tạo tài khoản...</span>
                     </>
                   ) : (
@@ -874,7 +874,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
               </form>
 
               {/* Footer switch to login */}
-              <div className="mt-4 text-center text-xs text-[#53536A]">
+              <div className="mt-4 text-center text-xs text-[#596273]">
                 Đã có tài khoản?{' '}
                 <button
                   type="button"
@@ -882,7 +882,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     setAuthMode('login');
                     setRegError(null);
                   }}
-                  className="font-black text-[#006EE9] hover:text-[#000181] hover:underline cursor-pointer"
+                  className="font-black text-[#3155FF] hover:text-[#0C0D10] hover:underline cursor-pointer"
                 >
                   Đăng nhập ngay
                 </button>
@@ -895,13 +895,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
             <div>
               {/* Header */}
               <div className="mb-4 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-[#EFFBFF] text-[#006EE9] flex items-center justify-center mx-auto mb-2">
+                <div className="w-12 h-12 rounded-2xl bg-[#EEF1FF] text-[#3155FF] flex items-center justify-center mx-auto mb-2">
                   <KeyRound className="w-6 h-6" />
                 </div>
-                <h3 className="text-base font-black text-[#000181]">
+                <h3 className="text-base font-black text-[#0C0D10]">
                   {resetStep === 'request' ? 'Khôi phục mật khẩu' : 'Đặt lại mật khẩu mới'}
                 </h3>
-                <p className="text-xs text-[#53536A] mt-1 max-w-sm mx-auto">
+                <p className="text-xs text-[#596273] mt-1 max-w-sm mx-auto">
                   {resetStep === 'request'
                     ? 'Nhập địa chỉ email tài khoản của bạn để nhận mã xác thực đặt lại mật khẩu an toàn.'
                     : `Xác thực và thiết lập mật khẩu mới cho tài khoản: ${forgotEmail}`}
@@ -918,9 +918,9 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
 
               {/* Reset Success Message */}
               {resetSuccessMessage ? (
-                <div className="p-5 rounded-2xl bg-[#F4FFE8] border border-[#D0FFA4] text-[#000181] text-xs space-y-3.5 animate-fade-in text-center">
-                  <CheckCircle2 className="w-9 h-9 text-[#006EE9] mx-auto" />
-                  <p className="font-extrabold text-sm leading-relaxed text-[#000181]">
+                <div className="p-5 rounded-2xl bg-[#F5FBD9] border border-[#C7F000] text-[#0C0D10] text-xs space-y-3.5 animate-fade-in text-center">
+                  <CheckCircle2 className="w-9 h-9 text-[#3155FF] mx-auto" />
+                  <p className="font-extrabold text-sm leading-relaxed text-[#0C0D10]">
                     {resetSuccessMessage}
                   </p>
                   <button
@@ -930,7 +930,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       setResetSuccessMessage(null);
                       setResetStep('request');
                     }}
-                    className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer shadow-md shadow-[#006EE9]/20"
+                    className="w-full py-3 px-4 bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs uppercase tracking-wider rounded-xl transition cursor-pointer shadow-md shadow-[#3155FF]/20"
                   >
                     Đăng nhập ngay
                   </button>
@@ -939,7 +939,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 /* STEP 1: REQUEST EMAIL */
                 <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Email tài khoản <span className="text-rose-500">*</span>
                     </label>
                     <input
@@ -948,18 +948,18 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       onChange={(e) => setForgotEmail(e.target.value)}
                       placeholder="tenban@gmail.com"
                       required
-                      className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      className="block w-full px-3.5 py-2.5 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-full py-3 px-4 bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#3155FF]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {isLoading ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
+                        <Loader2 className="w-4 h-4 animate-spin text-[#C7F000]" />
                         <span>Đang gửi mã...</span>
                       </>
                     ) : (
@@ -974,7 +974,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     <button
                       type="button"
                       onClick={() => setAuthMode('login')}
-                      className="text-xs font-bold text-[#53536A] hover:text-[#000181] cursor-pointer"
+                      className="text-xs font-bold text-[#596273] hover:text-[#0C0D10] cursor-pointer"
                     >
                       &larr; Quay lại Đăng nhập
                     </button>
@@ -985,13 +985,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 <form onSubmit={handleResetPasswordConfirm} className="space-y-3.5">
                   <div>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-black text-[#000181] uppercase tracking-wider">
+                      <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider">
                         Mã xác thực OTP <span className="text-rose-500">*</span>
                       </label>
                       <button
                         type="button"
                         onClick={() => setResetOtp('123456')}
-                        className="text-[11px] font-bold text-[#006EE9] hover:underline cursor-pointer"
+                        className="text-[11px] font-bold text-[#3155FF] hover:underline cursor-pointer"
                       >
                         Dùng mã demo: 123456
                       </button>
@@ -1003,12 +1003,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       placeholder="Nhập mã 6 chữ số"
                       maxLength={6}
                       required
-                      className="block w-full px-3.5 py-2.5 text-center tracking-widest text-lg font-black bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181]"
+                      className="block w-full px-3.5 py-2.5 text-center tracking-widest text-lg font-black bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Mật khẩu mới <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative">
@@ -1019,12 +1019,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                         placeholder="Tối thiểu 6 ký tự"
                         minLength={6}
                         required
-                        className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium pr-10"
+                        className="block w-full px-3.5 py-2.5 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium pr-10"
                       />
                       <button
                         type="button"
                         onClick={() => setShowNewPassword((prev) => !prev)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#53536A] hover:text-[#000181] transition cursor-pointer"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#596273] hover:text-[#0C0D10] transition cursor-pointer"
                       >
                         {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -1032,7 +1032,7 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-1">
+                    <label className="block text-xs font-black text-[#0C0D10] uppercase tracking-wider mb-1">
                       Xác nhận mật khẩu mới <span className="text-rose-500">*</span>
                     </label>
                     <input
@@ -1042,18 +1042,18 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                       placeholder="Nhập lại mật khẩu mới"
                       minLength={6}
                       required
-                      className="block w-full px-3.5 py-2.5 text-sm bg-[#FCFCF7] border border-[#E6E6EE] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#006EE9] focus:border-[#006EE9] outline-none transition text-[#000181] font-medium"
+                      className="block w-full px-3.5 py-2.5 text-sm bg-[#FFFFFF] border border-[#E4E8F0] rounded-2xl focus:bg-white focus:ring-2 focus:ring-[#3155FF] focus:border-[#3155FF] outline-none transition text-[#0C0D10] font-medium"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-full py-3 px-4 bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#3155FF]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {isLoading ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-[#D0FFA4]" />
+                        <Loader2 className="w-4 h-4 animate-spin text-[#C7F000]" />
                         <span>Đang cập nhật...</span>
                       </>
                     ) : (
@@ -1068,14 +1068,14 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     <button
                       type="button"
                       onClick={() => setResetStep('request')}
-                      className="font-bold text-[#53536A] hover:text-[#000181] cursor-pointer"
+                      className="font-bold text-[#596273] hover:text-[#0C0D10] cursor-pointer"
                     >
                       &larr; Đổi email khác
                     </button>
                     <button
                       type="button"
                       onClick={() => setAuthMode('login')}
-                      className="font-bold text-[#006EE9] hover:underline cursor-pointer"
+                      className="font-bold text-[#3155FF] hover:underline cursor-pointer"
                     >
                       Về Đăng nhập
                     </button>

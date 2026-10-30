@@ -46,7 +46,7 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
           </p>
           <button
             onClick={onExplore}
-            className="bg-[#006EE9] hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs shadow-lg shadow-emerald-600/20"
+            className="bg-[#3155FF] hover:bg-emerald-500 text-white font-bold px-6 py-3 rounded-xl text-xs shadow-lg shadow-emerald-600/20"
           >
             Khám phá phòng ngay
           </button>
@@ -68,7 +68,7 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
                     <div className="flex items-center space-x-3">
                       <span className="text-3xl">{room.emoji}</span>
                       <div>
-                        <h4 className="font-bold text-slate-900 text-sm group-hover:text-[#000181] transition">
+                        <h4 className="font-bold text-slate-900 text-sm group-hover:text-[#0C0D10] transition">
                           {room.productName}
                         </h4>
                         <span className="text-xs text-slate-400">{room.unit} • {room.pickupPoint}</span>
@@ -102,7 +102,7 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
                     <span className="text-base font-black text-slate-900">{formatVND(currentPrice)}</span>
                   </div>
 
-                  <div className="flex items-center text-xs font-bold text-[#000181] space-x-1">
+                  <div className="flex items-center text-xs font-bold text-[#0C0D10] space-x-1">
                     <span>Xem phòng</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>

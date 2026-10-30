@@ -80,14 +80,14 @@ export const OfflineBanner: React.FC = () => {
 
   if (hasUpdate) {
     return (
-      <div className="relative z-50 w-full bg-[#000181] text-white py-2 px-4 text-center text-xs font-bold shadow-md flex items-center justify-between gap-3 border-b border-white/20">
+      <div className="relative z-50 w-full bg-[#3155FF] text-white py-2 px-4 text-center text-xs font-bold shadow-md flex items-center justify-between gap-3 border-b border-white/20">
         <div className="flex-1 flex items-center justify-center gap-2.5">
-          <Sparkles className="w-4 h-4 text-[#83E7FF] shrink-0 animate-pulse" />
+          <Sparkles className="w-4 h-4 text-[#3155FF] shrink-0 animate-pulse" />
           <span>CÓ PHIÊN BẢN MỚI — Đã có bản cập nhật giao diện FlashGroup mới nhất.</span>
           <button
             type="button"
             onClick={handleUpdateApp}
-            className="ml-2 bg-[#D0FFA4] hover:bg-[#83E7FF] text-[#000181] px-3.5 py-1 rounded-lg text-[11px] font-black tracking-wider uppercase transition cursor-pointer active:scale-95 shadow-xs"
+            className="ml-2 bg-[#C7F000] hover:bg-[#EEF1FF] text-[#0C0D10] px-3.5 py-1 rounded-lg text-[11px] font-black tracking-wider uppercase transition cursor-pointer active:scale-95 shadow-xs"
           >
             CẬP NHẬT
           </button>
@@ -106,9 +106,9 @@ export const OfflineBanner: React.FC = () => {
 
   if (isOffline) {
     return (
-      <div className="relative z-50 w-full bg-[#000181] text-white py-2 px-4 text-center text-xs font-bold shadow-md flex items-center justify-between gap-2 border-b border-white/20">
+      <div className="relative z-50 w-full bg-[#3155FF] text-white py-2 px-4 text-center text-xs font-bold shadow-md flex items-center justify-between gap-2 border-b border-white/20">
         <div className="flex-1 flex items-center justify-center gap-2">
-          <WifiOff className="w-4 h-4 text-[#83E7FF] shrink-0 animate-pulse" />
+          <WifiOff className="w-4 h-4 text-[#3155FF] shrink-0 animate-pulse" />
           <span>BẠN ĐANG NGOẠI TUYẾN — Dữ liệu mới có thể chưa được cập nhật.</span>
         </div>
         <button
@@ -125,15 +125,15 @@ export const OfflineBanner: React.FC = () => {
 
   if (showReconnected) {
     return (
-      <div className="relative z-50 w-full bg-[#D0FFA4] text-[#000181] py-2 px-4 text-center text-xs font-black shadow-md flex items-center justify-between gap-2 border-b border-[#000181]/20">
+      <div className="relative z-50 w-full bg-[#C7F000] text-[#0C0D10] py-2 px-4 text-center text-xs font-black shadow-md flex items-center justify-between gap-2 border-b border-[#3155FF]/20">
         <div className="flex-1 flex items-center justify-center gap-2">
-          <Wifi className="w-4 h-4 text-[#000181] shrink-0" />
+          <Wifi className="w-4 h-4 text-[#0C0D10] shrink-0" />
           <span>ĐÃ KẾT NỐI LẠI — Dữ liệu đã được đồng bộ trực tuyến.</span>
         </div>
         <button
           type="button"
           onClick={() => setIsDismissed(true)}
-          className="text-[#000181]/70 hover:text-[#000181] p-1 rounded-lg hover:bg-black/5 transition cursor-pointer shrink-0"
+          className="text-[#0C0D10]/70 hover:text-[#0C0D10] p-1 rounded-lg hover:bg-black/5 transition cursor-pointer shrink-0"
           title="Đóng thông báo"
         >
           <X className="w-4 h-4" />

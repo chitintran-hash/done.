@@ -23,7 +23,7 @@ export const InfoCard: React.FC<InfoCardProps> = ({
     white: 'bg-white border-light-border text-neutral-text hover:border-blue-300 shadow-sm',
     warm: 'bg-amber-50/70 border-amber-200/80 text-neutral-text hover:border-amber-300 shadow-sm',
     accent: 'bg-blue-50/70 border-blue-200 text-neutral-text hover:border-blue-300 shadow-sm',
-    blue: 'bg-[#EFFBFF]/60 border-indigo-200 text-neutral-text hover:border-indigo-300 shadow-sm',
+    blue: 'bg-[#EEF1FF]/60 border-indigo-200 text-neutral-text hover:border-indigo-300 shadow-sm',
   };
 
   return (

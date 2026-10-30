@@ -195,7 +195,7 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
               onClick={onOpenBusinessModel}
               className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition flex items-center space-x-1.5"
             >
-              <HelpCircle className="w-4 h-4 text-[#006EE9]" />
+              <HelpCircle className="w-4 h-4 text-[#3155FF]" />
               <span>Mô hình phí</span>
             </button>
           )}
@@ -213,14 +213,14 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
       </div>
 
       {/* Requirement 27: Financial Help Tooltip Banner */}
-      <div className="bg-[#EFFBFF]/80 border border-indigo-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <div className="bg-[#EEF1FF]/80 border border-indigo-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-start space-x-2.5">
-          <HelpCircle className="w-4 h-4 text-[#006EE9] shrink-0 mt-0.5" />
+          <HelpCircle className="w-4 h-4 text-[#3155FF] shrink-0 mt-0.5" />
           <div className="text-indigo-950">
             <strong>Cơ chế trung gian FlashGroup:</strong> FlashGroup không mua lại hàng từ Supplier. Supplier vẫn sở hữu và fulfil sản phẩm. FlashGroup thu phí nền tảng trên giao dịch thành công (không thu phí trên cước vận chuyển).
           </div>
         </div>
-        <span className="text-[11px] font-bold text-[#000181] shrink-0 bg-white px-2.5 py-1 rounded-lg border border-indigo-200">
+        <span className="text-[11px] font-bold text-[#0C0D10] shrink-0 bg-white px-2.5 py-1 rounded-lg border border-indigo-200">
           Mở khóa rút khi: PICKED_UP
         </span>
       </div>
@@ -236,10 +236,10 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-[11px] text-[#006EE9] font-bold uppercase flex items-center gap-1">
+          <span className="text-[11px] text-[#3155FF] font-bold uppercase flex items-center gap-1">
             <Percent className="w-3 h-3" /> Platform Fees
           </span>
-          <div className="text-lg sm:text-xl font-black text-[#006EE9] mt-1">
+          <div className="text-lg sm:text-xl font-black text-[#3155FF] mt-1">
             -{formatVND(metrics.platformFees)}
           </div>
           <span className="text-[10px] text-slate-400 mt-1 block">
@@ -248,8 +248,8 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-[11px] text-[#000181] font-bold uppercase">Net Earnings</span>
-          <div className="text-lg sm:text-xl font-black text-[#000181] mt-1">
+          <span className="text-[11px] text-[#0C0D10] font-bold uppercase">Net Earnings</span>
+          <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">
             {formatVND(metrics.netEarnings)}
           </div>
           <span className="text-[10px] text-slate-400 mt-1 block">Tổng doanh thu ròng</span>
@@ -267,14 +267,14 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
           </span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border-2 border-[#D0FFA4] bg-[#F4FFE8]/40 shadow-sm">
+        <div className="bg-white p-5 rounded-2xl border-2 border-[#C7F000] bg-[#F5FBD9]/40 shadow-sm">
           <span className="text-[11px] text-emerald-800 font-black uppercase flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#000181]" /> Available Balance
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#0C0D10]" /> Available Balance
           </span>
-          <div className="text-lg sm:text-xl font-black text-[#000181] mt-1">
+          <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">
             {formatVND(metrics.availableBalance)}
           </div>
-          <span className="text-[10px] text-[#000181] font-semibold mt-1 block">
+          <span className="text-[10px] text-[#0C0D10] font-semibold mt-1 block">
             {metrics.availableOrders.length} đơn picked_up sẵn sàng rút
           </span>
         </div>
@@ -367,12 +367,12 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
                       <td className="py-3.5 px-4 font-bold text-slate-800">{formatVND(ord.totalAmount)}</td>
                       <td className="py-3.5 px-4 font-bold text-slate-900">{formatVND(ord.productSubtotal)}</td>
                       <td className="py-3.5 px-4 text-slate-500">{formatVND(ord.shippingFee)}</td>
-                      <td className="py-3.5 px-4 font-semibold text-[#006EE9]">
+                      <td className="py-3.5 px-4 font-semibold text-[#3155FF]">
                         {snap.isReversed
                           ? '0đ (Reversed)'
                           : `-${formatVND(snap.effectiveCommission)} (${Math.round(snap.commissionRate * 100)}%)`}
                       </td>
-                      <td className="py-3.5 px-4 font-black text-[#000181]">
+                      <td className="py-3.5 px-4 font-black text-[#0C0D10]">
                         {snap.isReversed ? (
                           <span className="line-through text-slate-400">{formatVND(snap.rawNet)}</span>
                         ) : (
@@ -381,7 +381,7 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         {earningStatus === 'available' && (
-                          <span className="bg-[#D0FFA4]/40 text-emerald-800 border border-[#D0FFA4] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">
+                          <span className="bg-[#F5FBD9] text-emerald-800 border border-[#C7F000] text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase">
                             AVAILABLE (Khả dụng)
                           </span>
                         )}
@@ -454,7 +454,7 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
                       {po.periodStart ? new Date(po.periodStart).toLocaleDateString('vi-VN') : '—'} →{' '}
                       {po.periodEnd ? new Date(po.periodEnd).toLocaleDateString('vi-VN') : '—'}
                     </td>
-                    <td className="py-3.5 px-4 font-black text-[#000181] text-sm">{formatVND(po.amount)}</td>
+                    <td className="py-3.5 px-4 font-black text-[#0C0D10] text-sm">{formatVND(po.amount)}</td>
                     <td className="py-3.5 px-4 text-slate-500">
                       {new Date(po.requestedAt).toLocaleString('vi-VN')}
                     </td>
@@ -464,7 +464,7 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
                           po.status === 'paid'
                             ? 'bg-teal-100 text-teal-800 border-teal-300'
                             : po.status === 'approved'
-                            ? 'bg-[#D0FFA4]/40 text-emerald-800 border-[#D0FFA4]'
+                            ? 'bg-[#F5FBD9] text-emerald-800 border-[#C7F000]'
                             : po.status === 'rejected'
                             ? 'bg-rose-100 text-rose-800 border-rose-300'
                             : 'bg-amber-100 text-amber-800 border-amber-300'
@@ -518,7 +518,7 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
               </div>
               <div className="pt-2.5 border-t border-slate-200 flex justify-between items-baseline">
                 <span className="font-black text-slate-900 text-sm">Số tiền đề nghị rút (Requested payout):</span>
-                <span className="text-xl font-black text-[#000181]">{formatVND(metrics.availableBalance)}</span>
+                <span className="text-xl font-black text-[#0C0D10]">{formatVND(metrics.availableBalance)}</span>
               </div>
             </div>
 

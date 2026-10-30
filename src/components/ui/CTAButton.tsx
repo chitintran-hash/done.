@@ -25,19 +25,19 @@ export const CTAButton: React.FC<CTAButtonProps> = ({
   };
 
   const variantStyles = {
-    // Primary CTA: Blue Raspberry #006EE9 -> Night Skies #000181
+    // Primary CTA: Cobalt #3155FF -> Hover #2444DC, Active #1C35B8
     primary:
-      'bg-[#006EE9] hover:bg-[#000181] text-white shadow-md shadow-[#006EE9]/25 active:scale-98 border border-transparent',
-    // Hero CTA: Powdered Lime #D0FFA4 -> Sunny Skies #83E7FF, text #000181
+      'bg-[#3155FF] hover:bg-[#2444DC] active:bg-[#1C35B8] text-white shadow-md shadow-[#3155FF]/20 active:scale-98 border border-transparent',
+    // Hero / Deal Highlight: Lime #C7F000 -> Hover #B6DC00, text #0C0D10
     hero:
-      'bg-[#D0FFA4] hover:bg-[#83E7FF] text-[#000181] shadow-lg shadow-[#000181]/15 active:scale-98 border border-transparent font-black',
-    // Secondary: transparent, border 1.5px #000181, text #000181, hover #E8A0FF
+      'bg-[#C7F000] hover:bg-[#B6DC00] text-[#0C0D10] shadow-md shadow-[#C7F000]/25 active:scale-98 border border-transparent font-black',
+    // Secondary Button: white, border #3155FF, text #3155FF, hover bg #EEF1FF
     secondary:
-      'bg-transparent hover:bg-[#E8A0FF] text-[#000181] shadow-xs active:scale-98 border-[1.5px] border-[#000181]',
+      'bg-white hover:bg-[#EEF1FF] text-[#3155FF] shadow-xs active:scale-98 border-[1.5px] border-[#3155FF]',
     outline:
-      'bg-white hover:bg-[#EFFBFF] text-[#000181] border border-[#E6E6EE] hover:border-[#83E7FF] shadow-xs active:scale-98',
+      'bg-white hover:bg-[#EEF1FF] text-[#0C0D10] border border-[#E4E8F0] hover:border-[#3155FF] shadow-xs active:scale-98',
     ghost:
-      'bg-transparent hover:bg-[#EFFBFF] text-[#006EE9] hover:text-[#000181] border border-transparent',
+      'bg-transparent hover:bg-[#EEF1FF] text-[#3155FF] hover:text-[#2444DC] border border-transparent',
     danger:
       'bg-rose-600 hover:bg-rose-700 text-white shadow-md shadow-rose-500/20 border border-rose-600',
   };

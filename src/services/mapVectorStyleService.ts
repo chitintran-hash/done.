@@ -294,7 +294,7 @@ export async function buildFlashGroupVectorStyle(
       'symbol-placement': 'point',
     },
     paint: {
-      'text-color': '#000181', // Night Skies
+      'text-color': '#0C0D10', // Text Main
       'text-halo-color': '#ffffff',
       'text-halo-width': 1.5,
       'text-halo-blur': 0.5,

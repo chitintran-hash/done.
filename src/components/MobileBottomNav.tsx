@@ -64,7 +64,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   return (
     <nav
       aria-label="Mobile Navigation Bar"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t border-[#E6E6EE] px-2 py-1.5 shadow-lg safe-area-pb"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FFFFFF] border-t border-[#E4E8F0] px-2 py-1.5 shadow-lg safe-area-pb"
     >
       <div className="grid grid-cols-5 items-center max-w-md mx-auto">
         {navItems.map((item) => {
@@ -81,22 +81,22 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               >
                 <Icon
                   className={`w-5 h-5 transition-colors ${
-                    item.isActive ? 'text-[#006EE9] stroke-[2.5]' : 'text-[#77778A] stroke-2'
+                    item.isActive ? 'text-[#3155FF] stroke-[2.5]' : 'text-[#596273] stroke-2'
                   }`}
                 />
                 {item.isActive && (
-                  <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#D0FFA4] ring-2 ring-[#006EE9]" />
+                  <span className="absolute -top-1 w-1.5 h-1.5 rounded-full bg-[#C7F000] ring-2 ring-[#3155FF]" />
                 )}
               </div>
               <span
                 className={`text-[9px] font-black uppercase tracking-tight mt-0.5 transition-colors ${
-                  item.isActive ? 'text-[#006EE9]' : 'text-[#77778A]'
+                  item.isActive ? 'text-[#3155FF]' : 'text-[#596273]'
                 }`}
               >
                 {item.label}
               </span>
               {item.isActive && (
-                <span className="w-4 h-0.5 rounded-full bg-[#D0FFA4] mt-0.5" />
+                <span className="w-4 h-0.5 rounded-full bg-[#C7F000] mt-0.5" />
               )}
             </button>
           );

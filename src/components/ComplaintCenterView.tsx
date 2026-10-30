@@ -60,11 +60,11 @@ const STATUS_BADGE: Record<ComplaintStatus, { label: string; cls: string }> = {
   },
   investigating: {
     label: 'Đang xác minh (investigating)',
-    cls: 'bg-[#FAF0FF] text-indigo-800 border-indigo-300',
+    cls: 'bg-[#F3EEFF] text-indigo-800 border-indigo-300',
   },
   awaiting_buyer: {
     label: 'Chờ Người mua phản hồi (awaiting_buyer)',
-    cls: 'bg-[#FAF0FF] text-purple-800 border-purple-300',
+    cls: 'bg-[#F3EEFF] text-purple-800 border-purple-300',
   },
   awaiting_supplier: {
     label: 'Chờ Nhà cung cấp giải trình (awaiting_supplier)',
@@ -72,7 +72,7 @@ const STATUS_BADGE: Record<ComplaintStatus, { label: string; cls: string }> = {
   },
   resolved: {
     label: 'Đã giải quyết (resolved)',
-    cls: 'bg-[#D0FFA4]/40 text-emerald-800 border-[#D0FFA4]',
+    cls: 'bg-[#F5FBD9] text-emerald-800 border-[#C7F000]',
   },
   rejected: {
     label: 'Từ chối (rejected)',
@@ -204,7 +204,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
         {currentUser.role === 'buyer' && (
           <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4 self-start">
             <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-[#000181]" />
+              <FileText className="w-5 h-5 text-[#0C0D10]" />
               <span>Gửi hồ sơ khiếu nại mới</span>
             </h3>
 
@@ -279,7 +279,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
               <div className="bg-slate-50 rounded-2xl p-3.5 border border-slate-200 space-y-2.5">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-800 flex items-center gap-1.5">
-                    <Paperclip className="w-3.5 h-3.5 text-[#000181]" />
+                    <Paperclip className="w-3.5 h-3.5 text-[#0C0D10]" />
                     <span>Đính kèm bằng chứng (Hình ảnh / Tài liệu)</span>
                   </span>
                   <span className="text-[10px] text-slate-500 flex items-center gap-1">
@@ -337,7 +337,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-[#006EE9] hover:bg-[#000181] text-white text-white font-bold text-xs shadow-md transition"
+                className="w-full py-3 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white text-white font-bold text-xs shadow-md transition"
               >
                 Gửi khiếu nại & Nhận xác nhận SLA 3 ngày làm việc
               </button>
@@ -354,7 +354,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <MessageSquare className="w-5 h-5 text-[#006EE9]" />
+                <MessageSquare className="w-5 h-5 text-[#3155FF]" />
                 <span>Lịch sử Khiếu nại & Giải quyết tranh chấp ({visibleComplaints.length})</span>
               </h3>
               <p className="text-xs text-slate-500">
@@ -464,7 +464,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
                         </span>
                       </div>
                       {activeComplaint.acknowledgedAt && (
-                        <div className="sm:col-span-2 text-[#000181] font-semibold flex items-center gap-1">
+                        <div className="sm:col-span-2 text-[#0C0D10] font-semibold flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           Đã xác nhận tiếp nhận lúc:{' '}
                           {new Date(activeComplaint.acknowledgedAt).toLocaleString('vi-VN')}
@@ -480,7 +480,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
                       {activeComplaint.evidenceMetadata.length > 0 && (
                         <div className="pt-2 border-t border-slate-100 space-y-1">
                           <span className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-1">
-                            <Lock className="w-3 h-3 text-[#000181]" /> Bằng chứng đính kèm (Chỉ hiển thị nội bộ cho các bên liên quan):
+                            <Lock className="w-3 h-3 text-[#0C0D10]" /> Bằng chứng đính kèm (Chỉ hiển thị nội bộ cho các bên liên quan):
                           </span>
                           {activeComplaint.evidenceMetadata.map((ev) => (
                             <div
@@ -494,7 +494,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
                       )}
 
                       {activeComplaint.resolution && (
-                        <div className="p-2.5 rounded-xl bg-[#F4FFE8] border border-[#D0FFA4] text-emerald-900">
+                        <div className="p-2.5 rounded-xl bg-[#F5FBD9] border border-[#C7F000] text-emerald-900">
                           <strong>Kết quả giải quyết (Resolution):</strong> {activeComplaint.resolution}
                         </div>
                       )}
@@ -510,7 +510,7 @@ export const ComplaintCenterView: React.FC<ComplaintCenterViewProps> = ({
                           key={m.id}
                           className={`p-3 rounded-xl border text-xs ${
                             m.senderRole === 'admin'
-                              ? 'bg-[#EFFBFF]/80 border-indigo-200 text-indigo-950'
+                              ? 'bg-[#EEF1FF]/80 border-indigo-200 text-indigo-950'
                               : m.senderRole === 'supplier'
                               ? 'bg-amber-50/80 border-amber-200 text-amber-950'
                               : 'bg-white border-slate-200 text-slate-800'

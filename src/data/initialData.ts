@@ -37,6 +37,17 @@ import { calculateWorkingDaysDeadline } from '../utils/pricing';
 export function createInitialUsers(): User[] {
   return [
     {
+      id: 'admin-tranchitin',
+      name: 'Trần Chí Tín (Admin)',
+      email: 'tranchitin2006@gmail.com',
+      password: '123456',
+      role: 'admin',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+      phone: '0909123456',
+      status: 'active',
+      createdAt: new Date(Date.now() - 100 * 86400000).toISOString(),
+    },
+    {
       id: 'buyer-demo',
       name: 'Nguyễn Minh Anh',
       email: 'buyer@flashgroup.demo',

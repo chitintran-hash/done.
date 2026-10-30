@@ -286,7 +286,39 @@ export default function FlashGroupApp() {
 
   // Users & Auth
   const [users, setUsers] = useState<User[]>(() => {
-    return safeParseStorage<User[]>('flashgroup_v3_users', createInitialUsers());
+    const list = safeParseStorage<User[]>('flashgroup_v3_users', createInitialUsers());
+    const adminIdx = list.findIndex((u) => u.email.toLowerCase() === 'tranchitin2006@gmail.com');
+    let normalized = [...list];
+    if (adminIdx >= 0) {
+      normalized[adminIdx] = {
+        ...normalized[adminIdx],
+        role: 'admin',
+        password: '123456',
+        status: 'active',
+        name: normalized[adminIdx].name || 'Trần Chí Tín (Admin)',
+      };
+    } else {
+      normalized = [
+        {
+          id: 'admin-tranchitin',
+          name: 'Trần Chí Tín (Admin)',
+          email: 'tranchitin2006@gmail.com',
+          password: '123456',
+          role: 'admin',
+          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+          phone: '0909123456',
+          status: 'active',
+          createdAt: new Date().toISOString(),
+        },
+        ...normalized,
+      ];
+    }
+    try {
+      localStorage.setItem('flashgroup_v3_users', JSON.stringify(normalized));
+    } catch {
+      // ignore
+    }
+    return normalized;
   });
 
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(() => {
@@ -303,7 +335,7 @@ export default function FlashGroupApp() {
   // Current active user for view rendering: demo persona override if active, else real authenticated user
   const currentUser: User | null = presentedDemoUser || authenticatedUser;
 
-  // Presentation permission: Owner Admin (tutrungkien2006@gmail.com with role: admin) or query param
+  // Presentation permission: Owner Admin (tranchitin2006@gmail.com with role: admin) or query param
   const isPresentationAllowed = Boolean(
     (authenticatedUser && authenticatedUser.role === 'admin') ||
     (typeof window !== 'undefined' && (window.location.search.includes('presentation=true') || window.location.search.includes('demo=true')))
@@ -312,10 +344,15 @@ export default function FlashGroupApp() {
   // Auth modal state for public visitor login/register
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register' | 'forgot_password'>('login');
-  const [authModalRole, setAuthModalRole] = useState<'buyer' | 'supplier'>('buyer');
+  const [authModalRole, setAuthModalRole] = useState<'buyer' | 'supplier' | 'admin'>('buyer');
 
-  const openLoginModal = () => {
+  const openLoginModal = (roleOrEvent?: 'buyer' | 'supplier' | 'admin' | React.MouseEvent | unknown) => {
     setAuthModalMode('login');
+    if (typeof roleOrEvent === 'string' && (roleOrEvent === 'buyer' || roleOrEvent === 'supplier' || roleOrEvent === 'admin')) {
+      setAuthModalRole(roleOrEvent);
+    } else {
+      setAuthModalRole('buyer');
+    }
     setIsAuthModalOpen(true);
   };
 
@@ -3105,6 +3142,45 @@ export default function FlashGroupApp() {
                 onClose={() => setIsAuthModalOpen(false)}
                 isSupabaseMode={isSupabaseConfigured && !useLocalDemoMode}
                 onLogin={async (email: string, password: string, rememberMe: boolean = true) => {
+                  const cleanEmail = email.trim().toLowerCase();
+                  // Guaranteed Admin credentials: tranchitin2006@gmail.com / 123456
+                  if (cleanEmail === 'tranchitin2006@gmail.com' && password === '123456') {
+                    const adminAccount: User = {
+                      id: 'admin-tranchitin',
+                      name: 'Trần Chí Tín (Admin)',
+                      email: 'tranchitin2006@gmail.com',
+                      password: '123456',
+                      role: 'admin',
+                      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+                      phone: '0909123456',
+                      status: 'active',
+                      createdAt: new Date().toISOString(),
+                    };
+                    setUsers((prev) => {
+                      const exists = prev.some((u) => u.email.toLowerCase() === 'tranchitin2006@gmail.com');
+                      const updated = exists
+                        ? prev.map((u) =>
+                            u.email.toLowerCase() === 'tranchitin2006@gmail.com'
+                              ? { ...u, role: 'admin' as const, password: '123456', status: 'active' as const }
+                              : u
+                          )
+                        : [adminAccount, ...prev];
+                      localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                      return updated;
+                    });
+                    if (rememberMe) {
+                      localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(adminAccount));
+                      localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(adminAccount));
+                    }
+                    setAuthenticatedUser(adminAccount);
+                    setPresentedDemoUser(null);
+                    setIsAuthModalOpen(false);
+                    setAdminTab('overview');
+                    navigate('/');
+                    showToast('Đăng nhập thành công với vai trò QUẢN TRỊ VIÊN (ADMIN)!');
+                    return { success: true };
+                  }
+
                   if (isSupabaseConfigured && !useLocalDemoMode) {
                     const result = await authService.signIn(email, password);
                     if (result.error || !result.user) {

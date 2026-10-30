@@ -30,7 +30,7 @@ interface AuthProps {
   isSupabaseMode: boolean;
   onClose?: () => void;
   initialMode?: 'login' | 'register' | 'forgot_password';
-  initialRole?: 'buyer' | 'supplier';
+  initialRole?: 'buyer' | 'supplier' | 'admin';
 }
 
 export const AuthModalOrPage: React.FC<AuthProps> = ({
@@ -44,7 +44,12 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
   initialRole = 'buyer',
 }) => {
   const [authMode, setAuthMode] = useState<'login' | 'register' | 'forgot_password'>(initialMode);
-  const [registerRole, setRegisterRole] = useState<'buyer' | 'supplier'>(initialRole); // Strictly NO admin
+  const [registerRole, setRegisterRole] = useState<'buyer' | 'supplier'>(
+    initialRole === 'supplier' ? 'supplier' : 'buyer'
+  ); // Strictly NO admin in registration
+  const [loginRole, setLoginRole] = useState<'buyer' | 'supplier' | 'admin'>(
+    initialRole === 'admin' ? 'admin' : initialRole === 'supplier' ? 'supplier' : 'buyer'
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Show/Hide password toggles
@@ -350,13 +355,151 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
           {/* ================= MODE: LOGIN ================= */}
           {authMode === 'login' && (
             <div>
-              <div className="mb-4">
+              <div className="mb-3">
                 <h3 className="text-base font-black text-[#000181]">
                   Đăng nhập tài khoản
                 </h3>
                 <p className="text-xs text-[#53536A] mt-0.5">
-                  Nhập thông tin xác thực để tiếp tục trải nghiệm đầy đủ quyền lợi mua chung.
+                  Chọn vai trò tài khoản để đăng nhập vào đúng cổng chức năng.
                 </p>
+              </div>
+
+              {/* Role Selection for Login: Buyer, Supplier, Admin */}
+              <div className="mb-3.5">
+                <label className="block text-xs font-black text-[#000181] uppercase tracking-wider mb-2">
+                  Bạn muốn đăng nhập với vai trò nào?
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {/* Option 1: Buyer */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginRole('buyer');
+                      setLoginError(null);
+                    }}
+                    className={`p-2.5 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                      loginRole === 'buyer'
+                        ? 'border-[#006EE9] bg-[#EFFBFF] ring-2 ring-[#006EE9]/25 shadow-xs'
+                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        loginRole === 'buyer' ? 'bg-[#006EE9] text-white' : 'bg-[#E6E6EE] text-[#53536A]'
+                      }`}
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-black text-[#000181]">Người mua</div>
+                      <div className="text-[10px] text-[#53536A] font-medium">Buyer</div>
+                    </div>
+                  </button>
+
+                  {/* Option 2: Supplier */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginRole('supplier');
+                      setLoginError(null);
+                    }}
+                    className={`p-2.5 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                      loginRole === 'supplier'
+                        ? 'border-[#000181] bg-[#F4FFE8] ring-2 ring-[#000181]/20 shadow-xs'
+                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        loginRole === 'supplier' ? 'bg-[#000181] text-[#D0FFA4]' : 'bg-[#E6E6EE] text-[#53536A]'
+                      }`}
+                    >
+                      <Store className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-black text-[#000181]">Nhà cung cấp</div>
+                      <div className="text-[10px] text-[#53536A] font-medium">Supplier</div>
+                    </div>
+                  </button>
+
+                  {/* Option 3: Admin */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginRole('admin');
+                      setLoginError(null);
+                    }}
+                    className={`p-2.5 rounded-2xl border text-center transition cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                      loginRole === 'admin'
+                        ? 'border-[#000181] bg-[#000181] text-white ring-2 ring-[#000181]/30 shadow-xs'
+                        : 'border-[#E6E6EE] bg-[#FCFCF7] hover:bg-[#F6F7FB]'
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        loginRole === 'admin' ? 'bg-[#D0FFA4] text-[#000181]' : 'bg-[#E6E6EE] text-[#53536A]'
+                      }`}
+                    >
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div
+                        className={`text-xs font-black ${
+                          loginRole === 'admin' ? 'text-white' : 'text-[#000181]'
+                        }`}
+                      >
+                        Quản trị viên
+                      </div>
+                      <div
+                        className={`text-[10px] font-medium ${
+                          loginRole === 'admin' ? 'text-indigo-200' : 'text-[#53536A]'
+                        }`}
+                      >
+                        Admin
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* 1-Click Fast Fill for the selected role */}
+              <div className="mb-4 p-2.5 rounded-2xl bg-[#F6F7FB] border border-[#E6E6EE] flex items-center justify-between gap-2">
+                <div className="text-[11px] text-[#53536A] truncate">
+                  {loginRole === 'buyer' && (
+                    <span>
+                      Tài khoản mẫu: <strong className="text-[#000181]">buyer@flashgroup.demo</strong>
+                    </span>
+                  )}
+                  {loginRole === 'supplier' && (
+                    <span>
+                      Tài khoản mẫu: <strong className="text-[#000181]">supplier@flashgroup.demo</strong>
+                    </span>
+                  )}
+                  {loginRole === 'admin' && (
+                    <span>
+                      Admin: <strong className="text-[#000181]">tranchitin2006@gmail.com</strong>
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (loginRole === 'buyer') {
+                      setEmail('buyer@flashgroup.demo');
+                      setPassword('123456');
+                    } else if (loginRole === 'supplier') {
+                      setEmail('supplier@flashgroup.demo');
+                      setPassword('123456');
+                    } else {
+                      setEmail('tranchitin2006@gmail.com');
+                      setPassword('123456');
+                    }
+                    setLoginError(null);
+                  }}
+                  className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-[#006EE9] text-white hover:bg-[#000181] transition cursor-pointer shrink-0 active:scale-95 shadow-xs"
+                >
+                  Điền nhanh
+                </button>
               </div>
 
               {loginError && (
@@ -445,7 +588,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 px-4 bg-[#006EE9] hover:bg-[#000181] text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-[#006EE9]/20 transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className={`w-full py-3 px-4 font-black text-xs uppercase tracking-wider rounded-2xl shadow-md transition cursor-pointer active:scale-98 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed ${
+                    loginRole === 'admin'
+                      ? 'bg-[#000181] text-[#D0FFA4] hover:bg-indigo-950 shadow-[#000181]/25'
+                      : loginRole === 'supplier'
+                      ? 'bg-[#000181] text-white hover:bg-[#006EE9] shadow-[#000181]/20'
+                      : 'bg-[#006EE9] text-white hover:bg-[#000181] shadow-[#006EE9]/20'
+                  }`}
                 >
                   {isLoading ? (
                     <>
@@ -454,7 +603,13 @@ export const AuthModalOrPage: React.FC<AuthProps> = ({
                     </>
                   ) : (
                     <>
-                      <span>ĐĂNG NHẬP</span>
+                      <span>
+                        {loginRole === 'admin'
+                          ? 'ĐĂNG NHẬP QUẢN TRỊ VIÊN (ADMIN)'
+                          : loginRole === 'supplier'
+                          ? 'ĐĂNG NHẬP NHÀ CUNG CẤP'
+                          : 'ĐĂNG NHẬP NGƯỜI MUA'}
+                      </span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}

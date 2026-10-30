@@ -5,7 +5,7 @@
 // 1. User & Auth Models
 export type UserRole = 'buyer' | 'supplier' | 'admin';
 
-export type UserStatus = 'active' | 'suspended';
+export type UserStatus = 'active' | 'suspended' | 'pending' | 'rejected';
 
 export type User = {
   id: string;

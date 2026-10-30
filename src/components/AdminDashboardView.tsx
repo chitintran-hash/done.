@@ -72,7 +72,10 @@ import {
   Box,
   Sparkles,
   Eye,
-  X
+  X,
+  Search,
+  Trash2,
+  Clock
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -115,6 +118,9 @@ interface AdminDashboardProps {
   onUpdateCommissionRate: (newRate: number) => void;
   onUpdatePayoutStatus: (payoutId: string, newStatus: PayoutStatus) => void;
   onToggleUserStatus: (userId: string) => void;
+  onApproveUser?: (userId: string) => void;
+  onRejectUser?: (userId: string) => void;
+  onDeleteUser?: (userId: string) => void;
   onUpdateSupplierVerification: (
     supplierId: string,
     status: Supplier['verificationStatus'],
@@ -200,6 +206,9 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
   onUpdateCommissionRate,
   onUpdatePayoutStatus,
   onToggleUserStatus,
+  onApproveUser,
+  onRejectUser,
+  onDeleteUser,
   onUpdateSupplierVerification,
   onToggleProductStatus,
   onForceCloseRoom,
@@ -239,6 +248,28 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
   const [forceCloseModalRoomId, setForceCloseModalRoomId] = useState<string | null>(null);
   const [rateDraftPct, setRateDraftPct] = useState<number>(Math.round(commissionRate * 100));
+
+  // User Management filters and search
+  const [userSearch, setUserSearch] = useState<string>('');
+  const [userStatusFilter, setUserStatusFilter] = useState<'all' | 'pending' | 'active' | 'suspended'>('all');
+  const [userRoleFilter, setUserRoleFilter] = useState<'all' | 'buyer' | 'supplier' | 'admin'>('all');
+
+  const pendingUsersCount = useMemo(() => users.filter((u) => u.status === 'pending').length, [users]);
+
+  const filteredUsers = useMemo(() => {
+    return users.filter((u) => {
+      if (userStatusFilter !== 'all' && u.status !== userStatusFilter) return false;
+      if (userRoleFilter !== 'all' && u.role !== userRoleFilter) return false;
+      if (userSearch.trim()) {
+        const q = userSearch.trim().toLowerCase();
+        const matchName = (u.name || '').toLowerCase().includes(q);
+        const matchEmail = (u.email || '').toLowerCase().includes(q);
+        const matchPhone = (u.phone || '').toLowerCase().includes(q);
+        if (!matchName && !matchEmail && !matchPhone) return false;
+      }
+      return true;
+    });
+  }, [users, userStatusFilter, userRoleFilter, userSearch]);
 
   // Phase 7: Admin Pickup Point CRUD & Batch Management state
   const [isPointModalOpen, setIsPointModalOpen] = useState<boolean>(false);
@@ -661,7 +692,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             { id: 'orders', label: 'Đơn hàng', count: orders.length },
             { id: 'rooms', label: 'Phòng gom', count: rooms.length },
             { id: 'products', label: 'Sản phẩm', count: products.length },
-            { id: 'users', label: 'Người dùng', count: users.length },
+            { id: 'users', label: 'Người dùng', count: pendingUsersCount > 0 ? pendingUsersCount : users.length, isPendingBadge: pendingUsersCount > 0 },
             { id: 'suppliers', label: 'Nhà cung cấp', count: suppliers.length },
             { id: 'refunds', label: 'Hoàn tiền', count: pendingRefunds },
             { id: 'vouchers', label: 'Vouchers', count: vouchers.length },
@@ -686,7 +717,9 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                 {typeof tab.count === 'number' && tab.count > 0 && (
                   <span
                     className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                      isActive
+                      (tab as any).isPendingBadge
+                        ? 'bg-amber-400 text-amber-950 font-black animate-pulse'
+                        : isActive
                         ? 'bg-[#C7F000] text-[#0C0D10]'
                         : 'bg-[#EEF1FF] text-[#3155FF] border border-[#3155FF]/30'
                     }`}
@@ -1155,64 +1188,302 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
       {/* VIEW: USERS */}
       {activeTab === 'users' && (
-        <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 text-sm">Danh sách Tài khoản người dùng ({users.length})</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold text-[10px]">
-                <tr>
-                  <th className="py-3 px-4">Tên</th>
-                  <th className="py-3 px-4">Email</th>
-                  <th className="py-3 px-4">Vai trò</th>
-                  <th className="py-3 px-4">Ngày tạo</th>
-                  <th className="py-3 px-4">Trạng thái</th>
-                  <th className="py-3 px-4 text-right">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-50/80 transition">
-                    <td className="py-3.5 px-4 font-bold text-slate-900">{u.name}</td>
-                    <td className="py-3.5 px-4 text-slate-600">{u.email}</td>
-                    <td className="py-3.5 px-4">
-                      <span className="bg-slate-100 text-slate-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-                        {u.role}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-400">
-                      {new Date(u.createdAt).toLocaleDateString('vi-VN')}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                          u.status === 'active'
-                            ? 'bg-[#C7F000]/40 text-emerald-800'
-                            : 'bg-rose-100 text-rose-800'
-                        }`}
-                      >
-                        {u.status === 'active' ? 'Hoạt động' : 'Tạm khóa'}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      {u.role === 'buyer' && (
-                        <button
-                          onClick={() => onToggleUserStatus(u.id)}
-                          className={`px-3 py-1 rounded-lg text-xs font-bold transition border ${
-                            u.status === 'active'
-                              ? 'border-rose-200 text-rose-600 hover:bg-rose-50'
-                              : 'border-[#C7F000] text-[#0C0D10] hover:bg-[#F5FBD9]'
+        <div className="space-y-6">
+          {/* Pending Approval Callout Banner */}
+          {pendingUsersCount > 0 && (
+            <div className="bg-gradient-to-r from-amber-500/10 via-amber-400/15 to-yellow-500/10 border-2 border-amber-300 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3.5">
+                <div className="p-2.5 bg-amber-500 text-white rounded-2xl shadow-sm shrink-0 mt-0.5">
+                  <Clock className="w-5 h-5 animate-pulse" />
+                </div>
+                <div>
+                  <h4 className="font-extrabold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                    Có {pendingUsersCount} tài khoản mới đang chờ phê duyệt
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500 text-white uppercase tracking-wider">
+                      Cần xử lý
+                    </span>
+                  </h4>
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Bao gồm các đối tác Nhà cung cấp hoặc thành viên mới đăng ký cần được Quản trị viên kích hoạt để mở quyền giao dịch và mở bán.
+                  </p>
+                </div>
+              </div>
+              {onApproveUser && (
+                <button
+                  onClick={() => {
+                    users.filter((u) => u.status === 'pending').forEach((u) => onApproveUser(u.id));
+                  }}
+                  className="shrink-0 px-4 py-2.5 bg-[#3155FF] text-white hover:bg-[#2040DD] rounded-2xl text-xs font-bold transition shadow-sm flex items-center gap-2 active:scale-95"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  Duyệt tất cả ({pendingUsersCount})
+                </button>
+              )}
+            </div>
+          )}
+
+          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+            {/* Toolbar */}
+            <div className="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="font-black text-slate-900 text-base flex items-center gap-2">
+                  <Users className="w-5 h-5 text-[#3155FF]" />
+                  Danh sách Tài khoản người dùng ({users.length})
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Kiểm soát danh tính, phê duyệt hồ sơ đối tác và quản lý quyền hoạt động.
+                </p>
+              </div>
+
+              {/* Search & Filters */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={userSearch}
+                    onChange={(e) => setUserSearch(e.target.value)}
+                    placeholder="Tìm tên, email, SĐT..."
+                    className="pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#3155FF] w-44 sm:w-48 transition"
+                  />
+                  {userSearch && (
+                    <button
+                      onClick={() => setUserSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Role filter */}
+                <select
+                  value={userRoleFilter}
+                  onChange={(e) => setUserRoleFilter(e.target.value as any)}
+                  className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 font-medium focus:outline-none focus:border-[#3155FF]"
+                >
+                  <option value="all">Tất cả vai trò</option>
+                  <option value="buyer">Người mua (Buyer)</option>
+                  <option value="supplier">Nhà cung cấp (Supplier)</option>
+                  <option value="admin">Quản trị viên (Admin)</option>
+                </select>
+
+                {/* Status filter tabs */}
+                <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-xs font-bold">
+                  <button
+                    onClick={() => setUserStatusFilter('all')}
+                    className={`px-3 py-1 rounded-lg transition ${
+                      userStatusFilter === 'all'
+                        ? 'bg-white text-slate-900 shadow-xs'
+                        : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    Tất cả ({users.length})
+                  </button>
+                  <button
+                    onClick={() => setUserStatusFilter('pending')}
+                    className={`px-3 py-1 rounded-lg transition flex items-center gap-1.5 ${
+                      userStatusFilter === 'pending'
+                        ? 'bg-amber-500 text-white shadow-xs'
+                        : 'text-amber-700 hover:text-amber-800'
+                    }`}
+                  >
+                    Chờ duyệt ({pendingUsersCount})
+                  </button>
+                  <button
+                    onClick={() => setUserStatusFilter('active')}
+                    className={`px-3 py-1 rounded-lg transition ${
+                      userStatusFilter === 'active'
+                        ? 'bg-white text-slate-900 shadow-xs'
+                        : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    Hoạt động ({users.filter((u) => u.status === 'active').length})
+                  </button>
+                  <button
+                    onClick={() => setUserStatusFilter('suspended')}
+                    className={`px-3 py-1 rounded-lg transition ${
+                      userStatusFilter === 'suspended'
+                        ? 'bg-white text-slate-900 shadow-xs'
+                        : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    Tạm khóa ({users.filter((u) => u.status === 'suspended').length})
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold text-[10px]">
+                  <tr>
+                    <th className="py-3 px-4">Tài khoản & Tên</th>
+                    <th className="py-3 px-4">Email</th>
+                    <th className="py-3 px-4">Vai trò</th>
+                    <th className="py-3 px-4">Ngày tạo</th>
+                    <th className="py-3 px-4">Trạng thái</th>
+                    <th className="py-3 px-4 text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="py-12 text-center text-slate-400">
+                        <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                        Không tìm thấy tài khoản người dùng nào phù hợp với bộ lọc.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredUsers.map((u) => {
+                      const isOwnerAdmin =
+                        u.email.toLowerCase() === 'tranchitin2006@gmail.com' ||
+                        u.email.toLowerCase() === 'tutrungkien2006@gmail.com' ||
+                        u.email.toLowerCase() === 'admin@flashgroup.demo';
+
+                      return (
+                        <tr
+                          key={u.id}
+                          className={`hover:bg-slate-50/80 transition ${
+                            u.status === 'pending' ? 'bg-amber-50/50' : ''
                           }`}
                         >
-                          {u.status === 'active' ? 'Khóa tài khoản' : 'Mở khóa'}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-3">
+                              {u.avatar ? (
+                                <img
+                                  src={u.avatar}
+                                  alt={u.name}
+                                  className="w-8 h-8 rounded-full object-cover border border-slate-200 shrink-0"
+                                />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0 uppercase">
+                                  {u.name ? u.name.charAt(0) : 'U'}
+                                </div>
+                              )}
+                              <div>
+                                <div className="font-bold text-slate-900 flex items-center gap-1.5 flex-wrap">
+                                  <span>{u.name}</span>
+                                  {isOwnerAdmin && (
+                                    <span className="px-1.5 py-0.2 bg-blue-100 text-[#3155FF] text-[9px] font-black rounded-md">
+                                      ADMIN
+                                    </span>
+                                  )}
+                                </div>
+                                {u.phone && <div className="text-[10px] text-slate-400">{u.phone}</div>}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4 font-medium text-slate-600">{u.email}</td>
+                          <td className="py-3.5 px-4">
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase border ${
+                                u.role === 'admin'
+                                  ? 'bg-amber-50 text-amber-800 border-amber-200 font-black'
+                                  : u.role === 'supplier'
+                                  ? 'bg-purple-50 text-purple-700 border-purple-200'
+                                  : 'bg-blue-50 text-blue-700 border-blue-200'
+                              }`}
+                            >
+                              {u.role === 'admin' ? 'ADMIN' : u.role === 'supplier' ? 'SUPPLIER' : 'BUYER'}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-400">
+                            {new Date(u.createdAt).toLocaleDateString('vi-VN')}
+                          </td>
+                          <td className="py-3.5 px-4">
+                            {u.status === 'pending' && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-amber-100 text-amber-800 border border-amber-300">
+                                <Clock className="w-3 h-3 text-amber-600" />
+                                Chờ duyệt
+                              </span>
+                            )}
+                            {u.status === 'active' && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-[#C7F000]/40 text-emerald-800 border border-emerald-300">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-700" />
+                                Hoạt động
+                              </span>
+                            )}
+                            {u.status === 'suspended' && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-rose-100 text-rose-800 border border-rose-200">
+                                <Lock className="w-3 h-3 text-rose-600" />
+                                Tạm khóa
+                              </span>
+                            )}
+                            {u.status === 'rejected' && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-slate-100 text-slate-700 border border-slate-300">
+                                <X className="w-3 h-3 text-slate-500" />
+                                Từ chối
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            <div className="inline-flex items-center gap-2 justify-end">
+                              {/* Pending user actions */}
+                              {u.status === 'pending' && (
+                                <>
+                                  <button
+                                    onClick={() => (onApproveUser ? onApproveUser(u.id) : onToggleUserStatus(u.id))}
+                                    className="px-3 py-1.5 bg-[#3155FF] text-white hover:bg-[#2040DD] rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1 active:scale-95"
+                                  >
+                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                    Duyệt tài khoản
+                                  </button>
+                                  {onRejectUser && (
+                                    <button
+                                      onClick={() => onRejectUser(u.id)}
+                                      className="px-2.5 py-1.5 border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-xl text-xs font-bold transition"
+                                    >
+                                      Từ chối
+                                    </button>
+                                  )}
+                                </>
+                              )}
+
+                              {/* Active user action */}
+                              {u.status === 'active' && !isOwnerAdmin && (
+                                <button
+                                  onClick={() => onToggleUserStatus(u.id)}
+                                  className="px-3 py-1 rounded-lg text-xs font-bold transition border border-rose-200 text-rose-600 hover:bg-rose-50"
+                                >
+                                  Khóa tài khoản
+                                </button>
+                              )}
+
+                              {/* Suspended or Rejected user action */}
+                              {(u.status === 'suspended' || u.status === 'rejected') && !isOwnerAdmin && (
+                                <button
+                                  onClick={() => onToggleUserStatus(u.id)}
+                                  className="px-3 py-1 rounded-lg text-xs font-bold transition border border-emerald-300 text-emerald-800 hover:bg-emerald-50"
+                                >
+                                  Mở khóa
+                                </button>
+                              )}
+
+                              {/* Delete button (except for owner admins) */}
+                              {!isOwnerAdmin && onDeleteUser && (
+                                <button
+                                  onClick={() => {
+                                    if (window.confirm(`Bạn có chắc chắn muốn xóa tài khoản "${u.name}" (${u.email})?`)) {
+                                      onDeleteUser(u.id);
+                                    }
+                                  }}
+                                  title="Xóa tài khoản"
+                                  className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}

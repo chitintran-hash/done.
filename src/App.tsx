@@ -44,6 +44,7 @@ import {
 
 import {
   User,
+  UserStatus,
   Supplier,
   SupplierVerificationDocument,
   Product,
@@ -287,32 +288,56 @@ export default function FlashGroupApp() {
   // Users & Auth
   const [users, setUsers] = useState<User[]>(() => {
     const list = safeParseStorage<User[]>('flashgroup_v3_users', createInitialUsers());
-    const adminIdx = list.findIndex((u) => u.email.toLowerCase() === 'tranchitin2006@gmail.com');
     let normalized = [...list];
-    if (adminIdx >= 0) {
-      normalized[adminIdx] = {
-        ...normalized[adminIdx],
+
+    // 1. Ensure tranchitin2006@gmail.com is present & admin
+    const tinIdx = normalized.findIndex((u) => u.email.toLowerCase() === 'tranchitin2006@gmail.com');
+    if (tinIdx >= 0) {
+      normalized[tinIdx] = {
+        ...normalized[tinIdx],
         role: 'admin',
         password: '123456',
         status: 'active',
-        name: normalized[adminIdx].name || 'Trần Chí Tín (Admin)',
+        name: normalized[tinIdx].name || 'Trần Chí Tín (Admin)',
       };
     } else {
-      normalized = [
-        {
-          id: 'admin-tranchitin',
-          name: 'Trần Chí Tín (Admin)',
-          email: 'tranchitin2006@gmail.com',
-          password: '123456',
-          role: 'admin',
-          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
-          phone: '0909123456',
-          status: 'active',
-          createdAt: new Date().toISOString(),
-        },
-        ...normalized,
-      ];
+      normalized.unshift({
+        id: 'admin-tranchitin',
+        name: 'Trần Chí Tín (Admin)',
+        email: 'tranchitin2006@gmail.com',
+        password: '123456',
+        role: 'admin',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+        phone: '0909123456',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+      });
     }
+
+    // 2. Ensure tutrungkien2006@gmail.com is present & admin
+    const kienIdx = normalized.findIndex((u) => u.email.toLowerCase() === 'tutrungkien2006@gmail.com');
+    if (kienIdx >= 0) {
+      normalized[kienIdx] = {
+        ...normalized[kienIdx],
+        role: 'admin',
+        password: '123456',
+        status: 'active',
+        name: normalized[kienIdx].name || 'Từ Trung Kiên (Admin)',
+      };
+    } else {
+      normalized.unshift({
+        id: 'admin-tutrungkien',
+        name: 'Từ Trung Kiên (Admin)',
+        email: 'tutrungkien2006@gmail.com',
+        password: '123456',
+        role: 'admin',
+        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80',
+        phone: '0906025608',
+        status: 'active',
+        createdAt: new Date().toISOString(),
+      });
+    }
+
     try {
       localStorage.setItem('flashgroup_v3_users', JSON.stringify(normalized));
     } catch {
@@ -596,6 +621,12 @@ export default function FlashGroupApp() {
       localStorage.removeItem('flashgroup_v3_current_user');
     }
   }, [authenticatedUser]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('flashgroup_v3_users', JSON.stringify(users));
+    } catch {}
+  }, [users]);
 
   useEffect(() => {
     localStorage.setItem('flashgroup_v3_suppliers', JSON.stringify(suppliers));
@@ -3143,29 +3174,38 @@ export default function FlashGroupApp() {
                 isSupabaseMode={isSupabaseConfigured && !useLocalDemoMode}
                 onLogin={async (email: string, password: string, rememberMe: boolean = true) => {
                   const cleanEmail = email.trim().toLowerCase();
-                  // Guaranteed Admin credentials: tranchitin2006@gmail.com / 123456
-                  if (cleanEmail === 'tranchitin2006@gmail.com' && password === '123456') {
+                  // Guaranteed Admin credentials: tranchitin2006@gmail.com or tutrungkien2006@gmail.com / 123456
+                  const isGuaranteedAdmin =
+                    (cleanEmail === 'tranchitin2006@gmail.com' || cleanEmail === 'tutrungkien2006@gmail.com') &&
+                    password === '123456';
+
+                  if (isGuaranteedAdmin) {
+                    const isTin = cleanEmail === 'tranchitin2006@gmail.com';
                     const adminAccount: User = {
-                      id: 'admin-tranchitin',
-                      name: 'Trần Chí Tín (Admin)',
-                      email: 'tranchitin2006@gmail.com',
+                      id: isTin ? 'admin-tranchitin' : 'admin-tutrungkien',
+                      name: isTin ? 'Trần Chí Tín (Admin)' : 'Từ Trung Kiên (Admin)',
+                      email: cleanEmail,
                       password: '123456',
                       role: 'admin',
-                      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
-                      phone: '0909123456',
+                      avatar: isTin
+                        ? 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80'
+                        : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80',
+                      phone: isTin ? '0909123456' : '0906025608',
                       status: 'active',
                       createdAt: new Date().toISOString(),
                     };
                     setUsers((prev) => {
-                      const exists = prev.some((u) => u.email.toLowerCase() === 'tranchitin2006@gmail.com');
+                      const exists = prev.some((u) => u.email.toLowerCase() === cleanEmail);
                       const updated = exists
                         ? prev.map((u) =>
-                            u.email.toLowerCase() === 'tranchitin2006@gmail.com'
-                              ? { ...u, role: 'admin' as const, password: '123456', status: 'active' as const }
+                            u.email.toLowerCase() === cleanEmail
+                              ? { ...u, role: 'admin' as const, password: '123456', status: 'active' as const, name: adminAccount.name }
                               : u
                           )
                         : [adminAccount, ...prev];
-                      localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                      try {
+                        localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                      } catch {}
                       return updated;
                     });
                     if (rememberMe) {
@@ -3177,7 +3217,7 @@ export default function FlashGroupApp() {
                     setIsAuthModalOpen(false);
                     setAdminTab('overview');
                     navigate('/');
-                    showToast('Đăng nhập thành công với vai trò QUẢN TRỊ VIÊN (ADMIN)!');
+                    showToast(`Đăng nhập thành công với vai trò QUẢN TRỊ VIÊN (ADMIN)! Chào mừng ${adminAccount.name}.`);
                     return { success: true };
                   }
 
@@ -3246,15 +3286,53 @@ export default function FlashGroupApp() {
                     if (result.error || !result.user) {
                       return { success: false, error: result.error || 'Đăng ký không thành công.' };
                     }
-                    localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(result.user));
-                    localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(result.user));
-                    setAuthenticatedUser(result.user);
+                    const userWithStatus: User = {
+                      ...result.user,
+                      status: targetRole === 'supplier' ? 'pending' : 'active',
+                    };
+                    setUsers((prev) => {
+                      const exists = prev.some((u) => u.email.toLowerCase() === userWithStatus.email.toLowerCase());
+                      const updated = exists
+                        ? prev.map((u) => (u.email.toLowerCase() === userWithStatus.email.toLowerCase() ? userWithStatus : u))
+                        : [userWithStatus, ...prev];
+                      try {
+                        localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                      } catch {}
+                      return updated;
+                    });
+                    if (targetRole === 'supplier') {
+                      const newSupplierRecord: Supplier = {
+                        id: `sup-${Date.now()}`,
+                        userId: userWithStatus.id,
+                        businessName: payload.businessName || payload.name,
+                        supplierType: (payload.businessType as any) || 'local_retailer',
+                        verificationStatus: 'pending',
+                        contactPhone: payload.phone,
+                        email: payload.email,
+                        businessAddress: payload.businessAddress,
+                        sourceDescription: payload.operatingRegion || 'Hộ kinh doanh / Nhà phân phối địa phương',
+                        rating: 5.0,
+                        totalReviews: 0,
+                        isDemo: false,
+                        createdAt: new Date().toISOString(),
+                      };
+                      setSuppliers((prev) => {
+                        const updated = [newSupplierRecord, ...prev];
+                        try {
+                          localStorage.setItem('flashgroup_v3_suppliers', JSON.stringify(updated));
+                        } catch {}
+                        return updated;
+                      });
+                    }
+                    localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(userWithStatus));
+                    localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(userWithStatus));
+                    setAuthenticatedUser(userWithStatus);
                     setPresentedDemoUser(null);
                     setIsAuthModalOpen(false);
                     if (result.user.role === 'supplier') {
                       setSupplierTab('dashboard');
                       navigate('/');
-                      showToast('Đăng ký tài khoản Nhà cung cấp thành công! Chào mừng bạn đến với FlashGroup.');
+                      showToast('Đăng ký tài khoản Nhà cung cấp thành công! Hồ sơ của bạn đang chờ Quản trị viên duyệt.');
                     } else {
                       setBuyerTab('discovery');
                       navigate('/marketplace');
@@ -3267,6 +3345,7 @@ export default function FlashGroupApp() {
                       return { success: false, error: 'Email này đã được sử dụng.' };
                     }
                     const newUserId = `${targetRole}-${Date.now()}`;
+                    const initialStatus: UserStatus = targetRole === 'supplier' ? 'pending' : 'active';
                     const newUser: User = {
                       id: newUserId,
                       name: payload.name,
@@ -3275,10 +3354,16 @@ export default function FlashGroupApp() {
                       role: targetRole,
                       phone: payload.phone,
                       preferredPickupPoint: payload.preferredPickupPoint,
-                      status: 'active' as const,
+                      status: initialStatus,
                       createdAt: new Date().toISOString(),
                     };
-                    setUsers((prev) => [...prev, newUser]);
+                    setUsers((prev) => {
+                      const updated = [newUser, ...prev];
+                      try {
+                        localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                      } catch {}
+                      return updated;
+                    });
 
                     if (targetRole === 'supplier') {
                       const newSupplierRecord: Supplier = {
@@ -3296,7 +3381,13 @@ export default function FlashGroupApp() {
                         isDemo: false,
                         createdAt: new Date().toISOString(),
                       };
-                      setSuppliers((prev) => [...prev, newSupplierRecord]);
+                      setSuppliers((prev) => {
+                        const updated = [newSupplierRecord, ...prev];
+                        try {
+                          localStorage.setItem('flashgroup_v3_suppliers', JSON.stringify(updated));
+                        } catch {}
+                        return updated;
+                      });
                       localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(newUser));
                       localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
                       setAuthenticatedUser(newUser);
@@ -3304,7 +3395,7 @@ export default function FlashGroupApp() {
                       setIsAuthModalOpen(false);
                       setSupplierTab('dashboard');
                       navigate('/');
-                      showToast('Đăng ký tài khoản Nhà cung cấp thành công! Vui lòng hoàn thiện hồ sơ xác minh để đăng bán.');
+                      showToast('Đăng ký tài khoản Nhà cung cấp thành công! Hồ sơ của bạn đang chờ Quản trị viên duyệt.');
                     } else {
                       localStorage.setItem('flashgroup_v3_auth_user', JSON.stringify(newUser));
                       localStorage.setItem('flashgroup_v3_current_user', JSON.stringify(newUser));
@@ -4743,14 +4834,100 @@ export default function FlashGroupApp() {
                 onUpdatePayoutStatus={handleUpdatePayoutStatus}
                 onOpenBusinessModel={() => setIsBusinessModelOpen(true)}
                 onToggleUserStatus={(uId) => {
-                  setUsers((prev) =>
-                    prev.map((u) => {
+                  setUsers((prev) => {
+                    const updated = prev.map((u) => {
                       if (u.id !== uId) return u;
-                      const nextStatus = u.status === 'active' ? 'suspended' : 'active';
-                      showToast(`Tài khoản ${u.name} đã được chuyển sang ${nextStatus.toUpperCase()}`);
+                      const nextStatus: UserStatus = u.status === 'active' ? 'suspended' : 'active';
+                      showToast(`Tài khoản ${u.name} đã được chuyển sang ${nextStatus === 'active' ? 'HOẠT ĐỘNG' : 'TẠM KHÓA'}`);
                       return { ...u, status: nextStatus };
-                    })
-                  );
+                    });
+                    try {
+                      localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                    } catch {}
+                    return updated;
+                  });
+                }}
+                onApproveUser={(uId) => {
+                  let targetUser: User | undefined;
+                  setUsers((prev) => {
+                    const updated = prev.map((u) => {
+                      if (u.id !== uId) return u;
+                      targetUser = u;
+                      return { ...u, status: 'active' as const };
+                    });
+                    try {
+                      localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                    } catch {}
+                    return updated;
+                  });
+
+                  setSuppliers((prev) => {
+                    const updated = prev.map((s) => {
+                      if (s.userId === uId || s.id === uId || (targetUser && s.email && s.email.toLowerCase() === targetUser.email.toLowerCase())) {
+                        return {
+                          ...s,
+                          verificationStatus: 'verified' as const,
+                          verifiedAt: new Date().toISOString(),
+                          verifiedBy: currentUser?.id || 'admin',
+                        };
+                      }
+                      return s;
+                    });
+                    try {
+                      localStorage.setItem('flashgroup_v3_suppliers', JSON.stringify(updated));
+                    } catch {}
+                    return updated;
+                  });
+
+                  if (targetUser) {
+                    pushNotification(
+                      uId,
+                      'system',
+                      'Tài khoản đã được Admin phê duyệt',
+                      `Chào mừng ${targetUser.name}! Tài khoản của bạn đã được Admin phê duyệt và kích hoạt đầy đủ quyền hạn trên FlashGroup.`,
+                      `approved-${uId}-${Date.now()}`
+                    );
+                    showToast(`Đã duyệt và kích hoạt thành công tài khoản: ${targetUser.name}`);
+                  }
+                }}
+                onRejectUser={(uId) => {
+                  let targetUser: User | undefined;
+                  setUsers((prev) => {
+                    const updated = prev.map((u) => {
+                      if (u.id !== uId) return u;
+                      targetUser = u;
+                      return { ...u, status: 'rejected' as const };
+                    });
+                    try {
+                      localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                    } catch {}
+                    return updated;
+                  });
+                  if (targetUser) {
+                    showToast(`Đã từ chối kích hoạt tài khoản: ${targetUser.name}`);
+                  }
+                }}
+                onDeleteUser={(uId) => {
+                  const target = users.find((u) => u.id === uId);
+                  if (target && target.role === 'admin') {
+                    showToast('Không thể xóa tài khoản Quản trị viên hệ thống.');
+                    return;
+                  }
+                  setUsers((prev) => {
+                    const updated = prev.filter((u) => u.id !== uId);
+                    try {
+                      localStorage.setItem('flashgroup_v3_users', JSON.stringify(updated));
+                    } catch {}
+                    return updated;
+                  });
+                  setSuppliers((prev) => {
+                    const updated = prev.filter((s) => s.userId !== uId && s.id !== uId);
+                    try {
+                      localStorage.setItem('flashgroup_v3_suppliers', JSON.stringify(updated));
+                    } catch {}
+                    return updated;
+                  });
+                  showToast(`Đã xóa tài khoản "${target?.name || ''}" khỏi hệ thống.`);
                 }}
                 onUpdateSupplierVerification={(suppId, newStatus, note) => {
                   const nowIso = new Date().toISOString();
@@ -4771,6 +4948,18 @@ export default function FlashGroupApp() {
                           `Trạng thái xác minh hiện tại: ${newStatus.toUpperCase()}. Huy hiệu "Đã xác minh" đã được kích hoạt.`,
                           `verified-${s.id}-${newStatus}`
                         );
+                        setUsers((uPrev) => {
+                          const uUpdated = uPrev.map((u) => {
+                            if (u.id === s.userId || (s.email && u.email.toLowerCase() === s.email.toLowerCase())) {
+                              return { ...u, status: 'active' as const };
+                            }
+                            return u;
+                          });
+                          try {
+                            localStorage.setItem('flashgroup_v3_users', JSON.stringify(uUpdated));
+                          } catch {}
+                          return uUpdated;
+                        });
                       } else if (newStatus === 'suspended') {
                         pushNotification(
                           s.userId,

@@ -48,6 +48,17 @@ export function createInitialUsers(): User[] {
       createdAt: new Date(Date.now() - 100 * 86400000).toISOString(),
     },
     {
+      id: 'admin-tutrungkien',
+      name: 'Từ Trung Kiên (Admin)',
+      email: 'tutrungkien2006@gmail.com',
+      password: '123456',
+      role: 'admin',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80',
+      phone: '0906025608',
+      status: 'active',
+      createdAt: new Date(Date.now() - 95 * 86400000).toISOString(),
+    },
+    {
       id: 'buyer-demo',
       name: 'Nguyễn Minh Anh',
       email: 'buyer@flashgroup.demo',
@@ -87,7 +98,7 @@ export function createInitialUsers(): User[] {
       password: '123456',
       role: 'supplier',
       phone: '0912345678',
-      status: 'active',
+      status: 'pending',
       createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
     },
   ];

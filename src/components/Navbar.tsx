@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* LEFT: LOGO (FLASH white + GROUP #C7F000 + Spark #C7F000) */}
           <div className="flex items-center space-x-3">
             <button
-              onClick={() => onNavigate(!currentUser || currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'overview')}
+              onClick={() => onNavigate(!currentUser || currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'discovery')}
               className="flex items-center space-x-3 text-left group shrink-0 cursor-pointer"
             >
               <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-[#3155FF] shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-200">
@@ -313,9 +313,31 @@ export const Navbar: React.FC<NavbarProps> = ({
               </>
             ) : (
               <>
+                {/* ADMIN HOMEPAGE & FLASHMAP SHORTCUTS */}
+                <button
+                  onClick={() => onNavigate('discovery')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+                    currentTab === 'discovery' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <span>TRANG CHỦ</span>
+                </button>
+
+                <button
+                  onClick={() => onNavigate('flashmap')}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+                    currentTab === 'flashmap' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>FLASHMAP</span>
+                </button>
+
+                <div className="h-4 w-[1px] bg-white/20 mx-1" />
+
                 <button
                   onClick={() => onNavigate('overview')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
                     currentTab === 'overview' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -323,7 +345,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('users')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
                     currentTab === 'users' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -331,7 +353,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('suppliers')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
                     currentTab === 'suppliers' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -339,7 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('finance')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
                     currentTab === 'finance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -347,7 +369,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('compliance')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
                     currentTab === 'compliance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -516,6 +538,41 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   {/* Main Profile Links */}
                   <div className="py-1">
+                    {currentUser.role === 'admin' && (
+                      <div className="p-2 border-b border-[#E4E8F0] bg-[#EEF1FF]/60 space-y-1 mb-1">
+                        <button
+                          onClick={() => {
+                            onNavigate('discovery');
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full px-3 py-2 rounded-xl text-left bg-white hover:bg-[#3155FF] hover:text-white flex items-center space-x-2 text-xs font-black text-[#3155FF] border border-[#3155FF]/20 transition cursor-pointer"
+                        >
+                          <Zap className="w-4 h-4 text-[#C7F000] fill-[#C7F000]" />
+                          <span>XEM TRANG CHỦ & PHÒNG GOM</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            onNavigate('flashmap');
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full px-3 py-2 rounded-xl text-left bg-white hover:bg-[#3155FF] hover:text-white flex items-center space-x-2 text-xs font-black text-[#3155FF] border border-[#3155FF]/20 transition cursor-pointer"
+                        >
+                          <MapPin className="w-4 h-4" />
+                          <span>XEM BẢN ĐỒ FLASHMAP</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            onNavigate('overview');
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full px-3 py-2 rounded-xl text-left hover:bg-white flex items-center space-x-2 text-xs font-black text-[#0C0D10] transition cursor-pointer"
+                        >
+                          <LayoutDashboard className="w-4 h-4 text-[#7B3FF2]" />
+                          <span>VỀ BẢNG QUẢN TRỊ ADMIN</span>
+                        </button>
+                      </div>
+                    )}
+
                     <button
                       onClick={() => {
                         onNavigate('profile');
@@ -790,6 +847,45 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   TRUNG TÂM QUYỀN RIÊNG TƯ
                 </button>
+
+                {currentUser?.role === 'admin' && (
+                  <div className="pt-2 border-t border-[#E4E8F0] space-y-1">
+                    <div className="text-[10px] font-black text-[#596273] px-3.5 py-1 uppercase">Bảng Quản Trị Hệ Thống</div>
+                    <button
+                      onClick={() => {
+                        onNavigate('overview');
+                        setIsMobileDrawerOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl transition ${
+                        currentTab === 'overview' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
+                      }`}
+                    >
+                      TỔNG QUAN QUẢN TRỊ
+                    </button>
+                    <button
+                      onClick={() => {
+                        onNavigate('users');
+                        setIsMobileDrawerOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl transition ${
+                        currentTab === 'users' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
+                      }`}
+                    >
+                      QUẢN LÝ NGƯỜI DÙNG
+                    </button>
+                    <button
+                      onClick={() => {
+                        onNavigate('suppliers');
+                        setIsMobileDrawerOpen(false);
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl transition ${
+                        currentTab === 'suppliers' ? 'bg-[#3155FF] text-white font-black' : 'hover:bg-[#EEF1FF]'
+                      }`}
+                    >
+                      DUYỆT NHÀ CUNG CẤP
+                    </button>
+                  </div>
+                )}
               </nav>
             </div>
 

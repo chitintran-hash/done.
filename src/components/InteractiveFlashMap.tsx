@@ -157,6 +157,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const activeMarkersRef = useRef<MaplibreMarker[]>([]);
+  const renderMarkersRef = useRef<() => void>(() => {});
 
   // Reference coordinates for distance calculations: [lat, lng]
   const referenceCoords = useMemo<[number, number]>(() => {
@@ -301,71 +302,65 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
   // ----------------------------------------------------
   // INITIALIZE MAPLIBRE GL JS WITH VECTOR BASEMAP & CUSTOM LABELS
   // ----------------------------------------------------
+  // ----------------------------------------------------
+  // INITIALIZE MAPLIBRE GL JS ONCE (ROBUST VECTOR/RASTER BASEMAP)
+  // ----------------------------------------------------
   useEffect(() => {
-    if (!mapContainerRef.current) return;
+    if (!mapContainerRef.current || mapInstanceRef.current) return;
 
     let isMounted = true;
     setIsLoadingVectorStyle(true);
     setVectorStyleError(null);
 
-    const initVectorBasemap = async () => {
+    const initMap = async () => {
       try {
-        console.log(`[FlashMap] Initializing vector basemap for preset "${activeStylePreset}"`);
-        const vectorStyle = await buildFlashGroupVectorStyle(activeStylePreset);
+        console.log(`[FlashMap] Initializing MapLibre instance with preset "${activeStylePreset}"`);
+        const initialStyle = await buildFlashGroupVectorStyle(activeStylePreset);
 
         if (!isMounted || !mapContainerRef.current) return;
 
-        // Keep current center & zoom if user previously panned/zoomed
-        const prevCenter = mapInstanceRef.current?.getCenter();
-        const prevZoom = mapInstanceRef.current?.getZoom();
-        const centerCoords: [number, number] = prevCenter
-          ? [prevCenter.lng, prevCenter.lat]
-          : [106.7009, 10.7769]; // Default TP. Hồ Chí Minh
-        const zoomLevel = prevZoom !== undefined ? prevZoom : 13.5;
-
-        if (mapInstanceRef.current) {
-          mapInstanceRef.current.remove();
-          mapInstanceRef.current = null;
-        }
-
         const map = new Map({
           container: mapContainerRef.current,
-          style: vectorStyle,
-          center: centerCoords,
-          zoom: zoomLevel,
+          style: initialStyle,
+          center: [106.7009, 10.7769], // Default TP. Hồ Chí Minh
+          zoom: 13.5,
           minZoom: 3,
-          maxZoom: 19,
+          maxZoom: 20,
           attributionControl: { compact: true },
         });
+
+        mapInstanceRef.current = map;
 
         let hasMarkedReady = false;
         const markMapReady = () => {
           if (hasMarkedReady || !isMounted) return;
           hasMarkedReady = true;
-          console.log('[FlashMap] Map is ready for display! Style preset:', activeStylePreset);
+          console.info('[FlashMap] Map is ready for display! Style preset:', activeStylePreset);
           setIsMapLoaded(true);
           setHasMapError(false);
           setIsLoadingVectorStyle(false);
           map.resize();
+          renderMarkersRef.current();
         };
 
         map.once('load', markMapReady);
         map.once('idle', markMapReady);
-        map.once('styledata', markMapReady);
-        map.once('render', () => {
-          markMapReady();
+        map.on('style.load', () => {
+          console.info('[FlashMap] Basemap style loaded successfully');
+          map.resize();
+          renderMarkersRef.current();
         });
 
-        // Fail-safe guard timeout: Never let the loading spinner hang for more than 2.5s
+        // Fail-safe guard timeout: Never let the loading spinner hang
         const loadGuardTimer = setTimeout(() => {
           if (!hasMarkedReady) {
             console.warn('[FlashMap] Map load timeout guard triggered, forcing display');
             markMapReady();
           }
-        }, 2500);
+        }, 2000);
 
         map.on('error', (e) => {
-          console.warn('[FlashMap] Vector map runtime event:', e);
+          console.error('[FlashMap] MapLibre runtime event:', e);
         });
 
         // Map Click for "CHỌN TRÊN BẢN ĐỒ"
@@ -378,8 +373,6 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
           setTemporaryPinConfirmed(false);
         });
 
-        mapInstanceRef.current = map;
-
         // Ensure resize on frame and timeouts
         requestAnimationFrame(() => map.resize());
         const t1 = setTimeout(() => map.resize(), 100);
@@ -390,7 +383,9 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         window.addEventListener('resize', handleResize);
 
         const observer = new ResizeObserver(() => map.resize());
-        observer.observe(mapContainerRef.current);
+        if (mapContainerRef.current) {
+          observer.observe(mapContainerRef.current);
+        }
 
         return () => {
           clearTimeout(loadGuardTimer);
@@ -403,7 +398,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
           mapInstanceRef.current = null;
         };
       } catch (err: any) {
-        console.error('[FlashMap] Failed to initialize vector map, trying fallback:', err);
+        console.error('[FlashMap] Failed to initialize map, trying fallback:', err);
         if (isMounted && mapContainerRef.current) {
           try {
             const fallbackStyle = getOsmRasterStyle();
@@ -428,7 +423,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
       }
     };
 
-    initVectorBasemap();
+    initMap();
 
     return () => {
       isMounted = false;
@@ -436,6 +431,39 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
       }
+    };
+  }, []);
+
+  // ----------------------------------------------------
+  // SWITCH BASEMAP STYLE PRESET (USES map.setStyle(), NO RE-CREATING MAP)
+  // ----------------------------------------------------
+  const isFirstStyleRun = useRef(true);
+  useEffect(() => {
+    if (isFirstStyleRun.current) {
+      isFirstStyleRun.current = false;
+      return;
+    }
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    let isCancelled = false;
+    setIsLoadingVectorStyle(true);
+
+    buildFlashGroupVectorStyle(activeStylePreset)
+      .then((newStyle) => {
+        if (isCancelled || !mapInstanceRef.current) return;
+        console.info('[FlashMap] Switching basemap style to:', activeStylePreset);
+        mapInstanceRef.current.setStyle(newStyle);
+      })
+      .catch((err) => {
+        console.error('[FlashMap] Failed to update style preset:', err);
+      })
+      .finally(() => {
+        if (!isCancelled) setIsLoadingVectorStyle(false);
+      });
+
+    return () => {
+      isCancelled = true;
     };
   }, [activeStylePreset]);
 
@@ -863,6 +891,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
 
   // Re-run markers on updates
   useEffect(() => {
+    renderMarkersRef.current = renderMarkers;
     renderMarkers();
   }, [renderMarkers]);
 
@@ -1444,15 +1473,14 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
         {/* RIGHT COLUMN: LARGE INTERACTIVE STREET MAP CONTAINER (REAL DIMENSIONS) */}
         <div className="w-full lg:flex-1 min-w-0 space-y-4">
           <div
-            className="flashmap-container rounded-3xl overflow-hidden shadow-xl border border-[#E4E8F0]"
-            style={{ width: '100%', minHeight: '650px', height: 'calc(100vh - 140px)' }}
+            className="flashmap-container rounded-3xl overflow-hidden shadow-xl border border-[#E4E8F0] relative"
           >
             {/* Loading Indicator */}
             {(!isMapLoaded || isLoadingVectorStyle) && !hasMapError && (
               <div className="absolute inset-0 z-20 bg-[#F6F7FC]/80 backdrop-blur-xs flex flex-col items-center justify-center space-y-3">
                 <div className="w-10 h-10 border-4 border-[#3155FF] border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-xs font-bold text-[#3155FF] uppercase tracking-wider">
-                  Đang tải bản đồ đường phố vector FlashGroup...
+                  Đang tải bản đồ FlashGroup...
                 </span>
               </div>
             )}
@@ -1462,10 +1490,10 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
               <div className="absolute inset-0 z-30 bg-[#FFFFFF]/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
                 <AlertCircle className="w-12 h-12 text-[#3155FF] mb-3" />
                 <h3 className="text-lg font-black text-[#0C0D10] uppercase tracking-wide">
-                  KHÔNG THỂ TẢI BẢN ĐỒ VECTOR
+                  KHÔNG THỂ TẢI BẢN ĐỒ
                 </h3>
                 <p className="text-xs text-[#596273] max-w-md mt-1 mb-2 leading-relaxed">
-                  {vectorStyleError || 'Đã xảy ra sự cố kết nối máy chủ bản đồ vector. Danh sách phòng gom và điểm nhận vẫn hoạt động bình thường.'}
+                  {vectorStyleError || 'Đã xảy ra sự cố kết nối máy chủ bản đồ. Danh sách phòng gom và điểm nhận vẫn hoạt động bình thường.'}
                 </p>
                 {!getMapApiKey() && (
                   <p className="text-[11px] text-[#3155FF] max-w-md mb-4 bg-[#EEF1FF] p-2.5 rounded-xl border border-[#E4E8F0] leading-relaxed">
@@ -1488,7 +1516,7 @@ export const InteractiveFlashMap: React.FC<InteractiveFlashMapProps> = ({
             {/* Actual MapLibre DOM Node with Real Dimensions */}
             <div
               ref={mapContainerRef}
-              style={{ width: '100%', height: '100%', minHeight: '650px' }}
+              className="w-full h-full min-h-[500px] relative"
             />
 
             {/* Floating Map Style Selector (BẢN ĐỒ / TỐI GIẢN / VỆ TINH) */}

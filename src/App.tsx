@@ -545,6 +545,7 @@ export default function FlashGroupApp() {
   const [buyerTab, setBuyerTab] = useState<'discovery' | 'flashmap' | 'myrooms' | 'orders' | 'favorites' | 'complaints' | 'privacy' | 'notifications' | 'profile'>('discovery');
   const [supplierTab, setSupplierTab] = useState<'dashboard' | 'products' | 'rooms' | 'orders' | 'pickup' | 'logistics' | 'earnings' | 'analytics' | 'notifications' | 'profile'>('dashboard');
   const [adminTab, setAdminTab] = useState<'overview' | 'users' | 'suppliers' | 'products' | 'rooms' | 'orders' | 'refunds' | 'vouchers' | 'growth' | 'logistics' | 'finance' | 'payouts' | 'compliance' | 'reports'>('overview');
+  const [adminViewMode, setAdminViewMode] = useState<'dashboard' | 'storefront'>('dashboard');
 
   // Drilldown selection states
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(() => {
@@ -3570,6 +3571,8 @@ export default function FlashGroupApp() {
               ? buyerTab
               : currentUser.role === 'supplier'
               ? supplierTab
+              : adminViewMode === 'storefront'
+              ? buyerTab
               : adminTab
           }
           onNavigate={(tab) => {
@@ -3593,8 +3596,21 @@ export default function FlashGroupApp() {
               setSupplierTab(tab);
               navigate('/');
             } else {
-              setAdminTab(tab);
-              navigate('/');
+              const storefrontTabs = ['discovery', 'flashmap', 'orders', 'myrooms', 'favorites', 'complaints', 'privacy', 'profile', 'notifications'];
+              if (storefrontTabs.includes(tab)) {
+                setAdminViewMode('storefront');
+                setBuyerTab(tab as any);
+                if (tab === 'discovery') navigate('/marketplace');
+                else if (tab === 'flashmap') navigate('/flashmap');
+                else if (tab === 'orders') navigate('/orders');
+                else if (tab === 'complaints') navigate('/complaints');
+                else if (tab === 'privacy') navigate('/privacy-center');
+                else navigate('/');
+              } else {
+                setAdminViewMode('dashboard');
+                setAdminTab(tab);
+                navigate('/');
+              }
             }
           }}
           notifications={notifications}
@@ -3657,12 +3673,37 @@ export default function FlashGroupApp() {
             </div>
           )}
 
+        {/* ADMIN STOREFRONT MODE BANNER */}
+        {currentUser && currentUser.role === 'admin' && adminViewMode === 'storefront' && (
+          <div className="bg-[#0C0D10] text-white px-4 py-2.5 text-xs text-center font-bold flex items-center justify-between border-b border-white/10 z-30 shadow-md">
+            <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-[#C7F000] animate-pulse" />
+                <span className="text-white/90">
+                  Bạn đang xem <strong>Giao diện Trang chủ & FlashMap</strong> với quyền <strong>Quản trị viên (Admin)</strong>.
+                </span>
+              </div>
+              <button
+                onClick={() => {
+                  setAdminViewMode('dashboard');
+                  setAdminTab('overview');
+                  navigate('/');
+                }}
+                className="px-3.5 py-1.5 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer flex items-center space-x-1.5 shadow-sm active:scale-95"
+              >
+                <span>VỀ BẢNG QUẢN TRỊ ADMIN</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* VIEW CONTAINER */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           {/* ======================================================== */}
           {/* BUYER ROLE VIEWS                                         */}
           {/* ======================================================== */}
-          {(!currentUser || currentUser.role === 'buyer') && (
+          {(!currentUser || currentUser.role === 'buyer' || (currentUser.role === 'admin' && adminViewMode === 'storefront')) && (
             <>
               {checkoutRoomId && currentUser ? (
                 <CheckoutView
@@ -4756,7 +4797,7 @@ export default function FlashGroupApp() {
           {/* ======================================================== */}
           {/* ADMIN ROLE VIEWS                                         */}
           {/* ======================================================== */}
-          {currentUser && currentUser.role === 'admin' && (
+          {currentUser && currentUser.role === 'admin' && adminViewMode === 'dashboard' && (
             selectedRoomId && activeRoom ? (
               <GroupRoomView
                 room={activeRoom}

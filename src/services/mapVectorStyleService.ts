@@ -74,30 +74,27 @@ export function getMapApiKey(): string {
 
 // Check available style presets
 export function getAvailableStylePresets(): StylePresetOption[] {
-  const apiKey = getMapApiKey();
-  const hasValidSatelliteConfig = Boolean(apiKey);
-
   return [
     {
       id: 'streets',
       label: 'BẢN ĐỒ',
-      description: 'Bản đồ đường phố vector chi tiết (ngõ ngách, tên đường, khu phố)',
+      description: 'Bản đồ đường phố chi tiết (ngõ ngách, tên đường, khu dân cư, công viên)',
       isAvailable: true,
       requiresApiKey: false,
     },
     {
       id: 'minimal',
       label: 'TỐI GIẢN',
-      description: 'Giao diện vector đơn sắc thanh lịch, làm nổi bật điểm gom & phòng gom',
+      description: 'Giao diện đơn sắc thanh lịch, làm nổi bật điểm gom & phòng gom',
       isAvailable: true,
       requiresApiKey: false,
     },
     {
       id: 'satellite',
       label: 'VỆ TINH',
-      description: 'Ảnh chụp vệ tinh viễn thám độ phân giải cao',
-      isAvailable: hasValidSatelliteConfig,
-      requiresApiKey: true,
+      description: 'Ảnh chụp vệ tinh viễn thám độ phân giải cao Esri World Imagery',
+      isAvailable: true,
+      requiresApiKey: false,
     },
   ];
 }
@@ -107,7 +104,6 @@ export function getBaseVectorStyleUrl(preset: MapStylePreset): string {
   const apiKey = getMapApiKey();
 
   if (apiKey) {
-    // If MapTiler API Key is provided via VITE_MAP_API_KEY
     if (preset === 'satellite') {
       return `https://api.maptiler.com/maps/satellite/style.json?key=${apiKey}`;
     }
@@ -124,21 +120,154 @@ export function getBaseVectorStyleUrl(preset: MapStylePreset): string {
   return 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 }
 
-// Ultra-reliable OpenStreetMap raster style fallback (Zero external dependencies, guaranteed 100% availability)
+// Guaranteed Carto Voyager street basemap style (Zero blocked tiles, 100% availability, @2x crisp raster)
 export function getOsmRasterStyle(): StyleSpecification {
   return {
     version: 8,
-    name: 'FlashGroup Standard OSM',
+    name: 'FlashGroup Standard Streets',
+    glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
     sources: {
-      'osm-raster': {
+      'carto-voyager': {
         type: 'raster',
         tiles: [
-          'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+          'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+          'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
+          'https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png',
         ],
         tileSize: 256,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxzoom: 20,
+      },
+      'flashgroup-geographic-labels': {
+        type: 'geojson',
+        data: FLASHGROUP_GEOGRAPHIC_LABELS_GEOJSON as any,
+      },
+    },
+    layers: [
+      {
+        id: 'carto-voyager-layer',
+        type: 'raster',
+        source: 'carto-voyager',
+        minzoom: 0,
+        maxzoom: 20,
+      },
+      {
+        id: 'flashgroup-geographic-labels-layer',
+        type: 'symbol',
+        source: 'flashgroup-geographic-labels',
+        minzoom: 3,
+        maxzoom: 13,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Open Sans Bold', 'Noto Sans Regular'],
+          'text-size': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            3, 11,
+            6, 12,
+            8, 13,
+            11, 14,
+          ],
+          'text-letter-spacing': 0.05,
+          'text-transform': 'uppercase',
+          'text-allow-overlap': false,
+          'text-ignore-placement': false,
+          'symbol-placement': 'point',
+        },
+        paint: {
+          'text-color': '#0C0D10',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 2,
+          'text-halo-blur': 0.5,
+        },
+      },
+    ],
+  };
+}
+
+// Minimal basemap style (Carto Positron @2x Retina)
+export function getMinimalRasterStyle(): StyleSpecification {
+  return {
+    version: 8,
+    name: 'FlashGroup Minimal Positron',
+    glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
+    sources: {
+      'carto-positron': {
+        type: 'raster',
+        tiles: [
+          'https://a.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
+          'https://b.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
+          'https://c.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
+          'https://d.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png',
+        ],
+        tileSize: 256,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxzoom: 20,
+      },
+      'flashgroup-geographic-labels': {
+        type: 'geojson',
+        data: FLASHGROUP_GEOGRAPHIC_LABELS_GEOJSON as any,
+      },
+    },
+    layers: [
+      {
+        id: 'carto-positron-layer',
+        type: 'raster',
+        source: 'carto-positron',
+        minzoom: 0,
+        maxzoom: 20,
+      },
+      {
+        id: 'flashgroup-geographic-labels-layer',
+        type: 'symbol',
+        source: 'flashgroup-geographic-labels',
+        minzoom: 3,
+        maxzoom: 13,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Open Sans Bold', 'Noto Sans Regular'],
+          'text-size': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            3, 11,
+            6, 12,
+            8, 13,
+            11, 14,
+          ],
+          'text-letter-spacing': 0.05,
+          'text-transform': 'uppercase',
+          'text-allow-overlap': false,
+          'text-ignore-placement': false,
+          'symbol-placement': 'point',
+        },
+        paint: {
+          'text-color': '#0C0D10',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 2,
+          'text-halo-blur': 0.5,
+        },
+      },
+    ],
+  };
+}
+
+// Satellite basemap style (Esri World Imagery)
+export function getSatelliteRasterStyle(): StyleSpecification {
+  return {
+    version: 8,
+    name: 'FlashGroup Satellite Imagery',
+    glyphs: 'https://tiles.basemaps.cartocdn.com/v/20261026-01/fonts/{fontstack}/{range}.pbf',
+    sources: {
+      'esri-satellite': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
         maxzoom: 19,
       },
       'flashgroup-geographic-labels': {
@@ -148,17 +277,48 @@ export function getOsmRasterStyle(): StyleSpecification {
     },
     layers: [
       {
-        id: 'osm-raster-layer',
+        id: 'esri-satellite-layer',
         type: 'raster',
-        source: 'osm-raster',
+        source: 'esri-satellite',
         minzoom: 0,
         maxzoom: 19,
+      },
+      {
+        id: 'flashgroup-geographic-labels-layer',
+        type: 'symbol',
+        source: 'flashgroup-geographic-labels',
+        minzoom: 3,
+        maxzoom: 13,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Open Sans Bold', 'Noto Sans Regular'],
+          'text-size': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            3, 11,
+            6, 12,
+            8, 13,
+            11, 14,
+          ],
+          'text-letter-spacing': 0.05,
+          'text-transform': 'uppercase',
+          'text-allow-overlap': false,
+          'text-ignore-placement': false,
+          'symbol-placement': 'point',
+        },
+        paint: {
+          'text-color': '#ffffff',
+          'text-halo-color': '#000000',
+          'text-halo-width': 2,
+          'text-halo-blur': 0.5,
+        },
       },
     ],
   };
 }
 
-// Build and refine the vector style object
+// Build and refine the style object
 export async function buildFlashGroupVectorStyle(
   preset: MapStylePreset = 'streets'
 ): Promise<StyleSpecification> {
@@ -167,8 +327,30 @@ export async function buildFlashGroupVectorStyle(
     return vectorStyleCache.get(cacheKey)!;
   }
 
+  // Preset routing: instantaneous & robust basemap specifications
+  if (preset === 'minimal') {
+    const minStyle = getMinimalRasterStyle();
+    vectorStyleCache.set(cacheKey, minStyle);
+    return minStyle;
+  }
+
+  if (preset === 'satellite') {
+    const satStyle = getSatelliteRasterStyle();
+    vectorStyleCache.set(cacheKey, satStyle);
+    return satStyle;
+  }
+
+  // Default 'streets' preset:
+  const apiKey = getMapApiKey();
+  if (!apiKey) {
+    // Zero-Key: Return Carto Voyager street style instantly with full Vietnamese labels
+    const streetsStyle = getOsmRasterStyle();
+    vectorStyleCache.set(cacheKey, streetsStyle);
+    return streetsStyle;
+  }
+
   const url = getBaseVectorStyleUrl(preset);
-  console.log(`[FlashMap] Loading vector basemap style for preset "${preset}" from:`, url);
+  console.log(`[FlashMap] Loading keyed vector basemap style for preset "${preset}" from:`, url);
 
   try {
     const controller = new AbortController();
@@ -178,7 +360,7 @@ export async function buildFlashGroupVectorStyle(
     clearTimeout(timeoutId);
 
     if (!res.ok) {
-      console.warn(`[FlashMap] Vector basemap returned ${res.status}, using standard OSM fallback.`);
+      console.warn(`[FlashMap] Vector basemap returned ${res.status}, using standard streets fallback.`);
       return getOsmRasterStyle();
     }
 

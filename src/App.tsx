@@ -119,7 +119,6 @@ import {
 } from './utils/pricing';
 import {
   createInitialUsers,
-  createInitialParticipations,
   createInitialSuppliers,
   createInitialProducts,
   createInitialRooms,

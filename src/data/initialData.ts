@@ -2312,19 +2312,3 @@ export function createInitialPayouts(): SupplierPayout[] {
     },
   ];
 }
-
-
-
-
-export function createInitialParticipations(): GroupParticipation[] {
-  return [
-    {
-      id: 'part-scenario-b-demo',
-      roomId: 'room-scenario-b-7suat',
-      userId: 'buyer-demo',
-      quantity: 1,
-      joinedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-      status: 'awaiting_payment',
-    },
-  ];
-}

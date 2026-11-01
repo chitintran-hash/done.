@@ -114,22 +114,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       {/* 1. TOP HEADER (Height 72-80px: h-20, Cobalt #3155FF, border #2444DC) */}
-      <header className="sticky top-0 z-40 bg-[#3155FF] border-b border-[#2444DC] shadow-md h-20 transition-all text-white">
-        <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-2 sm:gap-4">
+      <header className="sticky top-0 z-40 bg-[#3155FF] border-b border-[#2444DC] shadow-md h-20 transition-all text-white w-full max-w-full overflow-x-hidden">
+        <div className="max-w-[1600px] w-full mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 h-full flex items-center justify-between gap-1.5 sm:gap-3">
           {/* LEFT: LOGO (FLASH white + GROUP #C7F000 + Spark #C7F000) */}
-          <div className="flex items-center space-x-3 shrink-0">
+          <div className="flex items-center space-x-2 xl:space-x-3 shrink-0">
             <button
               onClick={() => onNavigate(!currentUser || currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'discovery')}
-              className="flex items-center space-x-3 text-left group shrink-0 cursor-pointer"
+              className="flex items-center space-x-2 xl:space-x-3 text-left group shrink-0 cursor-pointer"
             >
-              <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-[#3155FF] shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-200 shrink-0">
-                <Zap className="w-6 h-6 fill-[#C7F000] stroke-[#3155FF]" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 xl:w-11 xl:h-11 rounded-xl xl:rounded-2xl bg-white flex items-center justify-center text-[#3155FF] shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-200 shrink-0">
+                <Zap className="w-5 h-5 xl:w-6 xl:h-6 fill-[#C7F000] stroke-[#3155FF]" />
               </div>
               <div className="shrink-0">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-white block leading-none whitespace-nowrap">
+                <span className="text-lg sm:text-xl xl:text-2xl font-black tracking-tight text-white block leading-none whitespace-nowrap">
                   FLASH<span className="text-[#C7F000]">GROUP</span>
                 </span>
-                <span className="block text-[10px] text-white/80 font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">
+                <span className="hidden xl:block text-[10px] text-white/80 font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">
                   CÀNG ĐÔNG, CÀNG RẺ
                 </span>
               </div>
@@ -316,7 +316,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* ADMIN HOMEPAGE & FLASHMAP SHORTCUTS */}
                 <button
                   onClick={() => onNavigate('discovery')}
-                  className={`px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2.5 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1 whitespace-nowrap shrink-0 ${
                     currentTab === 'discovery' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
@@ -325,19 +325,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <button
                   onClick={() => onNavigate('flashmap')}
-                  className={`px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2.5 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1 whitespace-nowrap shrink-0 ${
                     currentTab === 'flashmap' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
-                  <MapPin className="w-3.5 h-3.5" />
+                  <MapPin className="w-3 h-3 xl:w-3.5 xl:h-3.5 shrink-0" />
                   <span>FLASHMAP</span>
                 </button>
 
-                <div className="h-4 w-[1px] bg-white/20 mx-0.5 xl:mx-1 shrink-0" />
+                <div className="h-4 w-[1px] bg-white/20 mx-0.5 shrink-0" />
 
                 <button
                   onClick={() => onNavigate('overview')}
-                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'overview' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -345,7 +345,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('users')}
-                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'users' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -353,7 +353,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('suppliers')}
-                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'suppliers' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -361,7 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('finance')}
-                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'finance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -369,7 +369,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('compliance')}
-                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-1.5 xl:px-2 py-1 xl:py-1.5 rounded-lg xl:rounded-xl text-[10.5px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'compliance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -380,7 +380,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* RIGHT: SEARCH ICON, NOTIFICATION, USER AVATAR */}
-          <div className="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
+          <div className="flex items-center space-x-1 sm:space-x-1.5 xl:space-x-2.5 shrink-0">
             {/* Quick Search Button */}
             <button
               onClick={() => {
@@ -388,13 +388,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 else onNavigate('flashmap');
               }}
               title="Tìm kiếm phòng gom, điểm nhận..."
-              className="p-2 sm:p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer shrink-0"
+              className="p-1.5 sm:p-2 xl:p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer shrink-0"
             >
-              <Search className="w-5 h-5 text-white" />
+              <Search className="w-4 h-4 xl:w-5 xl:h-5 text-white" />
             </button>
 
             {/* PWA Install Button */}
-            <InstallPwaButton className="hidden md:inline-flex mr-0.5 xl:mr-1 shrink-0" />
+            <InstallPwaButton className="hidden md:inline-flex shrink-0" />
 
             {!currentUser ? (
               <div className="flex items-center space-x-2">
@@ -432,7 +432,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Notification Dropdown */}
               {isNotifOpen && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 overflow-hidden animate-fade-in text-[#0C0D10]">
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-1.5rem)] bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 overflow-hidden animate-fade-in text-[#0C0D10]">
                   <div className="p-3.5 bg-[#F6F7FC] border-b border-[#E4E8F0] flex items-center justify-between">
                     <span className="font-black text-xs uppercase tracking-wider text-[#0C0D10]">
                       THÔNG BÁO ({unreadCount} CHƯA ĐỌC)
@@ -502,9 +502,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="relative shrink-0" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center space-x-1.5 sm:space-x-2 p-1 sm:p-1.5 rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white shrink-0"
+                className="flex items-center space-x-1.5 sm:space-x-2 p-1 sm:p-1.5 rounded-xl xl:rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white shrink-0"
               >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-[#3155FF] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden shrink-0">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg xl:rounded-xl bg-white text-[#3155FF] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden shrink-0">
                   {currentUser.avatar ? (
                     <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
                   ) : (
@@ -512,7 +512,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </div>
                 <div className="hidden sm:block">
-                  <span className="text-xs font-black text-white block leading-tight truncate max-w-[85px] xl:max-w-[120px]">
+                  <span className="text-xs font-black text-white block leading-tight truncate max-w-[75px] xl:max-w-[120px]">
                     {currentUser.name}
                   </span>
                   <span className={`inline-block text-[9px] font-black px-1.5 py-0.2 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border} mt-0.5`}>
@@ -524,10 +524,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Profile Menu Dropdown */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 overflow-hidden py-1.5 animate-fade-in text-xs font-bold text-[#0C0D10]">
+                <div className="absolute right-0 mt-2 w-64 sm:w-72 max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-90px)] overflow-y-auto bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 py-1.5 animate-fade-in text-xs font-bold text-[#0C0D10]">
                   {/* Header: User Info */}
                   <div className="px-4 py-3 bg-[#F6F7FC] border-b border-[#E4E8F0]">
-                    <div className="font-black text-[#0C0D10] text-sm">{currentUser.name}</div>
+                    <div className="font-black text-[#0C0D10] text-sm truncate">{currentUser.name}</div>
                     <div className="text-[11px] text-[#596273] font-medium truncate">{currentUser.email}</div>
                     <div className="mt-1.5">
                       <span className={`inline-block text-[10px] font-black px-2 py-0.5 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border}`}>

@@ -42,11 +42,11 @@ export const InstallPwaButton: React.FC<{ className?: string }> = ({ className =
     <button
       type="button"
       onClick={handleInstallClick}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white font-black text-xs transition shadow-xs cursor-pointer active:scale-95 ${className}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-black text-xs transition shadow-xs cursor-pointer active:scale-95 whitespace-nowrap shrink-0 ${className}`}
       title="Cài đặt ứng dụng FlashGroup lên thiết bị của bạn"
     >
-      <Smartphone className="w-3.5 h-3.5 text-[#C7F000]" />
-      <span>CÀI FLASHGROUP</span>
+      <Smartphone className="w-3.5 h-3.5 text-[#C7F000] shrink-0" />
+      <span className="whitespace-nowrap">CÀI FLASHGROUP</span>
     </button>
   );
 };

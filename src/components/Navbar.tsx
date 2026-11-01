@@ -115,21 +115,21 @@ export const Navbar: React.FC<NavbarProps> = ({
     <>
       {/* 1. TOP HEADER (Height 72-80px: h-20, Cobalt #3155FF, border #2444DC) */}
       <header className="sticky top-0 z-40 bg-[#3155FF] border-b border-[#2444DC] shadow-md h-20 transition-all text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+        <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-2 sm:gap-4">
           {/* LEFT: LOGO (FLASH white + GROUP #C7F000 + Spark #C7F000) */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 shrink-0">
             <button
               onClick={() => onNavigate(!currentUser || currentUser.role === 'buyer' ? 'discovery' : currentUser.role === 'supplier' ? 'dashboard' : 'discovery')}
               className="flex items-center space-x-3 text-left group shrink-0 cursor-pointer"
             >
-              <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-[#3155FF] shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-200">
+              <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-[#3155FF] shadow-md shadow-black/10 group-hover:scale-105 transition-transform duration-200 shrink-0">
                 <Zap className="w-6 h-6 fill-[#C7F000] stroke-[#3155FF]" />
               </div>
-              <div>
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-white block leading-none">
+              <div className="shrink-0">
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-white block leading-none whitespace-nowrap">
                   FLASH<span className="text-[#C7F000]">GROUP</span>
                 </span>
-                <span className="block text-[10px] text-white/80 font-bold uppercase tracking-wider mt-0.5">
+                <span className="block text-[10px] text-white/80 font-bold uppercase tracking-wider mt-0.5 whitespace-nowrap">
                   CÀNG ĐÔNG, CÀNG RẺ
                 </span>
               </div>
@@ -137,13 +137,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* CENTER: DESKTOP CLEAN NAVIGATION (ALL UPPERCASE, FONT 700) */}
-          <nav className="hidden lg:flex items-center space-x-2">
+          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 shrink-0">
             {!currentUser || currentUser.role === 'buyer' ? (
               <>
                 {/* 1. KHÁM PHÁ */}
                 <button
                   onClick={() => onNavigate('discovery')}
-                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 cursor-pointer ${
+                  className={`px-3 xl:px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'discovery'
                       ? 'bg-white text-[#3155FF] shadow-xs'
                       : 'text-white/90 hover:bg-white/10 hover:text-white'
@@ -155,7 +155,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* 2. FLASHMAP */}
                 <button
                   onClick={() => onNavigate('flashmap')}
-                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                  className={`px-3 xl:px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'flashmap'
                       ? 'bg-white text-[#3155FF] shadow-xs'
                       : 'text-white/90 hover:bg-white/10 hover:text-white'
@@ -170,7 +170,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* 3. PHÒNG CỦA TÔI */}
                 <button
                   onClick={() => currentUser ? onNavigate('myrooms') : onOpenLogin?.()}
-                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                  className={`px-3 xl:px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'myrooms'
                       ? 'bg-white text-[#3155FF] shadow-xs'
                       : 'text-white/90 hover:bg-white/10 hover:text-white'
@@ -188,7 +188,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* 4. ĐƠN HÀNG */}
                 <button
                   onClick={() => currentUser ? onNavigate('orders') : onOpenLogin?.()}
-                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer ${
+                  className={`px-3 xl:px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'orders'
                       ? 'bg-white text-[#3155FF] shadow-xs'
                       : 'text-white/90 hover:bg-white/10 hover:text-white'
@@ -206,10 +206,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </>
                 )}
                 {/* 5. HỖ TRỢ */}
-                <div className="relative" ref={supportMenuRef}>
+                <div className="relative shrink-0" ref={supportMenuRef}>
                   <button
                     onClick={() => setIsSupportMenuOpen((prev) => !prev)}
-                    className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1 cursor-pointer ${
+                    className={`px-3 xl:px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1 cursor-pointer whitespace-nowrap shrink-0 ${
                       isSupportMenuOpen
                         ? 'bg-white text-[#3155FF]'
                         : 'text-white/90 hover:bg-white/10 hover:text-white'
@@ -272,7 +272,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <>
                 <button
                   onClick={() => onNavigate('dashboard')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'dashboard' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -280,7 +280,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('products')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'products' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -288,7 +288,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('rooms')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'rooms' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -296,7 +296,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('orders')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'orders' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -304,7 +304,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('earnings')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition ${
+                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'earnings' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -316,7 +316,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* ADMIN HOMEPAGE & FLASHMAP SHORTCUTS */}
                 <button
                   onClick={() => onNavigate('discovery')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                     currentTab === 'discovery' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
@@ -325,7 +325,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <button
                   onClick={() => onNavigate('flashmap')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-2.5 xl:px-3.5 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
                     currentTab === 'flashmap' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10 hover:text-white'
                   }`}
                 >
@@ -333,11 +333,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span>FLASHMAP</span>
                 </button>
 
-                <div className="h-4 w-[1px] bg-white/20 mx-1" />
+                <div className="h-4 w-[1px] bg-white/20 mx-0.5 xl:mx-1 shrink-0" />
 
                 <button
                   onClick={() => onNavigate('overview')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
+                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'overview' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -345,7 +345,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('users')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
+                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'users' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -353,7 +353,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('suppliers')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
+                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'suppliers' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -361,7 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('finance')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
+                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'finance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -369,7 +369,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('compliance')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer ${
+                  className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'compliance' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -380,7 +380,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* RIGHT: SEARCH ICON, NOTIFICATION, USER AVATAR */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
+          <div className="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
             {/* Quick Search Button */}
             <button
               onClick={() => {
@@ -388,13 +388,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 else onNavigate('flashmap');
               }}
               title="Tìm kiếm phòng gom, điểm nhận..."
-              className="p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer"
+              className="p-2 sm:p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer shrink-0"
             >
               <Search className="w-5 h-5 text-white" />
             </button>
 
             {/* PWA Install Button */}
-            <InstallPwaButton className="hidden md:inline-flex mr-1" />
+            <InstallPwaButton className="hidden md:inline-flex mr-0.5 xl:mr-1 shrink-0" />
 
             {!currentUser ? (
               <div className="flex items-center space-x-2">
@@ -416,10 +416,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <>
               {/* Notification Bell with Badge & Dropdown */}
-            <div className="relative" ref={notifRef}>
+            <div className="relative shrink-0" ref={notifRef}>
               <button
                 onClick={() => setIsNotifOpen((prev) => !prev)}
-                className="relative p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer"
+                className="relative p-2 sm:p-2.5 rounded-xl text-white hover:bg-white/10 transition cursor-pointer shrink-0"
                 title="Thông báo"
               >
                 <Bell className="w-5 h-5" />
@@ -499,12 +499,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* User Profile Dropdown */}
-            <div className="relative" ref={userMenuRef}>
+            <div className="relative shrink-0" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center space-x-2 p-1.5 rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white"
+                className="flex items-center space-x-1.5 sm:space-x-2 p-1 sm:p-1.5 rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white shrink-0"
               >
-                <div className="w-9 h-9 rounded-xl bg-white text-[#3155FF] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-[#3155FF] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden shrink-0">
                   {currentUser.avatar ? (
                     <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full object-cover" />
                   ) : (
@@ -512,14 +512,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </div>
                 <div className="hidden sm:block">
-                  <span className="text-xs font-black text-white block leading-tight truncate max-w-[120px]">
+                  <span className="text-xs font-black text-white block leading-tight truncate max-w-[85px] xl:max-w-[120px]">
                     {currentUser.name}
                   </span>
                   <span className={`inline-block text-[9px] font-black px-1.5 py-0.2 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border} mt-0.5`}>
                     {roleBadgeConfig.label}
                   </span>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-white/80" />
+                <ChevronDown className="w-3.5 h-3.5 text-white/80 shrink-0" />
               </button>
 
               {/* Profile Menu Dropdown */}
@@ -720,7 +720,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMobileDrawerOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-white hover:bg-white/10 transition cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-white hover:bg-white/10 transition cursor-pointer shrink-0"
             >
               <Menu className="w-6 h-6" />
             </button>

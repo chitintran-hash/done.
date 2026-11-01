@@ -104,6 +104,70 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md', c
       border: 'border-white/20',
       icon: <Sparkles className={size === 'sm' ? 'w-3 h-3 text-[#C7F000]' : 'w-3.5 h-3.5 text-[#C7F000]'} />,
     },
+    // Order Lifecycle Statuses (Friendly Vietnamese)
+    awaiting_payment: {
+      label: 'CHỜ BẠN XÁC NHẬN / THANH TOÁN',
+      bg: 'bg-[#FAF0FF]',
+      text: 'text-[#000181]',
+      border: 'border-[#E8A0FF]',
+      icon: <Clock className={size === 'sm' ? 'w-3 h-3 text-[#006EE9]' : 'w-3.5 h-3.5 text-[#006EE9]'} />,
+    },
+    paid: {
+      label: 'ĐÃ THANH TOÁN',
+      bg: 'bg-[#D0FFA4]',
+      text: 'text-[#000181]',
+      border: 'border-[#000181]/30',
+      icon: <CheckCircle2 className={size === 'sm' ? 'w-3 h-3 text-[#000181]' : 'w-3.5 h-3.5 text-[#000181]'} />,
+    },
+    preparing: {
+      label: 'NCC ĐANG CHUẨN BỊ',
+      bg: 'bg-amber-50',
+      text: 'text-amber-800',
+      border: 'border-amber-300',
+      icon: <Clock className={size === 'sm' ? 'w-3 h-3 text-amber-600' : 'w-3.5 h-3.5 text-amber-600'} />,
+    },
+    in_transit: {
+      label: 'ĐANG VẬN CHUYỂN',
+      bg: 'bg-[#EFFBFF]',
+      text: 'text-[#000181]',
+      border: 'border-[#83E7FF]',
+      icon: <Clock className={size === 'sm' ? 'w-3 h-3 text-[#006EE9]' : 'w-3.5 h-3.5 text-[#006EE9]'} />,
+    },
+    ready_for_pickup: {
+      label: 'SẴN SÀNG TẠI LOCKER',
+      bg: 'bg-[#F4FFE8]',
+      text: 'text-[#000181]',
+      border: 'border-[#D0FFA4]',
+      icon: <CheckCircle2 className={size === 'sm' ? 'w-3 h-3 text-[#000181]' : 'w-3.5 h-3.5 text-[#000181]'} />,
+    },
+    picked_up: {
+      label: 'ĐÃ NHẬN HÀNG',
+      bg: 'bg-teal-50',
+      text: 'text-teal-800',
+      border: 'border-teal-300',
+      icon: <CheckCircle2 className={size === 'sm' ? 'w-3 h-3 text-teal-600' : 'w-3.5 h-3.5 text-teal-600'} />,
+    },
+    pickup_overdue: {
+      label: 'QUÁ HẠN NHẬN',
+      bg: 'bg-rose-50',
+      text: 'text-rose-700',
+      border: 'border-rose-300',
+      icon: <XCircle className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />,
+    },
+    cancelled_before_payment: {
+      label: 'ĐÃ HỦY (CHƯA THANH TOÁN)',
+      bg: 'bg-[#F6F7FB]',
+      text: 'text-[#53536A]',
+      border: 'border-[#E6E6EE]',
+      icon: <XCircle className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />,
+    },
+    refunded: {
+      label: 'ĐÃ HOÀN TIỀN',
+      bg: 'bg-rose-50',
+      text: 'text-rose-700',
+      border: 'border-rose-200',
+      icon: <CheckCircle2 className={size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'} />,
+    },
   };
 
   const config = configs[status] || configs.active;

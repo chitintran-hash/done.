@@ -92,6 +92,18 @@ export function getCurrentPrice(
   return tier?.price ?? tiers[0].price;
 }
 
+export function highestUnlockedTier(
+  totalQuantity: number,
+  tiers: PriceTier[]
+): PriceTier {
+  if (!tiers || tiers.length === 0) {
+    return { minQuantity: 1, price: 0 };
+  }
+  const sorted = [...tiers].sort((a, b) => b.minQuantity - a.minQuantity);
+  const tier = sorted.find((t) => totalQuantity >= t.minQuantity);
+  return tier || sorted[sorted.length - 1];
+}
+
 export function getNextTier(
   totalQuantity: number,
   tiers: PriceTier[]
@@ -421,7 +433,7 @@ export function canCheckout(
   if (!participation) return false;
   if (room.finalPrice === undefined) return false;
   if (room.status !== 'successful') return false;
-  if (participation.status === 'paid') return false;
+  if (participation.status === 'paid' || participation.status === 'cancelled' || participation.status === 'cancelled_before_payment') return false;
   return true;
 }
 

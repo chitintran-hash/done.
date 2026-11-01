@@ -4,7 +4,7 @@ import type {
   Product,
   GroupRoom,
   GroupParticipation,
-  Order,
+Order,
   SupplierPayout,
   Notification,
   Review,
@@ -371,7 +371,7 @@ export function createInitialRooms(): GroupRoom[] {
       productImage: 'https://images.unsplash.com/photo-1543528176-61b239494933?auto=format&fit=crop&w=800&q=80',
       unit: 'Hộp 500g',
       supplierName: 'Nhà phân phối Thực phẩm A – Demo',
-      participantCount: 19,
+      participantCount: 18,
       totalQuantity: 19,
       maxParticipants: 20,
       maxQuantity: 20,
@@ -404,6 +404,53 @@ export function createInitialRooms(): GroupRoom[] {
       description: 'Dâu tây thu hoạch tại nông trại Đà Lạt, đóng hộp cẩn thận, mở khóa mức giá theo nhóm cư dân.',
       status: 'active',
     },
+    {
+      id: 'room-scenario-b-7suat',
+      productId: 'prod-01',
+      supplierId: 'supplier-profile-demo',
+      productName: 'Bưởi Da Xanh Bến Tre (Chốt 7 suất)',
+      category: 'Thực phẩm',
+      productImage: 'https://images.unsplash.com/photo-1577234286642-fc512a5f8f11?auto=format&fit=crop&w=800&q=80',
+      unit: 'Trái 1.2kg',
+      supplierName: 'Nhà phân phối Thực phẩm A – Demo',
+      participantCount: 6,
+      totalQuantity: 7,
+      maxParticipants: 20,
+      maxQuantity: 20,
+      initialPrice: 120000,
+      priceTiers: [
+        { minQuantity: 1, maxQuantity: 4, price: 120000 },
+        { minQuantity: 5, maxQuantity: 9, price: 110000 },
+        { minQuantity: 10, maxQuantity: 19, price: 99000 },
+        { minQuantity: 20, price: 89000 },
+      ],
+      startAt: makeStartAt(60),
+      endAt: makeStartAt(5),
+      closedAt: makeStartAt(5),
+      pickupPoint: 'KTX Khu A – Locker Thông Minh Tòa A3',
+      pickupAddress: 'Tầng trệt Tòa A3, Khu KTX ĐHQG, Phường Linh Trung, TP. Thủ Đức, TP.HCM',
+      pickupPointId: '00000000-0000-0000-0000-000000000701',
+      pickupSlotId: '00000000-0000-0000-0000-000000000712',
+      pickupPointName: 'KTX Khu A – Locker Thông Minh Tòa A3',
+      pickupSlotSnapshot: '26 Oct • 18:00 – 21:00',
+      provinceOrCity: 'TP. Hồ Chí Minh',
+      area: 'TP. Thủ Đức',
+      locality: 'Làng Đại học Thủ Đức',
+      latitude: 10.8781,
+      longitude: 106.8062,
+      normalShippingEstimate: 20000,
+      totalShippingFee: 24500,
+      shippingPerBuyerSnapshot: 3500,
+      distance: '300m',
+      distanceMeters: 300,
+      mapCoords: { x: 42, y: 38 },
+      emoji: '🍈',
+      description: 'Phòng gom đã kết thúc thời gian ở mức 7 suất (đạt bậc 5-9 suất). Mức giá chốt thành công: 110.000đ/trái, phí ship chia sẻ: 3.500đ/suất.',
+      status: 'successful',
+      finalPrice: 110000,
+      finalQuantity: 7,
+    },
+
     {
       id: 'room-giay-ve-sinh',
       productId: 'prod-02',
@@ -2268,3 +2315,16 @@ export function createInitialPayouts(): SupplierPayout[] {
 
 
 
+
+export function createInitialParticipations(): GroupParticipation[] {
+  return [
+    {
+      id: 'part-scenario-b-demo',
+      roomId: 'room-scenario-b-7suat',
+      userId: 'buyer-demo',
+      quantity: 1,
+      joinedAt: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+      status: 'awaiting_payment',
+    },
+  ];
+}

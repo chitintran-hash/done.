@@ -38,6 +38,7 @@ import {
 } from '../types';
 import {
   formatVND,
+  getCurrentPrice,
   getOrderFinancialSnapshot,
   getMaskedBuyerName,
   validateVoucherPromotionCap,
@@ -526,6 +527,27 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
   const refundedOrders = useMemo(
     () => orders.filter((o) => o.status === 'refunded'),
+    [orders]
+  );
+
+  // Requirement: Separate Projected GMV, Finalized GMV, and Paid GMV
+  const projectedCollectingGmv = useMemo(
+    () =>
+      rooms
+        .filter((r) => r.status === 'active')
+        .reduce(
+          (acc, r) =>
+            acc + r.totalQuantity * (r.finalPrice ?? getCurrentPrice(r.totalQuantity, r.priceTiers)),
+          0
+        ),
+    [rooms]
+  );
+
+  const finalizedAwaitingPaymentGmv = useMemo(
+    () =>
+      orders
+        .filter((o) => o.status === 'awaiting_payment')
+        .reduce((acc, o) => acc + o.productSubtotal, 0),
     [orders]
   );
 

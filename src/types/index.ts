@@ -204,7 +204,8 @@ export type GroupParticipation = {
     | 'reserved'
     | 'awaiting_payment'
     | 'paid'
-    | 'cancelled';
+    | 'cancelled'
+    | 'cancelled_before_payment';
 };
 
 // 6. Order Models
@@ -216,6 +217,7 @@ export type OrderStatus =
   | 'ready_for_pickup'
   | 'picked_up'
   | 'pickup_overdue'
+  | 'cancelled_before_payment'
   | 'cancelled'
   | 'refunded';
 

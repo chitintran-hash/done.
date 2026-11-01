@@ -98,6 +98,7 @@ import {
 } from './types';
 import {
   getCurrentPrice,
+  highestUnlockedTier,
   getNextTier,
   getSharedShipping,
   getRemainingSeconds,
@@ -118,6 +119,7 @@ import {
 } from './utils/pricing';
 import {
   createInitialUsers,
+  createInitialParticipations,
   createInitialSuppliers,
   createInitialProducts,
   createInitialRooms,
@@ -239,6 +241,7 @@ import { EmptyState } from './components/ui/EmptyState';
 import { useDebounce } from './utils/useDebounce';
 import { SkeletonRoom } from './components/ui/Skeleton';
 import { PresenterPanel } from './components/PresenterPanel';
+import { FinalPriceConfirmationModal } from './components/FinalPriceConfirmationModal';
 import { GuidedDemoOverlay, GUIDED_DEMO_STEPS } from './components/GuidedDemoOverlay';
 
 
@@ -403,8 +406,18 @@ export default function FlashGroupApp() {
 
   const [participations, setParticipations] = useState<GroupParticipation[]>(() => {
     const stored = safeParseStorage<GroupParticipation[]>('flashgroup_v3_participations', []);
-    return stored && stored.length > 0 ? stored : createInitialParticipations();
+
+    if (!stored || stored.length === 0) {
+      return createInitialParticipations();
+    }
+    if (!stored.some((p) => p.roomId === 'room-scenario-b-7suat')) {
+      return [...stored, ...createInitialParticipations()];
+    }
+    return stored;
+
   });
+
+  const [confirmingPriceRoomId, setConfirmingPriceRoomId] = useState<string | null>(null);
 
   // Orders, Notifications, Reviews, Refunds, Favorites, Payouts & Commission Rate
   const [orders, setOrders] = useState<Order[]>(() => {
@@ -1634,6 +1647,22 @@ export default function FlashGroupApp() {
     }
   };
 
+  // Cancel Participation before payment (Requirement: No refund, sets status to cancelled_before_payment)
+  const handleCancelParticipation = (roomId: string) => {
+    if (!currentUser) return;
+    setParticipations((prev) =>
+      prev.map((p) =>
+        p.roomId === roomId &&
+        p.userId === currentUser.id &&
+        (p.status === 'awaiting_payment' || p.status === 'reserved')
+          ? { ...p, status: 'cancelled_before_payment' }
+          : p
+      )
+    );
+    setConfirmingPriceRoomId(null);
+    showToast('Bạn đã từ chối giá chốt & hủy suất tham gia. Chưa phát sinh chi phí nào.');
+  };
+
   // Reset Demo (Requirements 53 & 54, Phase 12 Idempotent Scenario Reset)
   const handleResetData = (keepCurrentUser: boolean = false) => {
     FLASHGROUP_V3_KEYS.forEach((key) => localStorage.removeItem(key));
@@ -1648,7 +1677,7 @@ export default function FlashGroupApp() {
     setProducts(createInitialProducts());
     setRooms(createInitialRooms());
     setParticipations(createInitialParticipations());
-    setOrders(createInitialOrders());
+setOrders(createInitialOrders());
     setNotifications(createInitialNotifications());
     setReviews(createInitialReviews());
     setRefunds(createInitialRefunds());
@@ -3799,7 +3828,7 @@ export default function FlashGroupApp() {
                   onModerateHideMessage={handleModerateHideMessage}
                   onToggleReaction={handleToggleReaction}
                   onBack={() => setSelectedRoomId(null)}
-                  onGoCheckout={() => setCheckoutRoomId(activeRoom.id)}
+                  onGoCheckout={() => setConfirmingPriceRoomId(activeRoom.id)}
                   onFinalizeNow={() => finalizeRoom(activeRoom.id)}
                   isFavorite={favoriteRoomIds.includes(activeRoom.id)}
                   onToggleFavorite={() => handleToggleFavorite(activeRoom.id)}
@@ -4102,7 +4131,7 @@ export default function FlashGroupApp() {
                           </span>
                         </h1>
                         <p className="text-base sm:text-lg text-slate-100 font-normal max-w-xl leading-relaxed">
-                          FlashGroup kết nối người mua gần nhau tại khu dân cư, chung cư, văn phòng và KTX để mở khóa bảng giá sỉ theo mốc số lượng và tối ưu 100% phí vận chuyển.
+                          Gom nhu cầu trong cùng khu vực, mở khóa mức giá theo số lượng và chia sẻ chi phí giao nhận về Smart Locker / điểm gom gần bạn.
                         </p>
 
                         <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -5111,6 +5140,42 @@ export default function FlashGroupApp() {
         isAuthenticated={Boolean(currentUser)}
         onOpenAuth={openLoginModal}
       />
+
+      
+      {/* FINAL PRICE CONFIRMATION MODAL (Scenario B / End of Room price confirmation) */}
+      {confirmingPriceRoomId && (
+        <FinalPriceConfirmationModal
+          isOpen={Boolean(confirmingPriceRoomId)}
+          onClose={() => setConfirmingPriceRoomId(null)}
+          room={rooms.find((r) => r.id === confirmingPriceRoomId)!}
+          participation={
+            participations.find(
+              (p) =>
+                p.roomId === confirmingPriceRoomId &&
+                p.userId === (currentUser?.id || 'buyer-demo') &&
+                p.status !== 'cancelled' &&
+                p.status !== 'cancelled_before_payment'
+            ) || {
+              id: 'temp-part',
+              roomId: confirmingPriceRoomId,
+              userId: currentUser?.id || 'buyer-demo',
+              quantity: 1,
+              joinedAt: new Date().toISOString(),
+              status: 'awaiting_payment',
+            }
+          }
+          onConfirmCheckout={() => {
+            const rid = confirmingPriceRoomId;
+            setConfirmingPriceRoomId(null);
+            setCheckoutRoomId(rid);
+          }}
+          onCancelParticipation={() => {
+            if (confirmingPriceRoomId) {
+              handleCancelParticipation(confirmingPriceRoomId);
+            }
+          }}
+        />
+      )}
 
       {/* PHASE 11: DEMO READINESS & SCENARIO CHECK MODAL */}
       <DemoCheckModal

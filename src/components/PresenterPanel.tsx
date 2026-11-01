@@ -6,6 +6,7 @@ import {
   Shield,
   RotateCcw,
   Sparkles,
+  Zap,
   Camera,
   Play,
   X,

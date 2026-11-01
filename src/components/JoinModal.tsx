@@ -36,9 +36,7 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 
   // Validation rules
   let validationError: string | null = null;
-  if (hasAlreadyJoined) {
-    validationError = 'Bạn đã tham gia phòng gom này rồi.';
-  } else if (room.status !== 'active') {
+  if (room.status !== 'active') {
     validationError = 'Phòng gom hiện không ở trạng thái mở.';
   } else if (room.participantCount >= room.maxParticipants) {
     validationError = 'Phòng gom đã đạt giới hạn số người tối đa.';
@@ -76,8 +74,10 @@ export const JoinModal: React.FC<JoinModalProps> = ({
           <div className="flex items-center space-x-3">
             <span className="text-3xl">{room.emoji}</span>
             <div>
-              <span className="text-[11px] font-black uppercase text-[#0C0D10] tracking-wider block">
-                THAM GIA PHÒNG GOM
+
+              <span className="text-[11px] font-black uppercase text-[#000181] tracking-wider block">
+                {hasAlreadyJoined ? 'MUA THÊM SUẤT GOM' : 'THAM GIA PHÒNG GOM'}
+
               </span>
               <h3 className="text-lg font-black text-slate-900 leading-snug">{room.productName}</h3>
               <p className="text-xs text-slate-500">
@@ -95,6 +95,12 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 
         {/* Quantity Selector Section */}
         <div className="py-5 space-y-4">
+          {hasAlreadyJoined && (
+            <div className="bg-[#EFFBFF] border border-[#83E7FF] p-3 rounded-2xl text-xs text-[#000181] font-semibold flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#006EE9] shrink-0" />
+              <span>Bạn đang đặt mua thêm suất. Tổng số lượng nhóm sẽ tăng thêm và số người tham gia giữ nguyên.</span>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-slate-700 block">

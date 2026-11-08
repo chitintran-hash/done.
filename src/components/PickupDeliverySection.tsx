@@ -43,7 +43,7 @@ export const PickupDeliverySection: React.FC<PickupDeliverySectionProps> = ({ on
       <SectionHeader
         badge="LOGISTICS SIÊU CỤC BỘ"
         title="ĐIỂM NHẬN HÀNG & GIAO HÀNG CHUNG"
-        subtitle="Mô hình giao hàng tập trung theo lô giúp giảm đến 85% chi phí vận chuyển mỗi đơn và bảo vệ môi trường nhờ giảm phát thải xe máy giao hàng lẻ."
+        subtitle="Mô hình giao hàng tập trung theo lô về Smart Locker và điểm nhận chung giúp tối ưu chi phí vận chuyển, giảm số chuyến giao riêng lẻ và giúp người mua chủ động thời gian nhận hàng 24/7."
         action={
           onOpenMap && (
             <button

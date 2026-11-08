@@ -1,6 +1,6 @@
 import React from 'react';
 import { SectionHeader } from './ui/SectionHeader';
-import { Building2, Package, Coins, BarChart3, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Building2, Package, Coins, BarChart3, ShieldCheck, ArrowRight, Layers, Truck } from 'lucide-react';
 
 interface SupplierValueSectionProps {
   onLearnMore?: () => void;
@@ -10,27 +10,27 @@ export const SupplierValueSection: React.FC<SupplierValueSectionProps> = ({ onLe
   const values = [
     {
       icon: <Package className="w-5 h-5 text-[#3155FF]" />,
-      title: 'ĐẨY SẢN LƯỢNG LỚN TRONG THỜI GIAN NGẮN',
+      title: 'BÁN THEO NHÓM THAY VÌ TỪNG ĐƠN LẺ',
       description:
-        'Cơ chế chốt phòng gom giúp tiêu thụ số lượng lớn sản phẩm (nông sản, đồ gia dụng, đồ ăn) mà không phải gánh chi phí quảng cáo đơn lẻ tốn kém.',
+        'Gom nhu cầu trước từ nhiều người mua cùng khu vực, giúp nhà cung cấp dễ dàng dự đoán số lượng cần thu hoạch và chuẩn bị hàng theo lô.',
+    },
+    {
+      icon: <Truck className="w-5 h-5 text-[#3155FF]" />,
+      title: 'TỐI ƯU CHI PHÍ XỬ LÝ & VẬN CHUYỂN',
+      description:
+        'Thay vì đóng gói và vận chuyển hàng chục đơn lẻ tốn kém, nhà cung cấp giao 1 chuyến xe gom tập trung về Smart Locker hoặc Điểm nhận chung.',
+    },
+    {
+      icon: <Layers className="w-5 h-5 text-[#3155FF]" />,
+      title: 'CHỦ ĐỘNG THIẾT LẬP BẬC GIÁ (PRICE TIERS)',
+      description:
+        'Có công cụ thiết lập mức giá linh hoạt theo số lượng sản phẩm, kiểm soát biên lợi nhuận và theo dõi tiến độ phòng gom trong thời gian thực.',
     },
     {
       icon: <Coins className="w-5 h-5 text-[#3155FF]" />,
-      title: 'PHÍ NỀN TẢNG MINH BẠCH & ĐỐI SOÁT RÕ RÀNG',
+      title: 'PHÍ NỀN TẢNG MINH BẠCH (7%)',
       description:
-        'Mức phí sàn demo chỉ 7% trên tiền hàng. Toàn bộ dòng tiền bán hàng và yêu cầu rút tiền đối soát được quản lý minh bạch trên bảng điều khiển NCC.',
-    },
-    {
-      icon: <BarChart3 className="w-5 h-5 text-[#3155FF]" />,
-      title: 'TIẾP CẬN CỤM KHÁCH HÀNG KTX & KHU DÂN CƯ',
-      description:
-        'Kết nối trực tiếp với hàng nghìn sinh viên, cán bộ, cư dân có nhu cầu mua sắm định kỳ tại từng cụm địa bàn siêu cục bộ.',
-    },
-    {
-      icon: <ShieldCheck className="w-5 h-5 text-[#3155FF]" />,
-      title: 'XÁC MINH DANH TÍNH & BẢO HỘ THƯƠNG HIỆU',
-      description:
-        'Hồ sơ pháp lý, chứng nhận ATTP và công bố sản phẩm được kiểm duyệt bài bản, xây dựng niềm tin vững chắc đối với người tiêu dùng.',
+        'Phí nền tảng chỉ tính trên các đơn hàng đã thanh toán thành công (không tính trên cước giao), đối soát và thanh toán rõ ràng cho nhà cung cấp.',
     },
   ];
 
@@ -48,14 +48,14 @@ export const SupplierValueSection: React.FC<SupplierValueSectionProps> = ({ onLe
               TẠI SAO NHÀ CUNG CẤP LỰA CHỌN FLASHGROUP?
             </h2>
             <p className="text-xs sm:text-sm text-[#596273] font-normal mt-2 leading-relaxed">
-              Giải pháp phân phối hàng hóa thế hệ mới: giao hàng theo cụm điểm nhận, nhận đơn sỉ từ nhiều người mua nhỏ lẻ, cắt giảm lãng phí trung gian.
+              Mô hình mua chung theo lô: gom nhu cầu trước, giảm chi phí xử lý trên mỗi đơn và tối ưu hóa giao nhận chặng cuối về điểm tập trung.
             </p>
           </div>
 
           {onLearnMore && (
             <button
               onClick={onLearnMore}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#3155FF] text-white font-extrabold text-xs transition shadow-md shadow-[#3155FF]/20 shrink-0 cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-extrabold text-xs transition shadow-md shadow-[#3155FF]/20 shrink-0 cursor-pointer"
             >
               <span>Xem chính sách nhà cung cấp</span>
               <ArrowRight className="w-4 h-4" />
@@ -69,7 +69,7 @@ export const SupplierValueSection: React.FC<SupplierValueSectionProps> = ({ onLe
               key={i}
               className="bg-[#F6F7FC] rounded-2xl p-5 border border-[#E4E8F0] hover:border-[#3155FF]/30 hover:bg-white transition-all duration-200"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#EEF1FF] border border-[#3155FF]/30/40 flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-[#EEF1FF] border border-[#3155FF]/30 flex items-center justify-center mb-4">
                 {v.icon}
               </div>
               <h4 className="font-extrabold text-[#0C0D10] text-xs sm:text-sm uppercase tracking-tight mb-2">

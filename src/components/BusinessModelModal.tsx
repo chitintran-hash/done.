@@ -10,7 +10,12 @@ import {
   Percent,
   HelpCircle,
   ShieldAlert,
-  Calculator
+  Calculator,
+  CheckCircle2,
+  MapPin,
+  Box,
+  Building2,
+  ShieldCheck,
 } from 'lucide-react';
 import { formatVND } from '../utils/pricing';
 
@@ -195,6 +200,50 @@ export const BusinessModelModal: React.FC<BusinessModelModalProps> = ({
               <p className="text-[10px] text-slate-400 italic pt-1">
                 * Lưu ý: Cước vận chuyển không tính vào phí hoa hồng nền tảng. Doanh thu chỉ mở khóa đối soát khi đơn đạt trạng thái Đã nhận hàng (picked_up).
               </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ĐỊNH VỊ THỊ TRƯỜNG & TÍNH KHẢ THI KINH DOANH (Mục 1, 13, 14, 15, 16, 17, 18, 19, 22) */}
+        <div className="bg-[#F6F7FC] rounded-2xl border border-slate-200 p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            <Building2 className="w-4 h-4 text-[#3155FF]" />
+            <h4 className="font-black text-slate-900 text-xs uppercase tracking-wider">
+              Định vị cạnh tranh & Tính khả thi kinh doanh (Business Positioning & Feasibility)
+            </h4>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-600">
+            {/* Cột 1: Định vị vs Sàn truyền thống */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+              <span className="font-black text-xs text-[#0C0D10] uppercase tracking-wide block">
+                Tại sao dùng FlashGroup thay vì Sàn truyền thống?
+              </span>
+              <p className="text-[11px] leading-relaxed">
+                FlashGroup <strong>không cố gắng rẻ hơn các sàn TMĐT trong mọi trường hợp</strong>. Nền tảng tạo giá trị thực tế khi:
+              </p>
+              <ul className="text-[11px] space-y-1.5 list-disc pl-3.5 leading-relaxed">
+                <li>Nhiều người trong cùng khu vực (KTX, chung cư, văn phòng) có cùng nhu cầu.</li>
+                <li>Nhà cung cấp có thể chiết khấu khi đơn hàng xử lý theo lô.</li>
+                <li>Chi phí giao nhận trên mỗi đơn giảm mạnh nhờ gom chung 1 chuyến xe về Smart Locker (3.000đ thay vì 20.000đ – 35.000đ).</li>
+                <li>Sản phẩm phù hợp: Nông sản tươi, thực phẩm, hàng tiêu dùng theo mùa từ nguồn cung trực tiếp.</li>
+              </ul>
+            </div>
+
+            {/* Cột 2: Mô hình Zero-Inventory & Trụ cột công nghệ */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200 space-y-2">
+              <span className="font-black text-xs text-[#0C0D10] uppercase tracking-wide block">
+                Mô hình Zero-Inventory & Vai trò Smart Locker / FlashMap
+              </span>
+              <p className="text-[11px] leading-relaxed">
+                FlashGroup <strong>không sở hữu hàng tồn kho (Zero-Inventory)</strong>. Nhà cung cấp chịu trách nhiệm về sản phẩm và chuẩn bị hàng.
+              </p>
+              <ul className="text-[11px] space-y-1.5 list-disc pl-3.5 leading-relaxed">
+                <li><strong>FlashGroup tập trung:</strong> Kết nối người mua, gom nhu cầu, quản lý mức giá theo số lượng, hỗ trợ logistics và trải nghiệm nền tảng.</li>
+                <li><strong>Smart Locker:</strong> Điểm nhận hàng 24/7 giúp gom nhiều đơn vào một điểm, giảm việc giao hàng riêng lẻ và giúp người mua chủ động thời gian nhận.</li>
+                <li><strong>FlashMap:</strong> Định vị các phòng gom và điểm nhận siêu cục bộ, giúp cộng đồng gần nhau gom đơn hiệu quả hơn.</li>
+                <li><strong>4 Trụ cột khác biệt:</strong> Mua chung + Khám phá theo khu vực + Chia sẻ giao nhận + Smart Locker 24/7.</li>
+              </ul>
             </div>
           </div>
         </div>

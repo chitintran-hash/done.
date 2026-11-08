@@ -7,12 +7,24 @@ export const FaqSection: React.FC = () => {
 
   const faqs = [
     {
-      q: 'Phòng gom hoạt động như thế nào khi chưa đủ người?',
-      a: 'Nếu phòng gom chưa đạt mốc số lượng cao nhất khi hết thời gian, hệ thống sẽ chốt đơn ở mức giá tương ứng với số lượng thực tế đã gom được. Người mua vẫn được nhận hàng với mức giá nhóm tốt hơn giá bán lẻ.',
+      q: 'Tại sao nên chọn FlashGroup thay vì các sàn thương mại điện tử hiện có?',
+      a: 'FlashGroup không hướng đến việc rẻ hơn mọi sàn thương mại điện tử trong mọi trường hợp. FlashGroup tạo giá trị khi nhiều người trong cùng một khu vực (KTX, chung cư, văn phòng) có cùng nhu cầu về các sản phẩm như nông sản tươi, thực phẩm, hàng tiêu dùng theo mùa hoặc sản phẩm từ nguồn cung trực tiếp. Khi đó, nhà cung cấp có thể chiết khấu khi đơn hàng xử lý theo lô và gom toàn bộ đơn vào 1 chuyến giao duy nhất về Smart Locker / Điểm nhận, giúp người mua chia sẻ chi phí giao nhận (chỉ 2.000đ – 4.000đ/người thay vì 20.000đ – 35.000đ khi giao riêng lẻ). Nếu một kênh khác có tổng chi phí thấp hơn hoặc cần giao gấp từng món lẻ, người mua hoàn toàn có thể lựa chọn kênh phù hợp hơn.',
     },
     {
-      q: 'Tôi nhận hàng tại đâu và có mất thêm phí ship không?',
-      a: 'Bạn nhận hàng tại Điểm nhận hàng (Locker thông minh hoặc quầy đối tác KTX/khu dân cư) đã chọn khi tham gia. Phí vận chuyển được chia đều minh bạch cho tất cả người tham gia (thường chỉ 2.000đ – 4.000đ/người) và hiển thị rõ ràng tại bước thanh toán.',
+      q: 'FlashGroup phù hợp khi nào và khi nào không nên dùng?',
+      a: 'FlashGroup phù hợp nhất khi: (1) Nhiều người ở gần nhau cần cùng một sản phẩm, (2) Nhà cung cấp có khả năng giảm giá theo số lượng, (3) Có thể giao theo nhóm đến điểm nhận thuận tiện và (4) Tổng chi phí mua chung thấp hơn hoặc hợp lý hơn mua riêng lẻ. Ngược lại, không nên dùng FlashGroup nếu giá bán lẻ trên thị trường đã rẻ hơn, hoặc đơn hàng cần giao gấp riêng biệt trong 1–2 giờ mà việc gom đơn không tạo thêm lợi ích về giá hay giao nhận.',
+    },
+    {
+      q: 'Vì sao Nhà cung cấp có thể giảm giá khi số lượng tăng?',
+      a: 'Khi tổng số lượng tăng, nhà cung cấp có thể xử lý đơn theo lô, giảm chi phí xử lý trên mỗi đơn và tối ưu hóa vận chuyển một chuyến thay vì đóng gói phân tán. Phần tiết kiệm chi phí vận hành này có thể được chuyển thành các mức giá mua chung thấp hơn theo từng bậc số lượng do chính nhà cung cấp thiết lập.',
+    },
+    {
+      q: 'Phòng gom hoạt động như thế nào khi chưa đủ số lượng mục tiêu cao nhất?',
+      a: 'Nếu phòng gom chưa đạt mốc số lượng cao nhất khi hết thời gian, hệ thống sẽ chốt đơn ở mức giá tương ứng với bậc số lượng cao nhất mà nhóm đã thực tế đạt được (highest unlocked tier). Người mua được quyền xem màn hình xác nhận giá cuối cùng và lựa chọn: [Tiếp tục thanh toán] hoặc [Không tiếp tục] mà không bị trừ tiền tự động hay mất phí.',
+    },
+    {
+      q: 'Tôi nhận hàng tại đâu và cước giao được tính như thế nào?',
+      a: 'Bạn nhận hàng tại Điểm nhận hàng (Locker thông minh hoặc quầy đối tác KTX/khu dân cư) đã chọn khi tham gia. Phí vận chuyển được chia đều minh bạch cho tất cả người tham gia (thường chỉ 2.000đ – 4.000đ/người) và hiển thị rõ ràng tại bước thanh toán. Tổng thanh toán = Giá sản phẩm theo bậc + Phí giao chia sẻ.',
     },
     {
       q: 'Nếu sản phẩm bị hư hỏng hoặc sai quy cách thì xử lý ra sao?',
@@ -20,7 +32,7 @@ export const FaqSection: React.FC = () => {
     },
     {
       q: 'FlashGroup có phải nền tảng thương mại điện tử thực tế không?',
-      a: 'FlashGroup là đồ án nguyên mẫu học thuật (Academic Prototype) nghiên cứu mô hình Hyperlocal Group Buying. Toàn bộ tính năng thanh toán, đổi điểm FlashPoints, voucher và vận chuyển đều được mô phỏng công nghệ, không phát sinh giao dịch tiền thật.',
+      a: 'FlashGroup là đồ án nguyên mẫu học thuật (Academic Prototype) nghiên cứu mô hình Hyperlocal Group Buying. Toàn bộ tính năng thanh toán, đổi điểm FlashPoints, voucher và vận chuyển đều được mô phỏng công nghệ phục vụ nghiên cứu, không phát sinh giao dịch tài chính thật.',
     },
     {
       q: 'Nhà cung cấp cần những điều kiện gì để mở phòng gom?',
@@ -37,7 +49,7 @@ export const FaqSection: React.FC = () => {
       <SectionHeader
         badge="GIẢI ĐÁP THẮC MẮC"
         title="CÂU HỎI THƯỜNG GẶP"
-        subtitle="Những câu hỏi phổ biến nhất về cơ chế mua gom, thanh toán mô phỏng và điểm nhận hàng tại FlashGroup."
+        subtitle="Những câu hỏi phổ biến nhất về định vị mô hình mua chung, tính kinh tế và điểm nhận hàng tại FlashGroup."
         align="left"
       />
 

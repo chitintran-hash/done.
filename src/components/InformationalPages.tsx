@@ -261,8 +261,8 @@ export const HowItWorksPage: React.FC = () => {
           },
           {
             step: '03',
-            title: 'ĐẠT MỐC GIÁ TỐT HƠN',
-            desc: 'Càng đông người mua, bậc giá tự động hạ xuống. Toàn bộ nhóm cùng được hưởng mức giá chốt thấp nhất.',
+            title: 'MỞ KHÓA GIÁ THEO SỐ LƯỢNG',
+            desc: 'Khi tổng số lượng đạt mốc, bậc giá tiếp theo được mở khóa. Toàn bộ nhóm cùng được hưởng mức giá chốt theo số lượng nhóm đạt được.',
             badge: 'Càng đông, càng rẻ',
           },
           {
@@ -304,27 +304,63 @@ export const HowItWorksPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               <tr>
+                <td className="py-3 px-4 font-bold text-slate-900">Mô hình phục vụ</td>
+                <td className="py-3 px-4 text-blue-700 font-bold">Gom nhu cầu theo cụm khu vực (KTX, chung cư, văn phòng) theo lô</td>
+                <td className="py-3 px-4 text-slate-600">Đặt mua và xử lý phân tán từng đơn lẻ cho từng cá nhân</td>
+              </tr>
+              <tr>
                 <td className="py-3 px-4 font-bold text-slate-900">Mức giá sản phẩm</td>
-                <td className="py-3 px-4 text-blue-700 font-bold">Giảm 15% – 35% theo bậc sỉ</td>
+                <td className="py-3 px-4 text-blue-700 font-bold">Mở khóa theo bậc số lượng của nhóm (do NCC thiết lập)</td>
                 <td className="py-3 px-4 text-slate-600">Giá bán lẻ niêm yết cố định</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-bold text-slate-900">Chi phí vận chuyển</td>
-                <td className="py-3 px-4 text-blue-700 font-bold">Chia đều theo lô (chỉ 2k – 5k/người)</td>
-                <td className="py-3 px-4 text-slate-600">Mỗi đơn trả phí ship riêng (20k – 35k)</td>
+                <td className="py-3 px-4 text-blue-700 font-bold">Chia sẻ theo lô (gom 1 chuyến về Smart Locker, chỉ từ 2k – 4k/người)</td>
+                <td className="py-3 px-4 text-slate-600">Mỗi đơn trả phí ship riêng lẻ (20k – 35k/đơn)</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-bold text-slate-900">Điểm nhận hàng</td>
-                <td className="py-3 px-4 text-blue-700 font-bold">Smart Locker, sảnh KTX, hub chung cư</td>
-                <td className="py-3 px-4 text-slate-600">Phải túc trực điện thoại nhận shipper</td>
+                <td className="py-3 px-4 text-blue-700 font-bold">Smart Locker chủ động 24/7 bằng mã QR/PIN không tiếp xúc</td>
+                <td className="py-3 px-4 text-slate-600">Giao tận nơi trong giờ hành chính, cần nghe máy shipper</td>
               </tr>
               <tr>
-                <td className="py-3 px-4 font-bold text-slate-900">Bảo đảm rủi ro</td>
-                <td className="py-3 px-4 text-blue-700 font-bold">Hoàn tiền 100% nếu không đủ số lượng</td>
-                <td className="py-3 px-4 text-slate-600">Phụ thuộc quy định từng sàn</td>
+                <td className="py-3 px-4 font-bold text-slate-900">Sản phẩm phù hợp nhất</td>
+                <td className="py-3 px-4 text-blue-700 font-bold">Nông sản tươi, thực phẩm, hàng theo mùa từ nguồn cung trực tiếp</td>
+                <td className="py-3 px-4 text-slate-600">Đa dạng mọi ngành hàng, đơn cần giao gấp riêng lẻ</td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Strategic Positioning: Khi nào nên & không nên dùng FlashGroup */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-3">
+          <h3 className="font-black text-sm uppercase text-slate-900 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            FlashGroup phù hợp khi nào?
+          </h3>
+          <ul className="text-xs text-slate-600 space-y-2 list-disc pl-4 leading-relaxed">
+            <li>Nhiều người gần nhau (cùng KTX, chung cư, công sở) có cùng nhu cầu về một mặt hàng.</li>
+            <li>Nhà cung cấp có khả năng giảm giá khi đơn hàng được gom đủ số lượng theo lô.</li>
+            <li>Có điểm nhận hàng Smart Locker thuận tiện nhận đồ khi đi học, đi làm về.</li>
+            <li>Tổng chi phí (Giá sản phẩm + Cước ship chia sẻ) thấp hơn hoặc hợp lý hơn mua lẻ riêng biệt.</li>
+          </ul>
+        </div>
+
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-3">
+          <h3 className="font-black text-sm uppercase text-slate-900 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            Khi nào không nên dùng FlashGroup?
+          </h3>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Không phải sản phẩm nào cũng phù hợp với mua chung:
+          </p>
+          <ul className="text-xs text-slate-600 space-y-2 list-disc pl-4 leading-relaxed">
+            <li>Nếu giá bán lẻ trên thị trường đã thấp hơn, việc gom đơn không tạo thêm lợi ích về giá hay giao nhận.</li>
+            <li>Khi bạn cần giao gấp một món riêng biệt trong 1–2 giờ mà không muốn chờ gom đủ lô.</li>
+            <li>Trong các trường hợp trên, người mua hoàn toàn có thể lựa chọn kênh mua sắm khác phù hợp hơn.</li>
+          </ul>
         </div>
       </div>
     </div>

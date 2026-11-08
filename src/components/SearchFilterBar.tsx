@@ -53,7 +53,7 @@ export const SearchFilterBar: React.FC<SearchFilterBarProps> = ({
             >
               <option value="near_me">Gần tôi nhất (Near Me)</option>
               <option value="ending_soon">Sắp kết thúc (Ending Soon)</option>
-              <option value="lowest_price">Giá thấp nhất (Lowest Price)</option>
+              <option value="lowest_price">Giá từ thấp đến cao (Price: Low to High)</option>
               <option value="highest_discount">Mức giảm sâu nhất (Highest Discount)</option>
               <option value="most_popular">Đông người nhất (Most Popular)</option>
               <option value="newest">Mới mở gom (Newest)</option>

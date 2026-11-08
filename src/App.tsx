@@ -43,6 +43,7 @@ import {
   LogOut,
   ShieldAlert,
   XCircle,
+  Calculator,
 } from 'lucide-react';
 
 import {
@@ -4169,18 +4170,18 @@ setOrders(createInitialOrders());
                     </div>
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
                       <div className="lg:col-span-7 space-y-6">
-                        <div className="inline-flex items-center space-x-2 bg-white/15 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-white border border-white/20">
+                        <div className="inline-flex items-center space-x-2 bg-white/15 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-black text-white border border-white/20 tracking-wider">
                           <Sparkles className="w-4 h-4 text-[#C7F000]" />
-                          <span>MÔ HÌNH MUA GOM SIÊU CỤC BỘ • TIẾT KIỆM ĐẾN 35%</span>
+                          <span>MUA CHUNG GẦN BẠN • CHIA SẺ GIAO NHẬN</span>
                         </div>
                         <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight uppercase">
                           CÀNG ĐÔNG, CÀNG RẺ. <br className="hidden sm:inline" />
                           <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#EEF1FF] to-[#C7F000]">
-                            GIAO CHUNG MỘT ĐIỂM.
+                            GOM NHU CẦU GẦN BẠN.
                           </span>
                         </h1>
                         <p className="text-base sm:text-lg text-slate-100 font-normal max-w-xl leading-relaxed">
-                          Gom nhu cầu trong cùng khu vực, mở khóa mức giá theo số lượng và chia sẻ chi phí giao nhận về Smart Locker / điểm gom gần bạn.
+                          Gom nhu cầu trong cùng khu vực, mở khóa mức giá theo số lượng và chia sẻ chi phí giao nhận. Mức tiết kiệm phụ thuộc vào sản phẩm, số lượng của nhóm và cước vận chuyển.
                         </p>
 
                         <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -4193,9 +4194,15 @@ setOrders(createInitialOrders());
                               if (el) el.scrollIntoView({ behavior: 'smooth' });
                             }}
                           >
-                            KHÁM PHÁ PHÒNG GOM
+                            KHÁM PHÁ PHÒNG MUA CHUNG
                           </CTAButton>
-                          <button onClick={() => navigate('/seller-policy')} className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base bg-transparent hover:bg-white/10 hover:text-white text-white border-2 border-white transition cursor-pointer active:scale-98 uppercase"><span>DÀNH CHO NHÀ CUNG CẤP</span><Building2 className="w-5 h-5" /></button>
+                          <button
+                            onClick={() => navigate('/flashmap')}
+                            className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base bg-transparent hover:bg-white/10 hover:text-white text-white border-2 border-white transition cursor-pointer active:scale-98 uppercase"
+                          >
+                            <MapPin className="w-5 h-5 text-[#C7F000]" />
+                            <span>XEM FLASHMAP</span>
+                          </button>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 pt-4 text-xs font-semibold text-white/90 border-t border-white/15">
@@ -4580,7 +4587,7 @@ setOrders(createInitialOrders());
                                   <div className="flex items-center justify-between text-xs">
                                     <div className="text-[#0C0D10] font-semibold flex items-center gap-1">
                                       <TrendingDown className="w-3.5 h-3.5" />
-                                      Mục tiêu giá thấp nhất:
+                                      Bậc giá gom tối ưu:
                                     </div>
                                     <div className="font-extrabold text-[#0C0D10]">{formatVND(lowestPrice)}</div>
                                   </div>
@@ -5588,6 +5595,48 @@ function GroupRoomView({
                     <span className="font-black text-[#0C0D10]">{formatVND(shippingSaved)}</span>
                   </div>
                 </div>
+              </div>
+
+              {/* PHẦN 5: TỔNG CHI PHÍ DỰ KIẾN (GIÁ SẢN PHẨM + SHIP CHIA SẺ) */}
+              <div className="bg-[#FAF0FF] border border-[#E8A0FF] rounded-2xl p-4 text-xs space-y-2">
+                <div className="flex items-center justify-between text-[#000181] font-bold">
+                  <span className="flex items-center gap-1.5 uppercase tracking-wide text-[11px]">
+                    <Calculator className="w-4 h-4 text-[#7B3FF2]" />
+                    Tổng chi phí dự kiến (1 {room.unit}):
+                  </span>
+                  <span className="text-[#000181] font-black text-base">
+                    {formatVND(currentPrice + shippingPerPerson)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-[#53536A] pt-1 border-t border-[#E8A0FF]/60">
+                  <span>Giá sản phẩm ({formatVND(currentPrice)}) + Cước ship chia sẻ ({formatVND(shippingPerPerson)})</span>
+                  <span className="font-bold text-[#000181]">0đ phụ phí ẩn</span>
+                </div>
+              </div>
+
+              {/* PHẦN 6 & 11: VÌ SAO MUA CHUNG CÓ LỢI & GIÁ DO NCC THIẾT LẬP */}
+              <div className="bg-[#EFFBFF] border border-[#83E7FF] rounded-2xl p-4 text-xs space-y-2 text-[#000181]">
+                <div className="font-black text-xs uppercase tracking-wide flex items-center gap-1.5">
+                  <HelpCircle className="w-4 h-4 text-[#006EE9]" />
+                  Vì sao mua chung có lợi?
+                </div>
+                <ul className="space-y-1.5 text-[11px] text-[#53536A] leading-relaxed">
+                  <li className="flex items-start gap-1.5">
+                    <span className="text-[#006EE9] font-black">•</span>
+                    <span><strong>Giá giảm khi tổng số lượng tăng:</strong> Nhà cung cấp có thể chiết khấu khi đơn hàng đạt ngưỡng xử lý theo lô.</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <span className="text-[#006EE9] font-black">•</span>
+                    <span><strong>Phí giao nhận được chia sẻ:</strong> Gom chung một chuyến xe về điểm nhận ({room.pickupPointName || room.pickupPoint}) giúp giảm chi phí giao riêng lẻ.</span>
+                  </li>
+                  <li className="flex items-start gap-1.5">
+                    <span className="text-[#006EE9] font-black">•</span>
+                    <span><strong>Nhận hàng chủ động tại Smart Locker:</strong> Nhận hàng linh hoạt 24/7 bằng mã QR/PIN mà không cần chờ shipper gọi điện.</span>
+                  </li>
+                </ul>
+                <p className="text-[10px] text-slate-500 italic pt-1 border-t border-[#83E7FF]/60">
+                  * Các mức giá mua chung do Nhà cung cấp trực tiếp thiết lập theo số lượng. FlashGroup là nền tảng kết nối và vận hành cơ chế mua chung.
+                </p>
               </div>
             </div>
           </div>

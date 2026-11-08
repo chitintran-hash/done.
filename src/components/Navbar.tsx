@@ -114,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       {/* 1. TOP HEADER (Height 72-80px: h-20, Cobalt #3155FF, border #2444DC) */}
-      <header className="sticky top-0 z-40 bg-[#3155FF] border-b border-[#2444DC] shadow-md h-20 transition-all text-white w-full max-w-full overflow-x-hidden">
+      <header className="sticky top-0 z-40 bg-[#3155FF] border-b border-[#2444DC] shadow-md h-20 transition-all text-white w-full">
         <div className="max-w-[1600px] w-full mx-auto px-3 sm:px-4 lg:px-6 xl:px-8 h-full flex items-center justify-between gap-1.5 sm:gap-3">
           {/* LEFT: LOGO (FLASH white + GROUP #C7F000 + Spark #C7F000) */}
           <div className="flex items-center space-x-2 xl:space-x-3 shrink-0">
@@ -501,8 +501,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* User Profile Dropdown */}
             <div className="relative shrink-0" ref={userMenuRef}>
               <button
+                type="button"
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center space-x-1.5 sm:space-x-2 p-1 sm:p-1.5 rounded-xl xl:rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white shrink-0"
+                title={`Tài khoản ${currentUser.name} — Bấm để mở menu & Đăng xuất`}
+                className="flex items-center space-x-1.5 sm:space-x-2 p-1 sm:p-1.5 rounded-xl xl:rounded-2xl hover:bg-white/10 transition text-left cursor-pointer border border-transparent hover:border-white/20 text-white shrink-0 active:scale-95"
               >
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg xl:rounded-xl bg-white text-[#3155FF] font-black flex items-center justify-center text-xs shadow-sm overflow-hidden shrink-0">
                   {currentUser.avatar ? (
@@ -519,15 +521,29 @@ export const Navbar: React.FC<NavbarProps> = ({
                     {roleBadgeConfig.label}
                   </span>
                 </div>
-                <ChevronDown className="w-3.5 h-3.5 text-white/80 shrink-0" />
+                <ChevronDown className={`w-3.5 h-3.5 text-white/80 shrink-0 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {/* Profile Menu Dropdown */}
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-64 sm:w-72 max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-90px)] overflow-y-auto bg-[#FFFFFF] rounded-2xl shadow-2xl border border-[#E4E8F0] z-50 py-1.5 animate-fade-in text-xs font-bold text-[#0C0D10]">
-                  {/* Header: User Info */}
+                  {/* Header: User Info & Direct Logout Button */}
                   <div className="px-4 py-3 bg-[#F6F7FC] border-b border-[#E4E8F0]">
-                    <div className="font-black text-[#0C0D10] text-sm truncate">{currentUser.name}</div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-black text-[#0C0D10] text-sm truncate">{currentUser.name}</div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          onLogout();
+                        }}
+                        className="text-[11px] font-black text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-2 py-0.5 rounded-lg transition shrink-0 cursor-pointer flex items-center gap-1 active:scale-95"
+                        title="Đăng xuất khỏi hệ thống"
+                      >
+                        <LogOut className="w-3 h-3 text-rose-500 shrink-0" />
+                        <span>THOÁT</span>
+                      </button>
+                    </div>
                     <div className="text-[11px] text-[#596273] font-medium truncate">{currentUser.email}</div>
                     <div className="mt-1.5">
                       <span className={`inline-block text-[10px] font-black px-2 py-0.5 rounded border ${roleBadgeConfig.bg} ${roleBadgeConfig.text} ${roleBadgeConfig.border}`}>
@@ -701,13 +717,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {/* Divider & Logout */}
                   <div className="border-t border-[#E4E8F0] pt-1">
                     <button
+                      type="button"
                       onClick={() => {
                         setIsUserMenuOpen(false);
                         onLogout();
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-rose-50 text-rose-600 font-black flex items-center space-x-2"
+                      className="w-full px-4 py-2.5 text-left hover:bg-rose-50 text-rose-600 font-black flex items-center space-x-2 transition cursor-pointer"
                     >
-                      <LogOut className="w-4 h-4 text-rose-500" />
+                      <LogOut className="w-4 h-4 text-rose-500 shrink-0" />
                       <span>ĐĂNG XUẤT</span>
                     </button>
                   </div>

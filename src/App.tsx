@@ -40,6 +40,7 @@ import {
   EyeOff,
   Home,
   Plus,
+  LogOut,
 } from 'lucide-react';
 
 import {
@@ -1738,6 +1739,8 @@ setOrders(createInitialOrders());
     setSelectedRoomId(null);
     setCheckoutRoomId(null);
     setBuyerTab('discovery');
+    setAdminViewMode('storefront');
+    navigate('/');
     showToast('Đã đăng xuất phiên làm việc.');
   };
 
@@ -3187,7 +3190,7 @@ setOrders(createInitialOrders());
   // 4. MAIN MARKETPLACE APP (LOGGED IN)
   // ==========================================
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-50 text-slate-800 font-sans selection:bg-[#C7F000]/40 selection:text-emerald-900 flex flex-col justify-between pb-20 md:pb-0">
+    <div className="min-h-screen w-full bg-slate-50 text-slate-800 font-sans selection:bg-[#C7F000]/40 selection:text-emerald-900 flex flex-col justify-between pb-20 md:pb-0">
       <div>
         {/* TOP OFFLINE DETECTION BANNER (Phase 11) */}
         <OfflineBanner />
@@ -3703,7 +3706,7 @@ setOrders(createInitialOrders());
 
         {/* ADMIN STOREFRONT MODE BANNER */}
         {currentUser && currentUser.role === 'admin' && adminViewMode === 'storefront' && (
-          <div className="bg-[#0C0D10] text-white px-3 sm:px-4 lg:px-6 xl:px-8 py-2.5 text-xs font-bold border-b border-white/10 z-30 shadow-md w-full max-w-full overflow-x-hidden">
+          <div className="bg-[#0C0D10] text-white px-3 sm:px-4 lg:px-6 xl:px-8 py-2.5 text-xs font-bold border-b border-white/10 z-30 shadow-md w-full">
             <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between gap-3">
               <div className="flex items-center space-x-2 truncate">
                 <span className="w-2 h-2 rounded-full bg-[#C7F000] animate-pulse shrink-0" />
@@ -3711,17 +3714,29 @@ setOrders(createInitialOrders());
                   Bạn đang xem <strong>Giao diện Trang chủ & FlashMap</strong> với quyền <strong>Quản trị viên (Admin)</strong>.
                 </span>
               </div>
-              <button
-                onClick={() => {
-                  setAdminViewMode('dashboard');
-                  setAdminTab('overview');
-                  navigate('/');
-                }}
-                className="px-3 xl:px-3.5 py-1.5 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer flex items-center space-x-1.5 shadow-sm active:scale-95 whitespace-nowrap shrink-0"
-              >
-                <span>VỀ BẢNG QUẢN TRỊ ADMIN</span>
-                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
+              <div className="flex items-center space-x-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAdminViewMode('dashboard');
+                    setAdminTab('overview');
+                    navigate('/');
+                  }}
+                  className="px-3 xl:px-3.5 py-1.5 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition cursor-pointer flex items-center space-x-1.5 shadow-sm active:scale-95 whitespace-nowrap shrink-0"
+                >
+                  <span>VỀ BẢNG QUẢN TRỊ ADMIN</span>
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 hover:text-white border border-rose-500/30 font-black text-xs transition cursor-pointer flex items-center space-x-1 shrink-0 active:scale-95"
+                  title="Thoát phiên đăng nhập"
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  <span>ĐĂNG XUẤT</span>
+                </button>
+              </div>
             </div>
           </div>
         )}

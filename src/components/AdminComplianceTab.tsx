@@ -16,8 +16,10 @@ import type {
   AuditEvent,
   ComplianceChecklistItem,
   ComplianceChecklistStatus,
+  Order,
+  RefundRequest,
 } from '../types';
-import { isComplaintSlaRisk } from '../utils/pricing';
+import { isComplaintSlaRisk, formatVND } from '../utils/pricing';
 import {
   ShieldCheck,
   Building2,
@@ -48,6 +50,8 @@ interface AdminComplianceTabProps {
   moderationActions: ModerationAction[];
   auditEvents: AuditEvent[];
   complianceChecklist: ComplianceChecklistItem[];
+  orders?: Order[];
+  refunds?: RefundRequest[];
   onUpdateSupplierVerification: (
     supplierId: string,
     status: SupplierVerificationStatus,
@@ -113,6 +117,8 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
   moderationActions,
   auditEvents,
   complianceChecklist,
+  orders = [],
+  refunds = [],
   onUpdateSupplierVerification,
   onReviewDocument,
   onModerateProduct,
@@ -716,6 +722,67 @@ export const AdminComplianceTab: React.FC<AdminComplianceTabProps> = ({
                   </div>
 
                   <p className="text-slate-700">{c.description}</p>
+
+                  {/* Requirement 23: Snapshot đơn hàng liên quan trong Compliance Tab */}
+                  {c.orderId && (() => {
+                    const relatedOrder = orders.find((o) => o.id === c.orderId);
+                    const relatedRefund = refunds.find((r) => r.orderId === c.orderId);
+                    if (!relatedOrder) return null;
+                    return (
+                      <div className="bg-white/95 p-3 rounded-xl border border-slate-200 text-xs shadow-2xs space-y-2">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+                          <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                            📦 Snapshot Giao dịch Đơn hàng #{relatedOrder.id}
+                          </span>
+                          <span className="text-[10px] font-mono text-slate-400">
+                            Ngày tạo: {new Date(relatedOrder.createdAt).toLocaleDateString('vi-VN')}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                          <div>
+                            <span className="text-slate-400 block text-[10px]">Sản phẩm & SL</span>
+                            <span className="font-bold text-slate-800">{relatedOrder.productName}</span>
+                            <span className="text-slate-500 block">SL: {relatedOrder.quantity} {relatedOrder.unit || 'suất'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block text-[10px]">Giá đã chốt (Snapshot)</span>
+                            <span className="font-black text-[#3155FF]">{formatVND(relatedOrder.unitPrice)}</span>
+                            <span className="text-slate-500 block">Tiền hàng: {formatVND(relatedOrder.productSubtotal)}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block text-[10px]">Thanh toán (GMV)</span>
+                            <span className="font-bold text-slate-900">{formatVND(relatedOrder.totalAmount)}</span>
+                            <span className="text-slate-500 block">
+                              {relatedOrder.status === 'awaiting_payment'
+                                ? 'Chờ thanh toán'
+                                : relatedOrder.status === 'cancelled_before_payment'
+                                ? 'Đã hủy trước TT'
+                                : 'Đã thanh toán'}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-slate-400 block text-[10px]">Giao nhận & Hoàn tiền</span>
+                            <span className="font-bold text-slate-800 block">
+                              {relatedOrder.status === 'picked_up'
+                                ? 'Đã nhận hàng'
+                                : relatedOrder.status === 'ready_for_pickup'
+                                ? 'Tại Locker'
+                                : relatedOrder.status === 'in_transit'
+                                ? 'Đang giao'
+                                : relatedOrder.status === 'preparing'
+                                ? 'Đang chuẩn bị'
+                                : 'Chờ xử lý'}
+                            </span>
+                            <span className={`text-[10px] font-bold ${relatedRefund ? 'text-rose-600' : 'text-slate-400'}`}>
+                              {relatedRefund
+                                ? `Hoàn tiền: ${formatVND(relatedOrder.totalAmount)} (${relatedRefund.status === 'refunded' ? 'Đã hoàn' : relatedRefund.status === 'approved' ? 'Đã duyệt' : 'Đang xử lý'})`
+                                : 'Không có yêu cầu refund'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {c.evidenceMetadata.length > 0 && (
                     <div className="text-[11px] text-slate-500">

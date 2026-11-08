@@ -127,6 +127,13 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
     };
   }, [supplierOrders, supplierPayouts]);
 
+  // Requirement 8: Doanh thu dự kiến từ các đơn chờ thanh toán
+  const projectedRevenue = useMemo(() => {
+    return supplierOrders
+      .filter((o) => o.status === 'awaiting_payment')
+      .reduce((acc, o) => acc + o.productSubtotal, 0);
+  }, [supplierOrders]);
+
   const periodRange = useMemo(() => {
     if (metrics.availableOrders.length === 0) {
       const nowIso = new Date().toISOString();
@@ -225,72 +232,78 @@ export const SupplierEarningsView: React.FC<SupplierEarningsProps> = ({
         </span>
       </div>
 
-      {/* 6 Financial Cards (Requirement 7) */}
+      {/* Requirement 8, 9, 10, 11: 6 Financial Cards (Tách bạch Doanh thu dự kiến vs Doanh thu đã thanh toán) */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-[11px] text-slate-400 font-bold uppercase">Gross Sales</span>
+        <div className="bg-white p-5 rounded-2xl border border-amber-200 bg-amber-50/20 shadow-sm">
+          <span className="text-[11px] text-amber-800 font-bold uppercase block">1. Doanh thu dự kiến</span>
+          <div className="text-lg sm:text-xl font-black text-amber-700 mt-1">
+            {formatVND(projectedRevenue)}
+          </div>
+          <span className="text-[10px] text-amber-600 mt-1 block">Chờ Buyer thanh toán</span>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-slate-300 shadow-sm">
+          <span className="text-[11px] text-slate-900 font-bold uppercase block">2. Doanh thu đã TT</span>
           <div className="text-lg sm:text-xl font-black text-slate-900 mt-1">
             {formatVND(metrics.grossSales)}
           </div>
-          <span className="text-[10px] text-slate-400 mt-1 block">Tổng tiền hàng (chưa trừ phí)</span>
+          <span className="text-[10px] text-slate-500 mt-1 block">Tiền hàng đã thanh toán (Paid GMV)</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-[11px] text-[#3155FF] font-bold uppercase flex items-center gap-1">
-            <Percent className="w-3 h-3" /> Platform Fees
+        <div className="bg-white p-5 rounded-2xl border border-indigo-200 bg-[#EEF1FF]/40 shadow-sm">
+          <span className="text-[11px] text-[#000181] font-bold uppercase flex items-center gap-1">
+            <Percent className="w-3 h-3 text-[#3155FF]" /> 3. Phí sàn (7%)
           </span>
-          <div className="text-lg sm:text-xl font-black text-[#3155FF] mt-1">
+          <div className="text-lg sm:text-xl font-black text-[#006EE9] mt-1">
             -{formatVND(metrics.platformFees)}
           </div>
-          <span className="text-[10px] text-slate-400 mt-1 block">
-            Phí nền tảng demo: {Math.round(commissionRate * 100)}%
+          <span className="text-[10px] text-slate-500 mt-1 block">
+            Chỉ tính trên tiền hàng đã TT
           </span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-[11px] text-[#0C0D10] font-bold uppercase">Net Earnings</span>
+        <div className="bg-white p-5 rounded-2xl border border-rose-200 bg-rose-50/20 shadow-sm">
+          <span className="text-[11px] text-rose-700 font-bold uppercase block">4. Khoản hoàn tiền</span>
+          <div className="text-lg sm:text-xl font-black text-rose-600 mt-1">
+            -{formatVND(metrics.reversedAmount)}
+          </div>
+          <span className="text-[10px] text-rose-500 mt-1 block">
+            {metrics.reversedOrders.length} đơn hoàn (Đã trừ doanh thu)
+          </span>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-[#D0FFA4] bg-[#F4FFE8]/40 shadow-sm">
+          <span className="text-[11px] text-[#000181] font-bold uppercase block">5. Doanh thu ròng</span>
           <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">
             {formatVND(metrics.netEarnings)}
           </div>
-          <span className="text-[10px] text-slate-400 mt-1 block">Tổng doanh thu ròng</span>
+          <span className="text-[10px] text-[#0C0D10] font-semibold mt-1 block">Thực nhận về Supplier</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm">
-          <span className="text-[11px] text-amber-800 font-bold uppercase flex items-center gap-1">
-            <Clock className="w-3 h-3" /> Pending Earnings
-          </span>
-          <div className="text-lg sm:text-xl font-black text-amber-700 mt-1">
-            {formatVND(metrics.pendingEarnings)}
-          </div>
-          <span className="text-[10px] text-amber-700/80 mt-1 block">
-            {metrics.pendingOrders.length} đơn đang giao / chờ nhận
-          </span>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border-2 border-[#C7F000] bg-[#F5FBD9]/40 shadow-sm">
-          <span className="text-[11px] text-emerald-800 font-black uppercase flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#0C0D10]" /> Available Balance
+        <div className="bg-white p-5 rounded-2xl border-2 border-[#C7F000] bg-[#F5FBD9]/50 shadow-sm">
+          <span className="text-[11px] text-emerald-900 font-black uppercase flex items-center gap-1">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#0C0D10]" /> 6. Khả dụng đối soát
           </span>
           <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">
             {formatVND(metrics.availableBalance)}
           </div>
           <span className="text-[10px] text-[#0C0D10] font-semibold mt-1 block">
-            {metrics.availableOrders.length} đơn picked_up sẵn sàng rút
-          </span>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-[11px] text-teal-700 font-bold uppercase">Paid Out</span>
-          <div className="text-lg sm:text-xl font-black text-teal-700 mt-1">
-            {formatVND(metrics.paidOutTotal)}
-          </div>
-          <span className="text-[10px] text-slate-400 mt-1 block">
-            {metrics.pendingPayoutRequestsTotal > 0
-              ? `Đang chờ duyệt: ${formatVND(metrics.pendingPayoutRequestsTotal)}`
-              : 'Đã đối soát hoàn tất'}
+            Đã nhận hàng tại Locker ({metrics.availableOrders.length} đơn)
           </span>
         </div>
       </div>
+
+      {/* Sub-status alert: Pending Earnings */}
+      {metrics.pendingEarnings > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 flex items-center justify-between text-xs text-amber-900">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>
+              <strong>Đang chờ khách nhận hàng (Pending Earnings):</strong> Có <strong>{formatVND(metrics.pendingEarnings)}</strong> ({metrics.pendingOrders.length} đơn) đã thanh toán và đang giao hoặc nằm tại Smart Locker. Khoản tiền này sẽ tự động chuyển sang số dư khả dụng ngay khi khách quét mã lấy hàng thành công.
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Order Financial Breakdown Table by Earning Status (Req 8 & 9) */}
       <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">

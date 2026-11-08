@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { GroupRoom, Order, Review, Supplier, DeliveryBatch } from '../types';
-import { formatVND, getOrderFinancialSnapshot } from '../utils/pricing';
-import { BarChart3, Star, Trophy, Layers, Truck, Sparkles } from 'lucide-react';
+import { GroupRoom, Order, Review, Supplier, DeliveryBatch, GroupParticipation } from '../types';
+import { formatVND, getOrderFinancialSnapshot, getCurrentPrice } from '../utils/pricing';
+import { BarChart3, Star, Trophy, Layers, Truck, Sparkles, Clock, CheckCircle2, ShoppingBag, Users, AlertCircle } from 'lucide-react';
 
 interface SupplierAnalyticsProps {
   supplier: Supplier;
@@ -9,6 +9,7 @@ interface SupplierAnalyticsProps {
   orders: Order[];
   reviews: Review[];
   batches?: DeliveryBatch[];
+  participations?: GroupParticipation[];
 }
 
 // Requirement 25 & Phase 7 Req 36-38: Extend Supplier Analytics with GMV, Net Earnings, Platform Fees, Average Order Value,
@@ -18,24 +19,83 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
   rooms,
   orders,
   batches = [],
+  participations = [],
 }) => {
   const supplierRooms = useMemo(
     () => rooms.filter((r) => r.supplierId === supplier.id),
     [rooms, supplier.id]
   );
 
+  const supplierParticipations = useMemo(
+    () => participations.filter((p) => supplierRooms.some((r) => r.id === p.roomId)),
+    [participations, supplierRooms]
+  );
+
+  const activeRooms = useMemo(
+    () => supplierRooms.filter((r) => r.status === 'active'),
+    [supplierRooms]
+  );
+
+  const closedRooms = useMemo(
+    () => supplierRooms.filter((r) => r.status === 'successful' || r.finalPrice !== undefined),
+    [supplierRooms]
+  );
+
+  // Requirement 2 & 3: Valid Supplier Orders MUST only be paid / preparing / in_transit / ready / completed
+  // (EXCLUDING awaiting_payment, cancelled, cancelled_before_payment, refunded)
   const validSupplierOrders = useMemo(
     () =>
       orders.filter(
         (o) =>
           (!o.supplierId || o.supplierId === supplier.id) &&
           o.status !== 'cancelled' &&
-          o.status !== 'refunded'
+          o.status !== 'cancelled_before_payment' &&
+          o.status !== 'refunded' &&
+          o.status !== 'awaiting_payment'
       ),
     [orders, supplier.id]
   );
 
-  // Financial & Operational Calculations from real order/room data (Req 25)
+  // Pipeline Status Breakdown
+  const awaitingOrders = useMemo(
+    () => orders.filter((o) => (!o.supplierId || o.supplierId === supplier.id) && o.status === 'awaiting_payment'),
+    [orders, supplier.id]
+  );
+  const paidOrders = useMemo(
+    () => orders.filter((o) => (!o.supplierId || o.supplierId === supplier.id) && o.status === 'paid'),
+    [orders, supplier.id]
+  );
+  const preparingOrders = useMemo(
+    () => orders.filter((o) => (!o.supplierId || o.supplierId === supplier.id) && o.status === 'preparing'),
+    [orders, supplier.id]
+  );
+  const inTransitOrders = useMemo(
+    () => orders.filter((o) => (!o.supplierId || o.supplierId === supplier.id) && o.status === 'in_transit'),
+    [orders, supplier.id]
+  );
+  const readyOrders = useMemo(
+    () => orders.filter((o) => (!o.supplierId || o.supplierId === supplier.id) && o.status === 'ready_for_pickup'),
+    [orders, supplier.id]
+  );
+  const completedOrders = useMemo(
+    () => orders.filter((o) => (!o.supplierId || o.supplierId === supplier.id) && o.status === 'picked_up'),
+    [orders, supplier.id]
+  );
+
+  // Expected demand vs confirmed revenue
+  const projectedCollectingUnits = activeRooms.reduce((acc, r) => acc + r.totalQuantity, 0);
+  const projectedCollectingGmv = activeRooms.reduce(
+    (acc, r) => acc + r.totalQuantity * (r.finalPrice ?? getCurrentPrice(r.totalQuantity, r.priceTiers)),
+    0
+  );
+  const awaitingBuyerCount = supplierParticipations.filter((p) => p.status === 'awaiting_payment').length;
+  const awaitingUnits = supplierParticipations
+    .filter((p) => p.status === 'awaiting_payment')
+    .reduce((acc, p) => acc + p.quantity, 0);
+  const totalProjectedUnits = projectedCollectingUnits + awaitingUnits;
+  const totalProjectedDemandGmv = projectedCollectingGmv + awaitingOrders.reduce((sum, o) => sum + o.productSubtotal, 0);
+
+  // Financial & Operational Calculations from REAL paid order data ONLY (Req 3, 8, 9)
   const gmv = validSupplierOrders.reduce((acc, o) => acc + o.productSubtotal, 0);
   const platformFees = validSupplierOrders.reduce(
     (acc, o) => acc + getOrderFinancialSnapshot(o).effectiveCommission,
@@ -159,38 +219,118 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
         </div>
       </div>
 
-      {/* Requirement 25: Supplier Financial & Operational KPIs */}
+      {/* Requirement 2, 3 & 8: TỔNG QUAN PHÂN BIỆT NHU CẦU DỰ KIẾN VS DOANH THU THỰC */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Card 1: Phòng gom */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs text-slate-400 font-semibold">GMV (Tổng tiền hàng)</span>
-          <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">{formatVND(gmv)}</div>
+          <span className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-[#3155FF]" /> Phòng gom Nhà cung cấp
+          </span>
+          <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+            {activeRooms.length} <span className="text-sm text-slate-400 font-normal">đang gom</span> • {closedRooms.length} <span className="text-sm text-emerald-600 font-normal">đã chốt</span>
+          </div>
           <span className="text-[11px] text-slate-400 mt-1 inline-block">
-            Từ {validSupplierOrders.length} đơn hợp lệ
+            Tổng cộng: {supplierRooms.length} phòng gom
           </span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs text-slate-400 font-semibold">Net Earnings (Thực nhận)</span>
-          <div className="text-xl sm:text-2xl font-black text-[#0C0D10] mt-1">{formatVND(netEarnings)}</div>
-          <span className="text-[11px] text-[#0C0D10] font-bold mt-1 inline-block">Sau trừ phí nền tảng</span>
+        {/* Card 2: Nhu cầu dự kiến (Chưa TT) */}
+        <div className="bg-amber-50/60 p-5 rounded-2xl border border-amber-200 shadow-sm">
+          <span className="text-xs text-amber-800 font-bold flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-amber-600" /> Nhu cầu dự kiến (Chờ TT)
+          </span>
+          <div className="text-xl sm:text-2xl font-black text-amber-800 mt-1">
+            {totalProjectedUnits} suất
+          </div>
+          <span className="text-[11px] text-amber-700 font-medium mt-1 inline-block">
+            Ước tính {formatVND(totalProjectedDemandGmv)} (Chưa phải doanh thu thật)
+          </span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs text-slate-400 font-semibold">Platform Fees (Phí sàn)</span>
-          <div className="text-xl sm:text-2xl font-black text-[#3155FF] mt-1">{formatVND(platformFees)}</div>
-          <span className="text-[11px] text-slate-400 mt-1 inline-block">Phí nền tảng demo</span>
+        {/* Card 3: Doanh thu đã thanh toán */}
+        <div className="bg-[#EEF1FF] p-5 rounded-2xl border border-[#3155FF]/30 shadow-sm">
+          <span className="text-xs text-[#000181] font-bold flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#006EE9]" /> Doanh thu đã thanh toán
+          </span>
+          <div className="text-xl sm:text-2xl font-black text-[#000181] mt-1">
+            {formatVND(gmv)}
+          </div>
+          <span className="text-[11px] text-slate-500 mt-1 inline-block">
+            Từ {validSupplierOrders.length} đơn đã thanh toán thành công
+          </span>
         </div>
 
+        {/* Card 4: Thực nhận NCC */}
+        <div className="bg-[#F5FBD9] p-5 rounded-2xl border border-[#C7F000] shadow-sm">
+          <span className="text-xs text-emerald-900 font-bold flex items-center gap-1.5">
+            <Trophy className="w-3.5 h-3.5 text-[#0C0D10]" /> Doanh thu ròng (Net)
+          </span>
+          <div className="text-xl sm:text-2xl font-black text-[#0C0D10] mt-1">
+            {formatVND(netEarnings)}
+          </div>
+          <span className="text-[11px] text-emerald-800 font-medium mt-1 inline-block">
+            Sau trừ phí sàn 7% (-{formatVND(platformFees)})
+          </span>
+        </div>
+      </div>
+
+      {/* Pipeline Status Breakdown Bar (Mục 2) */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-1.5">
+            <ShoppingBag className="w-4 h-4 text-[#3155FF]" />
+            Tiến độ xử lý Buyer & Đơn hàng của Nhà cung cấp
+          </span>
+          <span className="text-[10px] text-slate-400 font-medium italic">
+            * Chỉ chuẩn bị hàng cho các đơn đã thanh toán
+          </span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-1 text-center text-xs">
+          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <span className="text-[10px] text-slate-500 font-bold block">Buyer chờ xác nhận</span>
+            <strong className="text-amber-700 text-sm">{awaitingBuyerCount} Buyer</strong>
+            <span className="text-[9px] text-slate-400 block">({awaitingUnits} suất)</span>
+          </div>
+          <div className="bg-amber-50/50 p-2.5 rounded-xl border border-amber-200">
+            <span className="text-[10px] text-amber-800 font-bold block">Đơn chờ thanh toán</span>
+            <strong className="text-amber-800 text-sm">{awaitingOrders.length} đơn</strong>
+            <span className="text-[9px] text-amber-600 block">Chưa thanh toán</span>
+          </div>
+          <div className="bg-blue-50/50 p-2.5 rounded-xl border border-blue-200">
+            <span className="text-[10px] text-blue-700 font-bold block">Đơn đã thanh toán</span>
+            <strong className="text-blue-700 text-sm">{paidOrders.length} đơn</strong>
+            <span className="text-[9px] text-blue-500 block">Chờ đóng gói</span>
+          </div>
+          <div className="bg-indigo-50/50 p-2.5 rounded-xl border border-indigo-200">
+            <span className="text-[10px] text-indigo-700 font-bold block">Đang chuẩn bị</span>
+            <strong className="text-indigo-700 text-sm">{preparingOrders.length} đơn</strong>
+            <span className="text-[9px] text-indigo-500 block">Đang gom hàng</span>
+          </div>
+          <div className="bg-teal-50/50 p-2.5 rounded-xl border border-teal-200">
+            <span className="text-[10px] text-teal-700 font-bold block">Đang giao / Locker</span>
+            <strong className="text-teal-700 text-sm">{inTransitOrders.length + readyOrders.length} đơn</strong>
+            <span className="text-[9px] text-teal-600 block">Vận chuyển chặng cuối</span>
+          </div>
+          <div className="bg-[#F5FBD9] p-2.5 rounded-xl border border-[#C7F000]">
+            <span className="text-[10px] text-emerald-900 font-bold block">Đơn hoàn thành</span>
+            <strong className="text-[#0C0D10] text-sm">{completedOrders.length} đơn</strong>
+            <span className="text-[9px] text-emerald-700 block">Đã nhận tại tủ</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Requirement 25: Supplier Financial & Operational KPIs */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
           <span className="text-xs text-slate-400 font-semibold">Average Order Value (AOV)</span>
           <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">{formatVND(averageOrderValue)}</div>
-          <span className="text-[11px] text-slate-400 mt-1 inline-block">Giá trị trung bình / đơn</span>
+          <span className="text-[11px] text-slate-400 mt-1 inline-block">Giá trị trung bình / đơn đã thanh toán</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs text-slate-400 font-semibold">Units Sold</span>
+          <span className="text-xs text-slate-400 font-semibold">Units Sold (Đã bán)</span>
           <div className="text-2xl font-black text-slate-900 mt-1">{totalUnitsSold}</div>
-          <span className="text-[11px] text-slate-400 mt-1 inline-block">Đơn vị sản phẩm đã bán</span>
+          <span className="text-[11px] text-slate-400 mt-1 inline-block">Số suất đã thanh toán</span>
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
@@ -199,7 +339,13 @@ export const SupplierAnalyticsView: React.FC<SupplierAnalyticsProps> = ({
           <span className="text-[11px] text-slate-400 mt-1 inline-block">Người tham gia / phòng</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm col-span-2">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <span className="text-xs text-slate-400 font-semibold">Phí sàn (7% Product Subtotal)</span>
+          <div className="text-xl sm:text-2xl font-black text-[#3155FF] mt-1">{formatVND(platformFees)}</div>
+          <span className="text-[11px] text-slate-400 mt-1 inline-block">Chỉ tính trên đơn đã thanh toán, không tính ship</span>
+        </div>
+
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm col-span-2 lg:col-span-4">
           <span className="text-xs text-amber-700 font-bold flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5" /> Best Performing Price Tier (Nấc giá hiệu quả nhất)
           </span>

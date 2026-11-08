@@ -77,7 +77,9 @@ import {
   X,
   Search,
   Trash2,
-  Clock
+  Clock,
+  XCircle,
+  ShieldAlert
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -608,6 +610,101 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
     return refundedOrders.filter((o) => paidOrderIds.has(o.id));
   }, [payouts, refundedOrders]);
 
+  // Requirement 16 & 17: GMV & Platform Revenue Classifications
+  const completedOrders = useMemo(
+    () => validOrders.filter((o) => o.status === 'picked_up'),
+    [validOrders]
+  );
+  const completedGmv = useMemo(
+    () => completedOrders.reduce((acc, o) => acc + o.productSubtotal, 0),
+    [completedOrders]
+  );
+
+  // Platform Fee 4-tier breakdown (Requirement 17)
+  const projectedPlatformFee = useMemo(
+    () => Math.round(projectedCollectingGmv * commissionRate),
+    [projectedCollectingGmv, commissionRate]
+  );
+  const pendingPlatformFee = useMemo(
+    () =>
+      validOrders
+        .filter((o) => o.status !== 'picked_up')
+        .reduce((acc, o) => acc + getOrderFinancialSnapshot(o).effectiveCommission, 0),
+    [validOrders]
+  );
+  const recognizedPlatformFee = useMemo(
+    () =>
+      completedOrders.reduce(
+        (acc, o) => acc + getOrderFinancialSnapshot(o).effectiveCommission,
+        0
+      ),
+    [completedOrders]
+  );
+  const reversedPlatformFee = useMemo(
+    () =>
+      refundedOrders.reduce(
+        (acc, o) => acc + getOrderFinancialSnapshot(o).rawCommission,
+        0
+      ),
+    [refundedOrders]
+  );
+
+  // Pipeline Status Breakdown for Requirement 15
+  const awaitingConfirmationCount = useMemo(
+    () => participations.filter((p) => p.status === 'awaiting_payment').length,
+    [participations]
+  );
+  const paidOrdersCount = useMemo(
+    () => orders.filter((o) => o.status === 'paid').length,
+    [orders]
+  );
+  const preparingOrdersCount = useMemo(
+    () => orders.filter((o) => o.status === 'preparing').length,
+    [orders]
+  );
+  const inTransitOrdersCount = useMemo(
+    () => orders.filter((o) => o.status === 'in_transit' || o.status === 'ready_for_pickup').length,
+    [orders]
+  );
+  const completedOrdersCount = useMemo(
+    () => orders.filter((o) => o.status === 'picked_up').length,
+    [orders]
+  );
+  const cancelledBeforePayOrdersCount = useMemo(
+    () => orders.filter((o) => o.status === 'cancelled_before_payment').length,
+    [orders]
+  );
+  const cancelledOrdersCount = useMemo(
+    () => orders.filter((o) => o.status === 'cancelled' || o.status === 'cancelled_before_payment').length,
+    [orders]
+  );
+
+  // Buyer Funnel Metrics for Requirement 19
+  const totalBuyerParticipations = participations.length;
+  const finalizedRoomIds = useMemo(
+    () => new Set(rooms.filter((r) => r.status === 'successful' || r.finalPrice !== undefined).map((r) => r.id)),
+    [rooms]
+  );
+  const finalizedParticipations = useMemo(
+    () => participations.filter((p) => finalizedRoomIds.has(p.roomId)),
+    [participations, finalizedRoomIds]
+  );
+  const confirmedParticipations = useMemo(
+    () => finalizedParticipations.filter((p) => p.status === 'awaiting_payment' || p.status === 'paid'),
+    [finalizedParticipations]
+  );
+  const paidParticipations = useMemo(
+    () => finalizedParticipations.filter((p) => p.status === 'paid'),
+    [finalizedParticipations]
+  );
+  const pickedUpParticipations = useMemo(
+    () => orders.filter((o) => o.status === 'picked_up'),
+    [orders]
+  );
+
+  // Admin Room Detail Selection Modal (Requirement 20)
+  const [selectedRoomForAdminDetail, setSelectedRoomForAdminDetail] = useState<GroupRoom | null>(null);
+
   // General Admin Metrics
   const totalBuyers = users.filter((u) => u.role === 'buyer').length;
   const totalSuppliers = suppliers.length;
@@ -773,45 +870,134 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* VIEW: OVERVIEW (With Requirement 14 Platform Revenue Cards) */}
+      {/* VIEW: OVERVIEW (Requirement 15: Phân biệt rõ các trạng thái & Requirement 19: Buyer Funnel) */}
       {activeTab === 'overview' && (
         <div className="space-y-6">
-          {/* Operational KPIs */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5 text-[#0C0D10]" /> Total Buyers
+          {/* Requirement 15: 7 Operational Status KPIs */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] text-slate-500 font-bold uppercase flex items-center gap-1">
+                <Layers className="w-3 h-3 text-[#3155FF]" /> Phòng đang gom
               </span>
-              <div className="text-2xl font-black text-slate-900 mt-1">{totalBuyers}</div>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Tài khoản người mua</span>
+              <div className="text-xl font-black text-slate-900 mt-1">{activeRooms}</div>
+              <span className="text-[10px] text-slate-400 mt-0.5 block">Đang mở gom</span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-                <Store className="w-3.5 h-3.5 text-amber-600" /> Verified Suppliers
+            <div className="bg-white p-4 rounded-2xl border border-indigo-200 bg-[#EEF1FF]/40 shadow-sm">
+              <span className="text-[11px] text-[#000181] font-bold uppercase flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-[#006EE9]" /> Phòng đã chốt
               </span>
-              <div className="text-2xl font-black text-slate-900 mt-1">
-                {verifiedSuppliers} <span className="text-xs text-slate-400 font-normal">/ {totalSuppliers}</span>
+              <div className="text-xl font-black text-[#000181] mt-1">{successfulRooms}</div>
+              <span className="text-[10px] text-slate-500 mt-0.5 block">Đạt mốc số lượng</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm">
+              <span className="text-[11px] text-amber-800 font-bold uppercase flex items-center gap-1">
+                <Clock className="w-3 h-3 text-amber-600" /> Chờ xác nhận
+              </span>
+              <div className="text-xl font-black text-amber-700 mt-1">{awaitingConfirmationCount}</div>
+              <span className="text-[10px] text-amber-600 mt-0.5 block">Buyer đang cân nhắc</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-emerald-200 bg-emerald-50/30 shadow-sm">
+              <span className="text-[11px] text-emerald-800 font-bold uppercase flex items-center gap-1">
+                <DollarSign className="w-3 h-3 text-emerald-600" /> Đã thanh toán
+              </span>
+              <div className="text-xl font-black text-emerald-700 mt-1">{paidOrdersCount}</div>
+              <span className="text-[10px] text-emerald-600 mt-0.5 block">Đơn đã trả tiền</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-[#C7F000] bg-[#F5FBD9]/50 shadow-sm">
+              <span className="text-[11px] text-emerald-900 font-bold uppercase flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-[#0C0D10]" /> Đơn hoàn thành
+              </span>
+              <div className="text-xl font-black text-[#0C0D10] mt-1">{completedOrdersCount}</div>
+              <span className="text-[10px] text-emerald-800 mt-0.5 block">Đã nhận tại Locker</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] text-slate-600 font-bold uppercase flex items-center gap-1">
+                <XCircle className="w-3 h-3 text-slate-400" /> Đơn đã hủy
+              </span>
+              <div className="text-xl font-black text-slate-800 mt-1">{cancelledOrdersCount}</div>
+              <span className="text-[10px] text-slate-400 mt-0.5 block">Gồm {cancelledBeforePayOrdersCount} hủy trước TT</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-sm">
+              <span className="text-[11px] text-rose-700 font-bold uppercase flex items-center gap-1">
+                <RotateCcw className="w-3 h-3 text-rose-600" /> Hoàn tiền
+              </span>
+              <div className="text-xl font-black text-rose-600 mt-1">{refundedOrders.length}</div>
+              <span className="text-[10px] text-rose-500 mt-0.5 block">Đã hoàn sau TT</span>
+            </div>
+          </div>
+
+          {/* Requirement 19: BUYER FUNNEL (Phễu Chuyển Đổi Mua Chung) */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#3155FF] bg-[#EEF1FF] px-2.5 py-0.5 rounded-full">
+                  Buyer Group-Buying Funnel
+                </span>
+                <h3 className="text-base font-black text-slate-900 mt-1">
+                  Phễu Chuyển Đổi Người Mua Sau Khi Chốt Phòng
+                </h3>
               </div>
-              <span className="text-[11px] text-[#0C0D10] font-bold mt-0.5 block">Đã xét duyệt</span>
+              <p className="text-xs text-slate-400">
+                Theo dõi tỉ lệ drop-off từ khi đăng ký gom đến khi nhận hàng tại Locker
+              </p>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-[#3155FF]" /> Active / Success Rooms
-              </span>
-              <div className="text-2xl font-black text-slate-900 mt-1">
-                {activeRooms} <span className="text-xs text-slate-400 font-normal">/ {successfulRooms}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-1">
+              {/* Step 1 */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 relative">
+                <span className="text-[10px] font-bold text-slate-500 uppercase block">1. Đã tham gia</span>
+                <div className="text-2xl font-black text-slate-900">{totalBuyerParticipations}</div>
+                <span className="text-[10px] text-slate-500 block">Lượt đăng ký suất gom</span>
+                <span className="text-[10px] font-black text-slate-400 bg-white px-2 py-0.5 rounded-md border border-slate-200 inline-block mt-1">
+                  100% Khởi đầu
+                </span>
               </div>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Đang mở / Thành công</span>
-            </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <span className="text-xs text-slate-400 font-semibold flex items-center gap-1.5">
-                <RotateCcw className="w-3.5 h-3.5 text-rose-600" /> Pending Refunds
-              </span>
-              <div className="text-2xl font-black text-rose-600 mt-1">{pendingRefunds}</div>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Yêu cầu hoàn tiền chờ duyệt</span>
+              {/* Step 2 */}
+              <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-200 space-y-1 relative">
+                <span className="text-[10px] font-bold text-[#000181] uppercase block">2. Phòng đã chốt</span>
+                <div className="text-2xl font-black text-[#000181]">{finalizedParticipations.length}</div>
+                <span className="text-[10px] text-slate-500 block">Suất trong phòng chốt</span>
+                <span className="text-[10px] font-black text-[#006EE9] bg-white px-2 py-0.5 rounded-md border border-indigo-200 inline-block mt-1">
+                  {totalBuyerParticipations > 0 ? Math.round((finalizedParticipations.length / totalBuyerParticipations) * 100) : 0}% chuyển đổi
+                </span>
+              </div>
+
+              {/* Step 3 */}
+              <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-200 space-y-1 relative">
+                <span className="text-[10px] font-bold text-amber-800 uppercase block">3. Đã xác nhận</span>
+                <div className="text-2xl font-black text-amber-700">{confirmedParticipations.length}</div>
+                <span className="text-[10px] text-amber-700 block">Đồng ý giá chốt</span>
+                <span className="text-[10px] font-black text-amber-800 bg-white px-2 py-0.5 rounded-md border border-amber-200 inline-block mt-1">
+                  {finalizedParticipations.length > 0 ? Math.round((confirmedParticipations.length / finalizedParticipations.length) * 100) : 0}% xác nhận
+                </span>
+              </div>
+
+              {/* Step 4 */}
+              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-200 space-y-1 relative">
+                <span className="text-[10px] font-bold text-blue-800 uppercase block">4. Đã thanh toán</span>
+                <div className="text-2xl font-black text-blue-700">{paidParticipations.length}</div>
+                <span className="text-[10px] text-blue-600 block">Thanh toán thành công</span>
+                <span className="text-[10px] font-black text-blue-700 bg-white px-2 py-0.5 rounded-md border border-blue-200 inline-block mt-1">
+                  {confirmedParticipations.length > 0 ? Math.round((paidParticipations.length / confirmedParticipations.length) * 100) : 0}% thanh toán
+                </span>
+              </div>
+
+              {/* Step 5 */}
+              <div className="p-4 rounded-2xl bg-[#F5FBD9] border border-[#C7F000] space-y-1 relative">
+                <span className="text-[10px] font-bold text-emerald-900 uppercase block">5. Đã nhận hàng</span>
+                <div className="text-2xl font-black text-[#0C0D10]">{pickedUpParticipations.length}</div>
+                <span className="text-[10px] text-emerald-800 block">Quét QR tại Smart Locker</span>
+                <span className="text-[10px] font-black text-[#0C0D10] bg-white px-2 py-0.5 rounded-md border border-[#C7F000] inline-block mt-1">
+                  {paidParticipations.length > 0 ? Math.round((pickedUpParticipations.length / paidParticipations.length) * 100) : 0}% hoàn tất
+                </span>
+              </div>
             </div>
           </div>
 
@@ -911,44 +1097,83 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
       {/* VIEW: FINANCE (Requirement 15 & Requirement 21 Commission Settings + Phần 8, 25) */}
       {activeTab === 'finance' && (
         <div className="space-y-6">
-          {/* 6 Finance Summary Cards (Req 15 & Phần 8, 25) */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+          {/* Requirement 18: Finance Separation Example Banner */}
+          <div className="bg-[#FAF0FF] border border-[#E8A0FF] rounded-2xl p-4 flex items-start gap-3 text-xs text-[#000181]">
+            <ShieldAlert className="w-5 h-5 text-[#7B3FF2] shrink-0 mt-0.5" />
+            <div className="leading-relaxed">
+              <strong className="block font-black uppercase text-[11px] text-[#7B3FF2] mb-0.5">
+                Nguyên tắc phân tách dòng tiền FlashGroup (Financial Separation Integrity)
+              </strong>
+              Ví dụ kiểm chứng: <strong>20 suất đăng ký ban đầu → 17 suất xác nhận → 15 suất thanh toán</strong>. Hệ thống chỉ ghi nhận Paid GMV trên <strong>15 suất đã thanh toán thành công</strong> ({formatVND(15 * 89000)}), tuyệt đối không cộng 20 suất đăng ký hay 17 suất xác nhận vào doanh thu thực. Phí sàn 7% chỉ tính trên tiền hàng đã thanh toán (loại trừ 100% phí ship).
+            </div>
+          </div>
+
+          {/* Requirement 16: GMV Classification Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">1. GMV DỰ KIẾN</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase block">1. GMV DỰ KIẾN (ĐANG GOM)</span>
               <div className="text-base sm:text-lg font-black text-slate-700 mt-1">{formatVND(projectedCollectingGmv)}</div>
               <span className="text-[10px] text-slate-400 mt-0.5 block">Phòng gom đang mở</span>
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-amber-200 bg-amber-50/20 shadow-sm">
-              <span className="text-[10px] font-bold text-amber-800 uppercase block">2. GMV ĐÃ CHỐT</span>
+              <span className="text-[10px] font-bold text-amber-800 uppercase block">2. GMV ĐÃ CHỐT (CHỜ TT)</span>
               <div className="text-base sm:text-lg font-black text-amber-700 mt-1">{formatVND(finalizedAwaitingPaymentGmv)}</div>
-              <span className="text-[10px] text-amber-600 mt-0.5 block">Chờ thanh toán</span>
+              <span className="text-[10px] text-amber-600 mt-0.5 block">Chờ Buyer thanh toán</span>
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-slate-300 shadow-sm">
-              <span className="text-[10px] font-bold text-slate-900 uppercase block">3. GMV THỰC TẾ (PAID)</span>
+              <span className="text-[10px] font-bold text-slate-900 uppercase block">3. GMV ĐÃ TT (PAID GMV)</span>
               <div className="text-base sm:text-lg font-black text-slate-900 mt-1">{formatVND(gmv)}</div>
-              <span className="text-[10px] text-slate-500 mt-0.5 block">Đơn đã thanh toán</span>
+              <span className="text-[10px] text-slate-500 mt-0.5 block">Đơn đã thanh toán thực tế</span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-indigo-200 bg-[#EEF1FF]/40 shadow-sm">
-              <span className="text-[10px] font-bold text-[#000181] uppercase block">4. PHÍ SÀN EARNED</span>
-              <div className="text-base sm:text-lg font-black text-[#000181] mt-1">{formatVND(platformRevenue)}</div>
-              <span className="text-[10px] text-[#006EE9] mt-0.5 block">Hoa hồng 7% thực nhận</span>
-            </div>
-
-            <div className="bg-white p-4 rounded-2xl border border-[#D0FFA4] bg-[#F4FFE8]/50 shadow-sm">
-              <span className="text-[10px] font-bold text-[#000181] uppercase block">5. SUPPLIER NET</span>
-              <div className="text-base sm:text-lg font-black text-[#000181] mt-1">
-                {formatVND(supplierNetProceeds)}
-              </div>
-              <span className="text-[10px] text-[#000181] mt-0.5 block">Doanh thu ròng NCC</span>
+            <div className="bg-white p-4 rounded-2xl border border-[#C7F000] bg-[#F5FBD9]/50 shadow-sm">
+              <span className="text-[10px] font-bold text-emerald-900 uppercase block">4. GMV HOÀN THÀNH</span>
+              <div className="text-base sm:text-lg font-black text-[#0C0D10] mt-1">{formatVND(completedGmv)}</div>
+              <span className="text-[10px] text-emerald-800 mt-0.5 block">Khách đã nhận tại Locker</span>
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-sm">
-              <span className="text-[10px] font-bold text-rose-700 uppercase block">6. REFUNDED GMV</span>
+              <span className="text-[10px] font-bold text-rose-700 uppercase block">5. REFUNDED GMV</span>
               <div className="text-base sm:text-lg font-black text-rose-600 mt-1">{formatVND(refundedGmv)}</div>
-              <span className="text-[10px] text-rose-500 mt-0.5 block">{refundedOrders.length} đơn đã hoàn tiền</span>
+              <span className="text-[10px] text-rose-500 mt-0.5 block">{refundedOrders.length} đơn hoàn tiền</span>
+            </div>
+          </div>
+
+          {/* Requirement 17: Platform Revenue 4-Tier Breakdown */}
+          <div className="bg-white p-5 rounded-3xl border border-indigo-200 shadow-sm space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-indigo-100 pb-2">
+              <span className="text-xs font-black uppercase text-[#000181] tracking-wider flex items-center gap-1.5">
+                <Percent className="w-4 h-4 text-[#3155FF]" />
+                Phân bổ Doanh thu Phí nền tảng (Platform Commission 4 Tầng)
+              </span>
+              <span className="text-[11px] text-slate-500">
+                Phí nền tảng mặc định: <strong>7%</strong> • Loại trừ cước giao hàng
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span className="text-[10px] text-slate-500 font-bold uppercase block">Phí sàn dự kiến</span>
+                <strong className="text-slate-800 text-sm">{formatVND(projectedPlatformFee)}</strong>
+                <span className="text-[10px] text-slate-400 block mt-0.5">Từ phòng gom đang mở</span>
+              </div>
+              <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                <span className="text-[10px] text-amber-800 font-bold uppercase block">Phí sàn đang chờ (Pending)</span>
+                <strong className="text-amber-800 text-sm">{formatVND(pendingPlatformFee)}</strong>
+                <span className="text-[10px] text-amber-600 block mt-0.5">Đơn đang chuẩn bị / giao</span>
+              </div>
+              <div className="bg-[#EEF1FF] p-3 rounded-xl border border-indigo-200">
+                <span className="text-[10px] text-[#000181] font-bold uppercase block">Phí sàn đã ghi nhận</span>
+                <strong className="text-[#006EE9] text-sm">{formatVND(recognizedPlatformFee)}</strong>
+                <span className="text-[10px] text-indigo-600 block mt-0.5">Đơn đã nhận tại Locker</span>
+              </div>
+              <div className="bg-rose-50/50 p-3 rounded-xl border border-rose-200">
+                <span className="text-[10px] text-rose-700 font-bold uppercase block">Phí bị đảo do hoàn tiền</span>
+                <strong className="text-rose-600 text-sm">-{formatVND(reversedPlatformFee)}</strong>
+                <span className="text-[10px] text-rose-500 block mt-0.5">Đã hoàn lại cho NCC/khách</span>
+              </div>
             </div>
           </div>
 
@@ -1009,7 +1234,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </div>
 
               <p className="text-xs text-slate-500 leading-relaxed">
-                Thiết lập mức phí hoa hồng nền tảng thử nghiệm trong đồ án (từ <strong>0% – 20%</strong> phục vụ mô phỏng kinh doanh, mặc định <strong>7%</strong>). Mức phí mới chỉ áp dụng cho các đơn hàng thanh toán trong tương lai; các đơn hàng đã thanh toán trước đó giữ nguyên mức phí lịch sử (Historical Snapshot Integrity).
+                Thiết lập mức phí hoa hồng nền tảng thử nghiệm trong đồ án (Phí nền tảng mặc định: <strong>7%</strong>). Mức phí mới chỉ áp dụng cho các đơn hàng thanh toán trong tương lai; các đơn hàng đã thanh toán trước đó giữ nguyên mức phí lịch sử (Historical Snapshot Integrity).
               </p>
 
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
@@ -1736,14 +1961,22 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                         {r.finalPrice !== undefined ? formatVND(r.finalPrice) : 'Chưa chốt'}
                       </td>
                       <td className="py-3.5 px-3 text-right">
-                        {r.status === 'active' && (
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
-                            onClick={() => setForceCloseModalRoomId(r.id)}
-                            className="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition whitespace-nowrap"
+                            onClick={() => setSelectedRoomForAdminDetail(r)}
+                            className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer"
                           >
-                            Chốt ngay
+                            Chi tiết
                           </button>
-                        )}
+                          {r.status === 'active' && (
+                            <button
+                              onClick={() => setForceCloseModalRoomId(r.id)}
+                              className="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer"
+                            >
+                              Chốt ngay
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -1751,52 +1984,287 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </tbody>
             </table>
           </div>
+
+          {/* Requirement 20: ADMIN ROOM DETAIL MODAL */}
+          {selectedRoomForAdminDetail && (() => {
+            const r = selectedRoomForAdminDetail;
+            const rParts = participations.filter((p) => p.roomId === r.id);
+            const registeredQty = r.totalQuantity;
+            const awaitingParts = rParts.filter((p) => p.status === 'awaiting_payment');
+            const awaitingQty = awaitingParts.reduce((sum, p) => sum + p.quantity, 0);
+            const awaitingBuyers = awaitingParts.length;
+
+            const paidParts = rParts.filter((p) => p.status === 'paid');
+            const paidQty = paidParts.reduce((sum, p) => sum + p.quantity, 0);
+            const paidBuyers = paidParts.length;
+
+            const cancelledParts = rParts.filter((p) => p.status === 'cancelled_before_payment');
+            const cancelledQty = cancelledParts.reduce((sum, p) => sum + p.quantity, 0);
+            const cancelledBuyers = cancelledParts.length;
+
+            const confirmedQty = awaitingQty + paidQty;
+            const confirmedBuyers = awaitingBuyers + paidBuyers;
+
+            const roomRefunds = refunds.filter((rf) => orders.some((o) => o.roomId === r.id && o.id === rf.orderId));
+            const roomRefundAmount = roomRefunds.reduce((sum, rf) => {
+              const ord = orders.find((o) => o.id === rf.orderId);
+              return sum + (ord?.totalAmount || 0);
+            }, 0);
+
+            return (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+                <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div>
+                      <span className="text-[10px] font-black uppercase text-[#3155FF] tracking-wider block">
+                        CHI TIẾT PHÒNG GOM & TIẾN ĐỘ CHUYỂN ĐỔI (ADMIN ROOM AUDIT)
+                      </span>
+                      <h3 className="text-lg font-black text-slate-900 mt-0.5">{r.productName}</h3>
+                      <span className="text-xs text-slate-400">ID: {r.id} • NCC: {r.supplierName}</span>
+                    </div>
+                    <button
+                      onClick={() => setSelectedRoomForAdminDetail(null)}
+                      className="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* 8 Metric Grid for Requirement 20 */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Tổng SL đăng ký</span>
+                      <strong className="text-slate-900 text-sm block mt-0.5">{registeredQty} {r.unit}</strong>
+                    </div>
+
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Số người tham gia</span>
+                      <strong className="text-slate-900 text-sm block mt-0.5">{r.participantCount} người</strong>
+                    </div>
+
+                    <div className="bg-indigo-50/50 p-3 rounded-xl border border-indigo-200">
+                      <span className="text-[10px] text-[#000181] font-bold uppercase block">Giá cuối</span>
+                      <strong className="text-[#3155FF] text-sm block mt-0.5">
+                        {r.finalPrice !== undefined ? `${formatVND(r.finalPrice)}/${r.unit}` : 'Đang gom'}
+                      </strong>
+                    </div>
+
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase block">Thời điểm chốt</span>
+                      <strong className="text-slate-800 text-[11px] block mt-0.5">
+                        {r.finalizedAt || r.closedAt ? new Date(r.finalizedAt || r.closedAt || '').toLocaleString('vi-VN') : 'Đang mở'}
+                      </strong>
+                    </div>
+
+                    <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-200">
+                      <span className="text-[10px] text-amber-800 font-bold uppercase block">Buyer xác nhận</span>
+                      <strong className="text-amber-800 text-sm block mt-0.5">{confirmedBuyers} người ({confirmedQty} suất)</strong>
+                    </div>
+
+                    <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-200">
+                      <span className="text-[10px] text-emerald-800 font-bold uppercase block">Buyer thanh toán</span>
+                      <strong className="text-emerald-700 text-sm block mt-0.5">{paidBuyers} người ({paidQty} suất)</strong>
+                    </div>
+
+                    <div className="bg-slate-100 p-3 rounded-xl border border-slate-200">
+                      <span className="text-[10px] text-slate-600 font-bold uppercase block">Hủy trước TT</span>
+                      <strong className="text-slate-700 text-sm block mt-0.5">{cancelledBuyers} người ({cancelledQty} suất)</strong>
+                    </div>
+
+                    <div className="bg-rose-50/50 p-3 rounded-xl border border-rose-200">
+                      <span className="text-[10px] text-rose-700 font-bold uppercase block">Refund</span>
+                      <strong className="text-rose-600 text-sm block mt-0.5">{roomRefunds.length} đơn ({formatVND(roomRefundAmount)})</strong>
+                    </div>
+                  </div>
+
+                  {/* List of participations */}
+                  <div className="space-y-2 pt-2">
+                    <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">
+                      Danh sách Buyer tham gia ({rParts.length}):
+                    </h4>
+                    {rParts.length === 0 ? (
+                      <div className="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-xl">
+                        Chưa có Buyer nào đăng ký
+                      </div>
+                    ) : (
+                      <div className="max-h-48 overflow-y-auto space-y-1.5 border border-slate-100 p-2 rounded-xl">
+                        {rParts.map((p) => {
+                          const buyer = users.find((u) => u.id === p.userId);
+                          return (
+                            <div key={p.id} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 text-xs">
+                              <div>
+                                <strong className="text-slate-900">{buyer?.name || p.userId}</strong>
+                                <span className="text-slate-400 text-[10px] block">Số lượng: {p.quantity} {r.unit} • Đặt lúc {new Date(p.joinedAt).toLocaleTimeString('vi-VN')}</span>
+                              </div>
+                              <span
+                                className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                                  p.status === 'paid'
+                                    ? 'bg-emerald-100 text-emerald-800'
+                                    : p.status === 'awaiting_payment'
+                                    ? 'bg-amber-100 text-amber-800'
+                                    : p.status === 'cancelled_before_payment'
+                                    ? 'bg-slate-200 text-slate-600'
+                                    : 'bg-blue-100 text-blue-800'
+                                }`}
+                              >
+                                {p.status === 'paid'
+                                  ? 'Đã thanh toán'
+                                  : p.status === 'awaiting_payment'
+                                  ? 'Chờ thanh toán'
+                                  : p.status === 'cancelled_before_payment'
+                                  ? 'Không tiếp tục'
+                                  : 'Đang gom'}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-2 flex justify-end">
+                    <button
+                      onClick={() => setSelectedRoomForAdminDetail(null)}
+                      className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 cursor-pointer"
+                    >
+                      Đóng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       )}
 
-      {/* VIEW: ORDERS */}
+      {/* VIEW: ORDERS (Requirement 21: Mã đơn, Người mua, Phòng gom, Giá đã chốt, Số lượng, Tiền hàng, Phí giao nhận, Khách trả, Phí sàn 7%, Supplier Net, Trạng thái thanh toán, Trạng thái giao nhận) */}
       {activeTab === 'orders' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="p-5 border-b border-slate-100">
-            <h3 className="font-bold text-slate-900 text-sm">Lịch sử Giao dịch Đơn hàng & Snapshot Tài chính ({orders.length})</h3>
+          <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 className="font-bold text-slate-900 text-sm">Lịch sử Giao dịch Đơn hàng & Snapshot Tài chính ({orders.length})</h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Snapshot bất biến: Giá đã chốt theo mốc nhóm, phí sàn 7% tính trên tiền hàng thực tế, loại trừ 100% phí giao nhận
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                Đã TT: {orders.filter((o) => o.status !== 'awaiting_payment' && o.status !== 'cancelled_before_payment').length} đơn
+              </span>
+              <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                Chờ TT: {orders.filter((o) => o.status === 'awaiting_payment').length} đơn
+              </span>
+            </div>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Mã đơn</th>
-                  <th className="py-3 px-4">Sản phẩm</th>
-                  <th className="py-3 px-4">Tiền hàng (GMV)</th>
-                  <th className="py-3 px-4">Ship chia sẻ</th>
-                  <th className="py-3 px-4">Buyer trả</th>
-                  <th className="py-3 px-4">Phí sàn (Snapshot)</th>
-                  <th className="py-3 px-4">Supplier Net</th>
-                  <th className="py-3 px-4">Trạng thái</th>
+                  <th className="py-3 px-3">Mã đơn</th>
+                  <th className="py-3 px-3">Người mua</th>
+                  <th className="py-3 px-3">Phòng gom / SP</th>
+                  <th className="py-3 px-2">Giá đã chốt</th>
+                  <th className="py-3 px-2">Số lượng</th>
+                  <th className="py-3 px-3">Tiền hàng (GMV)</th>
+                  <th className="py-3 px-2">Ship chia sẻ</th>
+                  <th className="py-3 px-3">Khách trả</th>
+                  <th className="py-3 px-3">Phí sàn (7%)</th>
+                  <th className="py-3 px-3">Supplier Net</th>
+                  <th className="py-3 px-2.5">Thanh toán</th>
+                  <th className="py-3 px-2.5">Giao nhận</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {orders.map((o) => {
                   const snap = getOrderFinancialSnapshot(o);
+                  const buyer = users.find((u) => u.id === o.userId);
+                  const buyerName = buyer?.name || (o.userId === 'user-buyer-1' ? 'Nguyễn Minh Anh' : o.userId);
+                  const isPaid = o.status !== 'awaiting_payment' && o.status !== 'cancelled_before_payment';
+
                   return (
                     <tr key={o.id} className="hover:bg-slate-50/80 transition">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{o.id}</td>
-                      <td className="py-3.5 px-4 font-bold">
-                        {o.productName} ({o.quantity} sp)
+                      <td className="py-3.5 px-3 font-mono font-bold text-slate-900 whitespace-nowrap">{o.id}</td>
+                      <td className="py-3.5 px-3 font-bold text-slate-800 whitespace-nowrap">{buyerName}</td>
+                      <td className="py-3.5 px-3 font-semibold text-slate-800 max-w-[160px] truncate" title={o.productName}>
+                        {o.productName}
                       </td>
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{formatVND(o.productSubtotal)}</td>
-                      <td className="py-3.5 px-4 text-slate-500">{formatVND(o.shippingFee)}</td>
-                      <td className="py-3.5 px-4 font-bold text-slate-800">{formatVND(o.totalAmount)}</td>
-                      <td className="py-3.5 px-4 font-bold text-[#3155FF]">
+                      <td className="py-3.5 px-2 font-bold text-[#3155FF] whitespace-nowrap">
+                        {formatVND(o.unitPrice)}
+                      </td>
+                      <td className="py-3.5 px-2 font-bold text-slate-900 whitespace-nowrap">
+                        {o.quantity} {o.unit || 'suất'}
+                      </td>
+                      <td className="py-3.5 px-3 font-bold text-slate-900 whitespace-nowrap">
+                        {formatVND(o.productSubtotal)}
+                      </td>
+                      <td className="py-3.5 px-2 text-slate-500 whitespace-nowrap">
+                        {formatVND(o.shippingFee)}
+                      </td>
+                      <td className="py-3.5 px-3 font-black text-slate-900 whitespace-nowrap">
+                        {formatVND(o.totalAmount)}
+                      </td>
+                      <td className="py-3.5 px-3 font-bold text-[#3155FF] whitespace-nowrap">
                         {snap.isReversed
-                          ? '0đ'
-                          : `${formatVND(snap.effectiveCommission)} (${Math.round(snap.commissionRate * 100)}%)`}
+                          ? '0đ (đã đảo)'
+                          : o.status === 'awaiting_payment'
+                          ? `${formatVND(snap.effectiveCommission)} (dự kiến)`
+                          : `${formatVND(snap.effectiveCommission)} (7%)`}
                       </td>
-                      <td className="py-3.5 px-4 font-black text-[#0C0D10]">
-                        {snap.isReversed ? '0đ' : formatVND(snap.effectiveNet)}
+                      <td className="py-3.5 px-3 font-black text-[#0C0D10] whitespace-nowrap">
+                        {snap.isReversed ? '0đ (đã đảo)' : formatVND(snap.effectiveNet)}
                       </td>
-                      <td className="py-3.5 px-4">
-                        <span className="bg-slate-100 text-slate-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-                          {o.status}
+                      <td className="py-3.5 px-2.5 whitespace-nowrap">
+                        <span
+                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase border ${
+                            isPaid
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                              : o.status === 'cancelled_before_payment'
+                              ? 'bg-slate-100 text-slate-600 border-slate-200'
+                              : o.status === 'refunded'
+                              ? 'bg-rose-50 text-rose-700 border-rose-200'
+                              : 'bg-amber-50 text-amber-800 border-amber-200'
+                          }`}
+                        >
+                          {isPaid
+                            ? 'Đã thanh toán'
+                            : o.status === 'cancelled_before_payment'
+                            ? 'Hủy trước TT'
+                            : o.status === 'refunded'
+                            ? 'Đã hoàn tiền'
+                            : 'Chờ thanh toán'}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-2.5 whitespace-nowrap">
+                        <span
+                          className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase border ${
+                            o.status === 'picked_up'
+                              ? 'bg-teal-50 text-teal-700 border-teal-200'
+                              : o.status === 'ready_for_pickup'
+                              ? 'bg-[#F5FBD9] text-[#0C0D10] border-[#C7F000]'
+                              : o.status === 'in_transit'
+                              ? 'bg-blue-50 text-blue-700 border-blue-200'
+                              : o.status === 'preparing'
+                              ? 'bg-amber-50 text-amber-700 border-amber-200'
+                              : o.status === 'refunded'
+                              ? 'bg-rose-50 text-rose-700 border-rose-200'
+                              : 'bg-slate-100 text-slate-600 border-slate-200'
+                          }`}
+                        >
+                          {o.status === 'picked_up'
+                            ? 'Đã nhận hàng'
+                            : o.status === 'ready_for_pickup'
+                            ? 'Tại Locker'
+                            : o.status === 'in_transit'
+                            ? 'Đang giao'
+                            : o.status === 'preparing'
+                            ? 'Đang chuẩn bị'
+                            : o.status === 'awaiting_payment'
+                            ? 'Chưa xử lý'
+                            : o.status === 'cancelled_before_payment'
+                            ? 'Đã hủy'
+                            : o.status === 'refunded'
+                            ? 'Đã hoàn tiền'
+                            : 'Chờ chuẩn bị'}
                         </span>
                       </td>
                     </tr>
@@ -1808,51 +2276,80 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* VIEW: REFUNDS */}
+      {/* VIEW: REFUNDS (Requirement 22: Mã đơn, Buyer, Supplier, Số tiền, Platform fee reversal, Supplier net reversal, Lý do, Trạng thái) */}
       {activeTab === 'refunds' && (
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="p-5 border-b border-slate-100">
-            <h3 className="font-bold text-slate-900 text-sm">Xử lý Yêu cầu Hoàn tiền ({refunds.length})</h3>
+          <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 className="font-bold text-slate-900 text-sm">Xử lý Yêu cầu Hoàn tiền & Đảo dòng tiền ({refunds.length})</h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Khi hoàn tiền thành công: Đảo ngược phí sàn (Platform fee reversal), giảm doanh thu ròng Supplier và loại trừ khỏi GMV thực tế
+              </p>
+            </div>
+            <span className="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+              Tổng hoàn: {formatVND(refundedGmv)}
+            </span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Mã yêu cầu</th>
-                  <th className="py-3 px-4">Đơn hàng</th>
-                  <th className="py-3 px-4">Người mua</th>
-                  <th className="py-3 px-4">Lý do</th>
-                  <th className="py-3 px-4">Trạng thái</th>
-                  <th className="py-3 px-4 text-right">Thao tác duyệt</th>
+                  <th className="py-3 px-3">Mã đơn</th>
+                  <th className="py-3 px-3">Người mua</th>
+                  <th className="py-3 px-3">Nhà cung cấp</th>
+                  <th className="py-3 px-3">Số tiền hoàn</th>
+                  <th className="py-3 px-3">Phí sàn đảo (7%)</th>
+                  <th className="py-3 px-3">Supplier Net đảo</th>
+                  <th className="py-3 px-3">Lý do</th>
+                  <th className="py-3 px-3">Trạng thái</th>
+                  <th className="py-3 px-3 text-right">Thao tác</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {refunds.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-10 text-center text-slate-400">
+                    <td colSpan={9} className="py-10 text-center text-slate-400">
                       Không có yêu cầu hoàn tiền nào đang chờ
                     </td>
                   </tr>
                 ) : (
                   refunds.map((rf) => {
+                    const ord = orders.find((o) => o.id === rf.orderId);
+                    const supp = suppliers.find((s) => s.id === ord?.supplierId);
+                    const buyer = users.find((u) => u.id === rf.userId);
+                    const snap = ord ? getOrderFinancialSnapshot(ord) : null;
                     const isAlreadyPaidOut = payouts.some(
                       (p) => p.status === 'paid' && p.orderIds.includes(rf.orderId)
                     );
 
                     return (
                       <tr key={rf.id} className="hover:bg-slate-50/80 transition">
-                        <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{rf.id}</td>
-                        <td className="py-3.5 px-4 font-bold">
+                        <td className="py-3.5 px-3 font-mono font-bold text-slate-900">
                           <div>{rf.orderId}</div>
+                          <span className="text-[10px] text-slate-400 font-normal">ID: {rf.id}</span>
                           {isAlreadyPaidOut && (
-                            <span className="text-[10px] text-rose-600 font-bold block">
-                              ⚠️ Refund after payout – manual reconciliation required.
+                            <span className="text-[10px] text-rose-600 font-bold block mt-0.5">
+                              ⚠️ Đã payout – cần bù trừ
                             </span>
                           )}
                         </td>
-                        <td className="py-3.5 px-4 text-slate-600">{rf.userId}</td>
-                        <td className="py-3.5 px-4 text-slate-700 max-w-xs">{rf.reason}</td>
-                        <td className="py-3.5 px-4">
+                        <td className="py-3.5 px-3 font-bold text-slate-800">
+                          {buyer?.name || rf.userId}
+                        </td>
+                        <td className="py-3.5 px-3 text-slate-700">
+                          {supp?.businessName || ord?.supplierId || 'NCC'}
+                        </td>
+                        <td className="py-3.5 px-3 font-black text-rose-600">
+                          {ord ? formatVND(ord.totalAmount) : 'N/A'}
+                        </td>
+                        <td className="py-3.5 px-3 font-bold text-[#3155FF]">
+                          {snap ? `-${formatVND(snap.rawCommission)}` : '0đ'}
+                        </td>
+                        <td className="py-3.5 px-3 font-bold text-[#0C0D10]">
+                          {snap ? `-${formatVND(snap.rawNet)}` : '0đ'}
+                        </td>
+                        <td className="py-3.5 px-3 text-slate-700 max-w-xs">{rf.reason}</td>
+                        <td className="py-3.5 px-3">
                           <span
                             className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                               rf.status === 'refunded'
@@ -1864,17 +2361,23 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                                 : 'bg-amber-100 text-amber-800'
                             }`}
                           >
-                            {rf.status}
+                            {rf.status === 'refunded'
+                              ? 'Đã hoàn tiền'
+                              : rf.status === 'approved'
+                              ? 'Đã duyệt'
+                              : rf.status === 'rejected'
+                              ? 'Từ chối'
+                              : 'Chờ duyệt'}
                           </span>
                         </td>
-                        <td className="py-3.5 px-4 text-right">
+                        <td className="py-3.5 px-3 text-right">
                           <div className="inline-flex items-center space-x-2">
                             {rf.status === 'requested' && (
                               <button
                                 onClick={() => onApproveRefund(rf.id)}
                                 className="px-3 py-1 bg-[#3155FF] text-white rounded-lg text-xs font-bold hover:bg-[#3155FF]"
                               >
-                                Phê duyệt (Approve)
+                                Phê duyệt
                               </button>
                             )}
                             {rf.status === 'approved' && (
@@ -1882,7 +2385,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
                                 onClick={() => onSimulateRefund(rf.id)}
                                 className="px-3 py-1 bg-teal-600 text-white rounded-lg text-xs font-bold hover:bg-teal-700"
                               >
-                                Mô phỏng hoàn tiền (Simulate Refund)
+                                Hoàn tiền
                               </button>
                             )}
                           </div>
@@ -3321,6 +3824,8 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
           moderationActions={moderationActions}
           auditEvents={auditEvents}
           complianceChecklist={complianceChecklist}
+          orders={orders}
+          refunds={refunds}
           onUpdateSupplierVerification={onUpdateSupplierVerification}
           onReviewDocument={(docId, st, note) => onReviewDocument?.(docId, st, note)}
           onModerateProduct={(prodId, act, rsn) => onModerateProduct?.(prodId, act, rsn)}

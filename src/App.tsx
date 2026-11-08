@@ -4889,6 +4889,7 @@ setOrders(createInitialOrders());
               ) : supplierTab === 'orders' ? (
                 <SupplierOrdersView
                   orders={orders}
+                  users={users}
                   onUpdateOrderStatus={handleUpdateOrderStatus}
                   showToast={showToast}
                 />
@@ -4933,6 +4934,7 @@ setOrders(createInitialOrders());
                   orders={orders}
                   reviews={reviews}
                   batches={deliveryBatches}
+                  participations={participations}
                 />
               ) : supplierTab === 'notifications' ? (
                 <NotificationCenter

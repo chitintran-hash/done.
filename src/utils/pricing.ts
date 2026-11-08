@@ -381,11 +381,11 @@ export function classifyOrderEarningStatus(
   order: Order,
   payouts: SupplierPayout[]
 ): OrderEarningClassification {
+  if (order.status === 'awaiting_payment' || order.status === 'cancelled_before_payment') {
+    return 'unpaid';
+  }
   if (order.status === 'cancelled' || order.status === 'refunded') {
     return 'reversed';
-  }
-  if (order.status === 'awaiting_payment') {
-    return 'unpaid';
   }
 
   // Check if order is already in a paid payout

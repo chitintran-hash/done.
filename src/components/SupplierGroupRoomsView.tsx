@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { GroupRoom, Product, Supplier, PickupPoint, PickupSlot, GroupParticipation } from '../types';
 import {
   getCurrentPrice,
+  getNextTier,
   formatVND,
   formatTime,
   DEFAULT_PLATFORM_COMMISSION_RATE,
@@ -279,58 +280,116 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                     <StatusBadge status={room.status} size="sm" />
                   </div>
 
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 space-y-2 text-xs">
-                    <div className="flex justify-between text-slate-600">
-                      <span>Người tham gia:</span>
-                      <span className="font-bold text-slate-900">{room.participantCount} / {room.maxParticipants}</span>
-                    </div>
-                    <div className="flex justify-between text-slate-600">
-                      <span>Số lượng đã gom:</span>
-                      <span className="font-bold text-slate-900">{room.totalQuantity} / {room.maxQuantity} {room.unit}</span>
-                    </div>
-                    <div className="flex justify-between text-slate-600">
-                      <span>{room.finalPrice !== undefined ? 'Giá chốt:' : 'Giá hiện tại:'}</span>
-                      <span className="font-black text-[#0C0D10] text-sm">{formatVND(currentPrice)}</span>
-                    </div>
-                    {/* Phần 24: Trạng thái Buyer sau khi chốt phòng */}
-                    {(room.status === 'successful' || room.finalPrice !== undefined) && participations.length > 0 && (
-                      <div className="pt-2 border-t border-slate-200/80 space-y-1.5 text-[11px]">
-                        <span className="font-bold text-slate-800 uppercase tracking-wider text-[10px] block">
-                          Tình trạng đơn sau khi chốt:
-                        </span>
-                        <div className="grid grid-cols-2 gap-1.5 bg-white p-2 rounded-lg border border-slate-200">
-                          <div>
-                            <span className="text-slate-500 block">Số lượng chốt:</span>
-                            <strong className="text-slate-900">{room.finalTotalQuantity ?? room.totalQuantity} {room.unit}</strong>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 block">Chờ xác nhận:</span>
-                            <strong className="text-amber-700">
-                              {participations.filter((p) => p.roomId === room.id && p.status === 'awaiting_payment').length} Buyer
-                            </strong>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 block">Đã thanh toán:</span>
-                            <strong className="text-emerald-700">
-                              {participations.filter((p) => p.roomId === room.id && p.status === 'paid').length} Buyer
-                            </strong>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 block">Không tiếp tục:</span>
-                            <strong className="text-rose-700">
-                              {participations.filter((p) => p.roomId === room.id && p.status === 'cancelled_before_payment').length} Buyer
-                            </strong>
-                          </div>
-                        </div>
+                  {/* Requirement 4 & 5: Phân biệt rõ Phòng Đang gom vs Phòng Đã chốt */}
+                  {room.status === 'active' ? (
+                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 space-y-2 text-xs">
+                      <div className="flex justify-between text-slate-600">
+                        <span>Trạng thái:</span>
+                        <span className="font-bold text-[#3155FF]">Đang gom</span>
                       </div>
-                    )}
-                    {room.status === 'active' && (
+                      <div className="flex justify-between text-slate-600">
+                        <span>Tổng số lượng:</span>
+                        <span className="font-bold text-slate-900">{room.totalQuantity} suất</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Người tham gia:</span>
+                        <span className="font-bold text-slate-900">{room.participantCount} người</span>
+                      </div>
+                      <div className="flex justify-between text-slate-600">
+                        <span>Mức giá hiện tại:</span>
+                        <span className="font-black text-[#0C0D10] text-sm">{formatVND(currentPrice)}</span>
+                      </div>
+                      {(() => {
+                        const nextTier = getNextTier(room.totalQuantity, room.priceTiers);
+                        return nextTier ? (
+                          <div className="p-2 rounded-lg bg-[#FAF0FF] border border-[#E8A0FF] text-[11px] text-[#7B3FF2] font-semibold flex items-center justify-between">
+                            <span>Mục tiêu tiếp theo:</span>
+                            <strong>Còn {nextTier.requiredQuantity} suất để mở khóa {formatVND(nextTier.nextPrice)}</strong>
+                          </div>
+                        ) : (
+                          <div className="p-2 rounded-lg bg-[#F5FBD9] border border-[#C7F000] text-[11px] text-[#0C0D10] font-bold">
+                            ✓ Đã mở khóa mốc giá tốt nhất ({formatVND(currentPrice)})
+                          </div>
+                        );
+                      })()}
                       <div className="flex justify-between text-slate-500 text-[11px] pt-1 border-t border-slate-200">
-                        <span>Hạn chót gom:</span>
+                        <span>Thời gian còn lại:</span>
                         <span className="font-mono font-bold text-slate-800">{formatTime(secondsLeft)}</span>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="bg-[#EFFBFF]/60 p-3.5 rounded-xl border border-[#83E7FF] space-y-2.5 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-[#000181] bg-[#EFFBFF] px-2 py-0.5 rounded-md border border-[#83E7FF]">
+                          PHÒNG ĐÃ CHỐT
+                        </span>
+                        <span className="text-slate-400 text-[11px]">
+                          {room.finalTier ? `Mốc ${room.finalTier}` : 'Đã chốt giá'}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between text-slate-700">
+                        <span>Tổng số lượng chốt:</span>
+                        <strong className="text-slate-900 text-sm">{room.finalTotalQuantity ?? room.totalQuantity} suất</strong>
+                      </div>
+                      <div className="flex justify-between text-slate-700">
+                        <span>Giá cuối:</span>
+                        <strong className="text-[#3155FF] font-black text-sm">{formatVND(currentPrice)} / {room.unit}</strong>
+                      </div>
+
+                      {/* Requirement 5: Breakdown sau khi chốt */}
+                      {(() => {
+                        const rParts = participations.filter((p) => p.roomId === room.id);
+                        const registeredQty = room.finalTotalQuantity ?? room.totalQuantity;
+                        const awaitingParts = rParts.filter((p) => p.status === 'awaiting_payment');
+                        const awaitingQty = awaitingParts.reduce((sum, p) => sum + p.quantity, 0);
+                        const awaitingBuyers = awaitingParts.length;
+
+                        const paidParts = rParts.filter((p) => p.status === 'paid');
+                        const paidQty = paidParts.reduce((sum, p) => sum + p.quantity, 0);
+                        const paidBuyers = paidParts.length;
+
+                        const cancelledParts = rParts.filter((p) => p.status === 'cancelled_before_payment');
+                        const cancelledQty = cancelledParts.reduce((sum, p) => sum + p.quantity, 0);
+                        const cancelledBuyers = cancelledParts.length;
+
+                        const confirmedQty = awaitingQty + paidQty;
+
+                        return (
+                          <div className="pt-2 border-t border-[#83E7FF]/70 space-y-1.5 text-[11px]">
+                            <span className="font-bold text-slate-800 uppercase tracking-wider text-[10px] block">
+                              Tiến độ chuyển đổi Buyer sau chốt:
+                            </span>
+                            <div className="grid grid-cols-2 gap-1.5 bg-white p-2.5 rounded-xl border border-slate-200">
+                              <div>
+                                <span className="text-slate-500 block">Đã đăng ký:</span>
+                                <strong className="text-slate-900">{registeredQty} suất ({room.participantCount} người)</strong>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 block">Đã xác nhận:</span>
+                                <strong className="text-[#3155FF]">{confirmedQty > 0 ? `${confirmedQty} suất` : 'Chờ xác nhận'}</strong>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 block">Buyer chờ xác nhận:</span>
+                                <strong className="text-amber-700">{awaitingBuyers} người ({awaitingQty} suất)</strong>
+                              </div>
+                              <div>
+                                <span className="text-slate-500 block">Buyer đã thanh toán:</span>
+                                <strong className="text-emerald-700">{paidBuyers} người ({paidQty} suất)</strong>
+                              </div>
+                              <div className="col-span-2 pt-1 border-t border-slate-100 flex justify-between">
+                                <span className="text-slate-500">Không tiếp tục (hủy trước TT):</span>
+                                <strong className="text-rose-600">{cancelledBuyers} người ({cancelledQty} suất)</strong>
+                              </div>
+                            </div>
+                            <p className="text-[10px] text-slate-500 italic mt-1 leading-relaxed">
+                              * Không coi {registeredQty} suất đăng ký ban đầu là {registeredQty} đơn đã thanh toán. Nhà cung cấp chỉ chuẩn bị hàng cho các đơn đã thanh toán.
+                            </p>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
 
                 {/* Actions */}

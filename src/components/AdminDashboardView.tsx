@@ -36,7 +36,10 @@ import {
   AuditEvent,
   ComplianceChecklistItem,
   ComplianceChecklistStatus,
+  FlashMatchDemand,
+  GrowthFeatureFlags,
 } from '../types';
+import { AdminGrowthDashboard } from './AdminGrowthDashboard';
 import {
   formatVND,
   getCurrentPrice,
@@ -179,6 +182,11 @@ interface AdminDashboardProps {
     internalNote: string
   ) => void;
   showToast: (msg: string) => void;
+  // FlashGrowth Ecosystem Props
+  demands?: FlashMatchDemand[];
+  featureFlags?: GrowthFeatureFlags;
+  onToggleFeatureFlag?: (flagKey: keyof GrowthFeatureFlags) => void;
+  onApplyBoostToRoom?: (roomId: string) => void;
 }
 
 export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
@@ -203,6 +211,10 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
   deliveryBatches = [],
   deliveryEvents = [],
   deliveryIssues = [],
+  demands = [],
+  featureFlags,
+  onToggleFeatureFlag,
+  onApplyBoostToRoom,
   onSavePickupPoint,
   onTogglePickupPointStatus,
   onAdvanceBatchStatus,
@@ -819,7 +831,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             { id: 'refunds', label: 'Hoàn tiền', count: pendingRefunds },
             { id: 'vouchers', label: 'Vouchers', count: vouchers.length },
             { id: 'logistics', label: 'Logistics & Hub', count: pickupPoints.length },
-            { id: 'growth', label: 'Tăng trưởng & Social', count: null },
+            { id: 'growth', label: 'FlashGrowth & Unit Economics', count: null },
             { id: 'compliance', label: 'Pháp lý & KYC', count: productReports.filter((r) => r.status === 'open').length },
             { id: 'reports', label: 'Báo cáo vi phạm', count: null },
           ].map((tab) => {
@@ -2576,169 +2588,21 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* VIEW: GROWTH & LOYALTY DASHBOARD (Requirements 44 & 45) */}
-      {activeTab === 'growth' && (() => {
-        const shareEventsCount = roomEvents.filter((e) => e.eventType === 'shared').length;
-        const inviteLinksCreated = Math.max(shareEventsCount + referrals.length, referrals.length);
-        const referralClicks = referrals.length;
-        const referralJoins = referrals.filter(
-          (r) => r.status === 'joined' || r.status === 'completed'
-        ).length;
-        const completedReferralsCount = referrals.filter((r) => r.status === 'completed').length;
-        const referralConversionRate =
-          referralClicks > 0 ? Math.round((completedReferralsCount / referralClicks) * 100) : 0;
-        const voucherRedemptionsCount = voucherUsages.length;
-        const totalPointsIssued = loyaltyTransactions
-          .filter((t) => t.points > 0)
-          .reduce((sum, t) => sum + t.points, 0);
-
-        const pointsByPurchase = loyaltyTransactions
-          .filter((t) => t.type === 'purchase')
-          .reduce((sum, t) => sum + t.points, 0);
-        const pointsByReferral = loyaltyTransactions
-          .filter((t) => t.type === 'referral')
-          .reduce((sum, t) => sum + t.points, 0);
-        const pointsByReview = loyaltyTransactions
-          .filter((t) => t.type === 'review')
-          .reduce((sum, t) => sum + t.points, 0);
-
-        // Top active users by loyalty points
-        const userPointsMap = new Map<string, number>();
-        loyaltyTransactions.forEach((t) => {
-          userPointsMap.set(t.userId, (userPointsMap.get(t.userId) || 0) + t.points);
-        });
-        const topActiveUsers = Array.from(userPointsMap.entries())
-          .map(([userId, points]) => {
-            const u = users.find((usr) => usr.id === userId);
-            return { userId, name: u?.name || userId, email: u?.email || '', points };
-          })
-          .sort((a, b) => b.points - a.points)
-          .slice(0, 5);
-
-        return (
-          <div className="space-y-6">
-            <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
-              <div>
-                <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-[#0C0D10]" />
-                  <span>Growth & Social Commerce Dashboard</span>
-                </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Đo lường hiệu quả lan truyền phòng gom (Referral Funnel), sử dụng Voucher và điểm thưởng FlashPoints
-                </p>
-              </div>
-
-              {/* 7 Growth Metrics Cards (Req 45) */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 text-xs">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase block">
-                    Invite links created
-                  </span>
-                  <div className="text-xl font-black text-slate-900 mt-1">{inviteLinksCreated}</div>
-                </div>
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase block">
-                    Referral clicks
-                  </span>
-                  <div className="text-xl font-black text-slate-900 mt-1">{referralClicks}</div>
-                </div>
-                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200">
-                  <span className="text-[10px] font-bold text-blue-700 uppercase block">
-                    Referral joins
-                  </span>
-                  <div className="text-xl font-black text-blue-700 mt-1">{referralJoins}</div>
-                </div>
-                <div className="p-4 rounded-2xl bg-[#F5FBD9]/80 border border-[#C7F000]">
-                  <span className="text-[10px] font-bold text-emerald-800 uppercase block">
-                    Completed referrals
-                  </span>
-                  <div className="text-xl font-black text-[#0C0D10] mt-1">
-                    {completedReferralsCount}
-                  </div>
-                </div>
-                <div className="p-4 rounded-2xl bg-teal-50/80 border border-teal-200">
-                  <span className="text-[10px] font-bold text-teal-800 uppercase block">
-                    Conversion rate
-                  </span>
-                  <div className="text-xl font-black text-teal-700 mt-1">
-                    {referralConversionRate}%
-                  </div>
-                </div>
-                <div className="p-4 rounded-2xl bg-[#EEF1FF]/80 border border-indigo-200">
-                  <span className="text-[10px] font-bold text-indigo-800 uppercase block">
-                    Voucher redemptions
-                  </span>
-                  <div className="text-xl font-black text-[#0C0D10] mt-1">
-                    {voucherRedemptionsCount}
-                  </div>
-                </div>
-                <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 col-span-2 sm:col-span-1">
-                  <span className="text-[10px] font-bold text-amber-800 uppercase block">
-                    Loyalty points issued
-                  </span>
-                  <div className="text-xl font-black text-amber-700 mt-1">
-                    {totalPointsIssued} đ
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Admin Loyalty Breakdown & Top Active Users (Req 44) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
-                <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-500" />
-                  <span>Phân bổ Điểm thưởng FlashPoints theo Lý do (Points by Reason)</span>
-                </h4>
-                <div className="space-y-3 text-xs">
-                  <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                    <span>Hoàn tất nhận hàng (`purchase` • +10 điểm/đơn)</span>
-                    <strong className="text-[#0C0D10] font-black">{pointsByPurchase} điểm</strong>
-                  </div>
-                  <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                    <span>Giới thiệu bạn bè hoàn tất (`referral` • +20 điểm/lượt)</span>
-                    <strong className="text-[#0C0D10] font-black">{pointsByReferral} điểm</strong>
-                  </div>
-                  <div className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
-                    <span>Đánh giá đơn hàng (`review` • +5 điểm/đơn)</span>
-                    <strong className="text-[#0C0D10] font-black">{pointsByReview} điểm</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
-                <h4 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#3155FF]" />
-                  <span>Top Thành viên Tích cực (Top Active Users)</span>
-                </h4>
-                {topActiveUsers.length === 0 ? (
-                  <p className="text-xs text-slate-400">Chưa có dữ liệu điểm thưởng.</p>
-                ) : (
-                  <div className="space-y-2.5 text-xs">
-                    {topActiveUsers.map((u, idx) => (
-                      <div
-                        key={u.userId}
-                        className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-100"
-                      >
-                        <div className="flex items-center space-x-2.5">
-                          <span className="w-6 h-6 rounded-lg bg-[#F3EEFF] text-indigo-800 font-black flex items-center justify-center text-[11px]">
-                            #{idx + 1}
-                          </span>
-                          <div>
-                            <div className="font-bold text-slate-900">{u.name}</div>
-                            <div className="text-[10px] text-slate-400">{u.email}</div>
-                          </div>
-                        </div>
-                        <span className="font-black text-amber-600 text-sm">{u.points} điểm</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      })()}
+      {/* VIEW: FLASHGROWTH & UNIT ECONOMICS DASHBOARD (Phần V, W, X, Y, Q, R, AJ) */}
+      {activeTab === 'growth' && (
+        <AdminGrowthDashboard
+          orders={orders}
+          rooms={rooms}
+          vouchers={vouchers}
+          voucherUsages={voucherUsages}
+          referrals={referrals}
+          refunds={refunds}
+          loyaltyTransactions={loyaltyTransactions}
+          featureFlags={featureFlags}
+          onToggleFeatureFlag={onToggleFeatureFlag}
+          onApplyBoostToRoom={onApplyBoostToRoom}
+        />
+      )}
 
       {/* VOUCHER CREATE / EDIT MODAL (Req 39) */}
       {isVoucherFormOpen && (

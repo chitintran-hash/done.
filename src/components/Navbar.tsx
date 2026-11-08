@@ -165,6 +165,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span>FLASHMAP</span>
                 </button>
 
+                {/* FLASHMATCH BUTTON FOR BUYER */}
+                <button
+                  onClick={() => onNavigate('flashmatch')}
+                  className={`px-3 xl:px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 flex items-center space-x-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'flashmatch'
+                      ? 'bg-white text-[#3155FF] shadow-xs'
+                      : 'text-[#C7F000] hover:bg-white/10'
+                  }`}
+                >
+                  <Zap className="w-3.5 h-3.5 fill-current text-[#C7F000]" />
+                  <span>FLASHMATCH</span>
+                </button>
+
                 {currentUser && (
                   <>
                 {/* 3. PHÒNG CỦA TÔI */}
@@ -272,7 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <>
                 <button
                   onClick={() => onNavigate('dashboard')}
-                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'dashboard' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -280,7 +293,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('products')}
-                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'products' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
@@ -288,27 +301,43 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => onNavigate('rooms')}
-                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'rooms' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   PHÒNG GOM
                 </button>
                 <button
+                  onClick={() => onNavigate('flashmatch')}
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'flashmatch' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-[#C7F000] hover:bg-white/10'
+                  }`}
+                >
+                  ⚡ FLASHMATCH
+                </button>
+                <button
                   onClick={() => onNavigate('orders')}
-                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'orders' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
                   ĐƠN HÀNG
                 </button>
                 <button
+                  onClick={() => onNavigate('business')}
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                    currentTab === 'business' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
+                  }`}
+                >
+                  FLASHBUSINESS
+                </button>
+                <button
                   onClick={() => onNavigate('earnings')}
-                  className={`px-2.5 xl:px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-xl text-[11px] xl:text-xs font-black uppercase tracking-wider transition cursor-pointer whitespace-nowrap shrink-0 ${
                     currentTab === 'earnings' ? 'bg-white text-[#3155FF] shadow-xs' : 'text-white/90 hover:bg-white/10'
                   }`}
                 >
-                  DOANH THU
+                  TÀI CHÍNH
                 </button>
               </>
             ) : (

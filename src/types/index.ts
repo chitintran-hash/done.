@@ -64,6 +64,10 @@ export type Supplier = {
   suspendedBy?: string;
   createdAt: string;
   isDemo: boolean;
+  // FlashGrowth: Supplier Pro & FlashBusiness (Req U, L, M)
+  isPro?: boolean;
+  proExpiresAt?: string;
+  boostCredits?: number;
 };
 
 // 3. Product Models
@@ -112,6 +116,45 @@ export type Product = {
 };
 
 // 4. Group Room & Pricing Models
+export type RoomType =
+  | 'standard'
+  | 'flashmatch'
+  | 'repeat'
+  | 'rescue'
+  | 'wholesale'
+  | 'bundle';
+
+export type FlashCommitment = {
+  id: string;
+  userId: string;
+  userName?: string;
+  quantity: number;
+  maxTargetPrice?: number;
+  commitmentType: 'interested' | 'committed';
+  createdAt: string;
+};
+
+export type SupplierOffer = {
+  id: string;
+  demandId: string;
+  supplierId: string;
+  supplierName: string;
+  priceTiers: PriceTier[];
+  unitPrice: number;
+  minQuantity: number;
+  deliveryEstimate: string;
+  note?: string;
+  status: 'pending' | 'accepted' | 'backup' | 'rejected';
+  createdAt: string;
+};
+
+export type FlashBundleItem = {
+  name: string;
+  quantity: number;
+  unit: string;
+  originalPrice?: number;
+};
+
 export type GroupRoomStatus =
   | 'draft'
   | 'active'
@@ -194,6 +237,39 @@ export type GroupRoom = {
   emoji: string;
   description: string;
   isSponsored?: boolean;
+
+  // FlashGrowth Ecosystem Fields (Phần AH, AI)
+  roomType?: RoomType;
+  // FlashMatch & FlashCommit
+  demandTitle?: string;
+  targetPriceMax?: number;
+  commitments?: FlashCommitment[];
+  supplierOffers?: SupplierOffer[];
+  selectedOfferId?: string;
+  backupOfferId?: string;
+  // FlashRepeat
+  isRepeat?: boolean;
+  repeatFrequency?: 'weekly' | 'biweekly' | 'monthly';
+  nextCycleDeliveryDate?: string;
+  activeSubscribersCount?: number;
+  // FlashRescue
+  isRescue?: boolean;
+  rescueReason?: string;
+  originalRegularPrice?: number;
+  rescueDeadline?: string;
+  // FlashWholesale
+  isWholesale?: boolean;
+  wholesaleRepName?: string;
+  wholesaleTargetQuantity?: number;
+  // FlashBundle
+  isBundle?: boolean;
+  bundleItems?: FlashBundleItem[];
+  // FlashClub
+  clubId?: string;
+  clubName?: string;
+  // Deal Health
+  dealHealthScore?: number;
+  dealHealthStatus?: 'healthy' | 'at_risk';
 
   status: GroupRoomStatus;
 };
@@ -279,6 +355,13 @@ export type Order = {
   status: OrderStatus;
 
   paymentMethod?: string;
+
+  // FlashGrowth Order Fields (Phần AH, AI, I, V)
+  transactionSource?: 'standard' | 'flashmatch' | 'repeat' | 'rescue' | 'wholesale' | 'bundle';
+  addOnItems?: { name: string; price: number; quantity: number }[];
+  clubId?: string;
+  batchId?: string;
+  repeatCycleNumber?: number;
 
   createdAt: string;
   paidAt?: string;
@@ -991,6 +1074,107 @@ export type ComplianceChecklistItem = {
   internalNote?: string;
   updatedBy?: string;
   updatedAt: string;
+};
+
+// ==========================================
+// FlashGrowth Ecosystem Types (Phần A - Phần Y)
+// ==========================================
+
+export type FlashMatchDemand = {
+  id: string;
+  creatorId: string;
+  creatorName: string;
+  title: string;
+  category: string;
+  description: string;
+  targetQuantity: number;
+  currentQuantity: number;
+  participantCount: number;
+  area: string;
+  pickupPointName: string;
+  commitments: FlashCommitment[];
+  offers: SupplierOffer[];
+  selectedOfferId?: string;
+  backupOfferId?: string;
+  status: 'gathering' | 'offered' | 'matched' | 'converted_to_room' | 'closed';
+  convertedRoomId?: string;
+  createdAt: string;
+  expiresAt: string;
+};
+
+export type FlashClub = {
+  id: string;
+  name: string;
+  category: 'university' | 'dorm' | 'office' | 'residential';
+  area: string;
+  memberCount: number;
+  pickupPointName: string;
+  description: string;
+  badgeText?: string;
+};
+
+export type FlashAddOnItem = {
+  id: string;
+  name: string;
+  price: number;
+  unit: string;
+  supplierId: string;
+  category: string;
+};
+
+export type GrowthFeatureFlags = {
+  flashMatchEnabled: boolean;
+  flashRepeatEnabled: boolean;
+  flashRescueEnabled: boolean;
+  flashWholesaleEnabled: boolean;
+  flashMergeEnabled: boolean;
+  flashBundleEnabled: boolean;
+  flashCommitEnabled: boolean;
+  flashNearEnabled: boolean;
+  flashInsightEnabled: boolean;
+  flashBoostEnabled: boolean;
+  unitEconomicsEnabled: boolean;
+};
+
+export type DealHealthInfo = {
+  score: number; // 0-100
+  status: 'healthy' | 'at_risk';
+  factors: {
+    quantityProgress: number;
+    timeRemainingHours: number;
+    conversionRate: number;
+    shippingEfficiency: number;
+  };
+  recommendations: string[];
+};
+
+export type UnitEconomicsReport = {
+  totalGmv: number;
+  revenue: {
+    commission: number;
+    supplierPro: number;
+    flashBoost: number;
+    flashLogistics: number;
+    smartLocker: number;
+    total: number;
+  };
+  variableCosts: {
+    voucherSubsidy: number;
+    referralRewards: number;
+    logisticsSubsidy: number;
+    refundCosts: number;
+    total: number;
+  };
+  netContribution: number;
+  contributionMarginPercent: number;
+  gmvBySource: {
+    standard: number;
+    flashmatch: number;
+    repeat: number;
+    rescue: number;
+    wholesale: number;
+    bundle: number;
+  };
 };
 
 // Re-export Vietnam Administrative & Address Types

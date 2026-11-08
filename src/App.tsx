@@ -93,6 +93,12 @@ import {
   ProductReportReason,
   ModerationAction,
   TransactionSnapshot,
+  FlashMatchDemand,
+  FlashCommitment,
+  SupplierOffer,
+  FlashClub,
+  FlashAddOnItem,
+  GrowthFeatureFlags,
   AuditEvent,
   AuditEventType,
   LegalDocument,
@@ -153,8 +159,14 @@ import {
   createInitialTransactionSnapshots,
   createInitialAuditEvents,
   createInitialLegalDocuments,
-  createInitialComplianceChecklist
+  createInitialComplianceChecklist,
+  createInitialDemands,
+  createInitialClubs,
+  createInitialAddOns,
 } from './data/initialData';
+import { DEFAULT_GROWTH_FLAGS } from './utils/growthEngine';
+import { FlashMatchHubModal } from './components/FlashMatchHubModal';
+import { SupplierBusinessView } from './components/SupplierBusinessView';
 
 import { StatusBadge } from './components/StatusBadge';
 import { JoinModal } from './components/JoinModal';
@@ -558,10 +570,25 @@ export default function FlashGroupApp() {
   });
 
   // Navigation tab state
-  const [buyerTab, setBuyerTab] = useState<'discovery' | 'flashmap' | 'myrooms' | 'orders' | 'favorites' | 'complaints' | 'privacy' | 'notifications' | 'profile'>('discovery');
-  const [supplierTab, setSupplierTab] = useState<'dashboard' | 'products' | 'rooms' | 'orders' | 'pickup' | 'logistics' | 'earnings' | 'analytics' | 'notifications' | 'profile'>('dashboard');
+  const [buyerTab, setBuyerTab] = useState<'discovery' | 'flashmap' | 'myrooms' | 'orders' | 'favorites' | 'complaints' | 'privacy' | 'notifications' | 'profile' | 'flashmatch'>('discovery');
+  const [supplierTab, setSupplierTab] = useState<'dashboard' | 'products' | 'rooms' | 'orders' | 'pickup' | 'logistics' | 'earnings' | 'analytics' | 'notifications' | 'profile' | 'business' | 'flashmatch'>('dashboard');
   const [adminTab, setAdminTab] = useState<'overview' | 'users' | 'suppliers' | 'products' | 'rooms' | 'orders' | 'refunds' | 'vouchers' | 'growth' | 'logistics' | 'finance' | 'payouts' | 'compliance' | 'reports'>('overview');
   const [adminViewMode, setAdminViewMode] = useState<'dashboard' | 'storefront'>('dashboard');
+
+  // FlashGrowth Ecosystem State (Phần A - Phần Y)
+  const [demands, setDemands] = useState<FlashMatchDemand[]>(() => {
+    return safeParseStorage<FlashMatchDemand[]>('flashgroup_v3_demands', createInitialDemands());
+  });
+  const [clubs, setClubs] = useState<FlashClub[]>(() => {
+    return safeParseStorage<FlashClub[]>('flashgroup_v3_clubs', createInitialClubs());
+  });
+  const [addOnItems, setAddOnItems] = useState<FlashAddOnItem[]>(() => {
+    return safeParseStorage<FlashAddOnItem[]>('flashgroup_v3_addons', createInitialAddOns());
+  });
+  const [growthFeatureFlags, setGrowthFeatureFlags] = useState<GrowthFeatureFlags>(() => {
+    return safeParseStorage<GrowthFeatureFlags>('flashgroup_v3_growth_flags', DEFAULT_GROWTH_FLAGS);
+  });
+  const [isFlashMatchModalOpen, setIsFlashMatchModalOpen] = useState<boolean>(false);
 
   // Drilldown selection states
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(() => {
@@ -736,6 +763,22 @@ export default function FlashGroupApp() {
   useEffect(() => {
     localStorage.setItem('flashgroup_v3_delivery_issues', JSON.stringify(deliveryIssues));
   }, [deliveryIssues]);
+
+  useEffect(() => {
+    localStorage.setItem('flashgroup_v3_demands', JSON.stringify(demands));
+  }, [demands]);
+
+  useEffect(() => {
+    localStorage.setItem('flashgroup_v3_clubs', JSON.stringify(clubs));
+  }, [clubs]);
+
+  useEffect(() => {
+    localStorage.setItem('flashgroup_v3_addons', JSON.stringify(addOnItems));
+  }, [addOnItems]);
+
+  useEffect(() => {
+    localStorage.setItem('flashgroup_v3_growth_flags', JSON.stringify(growthFeatureFlags));
+  }, [growthFeatureFlags]);
 
   useEffect(() => {
     localStorage.setItem('flashgroup_v3_verification_documents', JSON.stringify(verificationDocuments));
@@ -1554,6 +1597,18 @@ export default function FlashGroupApp() {
       return;
     }
 
+    // FlashLogistics: Kiểm tra sức chứa Smart Locker / Điểm nhận hàng
+    if (room.pickupPointId) {
+      const targetPoint = pickupPoints.find((p) => p.id === room.pickupPointId);
+      if (targetPoint && (targetPoint.type === 'locker' || targetPoint.type === 'store')) {
+        const remainingCapacity = Math.max(0, targetPoint.capacity - targetPoint.currentLoad);
+        if (remainingCapacity <= 0) {
+          showToast(`Điểm nhận hàng "${targetPoint.name}" đã đầy công suất lưu kho! Vui lòng chọn điểm khác hoặc chờ giải phóng ngăn.`, 'WARNING');
+          return;
+        }
+      }
+    }
+
     // Phần 1, Phần 21, Scenario D: Phân biệt người mới vs Người đã tham gia mua thêm
     const existingParticipation = participations.find(
       (p) =>
@@ -1848,7 +1903,174 @@ setOrders(createInitialOrders());
     setSnapshotModalOrder(null);
     setLegalModalSlug(null);
     setComplaintInitialOrderId(undefined);
+    // Reset FlashGrowth State
+    setDemands(createInitialDemands());
+    setClubs(createInitialClubs());
+    setAddOnItems(createInitialAddOns());
+    setGrowthFeatureFlags(DEFAULT_GROWTH_FLAGS);
+    setIsFlashMatchModalOpen(false);
     showToast('Đã khôi phục dữ liệu ban đầu cho bản demo!');
+  };
+
+  // FlashGrowth Handlers (Phần A - Phần Y)
+  const handleCreateDemand = (
+    demandData: Omit<FlashMatchDemand, 'id' | 'createdAt' | 'commitments' | 'offers' | 'currentQuantity' | 'participantCount'>
+  ) => {
+    const newDemand: FlashMatchDemand = {
+      ...demandData,
+      id: `demand-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      currentQuantity: 2,
+      participantCount: 1,
+      commitments: [
+        {
+          id: `commit-${Date.now()}`,
+          userId: currentUser?.id || 'guest-buyer',
+          userName: currentUser?.name || 'Người tạo nhu cầu',
+          quantity: 2,
+          commitmentType: 'committed',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+      offers: [],
+    };
+    setDemands((prev) => [newDemand, ...prev]);
+    showToast('Đã đăng nhu cầu gom hàng FlashMatch thành công! Đang thông báo đến nhà cung cấp trong khu vực.');
+  };
+
+  const handleJoinDemand = (
+    demandId: string,
+    quantity: number,
+    commitmentType: 'interested' | 'committed',
+    targetPrice?: number
+  ) => {
+    setDemands((prev) =>
+      prev.map((d) => {
+        if (d.id !== demandId) return d;
+        const newCommitment: FlashCommitment = {
+          id: `commit-${Date.now()}`,
+          userId: currentUser?.id || `user-buyer-${Date.now()}`,
+          userName: currentUser?.name || 'Người mua',
+          quantity,
+          commitmentType,
+          maxTargetPrice: targetPrice,
+          createdAt: new Date().toISOString(),
+        };
+        return {
+          ...d,
+          currentQuantity: d.currentQuantity + quantity,
+          participantCount: d.participantCount + 1,
+          commitments: [...d.commitments, newCommitment],
+        };
+      })
+    );
+    showToast(`Đã tham gia nhu cầu FlashMatch (${quantity} suất) với tín hiệu FlashCommit!`);
+  };
+
+  const handleMergeDemands = (sourceDemandId: string, targetDemandId: string) => {
+    const source = demands.find((d) => d.id === sourceDemandId);
+    const target = demands.find((d) => d.id === targetDemandId);
+    if (!source || !target) return;
+
+    setDemands((prev) =>
+      prev
+        .filter((d) => d.id !== sourceDemandId)
+        .map((d) => {
+          if (d.id !== targetDemandId) return d;
+          return {
+            ...d,
+            currentQuantity: d.currentQuantity + source.currentQuantity,
+            participantCount: d.participantCount + source.participantCount,
+            commitments: [...d.commitments, ...source.commitments],
+          };
+        })
+    );
+    showToast(`Đã gộp nhu cầu FlashMerge thành công! Tổng số lượng đạt ${source.currentQuantity + target.currentQuantity} suất.`);
+  };
+
+  const handleSubmitSupplierOffer = (
+    demandId: string,
+    offerData: Omit<SupplierOffer, 'id' | 'demandId' | 'createdAt' | 'status'>
+  ) => {
+    setDemands((prev) =>
+      prev.map((d) => {
+        if (d.id !== demandId) return d;
+        const newOffer: SupplierOffer = {
+          ...offerData,
+          id: `offer-${Date.now()}`,
+          demandId,
+          status: d.offers.length === 0 ? 'accepted' : 'backup',
+          createdAt: new Date().toISOString(),
+        };
+        return {
+          ...d,
+          status: 'offered',
+          offers: [...d.offers, newOffer],
+          selectedOfferId: d.selectedOfferId || newOffer.id,
+          backupOfferId: d.selectedOfferId ? newOffer.id : d.backupOfferId,
+        };
+      })
+    );
+    showToast('Đã gửi chào giá FlashMatch thành công đến nhóm người mua!');
+  };
+
+  const handleCreateRescueDeal = (dealData: {
+    productId: string;
+    productName: string;
+    originalPrice: number;
+    rescuePrice: number;
+    quantity: number;
+    deadline: string;
+    reason: string;
+    area: string;
+  }) => {
+    const newRescueRoom: GroupRoom = {
+      id: `room-rescue-${Date.now()}`,
+      productId: dealData.productId,
+      supplierId: currentSupplier?.id || 'supplier-profile-demo',
+      productName: `⚡ [FlashRescue] ${dealData.productName}`,
+      category: 'Thực phẩm',
+      productImage: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=800&q=80',
+      unit: 'Hộp / Phần',
+      supplierName: currentSupplier?.businessName || 'Nhà phân phối Đối tác',
+      participantCount: 0,
+      totalQuantity: 0,
+      maxParticipants: dealData.quantity,
+      maxQuantity: dealData.quantity,
+      initialPrice: dealData.rescuePrice,
+      originalRegularPrice: dealData.originalPrice,
+      priceTiers: [{ minQuantity: 1, price: dealData.rescuePrice }],
+      startAt: new Date().toISOString(),
+      endAt: new Date(Date.now() + 3600000 * 6).toISOString(),
+      pickupPoint: 'KTX Khu A – Locker Thông Minh Tòa A3',
+      pickupAddress: 'Tầng trệt Tòa A3, Khu KTX ĐHQG, Phường Linh Trung, TP. Thủ Đức, TP.HCM',
+      provinceOrCity: 'TP. Hồ Chí Minh',
+      area: dealData.area,
+      normalShippingEstimate: 20000,
+      totalShippingFee: 40000,
+      distance: '300m',
+      distanceMeters: 300,
+      mapCoords: { x: 42, y: 38 },
+      emoji: '⚡',
+      description: dealData.reason,
+      status: 'active',
+      isRescue: true,
+      roomType: 'rescue',
+      rescueReason: dealData.reason,
+      rescueDeadline: dealData.deadline,
+      dealHealthScore: 90,
+      dealHealthStatus: 'healthy',
+    };
+    setRooms((prev) => [newRescueRoom, ...prev]);
+    showToast(`Đã kích hoạt Deal FlashRescue "${dealData.productName}" thành công!`);
+  };
+
+  const handleToggleGrowthFeatureFlag = (flagKey: keyof GrowthFeatureFlags) => {
+    setGrowthFeatureFlags((prev) => ({
+      ...prev,
+      [flagKey]: !prev[flagKey],
+    }));
+    showToast(`Đã cập nhật cờ tính năng ${String(flagKey)}`);
   };
 
   // Logout (Requirement 6 & Production Auth Flow)
@@ -3655,6 +3877,24 @@ setOrders(createInitialOrders());
           showToast={showToast}
         />
 
+        {/* FLASHMATCH HUB MODAL (Phần A, B, E, N, Z, AB) */}
+        <FlashMatchHubModal
+          isOpen={isFlashMatchModalOpen || buyerTab === 'flashmatch' || supplierTab === 'flashmatch'}
+          onClose={() => {
+            setIsFlashMatchModalOpen(false);
+            if (buyerTab === 'flashmatch') setBuyerTab('discovery');
+            if (supplierTab === 'flashmatch') setSupplierTab('dashboard');
+          }}
+          currentUser={currentUser}
+          demands={demands}
+          rooms={rooms}
+          onCreateDemand={handleCreateDemand}
+          onJoinDemand={handleJoinDemand}
+          onMergeDemands={handleMergeDemands}
+          onSubmitSupplierOffer={handleSubmitSupplierOffer}
+          onSelectRoom={(roomId) => setSelectedRoomId(roomId)}
+        />
+
         {/* BUSINESS MODEL INFO MODAL (Requirements 27, 28, 29, 32) */}
         <BusinessModelModal
           isOpen={isBusinessModelOpen}
@@ -4296,6 +4536,13 @@ setOrders(createInitialOrders());
                             <MapPin className="w-5 h-5 text-[#C7F000]" />
                             <span>XEM FLASHMAP</span>
                           </button>
+                          <button
+                            onClick={() => setIsFlashMatchModalOpen(true)}
+                            className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl font-black text-sm bg-[#C7F000] text-[#0C0D10] hover:bg-lime-400 transition cursor-pointer active:scale-98 uppercase shadow-md"
+                          >
+                            <Sparkles className="w-4 h-4 text-[#0C0D10]" />
+                            <span>GOM NHU CẦU FLASHMATCH</span>
+                          </button>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 pt-4 text-xs font-semibold text-white/90 border-t border-white/15">
@@ -4418,6 +4665,38 @@ setOrders(createInitialOrders());
                     onJoinRoom={(id) => setJoinModalRoomId(id)}
                   />
 
+                  {/* FLASHNEAR CALLOUT WIDGET (Phần F) */}
+                  <div className="bg-gradient-to-r from-amber-500 via-[#3155FF] to-[#7B3FF2] p-0.5 rounded-3xl shadow-sm">
+                    <div className="bg-white p-4 sm:p-5 rounded-[22px] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl shrink-0">🔥</span>
+                        <div className="space-y-0.5">
+                          <strong className="text-slate-900 block font-black text-sm">
+                            FlashNear: 18 người gần khu vực {selectedArea === 'all' ? 'bạn' : selectedArea} đang gom Dâu Tây Đà Lạt
+                          </strong>
+                          <span className="text-slate-500 text-[11px] block">
+                            Chỉ còn <strong>1 suất duy nhất</strong> để toàn bộ nhóm mở khóa mức giá rẻ nhất <strong>89.000đ/hộp</strong>!
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => setSelectedRoomId('room-dau-dalat')}
+                          className="px-4 py-2 rounded-xl bg-[#0C0D10] text-[#C7F000] font-black hover:bg-slate-800 transition cursor-pointer whitespace-nowrap shadow-xs"
+                        >
+                          Xem Phòng Ngay
+                        </button>
+                        <button
+                          onClick={() => setIsFlashMatchModalOpen(true)}
+                          className="px-4 py-2 rounded-xl bg-[#3155FF] text-white font-bold hover:bg-[#000181] transition cursor-pointer whitespace-nowrap shadow-xs flex items-center gap-1.5"
+                        >
+                          <Zap className="w-3.5 h-3.5 fill-current text-[#C7F000]" />
+                          <span>Mở FlashMatch</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* 3. FEATURED ROOMS SECTION */}
                   <div id="deals-nearby" className="space-y-6 pt-2">
                     <SectionHeader
@@ -4509,25 +4788,43 @@ setOrders(createInitialOrders());
 
                     {/* Room Grid or Friendly Empty State */}
                     {filteredDiscoveryRooms.length === 0 ? (
-                      <EmptyState
-                        icon={Package}
-                        badge="BỘ LỌC HIỆN TẠI"
-                        title="KHÔNG TÌM THẤY PHÒNG GOM PHÙ HỢP"
-                        description="Hãy thử nới lỏng bán kính khoảng cách, chọn danh mục khác hoặc xóa từ khóa tìm kiếm để khám phá nhiều phòng hơn."
-                        actionLabel="Đặt lại tất cả bộ lọc"
-                        onAction={() => {
-                          setFilters({
-                            searchQuery: '',
-                            category: 'all',
-                            maxDistanceMeters: 10000,
-                            status: 'all',
-                            pickupPoint: 'all',
-                            maxPrice: 1000000,
-                            sortBy: 'near_me',
-                          });
-                          setSelectedQuickChip('all');
-                        }}
-                      />
+                      <div className="space-y-4">
+                        <EmptyState
+                          icon={Package}
+                          badge="BỘ LỌC HIỆN TẠI"
+                          title="KHÔNG TÌM THẤY PHÒNG GOM PHÙ HỢP"
+                          description="Hãy thử nới lỏng bán kính khoảng cách, chọn danh mục khác hoặc xóa từ khóa tìm kiếm để khám phá nhiều phòng hơn."
+                          actionLabel="Đặt lại tất cả bộ lọc"
+                          onAction={() => {
+                            setFilters({
+                              searchQuery: '',
+                              category: 'all',
+                              maxDistanceMeters: 10000,
+                              status: 'all',
+                              pickupPoint: 'all',
+                              maxPrice: 1000000,
+                              sortBy: 'near_me',
+                            });
+                            setSelectedQuickChip('all');
+                          }}
+                        />
+                        {/* Empty Search Recovery CTA (Phần N: FlashAutoMatch & Demand Aggregation) */}
+                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 text-center shadow-xs">
+                          <p className="text-sm font-black text-slate-800 mb-1">
+                            Không tìm thấy món bạn cần trong danh sách mở sẵn?
+                          </p>
+                          <p className="text-xs text-slate-600 mb-4 max-w-lg mx-auto">
+                            Đừng bỏ cuộc! Hãy tạo nhu cầu mua trên <strong>FlashMatch</strong> để hệ thống tự động gom người mua cùng chung cư/KTX và đấu thầu giá sỉ từ các nhà cung cấp.
+                          </p>
+                          <button
+                            onClick={() => setIsFlashMatchModalOpen(true)}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs bg-[#3155FF] text-white hover:bg-blue-600 transition cursor-pointer active:scale-95 shadow-sm"
+                          >
+                            <Sparkles className="w-4 h-4 text-[#C7F000]" />
+                            <span>TẠO NHU CẦU FLASHMATCH MỚI</span>
+                          </button>
+                        </div>
+                      </div>
                     ) : (
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredDiscoveryRooms.map((room) => {
@@ -4927,6 +5224,24 @@ setOrders(createInitialOrders());
                   onOpenBusinessModel={() => setIsBusinessModelOpen(true)}
                   showToast={showToast}
                 />
+              ) : supplierTab === 'business' || supplierTab === 'flashmatch' ? (
+                <SupplierBusinessView
+                  supplier={currentSupplier}
+                  demands={demands}
+                  rooms={rooms}
+                  products={products}
+                  onOpenFlashMatch={() => setIsFlashMatchModalOpen(true)}
+                  onCreateRescueDeal={handleCreateRescueDeal}
+                  onUpgradePro={() => {
+                    setSuppliers((prev) =>
+                      prev.map((s) => (s.id === currentSupplier.id ? { ...s, isPro: true } : s))
+                    );
+                    showToast('Đã nâng cấp Supplier Pro thành công!');
+                  }}
+                  onLaunchBoost={(c) => {
+                    showToast(`Đã khởi chạy chiến dịch FlashBoost cho ${c.productName}!`);
+                  }}
+                />
               ) : supplierTab === 'analytics' || supplierTab === 'dashboard' ? (
                 <SupplierAnalyticsView
                   supplier={currentSupplier}
@@ -5269,6 +5584,13 @@ setOrders(createInitialOrders());
                   showToast('Đã mô phỏng hoàn tiền thành công.');
                 }}
                 showToast={showToast}
+                demands={demands}
+                featureFlags={growthFeatureFlags}
+                onToggleFeatureFlag={handleToggleGrowthFeatureFlag}
+                onApplyBoostToRoom={(rId) => {
+                  setRooms((prev) => prev.map((r) => (r.id === rId ? { ...r, isSponsored: true } : r)));
+                  showToast('Đã kích hoạt FlashBoost cho phòng gom!');
+                }}
               />
             )
           )}

@@ -20,6 +20,12 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [selectedAddOnIds, setSelectedAddOnIds] = useState<string[]>([]);
+
+  const availableAddOns = [
+    { id: 'addon-01', name: 'Sữa Chua Nếp Cẩm Mộc Châu', price: 22000 },
+    { id: 'addon-02', name: 'Nước Ép Cam Sành Tươi Ép Lạnh', price: 29000 },
+  ];
 
   if (!isOpen) return null;
 
@@ -130,6 +136,65 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               >
                 <Plus className="w-4 h-4" />
               </button>
+            </div>
+          </div>
+
+          {/* FlashBundle Items (Phần H) */}
+          {room.bundleItems && room.bundleItems.length > 0 && (
+            <div className="bg-[#FAF0FF] p-3 rounded-2xl border border-[#E8A0FF] space-y-1.5 text-xs">
+              <span className="font-bold text-[#7B3FF2] block text-[11px]">
+                📦 Chi tiết Combo Gói Tuần FlashBundle:
+              </span>
+              <ul className="space-y-1 text-slate-700 text-[11px]">
+                {room.bundleItems.map((item, idx) => (
+                  <li key={idx} className="flex items-center justify-between">
+                    <span>• {item.name}</span>
+                    <strong className="text-slate-900">{item.quantity} {item.unit}</strong>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* FlashAdd-on: Gộp sản phẩm nhỏ vào cùng chuyến giao (Phần I) */}
+          <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2 text-xs">
+            <span className="font-bold text-slate-800 block text-[11px] flex items-center justify-between">
+              <span>➕ Thêm FlashAdd-on (Cùng chuyến giao • Phí ship 0đ)</span>
+              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-bold">Tối ưu AOV</span>
+            </span>
+            <div className="space-y-1.5">
+              {availableAddOns.map((addon) => {
+                const isSelected = selectedAddOnIds.includes(addon.id);
+                return (
+                  <label
+                    key={addon.id}
+                    className={`flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${
+                      isSelected
+                        ? 'bg-blue-50/80 border-[#3155FF] text-[#000181]'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100/60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => {
+                          setSelectedAddOnIds((prev) =>
+                            prev.includes(addon.id)
+                              ? prev.filter((id) => id !== addon.id)
+                              : [...prev, addon.id]
+                          );
+                        }}
+                        className="rounded text-[#3155FF] focus:ring-0"
+                      />
+                      <span className="text-xs font-semibold">{addon.name}</span>
+                    </div>
+                    <strong className="text-xs font-black text-slate-900">
+                      +{formatVND(addon.price)}
+                    </strong>
+                  </label>
+                );
+              })}
             </div>
           </div>
 

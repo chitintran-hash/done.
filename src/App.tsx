@@ -41,6 +41,8 @@ import {
   Home,
   Plus,
   LogOut,
+  ShieldAlert,
+  XCircle,
 } from 'lucide-react';
 
 import {
@@ -1478,7 +1480,18 @@ export default function FlashGroupApp() {
       showToast('Phòng gom hiện không ở trạng thái mở!');
       return;
     }
-    if (room.participantCount >= room.maxParticipants) {
+
+    // Phần 1, Phần 21, Scenario D: Phân biệt người mới vs Người đã tham gia mua thêm
+    const existingParticipation = participations.find(
+      (p) =>
+        p.roomId === roomId &&
+        p.userId === currentUser.id &&
+        p.status !== 'cancelled' &&
+        p.status !== 'cancelled_before_payment'
+    );
+    const isAdditional = Boolean(existingParticipation);
+
+    if (!isAdditional && room.participantCount >= room.maxParticipants) {
       showToast('Phòng gom đã đạt tối đa số người tham gia!');
       return;
     }
@@ -1486,32 +1499,50 @@ export default function FlashGroupApp() {
       showToast(`Không thể vượt quá số lượng tối đa của phòng (${room.maxQuantity})!`);
       return;
     }
-    const alreadyJoined = participations.some(
-      (p) => p.roomId === roomId && p.userId === currentUser.id && p.status !== 'cancelled'
-    );
-    if (alreadyJoined) {
-      showToast('Bạn đã tham gia phòng gom này rồi!');
-      return;
-    }
 
     const oldPrice = getCurrentPrice(room.totalQuantity, room.priceTiers);
-    const newParticipantCount = room.participantCount + 1;
+    // Nếu mua thêm: participantCount không đổi, totalQuantity tăng
+    const newParticipantCount = isAdditional ? room.participantCount : room.participantCount + 1;
     const newTotalQuantity = room.totalQuantity + quantity;
     const newPrice = getCurrentPrice(newTotalQuantity, room.priceTiers);
 
     const isFull =
       newTotalQuantity >= room.maxQuantity || newParticipantCount >= room.maxParticipants;
 
-    const newParticipation: GroupParticipation = {
-      id: `part-${Date.now()}`,
-      roomId: room.id,
-      userId: currentUser.id,
-      quantity,
-      joinedAt: new Date().toISOString(),
-      status: isFull ? 'awaiting_payment' : 'reserved',
-    };
-
-    setParticipations((prev) => [...prev, newParticipation]);
+    if (isAdditional && existingParticipation) {
+      setParticipations((prev) =>
+        prev.map((p): GroupParticipation => {
+          if (p.id === existingParticipation.id) {
+            return {
+              ...p,
+              quantity: p.quantity + quantity,
+              status: isFull ? 'awaiting_payment' : p.status,
+            };
+          }
+          if (isFull && p.roomId === room.id && p.status === 'reserved') {
+            return { ...p, status: 'awaiting_payment' };
+          }
+          return p;
+        })
+      );
+    } else {
+      const newParticipation: GroupParticipation = {
+        id: `part-${Date.now()}`,
+        roomId: room.id,
+        userId: currentUser.id,
+        quantity,
+        joinedAt: new Date().toISOString(),
+        status: isFull ? 'awaiting_payment' : 'reserved',
+      };
+      setParticipations((prev) => [
+        ...prev.map((p): GroupParticipation =>
+          isFull && p.roomId === room.id && p.status === 'reserved'
+            ? { ...p, status: 'awaiting_payment' }
+            : p
+        ),
+        newParticipation,
+      ]);
+    }
 
     let updatedRoom: GroupRoom = {
       ...room,
@@ -1537,7 +1568,11 @@ export default function FlashGroupApp() {
 
     setRooms((prev) => prev.map((r) => (r.id === roomId ? updatedRoom : r)));
     setJoinModalRoomId(null);
-    showToast(`Đã tham gia phòng gom "${room.productName}" (${quantity} ${room.unit}) thành công!`);
+    if (isAdditional) {
+      showToast(`Đã đặt mua thêm ${quantity} ${room.unit} vào phòng gom "${room.productName}" thành công!`);
+    } else {
+      showToast(`Đã tham gia phòng gom "${room.productName}" (${quantity} ${room.unit}) thành công!`);
+    }
 
     // Emit Room Activity Event (Requirements 11, 12, 49)
     emitRoomEvent(room.id, 'joined', {
@@ -3918,7 +3953,7 @@ setOrders(createInitialOrders());
                     orders={orders}
                     currentUserId={currentUser.id}
                     onSelectRoom={(id) => setSelectedRoomId(id)}
-                    onGoCheckout={(id) => setCheckoutRoomId(id)}
+                    onGoCheckout={(id) => setConfirmingPriceRoomId(id)}
                     onExplore={() => setBuyerTab('discovery')}
                     getSecondsLeft={getSecondsLeft}
                   />
@@ -5471,21 +5506,42 @@ function GroupRoomView({
               </div>
 
               {nextTier && room.status === 'active' ? (
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
+                <div className="bg-[#EEF1FF] border border-[#3155FF]/30 rounded-2xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-extrabold text-amber-800 uppercase tracking-wide flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4 text-amber-600" />
+                    <span className="text-xs font-extrabold text-[#3155FF] uppercase tracking-wide flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-[#3155FF]" />
                       Mức giá tiếp theo
                     </span>
-                    <span className="text-lg font-black text-amber-700">{formatVND(nextTier.nextPrice)}</span>
+                    <span className="text-lg font-black text-[#3155FF]">{formatVND(nextTier.nextPrice)}</span>
                   </div>
-                  <p className="text-xs text-amber-900">
+
+                  {/* Phần 19: Chi tiết 4 chỉ số rõ ràng */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-white/90 p-3 rounded-xl border border-[#3155FF]/20 shadow-xs">
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Mức hiện tại:</span>
+                      <strong className="text-slate-900 font-black text-sm">{formatVND(currentPrice)}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Tổng số lượng:</span>
+                      <strong className="text-slate-900 font-black text-sm">{room.totalQuantity} {room.unit}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Cần thêm:</span>
+                      <strong className="text-[#3155FF] font-black text-sm">{nextTier.requiredQuantity} {room.unit}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Mức tiếp theo:</span>
+                      <strong className="text-emerald-700 font-black text-sm">{formatVND(nextTier.nextPrice)}</strong>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-700">
                     Chỉ cần cả nhóm gom thêm{' '}
-                    <strong className="text-base text-amber-950 font-black">
+                    <strong className="text-sm text-[#3155FF] font-black">
                       {nextTier.requiredQuantity} {room.unit}
                     </strong>{' '}
                     nữa để mỗi thành viên cùng tiết kiệm thêm{' '}
-                    <strong>{formatVND(nextTier.savingPerUnit)}/{room.unit}</strong>!
+                    <strong className="text-emerald-800">{formatVND(nextTier.savingPerUnit)}/{room.unit}</strong>!
                   </p>
                 </div>
               ) : room.finalPrice !== undefined ? (
@@ -6310,6 +6366,17 @@ function CheckoutView({
           <h2 className="text-2xl font-black text-slate-900 mt-1">Rà soát hợp đồng & Thanh toán</h2>
         </div>
 
+        {/* PHẦN 11 & 12: MÔ PHỎNG THANH TOÁN (PROTOTYPE SIMULATION DISCLAIMER) */}
+        <div className="bg-[#FAF0FF] border border-[#E8A0FF] p-4 rounded-2xl flex items-start gap-3">
+          <ShieldAlert className="w-5 h-5 text-[#7B3FF2] shrink-0 mt-0.5" />
+          <div className="text-xs text-[#000181] leading-relaxed">
+            <strong className="block font-black uppercase text-[11px] text-[#7B3FF2] mb-0.5">
+              Thanh toán mô phỏng (Prototype Simulation)
+            </strong>
+            Quy trình thanh toán phục vụ nghiên cứu & nguyên mẫu FlashGroup, không phát sinh giao dịch tài chính thật. FlashGroup không trực tiếp lưu giữ tiền của người mua; toàn bộ doanh thu sản phẩm được ghi nhận cho Nhà cung cấp và đối soát theo lô sau khi giao nhận thành công.
+          </div>
+        </div>
+
         {/* REQUIREMENT 20: EXPLICIT DELIVERY METHOD (NHẬN TẠI ĐIỂM GOM vs GIAO ĐẾN ĐỊA CHỈ) */}
         <div className="space-y-3">
           <label className="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-1.5">
@@ -7063,99 +7130,153 @@ function OrdersView({
           })}
         </div>
 
-        {/* Phase 7 Req 26 & 56: Mobile-friendly Pickup QR & Pickup Code Card */}
-        {selectedOrderForQR && (
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xl text-center space-y-4 h-fit sticky top-24">
-            <span className="text-xs uppercase font-extrabold text-[#0C0D10] tracking-wider block">
-              THẺ NHẬN HÀNG TẠI LOCKER / ĐIỂM GOM
-            </span>
+        {/* Phase 7 Req 26 & 56 + Phần 22: Pickup QR & Status Card */}
+        {selectedOrderForQR && (() => {
+          const isPickupReady =
+            selectedOrderForQR.status === 'ready_for_pickup' ||
+            selectedOrderForQR.status === 'pickup_overdue' ||
+            selectedOrderForQR.status === 'picked_up';
+          const isAwaitingPayment = selectedOrderForQR.status === 'awaiting_payment';
+          const isCancelled =
+            selectedOrderForQR.status === 'cancelled' ||
+            selectedOrderForQR.status === 'cancelled_before_payment';
 
-            <div
-              title={JSON.stringify({
-                orderId: selectedOrderForQR.id,
-                pickupCode: selectedOrderForQR.pickupCode,
-              })}
-              className="w-48 h-48 mx-auto bg-slate-900 p-3 rounded-2xl shadow-inner flex items-center justify-center relative"
-            >
-              <svg className="w-full h-full text-white" viewBox="0 0 100 100" fill="currentColor">
-                <rect x="10" y="10" width="25" height="25" rx="3" fill="#10b981" />
-                <rect x="15" y="15" width="15" height="15" rx="2" fill="#0f172a" />
-                <rect x="19" y="19" width="7" height="7" fill="#10b981" />
+          return (
+            <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xl text-center space-y-4 h-fit sticky top-24">
+              <span className="text-xs uppercase font-extrabold text-[#0C0D10] tracking-wider block">
+                THẺ NHẬN HÀNG TẠI LOCKER / ĐIỂM GOM
+              </span>
 
-                <rect x="65" y="10" width="25" height="25" rx="3" fill="#10b981" />
-                <rect x="70" y="15" width="15" height="15" rx="2" fill="#0f172a" />
-                <rect x="74" y="19" width="7" height="7" fill="#10b981" />
+              {isPickupReady ? (
+                <>
+                  <div
+                    title={JSON.stringify({
+                      orderId: selectedOrderForQR.id,
+                      pickupCode: selectedOrderForQR.pickupCode,
+                    })}
+                    className="w-48 h-48 mx-auto bg-slate-900 p-3 rounded-2xl shadow-inner flex items-center justify-center relative"
+                  >
+                    <svg className="w-full h-full text-white" viewBox="0 0 100 100" fill="currentColor">
+                      <rect x="10" y="10" width="25" height="25" rx="3" fill="#10b981" />
+                      <rect x="15" y="15" width="15" height="15" rx="2" fill="#0f172a" />
+                      <rect x="19" y="19" width="7" height="7" fill="#10b981" />
 
-                <rect x="10" y="65" width="25" height="25" rx="3" fill="#10b981" />
-                <rect x="15" y="70" width="15" height="15" rx="2" fill="#0f172a" />
-                <rect x="19" y="74" width="7" height="7" fill="#10b981" />
+                      <rect x="65" y="10" width="25" height="25" rx="3" fill="#10b981" />
+                      <rect x="70" y="15" width="15" height="15" rx="2" fill="#0f172a" />
+                      <rect x="74" y="19" width="7" height="7" fill="#10b981" />
 
-                <rect x="42" y="15" width="6" height="6" />
-                <rect x="52" y="25" width="6" height="6" />
-                <rect x="42" y="45" width="16" height="16" rx="2" fill="#10b981" />
-                <rect x="70" y="55" width="8" height="8" />
-                <rect x="65" y="75" width="10" height="10" />
-                <rect x="45" y="75" width="8" height="8" />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-slate-950 p-1.5 rounded-lg border border-[#C7F000]/50">
-                  <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+                      <rect x="10" y="65" width="25" height="25" rx="3" fill="#10b981" />
+                      <rect x="15" y="70" width="15" height="15" rx="2" fill="#0f172a" />
+                      <rect x="19" y="74" width="7" height="7" fill="#10b981" />
+
+                      <rect x="42" y="15" width="6" height="6" />
+                      <rect x="52" y="25" width="6" height="6" />
+                      <rect x="42" y="45" width="16" height="16" rx="2" fill="#10b981" />
+                      <rect x="70" y="55" width="8" height="8" />
+                      <rect x="65" y="75" width="10" height="10" />
+                      <rect x="45" y="75" width="8" height="8" />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="bg-slate-950 p-1.5 rounded-lg border border-[#C7F000]/50">
+                        <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#F5FBD9] border border-[#C7F000] p-3 rounded-xl font-mono text-sm font-black text-emerald-900">
+                    Pickup Code: {selectedOrderForQR.pickupCode}
+                  </div>
+                </>
+              ) : isAwaitingPayment ? (
+                <div className="bg-[#FAF0FF] border border-[#E8A0FF] p-6 rounded-2xl space-y-2">
+                  <Clock className="w-8 h-8 text-[#7B3FF2] mx-auto" />
+                  <div className="font-black text-xs text-[#000181] uppercase">
+                    ĐƠN HÀNG ĐANG CHỜ THANH TOÁN
+                  </div>
+                  <p className="text-[11px] text-[#53536A] leading-relaxed">
+                    Vui lòng hoàn tất thanh toán để xác nhận đơn. Mã QR mở Smart Locker sẽ được kích hoạt ngay khi kiện hàng chuyển tới điểm nhận.
+                  </p>
                 </div>
-              </div>
-            </div>
+              ) : isCancelled ? (
+                <div className="bg-slate-50 border border-slate-200 p-6 rounded-2xl space-y-2">
+                  <XCircle className="w-8 h-8 text-slate-400 mx-auto" />
+                  <div className="font-black text-xs text-slate-700 uppercase">
+                    ĐƠN HÀNG ĐÃ HỦY
+                  </div>
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    Đơn hàng đã hủy trước khi thanh toán, không phát sinh chi phí và không tạo mã nhận hàng.
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-[#EFFBFF] border border-[#83E7FF] p-6 rounded-2xl space-y-2">
+                  <Truck className="w-8 h-8 text-[#006EE9] mx-auto animate-pulse" />
+                  <div className="font-black text-xs text-[#000181] uppercase">
+                    ĐANG CHUẨN BỊ / VẬN CHUYỂN
+                  </div>
+                  <p className="text-[11px] text-[#53536A] leading-relaxed">
+                    Đơn hàng đã thanh toán thành công và đang trên đường giao về điểm gom ({selectedOrderForQR.pickupPointName || selectedOrderForQR.pickupPoint}).
+                  </p>
+                  <div className="bg-white/80 p-2.5 rounded-xl border border-[#83E7FF] text-[10px] text-[#000181] font-bold">
+                    🔒 Mã QR và Pickup Code mở tủ Locker sẽ hiển thị khi kiện hàng đã vào tủ!
+                  </div>
+                </div>
+              )}
 
-            <div className="bg-[#F5FBD9] border border-[#C7F000] p-3 rounded-xl font-mono text-sm font-black text-emerald-900">
-              Pickup Code: {selectedOrderForQR.pickupCode}
-            </div>
+              <div className="text-left text-xs space-y-1.5 pt-2 border-t border-slate-100">
+                <div className="text-slate-500">
+                  Pickup Point:{' '}
+                  <strong className="text-slate-900">
+                    {selectedOrderForQR.pickupPointName || selectedOrderForQR.pickupPoint}
+                  </strong>
+                </div>
+                <div className="text-slate-500">
+                  Pickup Time:{' '}
+                  <strong className="text-[#0C0D10]">
+                    {selectedOrderForQR.pickupWindow || '26 Oct • 18:00 – 21:00'}
+                  </strong>
+                </div>
+                <div className="text-slate-500">
+                  Delivery Status:{' '}
+                  <strong className="uppercase text-[#0C0D10]">{selectedOrderForQR.status}</strong>
+                </div>
+                <div className="text-slate-500">
+                  Mã đơn: <strong className="text-slate-800">{selectedOrderForQR.id}</strong>
+                </div>
+                <div className="text-slate-500">Địa chỉ: {selectedOrderForQR.pickupAddress}</div>
+              </div>
 
-            <div className="text-left text-xs space-y-1.5 pt-2 border-t border-slate-100">
-              <div className="text-slate-500">
-                Pickup Point:{' '}
-                <strong className="text-slate-900">
-                  {selectedOrderForQR.pickupPointName || selectedOrderForQR.pickupPoint}
-                </strong>
-              </div>
-              <div className="text-slate-500">
-                Pickup Time:{' '}
-                <strong className="text-[#0C0D10]">
-                  {selectedOrderForQR.pickupWindow || '26 Oct • 18:00 – 21:00'}
-                </strong>
-              </div>
-              <div className="text-slate-500">
-                Delivery Status:{' '}
-                <strong className="uppercase text-[#0C0D10]">{selectedOrderForQR.status}</strong>
-              </div>
-              <div className="text-slate-500">
-                Mã đơn: <strong className="text-slate-800">{selectedOrderForQR.id}</strong>
-              </div>
-              <div className="text-slate-500">Địa chỉ: {selectedOrderForQR.pickupAddress}</div>
-            </div>
-
-            <div className="space-y-2">
-              <button
-                onClick={() => onOpenReceipt(selectedOrderForQR)}
-                className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
-              >
-                <Receipt className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Xem Chi tiết thanh toán</span>
-              </button>
-
-              {onOpenSnapshot && (
+              <div className="space-y-2">
                 <button
-                  onClick={() => onOpenSnapshot(selectedOrderForQR)}
-                  className="w-full py-2.5 rounded-xl bg-[#3155FF] hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
+                  onClick={() => onOpenReceipt(selectedOrderForQR)}
+                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
                 >
-                  <FileCheck className="w-3.5 h-3.5" />
-                  <span>Tải hồ sơ giao dịch (Hợp đồng)</span>
+                  <Receipt className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Xem Chi tiết thanh toán</span>
                 </button>
+
+                {onOpenSnapshot && (
+                  <button
+                    onClick={() => onOpenSnapshot(selectedOrderForQR)}
+                    className="w-full py-2.5 rounded-xl bg-[#3155FF] hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center space-x-1.5 transition"
+                  >
+                    <FileCheck className="w-3.5 h-3.5" />
+                    <span>Tải hồ sơ giao dịch (Hợp đồng)</span>
+                  </button>
+                )}
+              </div>
+
+              {isPickupReady ? (
+                <p className="text-[11px] text-emerald-800 font-semibold bg-[#F5FBD9] p-2 rounded-xl">
+                  Quét mã QR hoặc nhập Pickup Code tại điểm nhận để xác thực nhận hàng!
+                </p>
+              ) : (
+                <p className="text-[11px] text-slate-600 font-medium bg-slate-50 p-2 rounded-xl">
+                  Theo dõi tiến trình vận chuyển ở danh sách bên trái.
+                </p>
               )}
             </div>
-
-            <p className="text-[11px] text-emerald-800 font-semibold bg-[#F5FBD9] p-2 rounded-xl">
-              Quét mã QR hoặc nhập Pickup Code tại điểm nhận để xác thực nhận hàng!
-            </p>
-          </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );

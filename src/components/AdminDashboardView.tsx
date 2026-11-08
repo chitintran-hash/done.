@@ -824,38 +824,44 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                <span className="text-[11px] font-bold text-slate-500 uppercase">GMV (Product Subtotal)</span>
-                <div className="text-lg sm:text-xl font-black text-slate-900 mt-1">{formatVND(gmv)}</div>
-                <span className="text-[10px] text-slate-400 mt-0.5 block">Tổng tiền hàng hợp lệ</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase block">1. GMV DỰ KIẾN (ĐANG GOM)</span>
+                <div className="text-base sm:text-lg font-black text-slate-800 mt-1">{formatVND(projectedCollectingGmv)}</div>
+                <span className="text-[10px] text-slate-400 mt-0.5 block">Phòng gom đang mở</span>
               </div>
 
-              <div className="bg-[#EEF1FF]/70 p-4 rounded-2xl border border-indigo-200">
-                <span className="text-[11px] font-bold text-[#0C0D10] uppercase">Platform Revenue</span>
-                <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">{formatVND(platformRevenue)}</div>
-                <span className="text-[10px] text-[#3155FF] font-semibold mt-0.5 block">
-                  Doanh thu hoa hồng sàn
+              <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200">
+                <span className="text-[10px] font-bold text-amber-800 uppercase block">2. GMV ĐÃ CHỐT (CHỜ TT)</span>
+                <div className="text-base sm:text-lg font-black text-amber-700 mt-1">{formatVND(finalizedAwaitingPaymentGmv)}</div>
+                <span className="text-[10px] text-amber-600 mt-0.5 block">Chờ Buyer thanh toán</span>
+              </div>
+
+              <div className="bg-[#EEF1FF]/60 p-4 rounded-2xl border border-indigo-200">
+                <span className="text-[10px] font-bold text-[#000181] uppercase block">3. GMV ĐÃ TT (THỰC TẾ)</span>
+                <div className="text-base sm:text-lg font-black text-[#000181] mt-1">{formatVND(gmv)}</div>
+                <span className="text-[10px] text-slate-500 mt-0.5 block">Đơn hợp lệ đã thanh toán</span>
+              </div>
+
+              <div className="bg-[#EEF1FF] p-4 rounded-2xl border border-indigo-300">
+                <span className="text-[10px] font-bold text-[#000181] uppercase block">4. PHÍ SÀN THỰC NHẬN (7%)</span>
+                <div className="text-base sm:text-lg font-black text-[#006EE9] mt-1">{formatVND(platformRevenue)}</div>
+                <span className="text-[10px] text-[#000181] font-semibold mt-0.5 block">
+                  Chỉ ghi nhận khi đã thanh toán
                 </span>
               </div>
 
               <div className="bg-[#F5FBD9]/70 p-4 rounded-2xl border border-[#C7F000]">
-                <span className="text-[11px] font-bold text-emerald-800 uppercase">Supplier Net Proceeds</span>
-                <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">
+                <span className="text-[10px] font-bold text-emerald-800 uppercase block">5. SUPPLIER NET</span>
+                <div className="text-base sm:text-lg font-black text-[#0C0D10] mt-1">
                   {formatVND(supplierNetProceeds)}
                 </div>
                 <span className="text-[10px] text-[#0C0D10] mt-0.5 block">Doanh thu ròng về Supplier</span>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                <span className="text-[11px] font-bold text-slate-500 uppercase">Shipping Volume</span>
-                <div className="text-lg sm:text-xl font-black text-slate-800 mt-1">{formatVND(shippingVolume)}</div>
-                <span className="text-[10px] text-slate-400 mt-0.5 block">Tổng cước giao chia sẻ</span>
-              </div>
-
               <div className="bg-rose-50/60 p-4 rounded-2xl border border-rose-200">
-                <span className="text-[11px] font-bold text-rose-700 uppercase">Refunded GMV</span>
-                <div className="text-lg sm:text-xl font-black text-rose-600 mt-1">{formatVND(refundedGmv)}</div>
+                <span className="text-[10px] font-bold text-rose-700 uppercase block">6. REFUNDED GMV</span>
+                <div className="text-base sm:text-lg font-black text-rose-600 mt-1">{formatVND(refundedGmv)}</div>
                 <span className="text-[10px] text-rose-500 mt-0.5 block">Đã loại khỏi doanh thu sàn</span>
               </div>
             </div>
@@ -899,51 +905,47 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* VIEW: FINANCE (Requirement 15 & Requirement 21 Commission Settings) */}
+      {/* VIEW: FINANCE (Requirement 15 & Requirement 21 Commission Settings + Phần 8, 25) */}
       {activeTab === 'finance' && (
         <div className="space-y-6">
-          {/* 6 Finance Summary Cards (Req 15) */}
-          <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-              <span className="text-[11px] font-bold text-slate-400 uppercase">Total GMV</span>
-              <div className="text-lg sm:text-xl font-black text-slate-900 mt-1">{formatVND(gmv)}</div>
-              <span className="text-[10px] text-slate-400 mt-1 block">Tổng tiền hàng hợp lệ</span>
+          {/* 6 Finance Summary Cards (Req 15 & Phần 8, 25) */}
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+              <span className="text-[10px] font-bold text-slate-500 uppercase block">1. GMV DỰ KIẾN</span>
+              <div className="text-base sm:text-lg font-black text-slate-700 mt-1">{formatVND(projectedCollectingGmv)}</div>
+              <span className="text-[10px] text-slate-400 mt-0.5 block">Phòng gom đang mở</span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-indigo-200 bg-[#EEF1FF]/30 shadow-sm">
-              <span className="text-[11px] font-bold text-[#0C0D10] uppercase">Platform Fees</span>
-              <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">{formatVND(platformRevenue)}</div>
-              <span className="text-[10px] text-[#3155FF] mt-1 block">Doanh thu phí nền tảng</span>
+            <div className="bg-white p-4 rounded-2xl border border-amber-200 bg-amber-50/20 shadow-sm">
+              <span className="text-[10px] font-bold text-amber-800 uppercase block">2. GMV ĐÃ CHỐT</span>
+              <div className="text-base sm:text-lg font-black text-amber-700 mt-1">{formatVND(finalizedAwaitingPaymentGmv)}</div>
+              <span className="text-[10px] text-amber-600 mt-0.5 block">Chờ thanh toán</span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-[#C7F000] bg-[#F5FBD9]/30 shadow-sm">
-              <span className="text-[11px] font-bold text-emerald-800 uppercase">Supplier Earnings</span>
-              <div className="text-lg sm:text-xl font-black text-[#0C0D10] mt-1">
+            <div className="bg-white p-4 rounded-2xl border border-slate-300 shadow-sm">
+              <span className="text-[10px] font-bold text-slate-900 uppercase block">3. GMV THỰC TẾ (PAID)</span>
+              <div className="text-base sm:text-lg font-black text-slate-900 mt-1">{formatVND(gmv)}</div>
+              <span className="text-[10px] text-slate-500 mt-0.5 block">Đơn đã thanh toán</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-indigo-200 bg-[#EEF1FF]/40 shadow-sm">
+              <span className="text-[10px] font-bold text-[#000181] uppercase block">4. PHÍ SÀN EARNED</span>
+              <div className="text-base sm:text-lg font-black text-[#000181] mt-1">{formatVND(platformRevenue)}</div>
+              <span className="text-[10px] text-[#006EE9] mt-0.5 block">Hoa hồng 7% thực nhận</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border border-[#D0FFA4] bg-[#F4FFE8]/50 shadow-sm">
+              <span className="text-[10px] font-bold text-[#000181] uppercase block">5. SUPPLIER NET</span>
+              <div className="text-base sm:text-lg font-black text-[#000181] mt-1">
                 {formatVND(supplierNetProceeds)}
               </div>
-              <span className="text-[10px] text-[#0C0D10] mt-1 block">Tổng phần chia Supplier</span>
+              <span className="text-[10px] text-[#000181] mt-0.5 block">Doanh thu ròng NCC</span>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm">
-              <span className="text-[11px] font-bold text-amber-800 uppercase">Pending Payouts</span>
-              <div className="text-lg sm:text-xl font-black text-amber-700 mt-1">
-                {formatVND(pendingPayoutsAmount)}
-              </div>
-              <span className="text-[10px] text-amber-700 mt-1 block">Đang chờ duyệt / chi</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-teal-200 bg-teal-50/30 shadow-sm">
-              <span className="text-[11px] font-bold text-teal-800 uppercase">Completed Payouts</span>
-              <div className="text-lg sm:text-xl font-black text-teal-700 mt-1">
-                {formatVND(completedPayoutsAmount)}
-              </div>
-              <span className="text-[10px] text-teal-700 mt-1 block">Đã đối soát hoàn tất</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-sm">
-              <span className="text-[11px] font-bold text-rose-700 uppercase">Refunded Amount</span>
-              <div className="text-lg sm:text-xl font-black text-rose-600 mt-1">{formatVND(refundedGmv)}</div>
-              <span className="text-[10px] text-rose-500 mt-1 block">{refundedOrders.length} đơn đã hoàn</span>
+            <div className="bg-white p-4 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-sm">
+              <span className="text-[10px] font-bold text-rose-700 uppercase block">6. REFUNDED GMV</span>
+              <div className="text-base sm:text-lg font-black text-rose-600 mt-1">{formatVND(refundedGmv)}</div>
+              <span className="text-[10px] text-rose-500 mt-0.5 block">{refundedOrders.length} đơn đã hoàn tiền</span>
             </div>
           </div>
 
@@ -1004,7 +1006,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
               </div>
 
               <p className="text-xs text-slate-500 leading-relaxed">
-                Thiết lập mức phí hoa hồng nền tảng (từ <strong>0% – 20%</strong>, mặc định <strong>7%</strong>). Mức phí mới chỉ áp dụng cho các đơn hàng thanh toán trong tương lai; các đơn hàng đã thanh toán trước đó giữ nguyên mức phí lịch sử (Historical Snapshot Integrity).
+                Thiết lập mức phí hoa hồng nền tảng thử nghiệm trong đồ án (từ <strong>0% – 20%</strong> phục vụ mô phỏng kinh doanh, mặc định <strong>7%</strong>). Mức phí mới chỉ áp dụng cho các đơn hàng thanh toán trong tương lai; các đơn hàng đã thanh toán trước đó giữ nguyên mức phí lịch sử (Historical Snapshot Integrity).
               </p>
 
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
@@ -1025,9 +1027,9 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
 
                 <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
                   <span>0%</span>
-                  <span>7% (Default Demo)</span>
+                  <span>7% (Mặc định Demo)</span>
                   <span>15%</span>
-                  <span>20% (Max)</span>
+                  <span>20% (Giới hạn demo)</span>
                 </div>
               </div>
 

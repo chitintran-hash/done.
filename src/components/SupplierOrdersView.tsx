@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Order, OrderStatus } from '../types';
 import { formatVND, getOrderFinancialSnapshot } from '../utils/pricing';
-import { Package, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Package, CheckCircle2, ArrowRight, Clock, Truck, ShieldAlert } from 'lucide-react';
 
 interface SupplierOrdersProps {
   orders: Order[];
@@ -14,6 +14,37 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
   onUpdateOrderStatus,
 }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(orders[0] || null);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'awaiting_payment' | 'paid' | 'preparing' | 'in_transit' | 'ready_for_pickup' | 'picked_up'>('all');
+
+  // Phần 24: Tách riêng Nhu cầu dự kiến vs Doanh thu đã xác nhận
+  const projectedRevenue = useMemo(() => {
+    return orders
+      .filter((o) => o.status === 'awaiting_payment')
+      .reduce((sum, o) => sum + getOrderFinancialSnapshot(o).effectiveNet, 0);
+  }, [orders]);
+
+  const confirmedNet = useMemo(() => {
+    return orders
+      .filter(
+        (o) =>
+          o.status !== 'cancelled' &&
+          o.status !== 'cancelled_before_payment' &&
+          o.status !== 'refunded' &&
+          o.status !== 'awaiting_payment'
+      )
+      .reduce((sum, o) => sum + getOrderFinancialSnapshot(o).effectiveNet, 0);
+  }, [orders]);
+
+  const processingCount = useMemo(() => {
+    return orders.filter(
+      (o) => o.status === 'paid' || o.status === 'preparing' || o.status === 'in_transit' || o.status === 'ready_for_pickup'
+    ).length;
+  }, [orders]);
+
+  const filteredOrders = useMemo(() => {
+    if (filterStatus === 'all') return orders;
+    return orders.filter((o) => o.status === filterStatus);
+  }, [orders, filterStatus]);
 
   const getNextStatus = (current: OrderStatus): OrderStatus | null => {
     switch (current) {
@@ -45,7 +76,32 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
     }
   };
 
-  const activeOrder = orders.find((o) => o.id === selectedOrder?.id) || orders[0] || null;
+  const getVietnameseStatusLabel = (status: OrderStatus) => {
+    switch (status) {
+      case 'awaiting_payment':
+        return 'Chờ thanh toán';
+      case 'paid':
+        return 'Đã thanh toán';
+      case 'preparing':
+        return 'Đang chuẩn bị';
+      case 'in_transit':
+        return 'Đang vận chuyển';
+      case 'ready_for_pickup':
+        return 'Sẵn sàng tại Locker';
+      case 'picked_up':
+        return 'Đã nhận hàng';
+      case 'cancelled_before_payment':
+        return 'Đã hủy trước TT';
+      case 'cancelled':
+        return 'Đã hủy';
+      case 'refunded':
+        return 'Đã hoàn tiền';
+      default:
+        return status;
+    }
+  };
+
+  const activeOrder = orders.find((o) => o.id === selectedOrder?.id) || filteredOrders[0] || null;
   const activeSnap = activeOrder ? getOrderFinancialSnapshot(activeOrder) : null;
 
   return (
@@ -60,17 +116,85 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
         </p>
       </div>
 
-      {orders.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-3xl border border-slate-200 p-8">
+      {/* Phần 24: Hai khối thống kê rõ ràng: Nhu cầu dự kiến vs Doanh thu đã xác nhận */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
+          <span className="text-[11px] font-black uppercase text-amber-800 tracking-wider flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-amber-600" />
+            Nhu cầu dự kiến (Chờ TT)
+          </span>
+          <div className="text-xl font-black text-amber-800 mt-1">
+            {formatVND(projectedRevenue)}
+          </div>
+          <span className="text-[10px] text-amber-700 mt-0.5 block">
+            {orders.filter((o) => o.status === 'awaiting_payment').length} đơn đang chờ người mua thanh toán
+          </span>
+        </div>
+
+        <div className="bg-[#F5FBD9] p-4 rounded-2xl border border-[#C7F000]">
+          <span className="text-[11px] font-black uppercase text-emerald-900 tracking-wider flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#0C0D10]" />
+            Doanh thu đã xác nhận
+          </span>
+          <div className="text-xl font-black text-[#0C0D10] mt-1">
+            {formatVND(confirmedNet)}
+          </div>
+          <span className="text-[10px] text-emerald-800 mt-0.5 block">
+            Thực nhận của Supplier từ các đơn đã thanh toán
+          </span>
+        </div>
+
+        <div className="bg-[#EEF1FF] p-4 rounded-2xl border border-[#3155FF]/30">
+          <span className="text-[11px] font-black uppercase text-[#000181] tracking-wider flex items-center gap-1.5">
+            <Truck className="w-3.5 h-3.5 text-[#006EE9]" />
+            Đơn đang xử lý / Vận chuyển
+          </span>
+          <div className="text-xl font-black text-[#000181] mt-1">
+            {processingCount} đơn
+          </div>
+          <span className="text-[10px] text-slate-500 mt-0.5 block">
+            Đã thanh toán, đang chuẩn bị hoặc sẵn sàng tại Locker
+          </span>
+        </div>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap gap-2 pt-1 border-b border-slate-200 pb-3">
+        {[
+          { id: 'all', label: `Tất cả (${orders.length})` },
+          { id: 'awaiting_payment', label: `Chờ thanh toán (${orders.filter((o) => o.status === 'awaiting_payment').length})` },
+          { id: 'paid', label: `Đã thanh toán (${orders.filter((o) => o.status === 'paid').length})` },
+          { id: 'preparing', label: `Đang chuẩn bị (${orders.filter((o) => o.status === 'preparing').length})` },
+          { id: 'in_transit', label: `Đang giao (${orders.filter((o) => o.status === 'in_transit').length})` },
+          { id: 'ready_for_pickup', label: `Tại Locker (${orders.filter((o) => o.status === 'ready_for_pickup').length})` },
+          { id: 'picked_up', label: `Đã nhận (${orders.filter((o) => o.status === 'picked_up').length})` },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setFilterStatus(tab.id as any)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+              filterStatus === tab.id
+                ? 'bg-[#3155FF] text-white shadow-xs'
+                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {filteredOrders.length === 0 ? (
+        <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8">
           <Package className="w-12 h-12 text-slate-300 mx-auto mb-2" />
-          <h3 className="font-bold text-slate-800 text-sm">Chưa có đơn hàng gom nào</h3>
-          <p className="text-xs text-slate-400 mt-1">Đơn hàng mới từ người mua sẽ xuất hiện tại đây khi phòng gom chốt</p>
+          <h3 className="font-bold text-slate-800 text-sm">Không có đơn hàng nào trong danh mục này</h3>
+          <p className="text-xs text-slate-400 mt-1">Chọn tab khác để xem danh sách đơn hàng</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Order list */}
           <div className="lg:col-span-2 space-y-3">
-            {orders.map((ord) => {
+            {filteredOrders.map((ord) => {
               const isSelected = activeOrder?.id === ord.id;
               const nextStatus = getNextStatus(ord.status);
               const snap = getOrderFinancialSnapshot(ord);
@@ -105,12 +229,14 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                             ? 'bg-blue-50 text-blue-700 border-blue-200'
                             : ord.status === 'preparing'
                             ? 'bg-amber-50 text-amber-700 border-amber-200'
-                            : ord.status === 'refunded' || ord.status === 'cancelled'
+                            : ord.status === 'awaiting_payment'
+                            ? 'bg-[#FAF0FF] text-[#000181] border-[#E8A0FF]'
+                            : ord.status === 'refunded' || ord.status === 'cancelled' || ord.status === 'cancelled_before_payment'
                             ? 'bg-rose-50 text-rose-700 border-rose-200'
                             : 'bg-slate-100 text-slate-700 border-slate-200'
                         }`}
                       >
-                        {ord.status}
+                        {getVietnameseStatusLabel(ord.status)}
                       </span>
                       <div className="text-sm font-black text-[#0C0D10] mt-1">
                         Thực nhận: {formatVND(snap.effectiveNet)}
@@ -214,6 +340,8 @@ export const SupplierOrdersView: React.FC<SupplierOrdersProps> = ({
                     <div className="text-[10px] text-slate-400">
                       {activeOrder.paidAt
                         ? new Date(activeOrder.paidAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                        : activeOrder.status === 'awaiting_payment'
+                        ? 'Chờ người mua xác nhận thanh toán'
                         : 'Hoàn tất'}
                     </div>
                   </div>

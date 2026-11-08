@@ -46,12 +46,12 @@ export const GUIDED_DEMO_STEPS: GuidedStep[] = [
   },
   {
     stepNumber: 3,
-    title: 'QUAN SÁT TIẾN ĐỘ 19 / 20',
+    title: 'QUAN SÁT TIẾN ĐỘ 19 / 20 SUẤT',
     targetRole: 'buyer',
     badge: 'BƯỚC 3 / 11 • BUYER',
-    instruction: 'Quan sát phòng đang có 19 / 20 người tham gia, mức giá hiện tại là 99.000đ.',
+    instruction: 'Quan sát phòng đang có 19 / 20 suất đã đặt (18 người tham gia), mức giá hiện tại là 99.000đ.',
     explanation:
-      'Giá KHÔNG tự giảm theo thời gian đếm ngược. Giá chỉ giảm khi số lượng thành viên đạt ngưỡng nấc tiếp theo (bậc 20 sản phẩm = 89.000đ).',
+      'Giá KHÔNG tự giảm theo thời gian đếm ngược. Giá chỉ giảm khi tổng số lượng sản phẩm đạt ngưỡng nấc tiếp theo (bậc 20 suất = 89.000đ).',
   },
   {
     stepNumber: 4,
@@ -60,16 +60,16 @@ export const GUIDED_DEMO_STEPS: GuidedStep[] = [
     badge: 'BƯỚC 4 / 11 • BUYER',
     instruction: 'Nhấn nút "THAM GIA PHÒNG GOM", chọn số lượng 1 hộp và bấm Xác nhận.',
     explanation:
-      'Hành động này đẩy tổng số lượng lên 20 hộp, vừa đủ kích hoạt nấc giảm giá sâu nhất.',
+      'Hành động này đẩy tổng số lượng lên 20 suất, vừa đủ kích hoạt nấc giảm giá sâu nhất (89.000đ).',
   },
   {
     stepNumber: 5,
     title: 'GIÁ GIẢM XUỐNG 89.000đ',
     targetRole: 'buyer',
     badge: 'BƯỚC 5 / 11 • BUYER',
-    instruction: 'Chứng kiến phòng đạt 20/20 và giá toàn nhóm lập tức hạ xuống 89.000đ.',
+    instruction: 'Chứng kiến phòng đạt 20/20 suất và giá toàn nhóm lập tức hạ xuống 89.000đ.',
     explanation:
-      'Cơ chế Dynamic Price Tier được áp dụng cho toàn bộ người trong phòng, người vào trước cũng được hưởng mức giá 89.000đ khi chốt phòng.',
+      'Cơ chế Dynamic Price Tier tính theo tổng số lượng (totalQuantity) được áp dụng cho toàn bộ người trong phòng khi chốt phòng.',
   },
   {
     stepNumber: 6,

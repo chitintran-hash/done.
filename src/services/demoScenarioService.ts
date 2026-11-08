@@ -25,7 +25,7 @@ export const DEMO_STRAWBERRY_ROOM: GroupRoom = {
   priceTiers: DEMO_STRAWBERRY_PRICE_TIERS,
   totalQuantity: 19,
   maxQuantity: 20,
-  participantCount: 19,
+  participantCount: 18,
   maxParticipants: 20,
   status: 'active',
   pickupPoint: 'Smart Locker KTX Khu A – ĐHQG TP.HCM',
@@ -77,7 +77,7 @@ export const demoScenarioService = {
 
     return {
       updatedRooms,
-      message: 'Đã thiết lập lại kịch bản Demo: Phòng Dâu Đà Lạt (19/20 người, giá 99.000đ → MỞ KHÓA MỨC GIÁ 89.000đ khi có thêm 1 lượt mua).',
+      message: 'Đã thiết lập lại kịch bản Demo: Phòng Dâu Đà Lạt (19/20 suất đã đặt, 18 người tham gia, giá 99.000đ → MỞ KHÓA MỨC GIÁ 89.000đ khi đạt 20 suất).',
     };
   },
 

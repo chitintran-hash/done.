@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GroupRoom, Product, Supplier, PickupPoint, PickupSlot } from '../types';
+import { GroupRoom, Product, Supplier, PickupPoint, PickupSlot, GroupParticipation } from '../types';
 import {
   getCurrentPrice,
   formatVND,
@@ -29,6 +29,7 @@ interface SupplierGroupRoomsProps {
   rooms: GroupRoom[];
   products: Product[];
   supplier: Supplier;
+  participations?: GroupParticipation[];
   pickupPoints?: PickupPoint[];
   pickupSlots?: PickupSlot[];
   commissionRate?: number;
@@ -44,6 +45,7 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
   rooms,
   products,
   supplier,
+  participations = [],
   pickupPoints = [],
   pickupSlots = [],
   commissionRate = DEFAULT_PLATFORM_COMMISSION_RATE,
@@ -290,6 +292,38 @@ export const SupplierGroupRoomsView: React.FC<SupplierGroupRoomsProps> = ({
                       <span>{room.finalPrice !== undefined ? 'Giá chốt:' : 'Giá hiện tại:'}</span>
                       <span className="font-black text-[#0C0D10] text-sm">{formatVND(currentPrice)}</span>
                     </div>
+                    {/* Phần 24: Trạng thái Buyer sau khi chốt phòng */}
+                    {(room.status === 'successful' || room.finalPrice !== undefined) && participations.length > 0 && (
+                      <div className="pt-2 border-t border-slate-200/80 space-y-1.5 text-[11px]">
+                        <span className="font-bold text-slate-800 uppercase tracking-wider text-[10px] block">
+                          Tình trạng đơn sau khi chốt:
+                        </span>
+                        <div className="grid grid-cols-2 gap-1.5 bg-white p-2 rounded-lg border border-slate-200">
+                          <div>
+                            <span className="text-slate-500 block">Số lượng chốt:</span>
+                            <strong className="text-slate-900">{room.finalTotalQuantity ?? room.totalQuantity} {room.unit}</strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block">Chờ xác nhận:</span>
+                            <strong className="text-amber-700">
+                              {participations.filter((p) => p.roomId === room.id && p.status === 'awaiting_payment').length} Buyer
+                            </strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block">Đã thanh toán:</span>
+                            <strong className="text-emerald-700">
+                              {participations.filter((p) => p.roomId === room.id && p.status === 'paid').length} Buyer
+                            </strong>
+                          </div>
+                          <div>
+                            <span className="text-slate-500 block">Không tiếp tục:</span>
+                            <strong className="text-rose-700">
+                              {participations.filter((p) => p.roomId === room.id && p.status === 'cancelled_before_payment').length} Buyer
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     {room.status === 'active' && (
                       <div className="flex justify-between text-slate-500 text-[11px] pt-1 border-t border-slate-200">
                         <span>Hạn chót gom:</span>

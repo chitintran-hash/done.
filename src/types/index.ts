@@ -152,7 +152,15 @@ export type GroupRoom = {
 
   finalPrice?: number;
   finalQuantity?: number;
+  finalTotalQuantity?: number;
+  finalParticipantCount?: number;
+  finalTier?: string;
+  finalUnitPrice?: number;
+  finalShippingTotal?: number;
+  finalShippingPerUnit?: number;
+  finalBuyerShippingShare?: number;
   closedAt?: string;
+  finalizedAt?: string;
 
   pickupPoint: string;
   pickupAddress: string;

@@ -4,6 +4,7 @@ import {
   Supplier,
   Product,
   GroupRoom,
+  GroupParticipation,
   Order,
   RefundRequest,
   Review,
@@ -86,6 +87,7 @@ interface AdminDashboardProps {
   suppliers: Supplier[];
   products: Product[];
   rooms: GroupRoom[];
+  participations?: GroupParticipation[];
   orders: Order[];
   refunds: RefundRequest[];
   reviews: Review[];
@@ -184,6 +186,7 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
   suppliers,
   products,
   rooms,
+  participations = [],
   orders,
   reviews = [],
   refunds,
@@ -1678,41 +1681,73 @@ export const AdminDashboardView: React.FC<AdminDashboardProps> = ({
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase font-bold text-[10px]">
                 <tr>
-                  <th className="py-3 px-4">Phòng gom</th>
-                  <th className="py-3 px-4">Người tham gia</th>
-                  <th className="py-3 px-4">Đã gom</th>
-                  <th className="py-3 px-4">Trạng thái</th>
-                  <th className="py-3 px-4">Giá chốt</th>
-                  <th className="py-3 px-4 text-right">Hành động can thiệp</th>
+                  <th className="py-3 px-3">Phòng gom</th>
+                  <th className="py-3 px-2">Đã đăng ký</th>
+                  <th className="py-3 px-2">Đã chốt</th>
+                  <th className="py-3 px-2">Đã xác nhận</th>
+                  <th className="py-3 px-2">Đã thanh toán</th>
+                  <th className="py-3 px-2">Đã hủy trước TT</th>
+                  <th className="py-3 px-3">Trạng thái</th>
+                  <th className="py-3 px-3">Giá chốt</th>
+                  <th className="py-3 px-3 text-right">Hành động</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {rooms.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-50/80 transition">
-                    <td className="py-3.5 px-4">
-                      <span className="font-bold text-slate-900 block">{r.productName}</span>
-                      <span className="text-[11px] text-slate-400">ID: {r.id}</span>
-                    </td>
-                    <td className="py-3.5 px-4 font-bold">{r.participantCount} / {r.maxParticipants}</td>
-                    <td className="py-3.5 px-4 font-bold">{r.totalQuantity} / {r.maxQuantity}</td>
-                    <td className="py-3.5 px-4">
-                      <StatusBadge status={r.status} size="sm" />
-                    </td>
-                    <td className="py-3.5 px-4 font-bold text-[#0C0D10]">
-                      {r.finalPrice !== undefined ? formatVND(r.finalPrice) : 'Chưa chốt'}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      {r.status === 'active' && (
-                        <button
-                          onClick={() => setForceCloseModalRoomId(r.id)}
-                          className="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition"
-                        >
-                          Chốt phòng ngay (Force Close)
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {rooms.map((r) => {
+                  const rParts = participations.filter((p) => p.roomId === r.id);
+                  const registeredQty = r.totalQuantity;
+                  const finalizedQty = r.finalPrice !== undefined ? (r.finalQuantity ?? r.totalQuantity) : 'Đang gom';
+                  const confirmedQty = rParts
+                    .filter((p) => p.status === 'awaiting_payment')
+                    .reduce((sum, p) => sum + p.quantity, 0);
+                  const paidQty = rParts
+                    .filter((p) => p.status === 'paid')
+                    .reduce((sum, p) => sum + p.quantity, 0);
+                  const cancelledBeforePayQty = rParts
+                    .filter((p) => p.status === 'cancelled_before_payment')
+                    .reduce((sum, p) => sum + p.quantity, 0);
+
+                  return (
+                    <tr key={r.id} className="hover:bg-slate-50/80 transition">
+                      <td className="py-3.5 px-3">
+                        <span className="font-bold text-slate-900 block">{r.productName}</span>
+                        <span className="text-[11px] text-slate-400">ID: {r.id}</span>
+                      </td>
+                      <td className="py-3.5 px-2 font-bold text-slate-800">
+                        {registeredQty} {r.unit}
+                        <span className="text-[10px] text-slate-400 block font-normal">({r.participantCount} người)</span>
+                      </td>
+                      <td className="py-3.5 px-2 font-bold text-[#3155FF]">
+                        {typeof finalizedQty === 'number' ? `${finalizedQty} ${r.unit}` : finalizedQty}
+                      </td>
+                      <td className="py-3.5 px-2 font-bold text-amber-700">
+                        {confirmedQty > 0 ? `${confirmedQty} ${r.unit}` : '0'}
+                      </td>
+                      <td className="py-3.5 px-2 font-bold text-emerald-700">
+                        {paidQty > 0 ? `${paidQty} ${r.unit}` : '0'}
+                      </td>
+                      <td className="py-3.5 px-2 font-bold text-rose-600">
+                        {cancelledBeforePayQty > 0 ? `${cancelledBeforePayQty} ${r.unit}` : '0'}
+                      </td>
+                      <td className="py-3.5 px-3">
+                        <StatusBadge status={r.status} size="sm" />
+                      </td>
+                      <td className="py-3.5 px-3 font-bold text-[#0C0D10]">
+                        {r.finalPrice !== undefined ? formatVND(r.finalPrice) : 'Chưa chốt'}
+                      </td>
+                      <td className="py-3.5 px-3 text-right">
+                        {r.status === 'active' && (
+                          <button
+                            onClick={() => setForceCloseModalRoomId(r.id)}
+                            className="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition whitespace-nowrap"
+                          >
+                            Chốt ngay
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

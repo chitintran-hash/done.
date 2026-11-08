@@ -116,7 +116,7 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
           </div>
         </div>
 
-        {/* Pickup Info (Phase 7 Snapshot Req 31, 45) */}
+        {/* Pickup Info (Phase 7 Snapshot Req 31, 45 + Sau thanh toán Req 12, 14) */}
         <div className="bg-[#F5FBD9]/70 border border-[#C7F000] rounded-2xl p-3.5 flex items-start space-x-2.5">
           <MapPin className="w-4 h-4 text-[#0C0D10] shrink-0 mt-0.5" />
           <div className="space-y-0.5">
@@ -127,11 +127,17 @@ export const BuyerReceiptModal: React.FC<BuyerReceiptModalProps> = ({
               <div className="text-[11px] text-slate-500">{order.pickupAddress}</div>
             )}
             <div className="text-[11px] font-semibold text-[#0C0D10]">
-              Khung giờ nhận hàng (Pickup Window): {order.pickupWindow || '26 Oct • 18:00 – 21:00'}
+              Khung giờ nhận hàng: {order.pickupWindow || '26 Oct • 18:00 – 21:00'}
             </div>
-            <div className="text-[11px] font-mono font-bold text-emerald-800 pt-0.5">
-              Mã nhận Locker / Pickup Code: {order.pickupCode}
-            </div>
+            {order.status === 'ready_for_pickup' || order.status === 'picked_up' ? (
+              <div className="text-[11px] font-mono font-bold text-emerald-800 pt-0.5">
+                Mã nhận Locker / Pickup Code: {order.pickupCode}
+              </div>
+            ) : (
+              <div className="text-[11px] font-medium text-slate-600 pt-1">
+                🔒 <em>Nhà cung cấp đang chuẩn bị hàng. Mã nhận hàng sẽ xuất hiện khi kiện hàng sẵn sàng tại điểm nhận.</em>
+              </div>
+            )}
           </div>
         </div>
 

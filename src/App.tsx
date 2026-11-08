@@ -1224,31 +1224,67 @@ export default function FlashGroupApp() {
             });
           }
 
-          // Auto-close check: room is active but endAt reached
+          // Auto-close check: room is active but endAt reached (Requirement 1, 2, 16, 22)
           if (room.status === 'active' && currentTime >= new Date(room.endAt).getTime()) {
             hasChanges = true;
             const finalPrice = getCurrentPrice(room.totalQuantity, room.priceTiers);
             const isSuccessful = room.totalQuantity > 0;
+            const lockedShip = getSharedShipping(room.totalShippingFee, room.participantCount);
+            const nowIso = new Date(currentTime).toISOString();
 
-            // Notify joined buyers
-            const joinedBuyers = participations.filter((p) => p.roomId === room.id).map((p) => p.userId);
+            const activeTier = room.priceTiers.find(
+              (t) =>
+                room.totalQuantity >= t.minQuantity &&
+                (t.maxQuantity === undefined || room.totalQuantity <= t.maxQuantity)
+            );
+            const finalTierLabel = activeTier
+              ? activeTier.maxQuantity
+                ? `${activeTier.minQuantity}–${activeTier.maxQuantity} suất`
+                : `${activeTier.minQuantity}+ suất`
+              : undefined;
+
+            // Notify joined buyers (Req 22)
+            const joinedBuyers = participations
+              .filter((p) => p.roomId === room.id && p.status !== 'cancelled' && p.status !== 'cancelled_before_payment')
+              .map((p) => p.userId);
             joinedBuyers.forEach((bId) => {
               pushNotification(
                 bId,
                 'room_closed',
-                'Phòng gom đã kết thúc',
-                `Phòng "${room.productName}" đã chốt giá ở mức ${formatVND(finalPrice)}. Bạn có thể tiến hành thanh toán.`,
+                'Phòng gom đã chốt giá',
+                `Phòng "${room.productName}" đã chốt giá ở mức ${formatVND(finalPrice)}/suất. Vui lòng xác nhận để tiếp tục thanh toán.`,
                 `closed-${room.id}-${bId}`,
                 room.id
               );
             });
 
+            // Update participations to awaiting_payment
+            setParticipations((prev) =>
+              prev.map((p) => {
+                if (p.roomId === room.id && p.status === 'reserved') {
+                  return { ...p, status: 'awaiting_payment' };
+                }
+                return p;
+              })
+            );
+
             return {
               ...room,
               status: isSuccessful ? ('successful' as const) : ('cancelled' as const),
               finalPrice,
+              finalUnitPrice: finalPrice,
               finalQuantity: room.totalQuantity,
-              closedAt: new Date(currentTime).toISOString(),
+              finalTotalQuantity: room.totalQuantity,
+              finalParticipantCount: room.participantCount,
+              finalTier: finalTierLabel,
+              finalShippingTotal: room.totalShippingFee,
+              finalShippingPerUnit: lockedShip,
+              finalBuyerShippingShare: lockedShip,
+              shippingPerBuyerSnapshot: lockedShip,
+              pickupPointName: room.pickupPointName || room.pickupPoint,
+              pickupSlotSnapshot: room.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00',
+              closedAt: nowIso,
+              finalizedAt: nowIso,
             };
           }
           return room;
@@ -1421,40 +1457,60 @@ export default function FlashGroupApp() {
     }
   };
 
-  // Finalize Room
+  // Finalize Room (Requirement 1, 2, 3, 16, 22)
   const finalizeRoom = (roomId: string) => {
     const targetRoom = rooms.find((r) => r.id === roomId);
+    if (!targetRoom || targetRoom.finalPrice !== undefined) return;
+
+    const finalPrice = getCurrentPrice(targetRoom.totalQuantity, targetRoom.priceTiers);
+    const isSuccessful = targetRoom.totalQuantity > 0;
+    const lockedShip = getSharedShipping(targetRoom.totalShippingFee, targetRoom.participantCount);
+    const nowIso = new Date().toISOString();
+
+    const activeTier = targetRoom.priceTiers.find(
+      (t) =>
+        targetRoom.totalQuantity >= t.minQuantity &&
+        (t.maxQuantity === undefined || targetRoom.totalQuantity <= t.maxQuantity)
+    );
+    const finalTierLabel = activeTier
+      ? activeTier.maxQuantity
+        ? `${activeTier.minQuantity}–${activeTier.maxQuantity} suất`
+        : `${activeTier.minQuantity}+ suất`
+      : undefined;
+
     setRooms((prev) =>
       prev.map((r) => {
         if (r.id !== roomId || r.finalPrice !== undefined) return r;
-        const finalPrice = getCurrentPrice(r.totalQuantity, r.priceTiers);
-        const isSuccessful = r.totalQuantity > 0;
-        const lockedShip = getSharedShipping(r.totalShippingFee, r.participantCount);
         return {
           ...r,
           status: isSuccessful ? 'successful' : 'cancelled',
           finalPrice,
+          finalUnitPrice: finalPrice,
           finalQuantity: r.totalQuantity,
+          finalTotalQuantity: r.totalQuantity,
+          finalParticipantCount: r.participantCount,
+          finalTier: finalTierLabel,
+          finalShippingTotal: r.totalShippingFee,
+          finalShippingPerUnit: lockedShip,
+          finalBuyerShippingShare: lockedShip,
           shippingPerBuyerSnapshot: lockedShip,
           pickupPointName: r.pickupPointName || r.pickupPoint,
           pickupSlotSnapshot: r.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00',
-          closedAt: new Date().toISOString(),
+          closedAt: nowIso,
+          finalizedAt: nowIso,
         };
       })
     );
 
-    if (targetRoom && targetRoom.finalPrice === undefined) {
-      const lockedFinalPrice = getCurrentPrice(targetRoom.totalQuantity, targetRoom.priceTiers);
-      emitRoomEvent(roomId, 'room_closed', {
-        payload: { finalPrice: lockedFinalPrice },
-      });
-      appendAuditLog('price_locked', 'room', roomId, {
-        finalPrice: lockedFinalPrice,
-        finalQuantity: targetRoom.totalQuantity,
-      });
-      if (targetRoom.totalQuantity > 0) {
-        ensureBatchCreatedForRoom(targetRoom);
-      }
+    emitRoomEvent(roomId, 'room_closed', {
+      payload: { finalPrice },
+    });
+    appendAuditLog('price_locked', 'room', roomId, {
+      finalPrice,
+      finalQuantity: targetRoom.totalQuantity,
+    });
+    if (targetRoom.totalQuantity > 0) {
+      ensureBatchCreatedForRoom(targetRoom);
     }
 
     setParticipations((prev) =>
@@ -1465,6 +1521,22 @@ export default function FlashGroupApp() {
         return p;
       })
     );
+
+    // Requirement 22: Tạo thông báo phòng đã chốt kèm CTA xem giá cuối
+    const joinedBuyerIds = participations
+      .filter((p) => p.roomId === roomId && p.status !== 'cancelled' && p.status !== 'cancelled_before_payment')
+      .map((p) => p.userId);
+
+    joinedBuyerIds.forEach((bId) => {
+      pushNotification(
+        bId,
+        'room_closed',
+        'Phòng gom đã chốt giá',
+        `Phòng "${targetRoom.productName}" đã chốt ở mức ${formatVND(finalPrice)}/suất. Vui lòng xác nhận để tiếp tục thanh toán.`,
+        `finalized-${roomId}-${bId}`,
+        roomId
+      );
+    });
   };
 
   // Join Room Handler
@@ -1554,15 +1626,35 @@ export default function FlashGroupApp() {
     if (isFull) {
       const finalPrice = getCurrentPrice(newTotalQuantity, room.priceTiers);
       const lockedShip = getSharedShipping(room.totalShippingFee, newParticipantCount);
+      const nowIso = new Date().toISOString();
+      const activeTier = room.priceTiers.find(
+        (t) =>
+          newTotalQuantity >= t.minQuantity &&
+          (t.maxQuantity === undefined || newTotalQuantity <= t.maxQuantity)
+      );
+      const finalTierLabel = activeTier
+        ? activeTier.maxQuantity
+          ? `${activeTier.minQuantity}–${activeTier.maxQuantity} suất`
+          : `${activeTier.minQuantity}+ suất`
+        : undefined;
+
       updatedRoom = {
         ...updatedRoom,
         status: 'successful',
         finalPrice,
+        finalUnitPrice: finalPrice,
         finalQuantity: newTotalQuantity,
+        finalTotalQuantity: newTotalQuantity,
+        finalParticipantCount: newParticipantCount,
+        finalTier: finalTierLabel,
+        finalShippingTotal: room.totalShippingFee,
+        finalShippingPerUnit: lockedShip,
+        finalBuyerShippingShare: lockedShip,
         shippingPerBuyerSnapshot: lockedShip,
         pickupPointName: room.pickupPointName || room.pickupPoint,
         pickupSlotSnapshot: room.pickupSlotSnapshot || '26 Oct • 18:00 – 21:00',
-        closedAt: new Date().toISOString(),
+        closedAt: nowIso,
+        finalizedAt: nowIso,
       };
       ensureBatchCreatedForRoom(updatedRoom, newParticipantCount, newTotalQuantity);
     }
@@ -3879,6 +3971,7 @@ setOrders(createInitialOrders());
                   onToggleReaction={handleToggleReaction}
                   onBack={() => setSelectedRoomId(null)}
                   onGoCheckout={() => setConfirmingPriceRoomId(activeRoom.id)}
+                  onCancelParticipation={() => handleCancelParticipation(activeRoom.id)}
                   onFinalizeNow={() => finalizeRoom(activeRoom.id)}
                   isFavorite={favoriteRoomIds.includes(activeRoom.id)}
                   onToggleFavorite={() => handleToggleFavorite(activeRoom.id)}
@@ -4776,6 +4869,7 @@ setOrders(createInitialOrders());
               ) : supplierTab === 'rooms' ? (
                 <SupplierGroupRoomsView
                   rooms={rooms}
+                  participations={participations}
                   products={products.filter((p) => p.supplierId === currentSupplier.id && p.status === 'active')}
                   supplier={currentSupplier}
                   pickupPoints={pickupPoints}
@@ -4920,6 +5014,7 @@ setOrders(createInitialOrders());
                 suppliers={suppliers}
                 products={products}
                 rooms={rooms}
+                participations={participations}
                 orders={orders}
                 refunds={refunds}
                 reviews={reviews}
@@ -5313,6 +5408,7 @@ function GroupRoomView({
   onToggleReaction,
   onBack,
   onGoCheckout,
+  onCancelParticipation,
   onFinalizeNow,
   isFavorite,
   onToggleFavorite,
@@ -5339,6 +5435,7 @@ function GroupRoomView({
   onToggleReaction: (messageId: string, reaction: ReactionType) => void;
   onBack: () => void;
   onGoCheckout: () => void;
+  onCancelParticipation?: () => void;
   onFinalizeNow: () => void;
   isFavorite: boolean;
   onToggleFavorite: () => void;
@@ -5458,7 +5555,7 @@ function GroupRoomView({
 
           <div
             className={`px-4 py-2 rounded-xl font-mono text-sm font-bold flex items-center space-x-2 border ${
-              room.status === 'successful'
+              room.status === 'successful' || room.finalPrice !== undefined
                 ? 'bg-teal-950 text-teal-300 border-teal-800'
                 : room.status !== 'active' || secondsLeft <= 0
                 ? 'bg-slate-800 text-slate-400 border-slate-700'
@@ -5469,8 +5566,8 @@ function GroupRoomView({
           >
             <Clock className="w-4 h-4" />
             <span>
-              {room.status === 'successful'
-                ? 'PHÒNG ĐÃ CHỐT GIÁ'
+              {room.status === 'successful' || room.finalPrice !== undefined
+                ? 'PHÒNG ĐÃ CHỐT'
                 : room.status !== 'active' || secondsLeft <= 0
                 ? 'PHÒNG ĐÃ ĐÓNG'
                 : `Còn lại: ${formatTime(secondsLeft)}`}
@@ -5552,12 +5649,55 @@ function GroupRoomView({
                   </p>
                 </div>
               ) : room.finalPrice !== undefined ? (
-                <div className="bg-teal-50 border border-teal-300 rounded-2xl p-4 text-teal-900 text-xs font-bold flex items-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
-                  <span>
-                    Phòng gom đã chốt thành công ở mức <strong>{formatVND(room.finalPrice)}/{room.unit}</strong>.
-                    Mức giá đã được khóa vĩnh viễn cho tất cả người tham gia.
-                  </span>
+                <div className="bg-[#EEF1FF] border-2 border-[#3155FF] rounded-2xl p-5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black uppercase tracking-wider text-[#3155FF] flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-[#3155FF]" />
+                      PHÒNG ĐÃ KẾT THÚC • ĐÃ CHỐT GIÁ
+                    </span>
+                    <span className="bg-[#3155FF] text-white px-2.5 py-0.5 rounded-full text-[11px] font-black">
+                      {room.finalTotalQuantity ?? room.totalQuantity} {room.unit}
+                    </span>
+                  </div>
+
+                  {/* 4 chỉ số kết quả phòng chốt (Mục 3) */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs bg-white p-3 rounded-xl border border-slate-200">
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Tổng số lượng nhóm:</span>
+                      <strong className="text-slate-900 font-black text-sm">{room.finalTotalQuantity ?? room.totalQuantity} {room.unit}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Người tham gia:</span>
+                      <strong className="text-slate-900 font-black text-sm">{room.finalParticipantCount ?? room.participantCount} người</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Mức giá đã đạt:</span>
+                      <strong className="text-emerald-700 font-black text-sm">{formatVND(currentPrice)}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-[11px] font-medium">Số lượng của bạn:</span>
+                      <strong className="text-[#3155FF] font-black text-sm">{participation?.quantity || 1} {room.unit}</strong>
+                    </div>
+                  </div>
+
+                  {/* Block nổi bật: GIÁ CUỐI CÙNG (Mục 4) */}
+                  <div className="bg-white p-3.5 rounded-xl border border-[#3155FF]/30 flex items-center justify-between">
+                    <div>
+                      <span className="text-[10px] font-black uppercase text-slate-400 block tracking-wider">
+                        GIÁ CUỐI CÙNG
+                      </span>
+                      <span className="text-2xl sm:text-3xl font-black text-[#0C0D10]">
+                        {formatVND(currentPrice)}
+                      </span>
+                      <span className="text-xs text-slate-500 ml-1">/ {room.unit}</span>
+                      <span className="text-xs text-[#3155FF] font-bold block mt-0.5">
+                        Nhóm đã đạt {room.finalTier || 'mốc số lượng tối ưu'}
+                      </span>
+                    </div>
+                    <span className="text-xs font-bold text-emerald-800 bg-[#F5FBD9] border border-[#C7F000] px-3 py-1.5 rounded-xl">
+                      Đã khóa giá cố định
+                    </span>
+                  </div>
                 </div>
               ) : (
                 <div className="bg-[#F5FBD9] border border-[#C7F000] rounded-2xl p-4 text-emerald-900 text-xs font-bold flex items-center space-x-2">
@@ -5597,19 +5737,23 @@ function GroupRoomView({
                 </div>
               </div>
 
-              {/* PHẦN 5: TỔNG CHI PHÍ DỰ KIẾN (GIÁ SẢN PHẨM + SHIP CHIA SẺ) */}
+              {/* PHẦN 5: TỔNG CHI PHÍ CUỐI CÙNG (GIÁ SẢN PHẨM + SHIP CHIA SẺ) */}
               <div className="bg-[#FAF0FF] border border-[#E8A0FF] rounded-2xl p-4 text-xs space-y-2">
                 <div className="flex items-center justify-between text-[#000181] font-bold">
                   <span className="flex items-center gap-1.5 uppercase tracking-wide text-[11px]">
                     <Calculator className="w-4 h-4 text-[#7B3FF2]" />
-                    Tổng chi phí dự kiến (1 {room.unit}):
+                    {room.finalPrice !== undefined
+                      ? `Tổng thanh toán (${participation?.quantity || 1} ${room.unit}):`
+                      : `Tổng chi phí dự kiến (1 ${room.unit}):`}
                   </span>
                   <span className="text-[#000181] font-black text-base">
-                    {formatVND(currentPrice + shippingPerPerson)}
+                    {formatVND(currentPrice * (participation?.quantity || 1) + shippingPerPerson)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[11px] text-[#53536A] pt-1 border-t border-[#E8A0FF]/60">
-                  <span>Giá sản phẩm ({formatVND(currentPrice)}) + Cước ship chia sẻ ({formatVND(shippingPerPerson)})</span>
+                  <span>
+                    Giá sản phẩm ({formatVND(currentPrice * (participation?.quantity || 1))}) + Cước ship chia sẻ ({formatVND(shippingPerPerson)})
+                  </span>
                   <span className="font-bold text-[#000181]">0đ phụ phí ẩn</span>
                 </div>
               </div>
@@ -5989,24 +6133,35 @@ function GroupRoomView({
                 <div className="flex items-center space-x-2 text-xs font-bold text-blue-900">
                   <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
                   <span>
-                    Bạn đã thanh toán thành công ({participation.quantity} {room.unit}). Vui lòng kiểm tra mã QR nhận hàng tại mục "Đơn hàng".
+                    Bạn đã thanh toán thành công ({participation.quantity} {room.unit}). Nhà cung cấp đang chuẩn bị hàng. Mã QR nhận hàng sẽ kích hoạt tại mục "Đơn hàng" khi kiện hàng đến tủ.
+                  </span>
+                </div>
+              </div>
+            ) : participation.status === 'cancelled_before_payment' ? (
+              <div className="w-full bg-slate-50 border border-slate-200 p-4 rounded-2xl flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-xs font-bold text-slate-700">
+                  <XCircle className="w-5 h-5 text-slate-500 shrink-0" />
+                  <span>
+                    Bạn đã không tiếp tục đơn hàng này (Đã hủy trước thanh toán — không phát sinh bất kỳ khoản phí nào).
                   </span>
                 </div>
               </div>
             ) : isEligibleForCheckout ? (
               <div className="w-full flex flex-col sm:flex-row items-center gap-3">
-                <div className="w-full sm:w-auto bg-[#EEF1FF] text-indigo-900 border border-indigo-200 px-5 py-3.5 rounded-2xl text-xs font-bold flex items-center justify-center space-x-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#3155FF]" />
-                  <span>
-                    Đã chốt giá: {formatVND(room.finalPrice!)} • {participation.quantity} {room.unit}
-                  </span>
-                </div>
                 <button
+                  type="button"
                   onClick={onGoCheckout}
                   className="w-full sm:flex-1 bg-[#3155FF] hover:bg-[#2444DC] text-white font-black py-3.5 px-6 rounded-2xl transition shadow-lg shadow-[#3155FF]/25 text-sm flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
                 >
                   <span>TIẾP TỤC THANH TOÁN ({formatVND(room.finalPrice! * participation.quantity + shippingPerPerson)})</span>
                   <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={onCancelParticipation || onGoCheckout}
+                  className="w-full sm:w-auto py-3.5 px-6 rounded-2xl bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 font-bold text-xs uppercase tracking-wider transition border border-slate-200 cursor-pointer"
+                >
+                  Không tiếp tục
                 </button>
               </div>
             ) : (
@@ -6106,13 +6261,25 @@ function GroupRoomView({
             <span>Tham gia</span>
           </button>
         ) : isEligibleForCheckout ? (
-          <button
-            onClick={onGoCheckout}
-            className="flex-1 bg-[#3155FF] hover:bg-[#2444DC] text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
-          >
-            <CreditCard className="w-3.5 h-3.5" />
-            <span>Thanh toán</span>
-          </button>
+          <div className="flex-1 flex items-center gap-1.5">
+            <button
+              onClick={onGoCheckout}
+              className="flex-1 bg-[#3155FF] hover:bg-[#2444DC] text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
+            >
+              <CreditCard className="w-3.5 h-3.5" />
+              <span>Thanh toán</span>
+            </button>
+            <button
+              onClick={onCancelParticipation || onGoCheckout}
+              className="py-2 px-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-[11px] font-bold shrink-0"
+            >
+              Hủy
+            </button>
+          </div>
+        ) : participation?.status === 'cancelled_before_payment' ? (
+          <div className="flex-1 bg-slate-100 text-slate-600 border border-slate-200 font-bold py-2.5 px-3 rounded-xl text-[11px] text-center truncate">
+            Đã không tiếp tục
+          </div>
         ) : (
           <div className="flex-1 bg-[#C7F000] text-[#0C0D10] border border-[#3155FF]/20 font-black py-2.5 px-3 rounded-xl text-[11px] text-center truncate">
             ✓ Đã tham gia
@@ -6890,12 +7057,37 @@ function OrdersView({
   onExplore: () => void;
 }) {
   const [selectedOrderForQR, setSelectedOrderForQR] = useState<Order | null>(orders[0] || null);
+  const [orderFilterTab, setOrderFilterTab] = useState<string>('all');
+
+  const filteredOrders = useMemo(() => {
+    switch (orderFilterTab) {
+      case 'awaiting_payment':
+        return orders.filter((o) => o.status === 'awaiting_payment');
+      case 'paid':
+        return orders.filter((o) => o.status === 'paid');
+      case 'shipping':
+        return orders.filter((o) => o.status === 'preparing' || o.status === 'in_transit');
+      case 'ready_for_pickup':
+        return orders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'pickup_overdue');
+      case 'completed':
+        return orders.filter((o) => o.status === 'picked_up');
+      case 'cancelled':
+        return orders.filter(
+          (o) =>
+            o.status === 'cancelled' ||
+            o.status === 'cancelled_before_payment' ||
+            o.status === 'refunded'
+        );
+      default:
+        return orders;
+    }
+  }, [orders, orderFilterTab]);
 
   useEffect(() => {
-    if (orders.length > 0 && !selectedOrderForQR) {
-      setSelectedOrderForQR(orders[0]);
+    if (filteredOrders.length > 0 && (!selectedOrderForQR || !filteredOrders.some((o) => o.id === selectedOrderForQR.id))) {
+      setSelectedOrderForQR(filteredOrders[0]);
     }
-  }, [orders, selectedOrderForQR]);
+  }, [filteredOrders, selectedOrderForQR]);
 
   if (orders.length === 0) {
     return (
@@ -6922,51 +7114,76 @@ function OrdersView({
         </p>
       </div>
 
+      {/* Requirement 21: Phân tách rõ ràng các nhóm trạng thái đơn hàng */}
+      <div className="flex bg-white p-1 rounded-2xl border border-slate-200 overflow-x-auto scrollbar-none gap-1">
+        {[
+          { id: 'all', label: `Tất cả (${orders.length})` },
+          { id: 'awaiting_payment', label: `Chờ thanh toán (${orders.filter((o) => o.status === 'awaiting_payment').length})` },
+          { id: 'paid', label: `Đã thanh toán (${orders.filter((o) => o.status === 'paid').length})` },
+          { id: 'shipping', label: `Đang chuẩn bị / Giao (${orders.filter((o) => o.status === 'preparing' || o.status === 'in_transit').length})` },
+          { id: 'ready_for_pickup', label: `Sẵn sàng nhận (${orders.filter((o) => o.status === 'ready_for_pickup' || o.status === 'pickup_overdue').length})` },
+          { id: 'completed', label: `Đã nhận hàng (${orders.filter((o) => o.status === 'picked_up').length})` },
+          { id: 'cancelled', label: `Đã hủy (${orders.filter((o) => o.status === 'cancelled' || o.status === 'cancelled_before_payment' || o.status === 'refunded').length})` },
+        ].map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setOrderFilterTab(t.id)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+              orderFilterTab === t.id
+                ? 'bg-[#3155FF] text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-4">
-          {orders.map((ord) => {
-            const isSelected = selectedOrderForQR?.id === ord.id;
-            const hasReviewed = reviews.some((r) => r.orderId === ord.id);
-            const refundReq = refunds.find((r) => r.orderId === ord.id);
-            const batch = deliveryBatches.find(
-              (b) => b.id === ord.deliveryBatchId || b.roomId === ord.roomId
-            );
-            const room = rooms.find((r) => r.id === ord.roomId);
-            const point = pickupPoints.find(
-              (p) =>
-                p.id === ord.pickupPointId ||
-                p.name === ord.pickupPointName ||
-                p.name === ord.pickupPoint
-            );
+          {filteredOrders.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center text-xs text-slate-500">
+              Không có đơn hàng nào trong mục này.
+            </div>
+          ) : (
+            filteredOrders.map((ord) => {
+              const isSelected = selectedOrderForQR?.id === ord.id;
+              const hasReviewed = reviews.some((r) => r.orderId === ord.id);
+              const refundReq = refunds.find((r) => r.orderId === ord.id);
+              const batch = deliveryBatches.find(
+                (b) => b.id === ord.deliveryBatchId || b.roomId === ord.roomId
+              );
+              const room = rooms.find((r) => r.id === ord.roomId);
+              const point = pickupPoints.find(
+                (p) =>
+                  p.id === ord.pickupPointId ||
+                  p.name === ord.pickupPointName ||
+                  p.name === ord.pickupPoint
+              );
 
-            // Phase 7 Req 21: 6-step visual timeline for "Theo dõi giao hàng chung"
-            const batchSt = batch?.status;
-            const isPickedUp = ord.status === 'picked_up' || batchSt === 'completed';
-            const isArrived =
-              isPickedUp ||
-              ord.status === 'ready_for_pickup' ||
-              ord.status === 'pickup_overdue' ||
-              batchSt === 'arrived_at_pickup';
-            const isInTransit =
-              isArrived || ord.status === 'in_transit' || batchSt === 'in_transit';
-            const isHandedOver =
-              isInTransit ||
-              ord.status === 'preparing' ||
-              batchSt === 'picked_up_from_supplier';
-            const isConsolidated =
-              isHandedOver ||
-              Boolean(batch) ||
-              batchSt === 'planned' ||
-              batchSt === 'confirmed';
+              // Phase 7 Req 21 & Mục 13: 6-step visual timeline for "Theo dõi giao hàng chung"
+              const batchSt = batch?.status;
+              const isPickedUp = ord.status === 'picked_up' || batchSt === 'completed';
+              const isArrived =
+                isPickedUp ||
+                ord.status === 'ready_for_pickup' ||
+                ord.status === 'pickup_overdue' ||
+                batchSt === 'arrived_at_pickup';
+              const isInTransit =
+                isArrived || ord.status === 'in_transit' || batchSt === 'in_transit';
+              const isHandedOver =
+                isInTransit ||
+                ord.status === 'preparing' ||
+                batchSt === 'picked_up_from_supplier';
 
-            const trackingSteps = [
-              { label: 'Phòng gom thành công', done: true },
-              { label: 'Đã gom đơn', done: isConsolidated },
-              { label: 'Nhà cung cấp bàn giao', done: isHandedOver },
-              { label: 'Đang vận chuyển', done: isInTransit },
-              { label: 'Đã đến điểm nhận', done: isArrived },
-              { label: 'Đã nhận hàng', done: isPickedUp },
-            ];
+              const trackingSteps = [
+                { label: 'Đã chốt giá', done: true },
+                { label: 'Đã thanh toán', done: ord.status !== 'awaiting_payment' && ord.status !== 'cancelled_before_payment' },
+                { label: 'NCC chuẩn bị', done: isHandedOver },
+                { label: 'Đang vận chuyển', done: isInTransit },
+                { label: 'Sẵn sàng nhận', done: isArrived },
+                { label: 'Đã nhận hàng', done: isPickedUp },
+              ];
 
             const batchTimelineEvents = batch
               ? deliveryEvents.filter((e) => e.batchId === batch.id)
@@ -7176,8 +7393,9 @@ function OrdersView({
                 </div>
               </div>
             );
-          })}
-        </div>
+          })
+        )}
+      </div>
 
         {/* Phase 7 Req 26 & 56 + Phần 22: Pickup QR & Status Card */}
         {selectedOrderForQR && (() => {
@@ -7350,10 +7568,10 @@ function MyRoomsView({
   onExplore: () => void;
   getSecondsLeft: (endAt: string) => number;
 }) {
-  const [tab, setTab] = useState<'active' | 'waiting' | 'ready_checkout' | 'completed'>('active');
+  const [tab, setTab] = useState<'ready_checkout' | 'active' | 'waiting' | 'completed' | 'cancelled'>('ready_checkout');
 
   const myParticipations = useMemo(() => {
-    return participations.filter((p) => p.userId === currentUserId && p.status !== 'cancelled');
+    return participations.filter((p) => p.userId === currentUserId);
   }, [participations, currentUserId]);
 
   const joinedItems = useMemo(() => {
@@ -7366,40 +7584,52 @@ function MyRoomsView({
       .filter((item): item is { room: GroupRoom; part: GroupParticipation } => item !== null);
   }, [myParticipations, rooms]);
 
+  const readyCheckoutItems = joinedItems.filter(
+    (item) =>
+      (item.room.status === 'successful' || item.room.finalPrice !== undefined) &&
+      (item.part.status === 'awaiting_payment' || (item.part.status !== 'paid' && item.part.status !== 'cancelled' && item.part.status !== 'cancelled_before_payment'))
+  );
+
   const activeItems = joinedItems.filter(
-    (item) => item.room.status === 'active' && item.part.status !== 'paid'
+    (item) =>
+      item.room.status === 'active' &&
+      item.part.status !== 'paid' &&
+      item.part.status !== 'cancelled' &&
+      item.part.status !== 'cancelled_before_payment' &&
+      item.room.finalPrice === undefined
   );
 
   const waitingItems = joinedItems.filter(
     (item) =>
       item.part.status !== 'paid' &&
+      item.part.status !== 'cancelled' &&
+      item.part.status !== 'cancelled_before_payment' &&
       (item.room.status === 'full' || (item.room.status === 'active' && item.room.finalPrice === undefined))
-  );
-
-  const readyCheckoutItems = joinedItems.filter(
-    (item) =>
-      item.room.status === 'successful' &&
-      item.room.finalPrice !== undefined &&
-      item.part.status !== 'paid'
   );
 
   const completedItems = joinedItems.filter((item) => item.part.status === 'paid');
 
+  const cancelledItems = joinedItems.filter(
+    (item) => item.part.status === 'cancelled' || item.part.status === 'cancelled_before_payment'
+  );
+
   const currentList =
-    tab === 'active'
+    tab === 'ready_checkout'
+      ? readyCheckoutItems
+      : tab === 'active'
       ? activeItems
       : tab === 'waiting'
       ? waitingItems
-      : tab === 'ready_checkout'
-      ? readyCheckoutItems
-      : completedItems;
+      : tab === 'completed'
+      ? completedItems
+      : cancelledItems;
 
   return (
     <div className="space-y-6 animate-fade-in max-w-4xl mx-auto pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2 uppercase">
-            <Users className="w-6 h-6 text-blue-600" />
+            <Users className="w-6 h-6 text-[#3155FF]" />
             <span>PHÒNG GOM CỦA TÔI</span>
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -7407,38 +7637,55 @@ function MyRoomsView({
           </p>
         </div>
 
-        <div className="flex bg-white p-1 rounded-xl border border-slate-200 overflow-x-auto scrollbar-none">
+        <div className="flex bg-white p-1 rounded-xl border border-slate-200 overflow-x-auto scrollbar-none gap-1">
           <button
-            onClick={() => setTab('active')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-              tab === 'active' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            onClick={() => setTab('ready_checkout')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer flex items-center gap-1.5 ${
+              tab === 'ready_checkout'
+                ? 'bg-[#3155FF] text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            Đang tham gia ({activeItems.length})
+            <span>Chờ bạn xác nhận</span>
+            {readyCheckoutItems.length > 0 && (
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
+                tab === 'ready_checkout' ? 'bg-[#C7F000] text-[#0C0D10]' : 'bg-amber-100 text-amber-800'
+              }`}>
+                {readyCheckoutItems.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setTab('active')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+              tab === 'active' ? 'bg-[#3155FF] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            Đang gom ({activeItems.length})
           </button>
           <button
             onClick={() => setTab('waiting')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-              tab === 'waiting' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+              tab === 'waiting' ? 'bg-[#3155FF] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            Chờ chốt giá ({waitingItems.length})
-          </button>
-          <button
-            onClick={() => setTab('ready_checkout')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-              tab === 'ready_checkout' ? 'bg-[#3155FF] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Sẵn sàng thanh toán ({readyCheckoutItems.length})
+            Chờ chốt ({waitingItems.length})
           </button>
           <button
             onClick={() => setTab('completed')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-              tab === 'completed' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+              tab === 'completed' ? 'bg-[#3155FF] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
-            Đã hoàn tất ({completedItems.length})
+            Đã thanh toán ({completedItems.length})
+          </button>
+          <button
+            onClick={() => setTab('cancelled')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+              tab === 'cancelled' ? 'bg-[#3155FF] text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            Không tiếp tục ({cancelledItems.length})
           </button>
         </div>
       </div>
@@ -7459,13 +7706,20 @@ function MyRoomsView({
             const currentPrice = room.finalPrice ?? getCurrentPrice(room.totalQuantity, room.priceTiers);
             const savings = room.initialPrice - currentPrice;
             const percentFilled = Math.min(100, Math.round((room.totalQuantity / room.maxQuantity) * 100));
-            const isCanCheckout = canCheckout(room, part);
+            const isAwaiting =
+              part.status === 'awaiting_payment' ||
+              ((room.status === 'successful' || room.finalPrice !== undefined) &&
+                part.status !== 'paid' &&
+                part.status !== 'cancelled' &&
+                part.status !== 'cancelled_before_payment');
 
             return (
               <div
                 key={room.id}
                 onClick={() => onSelectRoom(room.id)}
-                className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-6"
+                className={`bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-6 ${
+                  isAwaiting ? 'border-[#3155FF]/40 ring-1 ring-[#3155FF]/20' : 'border-slate-200'
+                }`}
               >
                 <div className="flex items-center space-x-4 w-full sm:w-auto">
                   <div className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
@@ -7474,7 +7728,21 @@ function MyRoomsView({
                   <div>
                     <div className="flex items-center space-x-2">
                       <h4 className="font-bold text-slate-900 text-base">{room.productName}</h4>
-                      <StatusBadge status={room.status} size="sm" />
+                      {isAwaiting ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-white animate-pulse">
+                          Chờ bạn xác nhận
+                        </span>
+                      ) : part.status === 'paid' ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800">
+                          Đã thanh toán
+                        </span>
+                      ) : part.status === 'cancelled_before_payment' ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-600">
+                          Không tiếp tục
+                        </span>
+                      ) : (
+                        <StatusBadge status={room.status} size="sm" />
+                      )}
                     </div>
                     <div className="text-xs text-slate-500 flex items-center space-x-2 mt-0.5">
                       <span>Bạn đã gom: <strong>{part.quantity} {room.unit}</strong></span>
@@ -7493,7 +7761,7 @@ function MyRoomsView({
                       {room.participantCount} người • {room.totalQuantity}/{room.maxQuantity} {room.unit}
                     </span>
                     <span className="text-slate-900 font-mono">
-                      {room.status === 'successful'
+                      {room.status === 'successful' || room.finalPrice !== undefined
                         ? 'ĐÃ CHỐT GIÁ'
                         : room.status !== 'active' || secondsLeft <= 0
                         ? 'ĐÃ ĐÓNG'
@@ -7505,22 +7773,35 @@ function MyRoomsView({
                   </div>
                   <div className="flex justify-between items-baseline pt-1">
                     <span className="text-xs text-slate-400">
-                      {room.finalPrice !== undefined ? 'Giá chốt:' : 'Giá hiện tại:'}
+                      {room.finalPrice !== undefined ? 'Giá cuối:' : 'Giá hiện tại:'}
                     </span>
                     <span className="text-lg font-black text-slate-900">{formatVND(currentPrice)}</span>
                   </div>
 
-                  {isCanCheckout && (
+                  {isAwaiting && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onGoCheckout(room.id);
                       }}
-                      className="w-full mt-2 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs transition shadow flex items-center justify-center space-x-1"
+                      className="w-full mt-2 py-2.5 rounded-xl bg-[#3155FF] hover:bg-[#2444DC] text-white font-black text-xs transition shadow-md shadow-[#3155FF]/20 flex items-center justify-center space-x-1.5 cursor-pointer"
                     >
-                      <span>Thanh toán ngay ({formatVND(currentPrice * part.quantity)})</span>
+                      <span>Xem & xác nhận ({formatVND(currentPrice * part.quantity)})</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
+                  )}
+
+                  {part.status === 'paid' && (
+                    <div className="w-full mt-2 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-xs text-center flex items-center justify-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Đã thanh toán ({formatVND(currentPrice * part.quantity)})</span>
+                    </div>
+                  )}
+
+                  {part.status === 'cancelled_before_payment' && (
+                    <div className="w-full mt-2 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 font-bold text-xs text-center">
+                      Không tiếp tục mua
+                    </div>
                   )}
                 </div>
               </div>
